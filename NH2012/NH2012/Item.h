@@ -2,6 +2,8 @@
 
 #include <OgreString.h>
 
+#include "Attributes.h"
+
 class Item
 {
 public:
@@ -12,5 +14,7 @@ private:
   Ogre::String name;
 
   int value;
+
+  ItemAttributes attributes;
 };
 

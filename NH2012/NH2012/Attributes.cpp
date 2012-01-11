@@ -1,12 +1,22 @@
 #include "Attributes.h"
 
 
-Attributes::Attributes(void)
+MonsterAttributes::MonsterAttributes(void)
 {
 
 }
 
 
-Attributes::~Attributes(void)
+MonsterAttributes::~MonsterAttributes(void)
+{
+}
+
+ItemAttributes::ItemAttributes(void)
+{
+
+}
+
+
+ItemAttributes::~ItemAttributes(void)
 {
 }

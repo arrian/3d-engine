@@ -27,7 +27,7 @@ private:
   int level;
 
   Inventory inventory;
-  Attributes attributes;
+  MonsterAttributes attributes;
 
 };
 

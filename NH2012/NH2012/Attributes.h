@@ -154,11 +154,11 @@ namespace MonsterAttribute
   };
 }
 
-class Attributes
+class MonsterAttributes
 {
 public:
-  Attributes(void);
-  ~Attributes(void);
+  MonsterAttributes(void);
+  ~MonsterAttributes(void);
 
   std::vector<MonsterAttribute::Ability> abilities;
   MonsterAttribute::Attack attack;
@@ -177,3 +177,58 @@ public:
   MonsterAttribute::Status status;
 };
 
+namespace ItemAttribute
+{
+  enum BUC
+  {
+    BLESSED,
+    UNCURSED,
+    CURSED
+  };
+
+  enum Status
+  {
+    NORMAL,
+    UNIQUE,
+    ARTIFACT
+  };
+
+  enum Type
+  {
+    POTION,
+    SCROLL,
+    SPELLBOOK,
+    MELEE_WEAPON,
+    RANGED_WEAPON,
+    GEM,
+    GOLD,
+    PICK,
+    HELMET,
+    BOOTS,
+    ARMOUR,
+    KEY,
+    LAMP,
+    FOOD,
+    WATER,
+    WAND,
+    RING,
+    CONTAINER
+  };
+
+  enum Intrinsics
+  {
+
+  };
+}
+
+class ItemAttributes
+{
+public:
+  ItemAttributes(void);
+  ~ItemAttributes(void);
+
+  ItemAttribute::BUC buc;
+  ItemAttribute::Status status;
+  ItemAttribute::Type type;
+  std::vector<ItemAttribute::Intrinsics> intrinsics;
+};

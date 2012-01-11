@@ -4,6 +4,8 @@
 Item::Item(void)
 {
   name = "rock";
+
+  attributes = ItemAttributes();
 }
 
 

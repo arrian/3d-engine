@@ -23,7 +23,9 @@ Monster::Monster(int difficulty)
 
   //filling inventory
   inventory = Inventory(difficulty);
-  attributes = Attributes();
+
+  //filling attributes
+  attributes = MonsterAttributes();
 }
 
 
