@@ -79,7 +79,7 @@
   <ItemGroup>
     <ClInclude Include="..\NH2012\Attributes.h" />
     <ClInclude Include="..\NH2012\Bar.h" />
-    <ClInclude Include="..\NH2012\Core.h" />
+    <ClInclude Include="..\NH2012\World.h" />
     <ClInclude Include="..\NH2012\Dungeon.h" />
     <ClInclude Include="..\NH2012\Flag.h" />
     <ClInclude Include="..\NH2012\Inventory.h" />
@@ -91,7 +91,7 @@
   <ItemGroup>
     <ClCompile Include="..\NH2012\Attributes.cpp" />
     <ClCompile Include="..\NH2012\Bar.cpp" />
-    <ClCompile Include="..\NH2012\Core.cpp" />
+    <ClCompile Include="..\NH2012\World.cpp" />
     <ClCompile Include="..\NH2012\Dungeon.cpp" />
     <ClCompile Include="..\NH2012\Flag.cpp" />
     <ClCompile Include="..\NH2012\Inventory.cpp" />

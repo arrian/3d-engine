@@ -47,23 +47,7 @@ namespace MonsterAttribute
     NO_HEAD
   };
 
-  enum Conduct
-  {
-    OMNIVOR,
-    HERBIVOR,
-    CARNIVOR,
-    METALLIVOR
-  };
-
-  enum Corpse
-  {
-    SAFE,
-    POISONOUS,
-    VEGETARIAN,
-    VEGAN
-  };
-
-  enum Creature
+  enum Type
   {
     ANIMAL,
     HUMAMOID,
@@ -74,15 +58,6 @@ namespace MonsterAttribute
   enum Dislikes
   {
 
-  };
-
-  enum Food
-  {
-    SATIATED,
-    SATISFIED,
-    HUNGRY,
-    WEAK,
-    FAINTING
   };
 
   enum Gender
@@ -106,7 +81,7 @@ namespace MonsterAttribute
     PINA_COLADAS
   };
 
-  enum MonsterSize
+  enum Size
   {
     GIANT,
     LARGE,
@@ -124,16 +99,6 @@ namespace MonsterAttribute
     LIGHT
   };
 
-  enum Resistance
-  {
-    SLEEP,
-    FIRE,
-    COLD,
-    LIGHTNING,
-    STONING,
-    POISON
-  };
-
   enum Status
   {
     NONE,
@@ -142,40 +107,10 @@ namespace MonsterAttribute
     LORD,
     MINION,
     DEMON,
-    CROWNED
-  };
-
-  enum Water
-  {
-    DROWNING,
-    QUENCHED,
-    THIRSTY,
-    PARTCHED
+    CROWNED,
+    PLAYER
   };
 }
-
-class MonsterAttributes
-{
-public:
-  MonsterAttributes(void);
-  ~MonsterAttributes(void);
-
-  std::vector<MonsterAttribute::Ability> abilities;
-  MonsterAttribute::Attack attack;
-  MonsterAttribute::Awareness awareness;
-  MonsterAttribute::Behaviour behaviour;
-  std::vector<MonsterAttribute::Body> body;
-  MonsterAttribute::Conduct conduct;
-  MonsterAttribute::Corpse corpse;
-  std::vector<MonsterAttribute::Creature> types;
-  std::vector<MonsterAttribute::Dislikes> dislikes;
-  MonsterAttribute::Gender gender;
-  std::vector<MonsterAttribute::Likes> likes;
-  MonsterAttribute::MonsterSize size;
-  std::vector<MonsterAttribute::Produces> produces;
-  std::vector<MonsterAttribute::Resistance> resistances;
-  MonsterAttribute::Status status;
-};
 
 namespace ItemAttribute
 {
@@ -214,14 +149,122 @@ namespace ItemAttribute
     RING,
     CONTAINER
   };
+}
+
+namespace GeneralAttribute
+{
+  
+  enum Conduct
+  {
+    OMNIVOR,
+    HERBIVOR,
+    CARNIVOR,
+    METALLIVOR
+  };
+
+  enum FoodSafety
+  {
+    SAFE,
+    POISONOUS,
+    VEGETARIAN,
+    VEGAN
+  };
+
+  enum Food
+  {
+    SATIATED,
+    SATISFIED,
+    HUNGRY,
+    WEAK,
+    FAINTING
+  };
 
   enum Intrinsics
   {
+    AGGRAVATE_MONSTER,
+    COLD_RESISTANCE,
+    CONFLICT,
+    FIRE_RESISTANCE,
+    FREE_ACTION,
+    HUNGER,
+    INVISIBILITY,
+    LEVITATION,
+    POISON_RESISTANCE,
+    POLYMORPH_CONTROL,
+    POLYMORPHITIS,
+    PROTECTION,
+    REGENERATION,
+    SEARCHING,
+    SEE_INVISIBLE,
+    SHOCK_RESISTANCE,
+    SLOW_DIGESTION,
+    STEALTH,
+    SUSTAIN_ABILITY,
+    TELEPORT_CONTROL,
+    TELEPORITIS,
+    WARNING,
+    INCREASE_ACCURACY,
+    INCREASE_DAMAGE,
+    ADORNMENT,
+    ASTRAL_VISION,
+    BLINDING_RESISTANCE,
+    CLAIRVOYANCE,
+    DISPLACEMENT,
+    FLYING,
+    FOOD_APPRAISAL,
+    FUMBLING,
+    HALLUCINATION_RESISTANCE,
+    INFRAVISION,
+    INVULNERABILITY,
+    LEVEL_DRAIN_RESISTANCE,
+    LIFE_SAVING,
+    LYCANTHROPY,
+    MAGICAL_BREATING,
+    MONSTER_DETECTION,
+    PHASING,
+    REFLECTION,
+    SICKNESS_RESISTANCE,
+    SLEEP_RESISTANCE,
+    SPEED,
+    STONING_RESISTANCE,
+    SWIMMING,
+    TELEPATHY,
+    UNBREATHING,
+    UNCHANGING,
+    WATER_WALKING
+  };
 
+  enum Water
+  {
+    DROWNING,
+    QUENCHED,
+    THIRSTY,
+    PARTCHED
   };
 }
 
-class ItemAttributes
+struct MonsterAttributes
+{
+public:
+  MonsterAttributes(void);
+  ~MonsterAttributes(void);
+
+  std::vector<MonsterAttribute::Ability> abilities;
+  MonsterAttribute::Attack attack;
+  MonsterAttribute::Awareness awareness;
+  MonsterAttribute::Behaviour behaviour;
+  std::vector<MonsterAttribute::Body> body;
+  std::vector<MonsterAttribute::Type> types;
+  std::vector<MonsterAttribute::Dislikes> dislikes;
+  MonsterAttribute::Gender gender;
+  std::vector<MonsterAttribute::Likes> likes;
+  MonsterAttribute::Size size;
+  std::vector<MonsterAttribute::Produces> produces;
+  std::vector<GeneralAttribute::Intrinsics> intrinsics;
+  MonsterAttribute::Status status;
+};
+
+struct ItemAttributes
 {
 public:
   ItemAttributes(void);
@@ -230,5 +273,5 @@ public:
   ItemAttribute::BUC buc;
   ItemAttribute::Status status;
   ItemAttribute::Type type;
-  std::vector<ItemAttribute::Intrinsics> intrinsics;
+  std::vector<GeneralAttribute::Intrinsics> intrinsics;
 };

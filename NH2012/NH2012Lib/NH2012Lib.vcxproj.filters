@@ -45,7 +45,7 @@
     <ClInclude Include="Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\NH2012\Core.h">
+    <ClInclude Include="..\NH2012\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,7 +74,7 @@
     <ClCompile Include="..\NH2012\Monster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\NH2012\Core.cpp">
+    <ClCompile Include="..\NH2012\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

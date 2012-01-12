@@ -1,12 +1,12 @@
-#include "Core.h"
+#include "World.h"
 
 
-Core::Core(void)
+World::World(void)
 {
 }
 
 
-Core::~Core(void)
+World::~World(void)
 {
 }
 
