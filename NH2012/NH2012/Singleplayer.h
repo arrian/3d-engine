@@ -4,6 +4,8 @@
 
 #include "Client.h"
 
+#include <World.h>
+
 /**
  * Singleplayer frame generation.
  * Far simpler than multiplayer, since rather than threading 
@@ -19,5 +21,7 @@ public:
 
   void generateFrame();
   bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+  World world;
 };
 

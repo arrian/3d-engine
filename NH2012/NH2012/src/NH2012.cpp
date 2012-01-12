@@ -107,6 +107,26 @@ bool NH2012::go(void)
     {
         return false;
     }
+
+
+    std::cout << " Done." << std::endl;
+
+    std::cout << "Creating game client for ";
+
+    if(true)
+    {
+      std::cout << "singleplayer...";
+      game = new Singleplayer();
+    }
+    else
+    {
+      std::cout << "multiplayer...";
+      game = new Multiplayer();
+    }
+    std::cout << " Done." << std::endl;
+
+    std::cout << "Creating scene..." << std::endl;
+
 //-------------------------------------------------------------------------------------
     // choose scenemanager
     // Get the SceneManager, in this case a generic one
@@ -154,6 +174,10 @@ bool NH2012::go(void)
     // Create a light
     Ogre::Light* l = mSceneMgr->createLight("MainLight");
     l->setPosition(20,80,50);
+
+
+    std::cout << " Done." << std::endl;
+    std::cout << "Creating frame listener...";
 //-------------------------------------------------------------------------------------
     //create FrameListener
     Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
@@ -204,6 +228,10 @@ bool NH2012::go(void)
     mDetailsPanel->hide();
 
     mRoot->addFrameListener(this);
+
+    std::cout << " Done." << std::endl;
+    std::cout << "Started rendering..." << std::endl;
+
 //-------------------------------------------------------------------------------------
     mRoot->startRendering();
 
@@ -221,6 +249,8 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
     //Need to capture/update each device
     mKeyboard->capture();
     mMouse->capture();
+
+    game->frameRenderingQueued(evt);
 
     mTrayMgr->frameRenderingQueued(evt);
 
@@ -409,6 +439,16 @@ extern "C" {
     int main(int argc, char *argv[])
 #endif
     {
+
+//Console
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if defined _DEBUG
+        AllocConsole();
+        freopen("CONOUT$","wb",stdout);
+
+        std::cout << "Starting...";
+#endif
+#endif
         // Create application object
         NH2012 app;
 
