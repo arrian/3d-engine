@@ -1,11 +1,14 @@
 #pragma once
+
+#include <OgreFrameListener.h>
+
 class Client
 {
 public:
-  Client(void);
-  ~Client(void);
+  Client();
+  virtual ~Client(void);
 
-  void sendFrame();
-
+  virtual void generateFrame() = 0;
+  virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
 };
 

@@ -45,11 +45,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -74,16 +79,19 @@
   <ItemGroup>
     <ClInclude Include="..\NH2012\Attributes.h" />
     <ClInclude Include="..\NH2012\Bar.h" />
+    <ClInclude Include="..\NH2012\Core.h" />
     <ClInclude Include="..\NH2012\Dungeon.h" />
     <ClInclude Include="..\NH2012\Flag.h" />
     <ClInclude Include="..\NH2012\Inventory.h" />
     <ClInclude Include="..\NH2012\Item.h" />
     <ClInclude Include="..\NH2012\MeshGenerator.h" />
     <ClInclude Include="..\NH2012\Monster.h" />
+    <ClInclude Include="Packet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\NH2012\Attributes.cpp" />
     <ClCompile Include="..\NH2012\Bar.cpp" />
+    <ClCompile Include="..\NH2012\Core.cpp" />
     <ClCompile Include="..\NH2012\Dungeon.cpp" />
     <ClCompile Include="..\NH2012\Flag.cpp" />
     <ClCompile Include="..\NH2012\Inventory.cpp" />

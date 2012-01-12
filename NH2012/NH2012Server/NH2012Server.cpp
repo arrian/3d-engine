@@ -1,7 +1,7 @@
 // NH2012Server.cpp : main project file.
 
 #include "stdafx.h"
-#include "Form1.h"
+#include "ServerGUI.h"
 
 using namespace NH2012Server;
 
@@ -13,6 +13,6 @@ int main(array<System::String ^> ^args)
 	Application::SetCompatibleTextRenderingDefault(false); 
 
 	// Create the main window and run it
-	Application::Run(gcnew Form1());
+	Application::Run(gcnew ServerGUI());
 	return 0;
 }
