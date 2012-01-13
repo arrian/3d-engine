@@ -20,8 +20,8 @@ public:
   ~Singleplayer(void);
 
   void generateFrame();
-  bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+  WorldData frameRenderingQueued(const Ogre::FrameEvent& evt);
 
-  World world;
+  World* world;
 };
 

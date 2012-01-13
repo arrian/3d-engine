@@ -113,7 +113,7 @@ bool NH2012::go(void)
 
     std::cout << "Creating game client for ";
 
-    if(true)
+    if(false)
     {
       std::cout << "singleplayer...";
       game = new Singleplayer();

@@ -10,7 +10,12 @@ World::~World(void)
 {
 }
 
-bool frameRenderingQueued(const Ogre::FrameEvent& evt)
+bool World::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   return true;
+}
+
+WorldData World::getWorldState()
+{
+  return data;
 }

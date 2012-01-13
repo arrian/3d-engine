@@ -15,8 +15,8 @@ void Singleplayer::generateFrame()
 
 }
 
-bool Singleplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
+WorldData Singleplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  generateFrame();
-  return true;
+  world->frameRenderingQueued(evt);
+  return world->getWorldState();
 }

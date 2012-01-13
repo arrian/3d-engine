@@ -2,6 +2,8 @@
 
 #include <OgreFrameListener.h>
 
+#include <World.h>
+
 class Client
 {
 public:
@@ -9,6 +11,6 @@ public:
   virtual ~Client(void);
 
   virtual void generateFrame() = 0;
-  virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
+  virtual WorldData frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
 };
 
