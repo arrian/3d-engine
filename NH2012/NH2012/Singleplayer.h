@@ -19,7 +19,6 @@ public:
   Singleplayer(void);
   ~Singleplayer(void);
 
-  void generateFrame();
   WorldData frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   World* world;

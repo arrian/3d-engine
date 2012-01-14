@@ -7,22 +7,13 @@ Multiplayer::Multiplayer(void)
 
   //starting threaded server world frame request
   std::cout << "Beginning threaded server frame requester..." << std::endl;
-  FrameRequester requester();
-  boost::thread thrd(requester);
-  thrd.join();
+  packetSocket = boost::thread(PacketSocket(1));
+  packetSocket.join();
   std::cout << "Started server frame requester.";
 }
 
-
 Multiplayer::~Multiplayer(void)
 {
-}
-
-//requests a frame from the server
-void Multiplayer::generateFrame()
-{
-  std::cout << "debug: requesting frame" << std::endl;
-  response++;
 }
 
 WorldData Multiplayer::convertResponse()

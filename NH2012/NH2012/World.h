@@ -1,10 +1,20 @@
 #pragma once
 
+#include <vector>
+
 #include <OgreFrameListener.h>
+
+#include "Monster.h"
+#include "Item.h"
+#include "Dungeon.h"
 
 struct WorldData
 {
   int timestamp;
+
+  std::vector<Monster> monsters;
+  std::vector<Item> items;
+  Dungeon dungeon;
 };
 
 class World

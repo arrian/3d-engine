@@ -10,11 +10,6 @@ Singleplayer::~Singleplayer(void)
 {
 }
 
-void Singleplayer::generateFrame()
-{
-
-}
-
 WorldData Singleplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   world->frameRenderingQueued(evt);

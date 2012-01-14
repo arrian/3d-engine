@@ -250,7 +250,8 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mKeyboard->capture();
     mMouse->capture();
 
-    game->frameRenderingQueued(evt);
+    //capturing world data and preparing for display
+    WorldData worldFrame = game->frameRenderingQueued(evt);
 
     mTrayMgr->frameRenderingQueued(evt);
 
