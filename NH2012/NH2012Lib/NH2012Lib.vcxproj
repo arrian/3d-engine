@@ -77,27 +77,26 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\NH2012\Attributes.h" />
-    <ClInclude Include="..\NH2012\Bar.h" />
-    <ClInclude Include="..\NH2012\World.h" />
-    <ClInclude Include="..\NH2012\Dungeon.h" />
-    <ClInclude Include="..\NH2012\Flag.h" />
-    <ClInclude Include="..\NH2012\Inventory.h" />
-    <ClInclude Include="..\NH2012\Item.h" />
-    <ClInclude Include="..\NH2012\MeshGenerator.h" />
-    <ClInclude Include="..\NH2012\Monster.h" />
+    <ClInclude Include="Attributes.h" />
+    <ClInclude Include="Bar.h" />
+    <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="Flag.h" />
+    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="MeshGenerator.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Packet.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\NH2012\Attributes.cpp" />
-    <ClCompile Include="..\NH2012\Bar.cpp" />
-    <ClCompile Include="..\NH2012\World.cpp" />
-    <ClCompile Include="..\NH2012\Dungeon.cpp" />
-    <ClCompile Include="..\NH2012\Flag.cpp" />
-    <ClCompile Include="..\NH2012\Inventory.cpp" />
-    <ClCompile Include="..\NH2012\Item.cpp" />
-    <ClCompile Include="..\NH2012\MeshGenerator.cpp" />
-    <ClCompile Include="..\NH2012\Monster.cpp" />
+    <ClCompile Include="Attributes.cpp" />
+    <ClCompile Include="Bar.cpp" />
+    <ClCompile Include="Dungeon.cpp" />
+    <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="MeshGenerator.cpp" />
+    <ClCompile Include="Monster.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

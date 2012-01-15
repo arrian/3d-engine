@@ -111,6 +111,7 @@ bool NH2012::go(void)
 
     std::cout << " Done." << std::endl;
 
+//-------------------------------------------------------------------------------------
     std::cout << "Creating game client for ";
 
     if(false)
@@ -125,9 +126,9 @@ bool NH2012::go(void)
     }
     std::cout << " Done." << std::endl;
 
-    std::cout << "Creating scene..." << std::endl;
-
 //-------------------------------------------------------------------------------------
+    std::cout << "Creating scene..." << std::endl;
+    
     // choose scenemanager
     // Get the SceneManager, in this case a generic one
     mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
@@ -251,7 +252,8 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mMouse->capture();
 
     //capturing world data and preparing for display
-    WorldData worldFrame = game->frameRenderingQueued(evt);
+    std::cout << game->frameRenderingQueued(evt).timestamp << std::endl;
+
 
     mTrayMgr->frameRenderingQueued(evt);
 
