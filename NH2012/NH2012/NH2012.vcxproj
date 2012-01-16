@@ -114,17 +114,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Client.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="include\NH2012.h" />
     <ClInclude Include="Multiplayer.h" />
-    <ClInclude Include="Receiver.h" />
     <ClInclude Include="res\Resource.h" />
     <ClInclude Include="Singleplayer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Multiplayer.cpp" />
-    <ClCompile Include="Receiver.cpp" />
     <ClCompile Include="Singleplayer.cpp" />
     <ClCompile Include="src\NH2012.cpp" />
   </ItemGroup>

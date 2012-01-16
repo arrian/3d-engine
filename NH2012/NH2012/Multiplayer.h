@@ -8,13 +8,13 @@
 #include <boost/thread.hpp>
 #include <boost/asio.hpp>
 
-#include "Receiver.h"
-#include "Client.h"
+#include "Game.h"
 
 #include <World.h>
+#include <Client.h>
  
 class Multiplayer :
-  public Client
+  public Game
 {
 public:
   Multiplayer(void);
@@ -22,14 +22,9 @@ public:
 
   WorldData frameRenderingQueued(const Ogre::FrameEvent& evt);
 private:
-  int response;
-  void handleConnect(const boost::system::error_code& e, boost::asio::ip::tcp::resolver::iterator endpoint_iterator);
-  void handleRead(const boost::system::error_code& e);
+  int response;//temp
 
   boost::thread listener;
-  void listen(boost::asio::io_service& io_service, const std::string& host, const std::string& service);
-
-  /// The data received from the server.
-  std::vector<WorldData> frames;
+  void listen(const std::string& host, unsigned short port);
 };
 

@@ -2,9 +2,9 @@
 
 #include <OgreFrameListener.h>
 
-#include "Client.h"
-
 #include <World.h>
+
+#include "Game.h"
 
 /**
  * Singleplayer frame generation.
@@ -13,7 +13,7 @@
  * it is generated.
  */
 class Singleplayer : 
-  public Client
+  public Game
 {
 public:
   Singleplayer(void);

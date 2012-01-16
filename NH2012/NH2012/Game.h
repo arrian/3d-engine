@@ -4,11 +4,11 @@
 
 #include <World.h>
 
-class Client
+class Game
 {
 public:
-  Client();
-  virtual ~Client(void);
+  Game();
+  virtual ~Game(void);
 
   virtual WorldData frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
 };
