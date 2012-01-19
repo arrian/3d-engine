@@ -1,18 +1,16 @@
-// NH2012Server.cpp : main project file.
+// NH2012Server.cpp : Defines the entry point for the console application.
+//
 
 #include "stdafx.h"
-#include "ServerGUI.h"
 
-using namespace NH2012Server;
+#include <boost/asio.hpp>
+#include <Server.h>
+#include <boost/exception/all.hpp>
 
-[STAThreadAttribute]
-int main(array<System::String ^> ^args)
+int main(int argc, char* argv[])
 {
-	// Enabling Windows XP visual effects before any controls are created
-	Application::EnableVisualStyles();
-	Application::SetCompatibleTextRenderingDefault(false); 
-
-	// Create the main window and run it
-	Application::Run(gcnew ServerGUI());
+  boost::asio::io_service io_service;
+  Server server(io_service, 30001);
 	return 0;
 }
+

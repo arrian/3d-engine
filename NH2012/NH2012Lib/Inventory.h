@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <iostream>
 #include "Item.h"
 
@@ -11,7 +12,10 @@ public:
   virtual ~Inventory(void);
 
   bool contains(Item item);
+  void add(Item item);
 private:
+  std::vector<Item> items;
+
   void clear();
 };
 

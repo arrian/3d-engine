@@ -10,6 +10,8 @@ public:
   Game();
   virtual ~Game(void);
 
-  virtual WorldData frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
+  virtual void frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
+
+  int frame;
 };
 

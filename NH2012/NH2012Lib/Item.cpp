@@ -15,3 +15,8 @@ Item::Item(void)
 Item::~Item(void)
 {
 }
+
+bool operator==(const Item& x, const Item& y)
+{
+  return (x.name == y.name);//should also check if all attributes are identical
+}

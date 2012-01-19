@@ -27,7 +27,7 @@ void Client::handleReceive(const boost::system::error_code& error, std::size_t b
     std::cout.write(buffer.data(), 128);
 
     boost::shared_ptr<std::string> message(
-      new std::string(frame()));
+      new std::string("client"));
 
     socket.async_send_to(boost::asio::buffer(*message), endpoint,
       boost::bind(&Client::handleSend, this, message,
@@ -41,14 +41,4 @@ void Client::handleReceive(const boost::system::error_code& error, std::size_t b
 void Client::handleSend(boost::shared_ptr<std::string> message, const boost::system::error_code& error, std::size_t bytes)
 {
 
-}
-
-void Client::handleConnect()
-{
-
-}
-
-std::string Client::frame()
-{
-  return "test";
 }

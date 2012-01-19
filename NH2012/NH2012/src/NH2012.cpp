@@ -164,7 +164,7 @@ bool NH2012::go(void)
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 //-------------------------------------------------------------------------------------
     // Create the scene
-    Ogre::Entity* ogreHead = mSceneMgr->createEntity("Head", "ogrehead.mesh");
+    Ogre::Entity* ogreHead = mSceneMgr->createEntity("Cottage", "cottage.mesh");
 
     Ogre::SceneNode* headNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
     headNode->attachObject(ogreHead);
@@ -251,8 +251,9 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mKeyboard->capture();
     mMouse->capture();
 
-    //capturing world data and preparing for display
-    std::cout << game->frameRenderingQueued(evt).timestamp << std::endl;
+    //advancing the world
+    game->frameRenderingQueued(evt);
+    std::cout << game->frame << std::endl;
 
 
     mTrayMgr->frameRenderingQueued(evt);

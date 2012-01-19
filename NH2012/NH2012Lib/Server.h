@@ -11,12 +11,12 @@
 
 using boost::asio::ip::udp;
 
-class Client : 
+class Server : 
   public Service
 {
 public:
-  Client(boost::asio::io_service& io_service, std::string host, unsigned short port);
-  ~Client(void);
+  Server(boost::asio::io_service& io_service, unsigned short port);
+  ~Server(void);
 
 private:
   void startReceive();

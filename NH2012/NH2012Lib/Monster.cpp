@@ -10,7 +10,7 @@ Monster::Monster(int difficulty)
   magic = Bar(health.getMax());
   
   //level
-  level = difficulty;
+  level = Bar(difficulty);
 
   //generating name
   if(difficulty < 5) name = "jackal";
@@ -34,6 +34,24 @@ Monster::~Monster(void)
 }
 
 void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
+{
+
+
+  //moving
+  position += ((target - position) * speed) / evt.timeSinceLastFrame;
+}
+
+void Monster::setTarget(Ogre::Vector3 target)
+{
+  this->target = target;
+}
+
+void Monster::fixCollision(World* world)
+{
+
+}
+
+void Monster::fixAI(World* world)
 {
 
 }

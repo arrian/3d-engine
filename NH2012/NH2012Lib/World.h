@@ -5,17 +5,11 @@
 #include <OgreFrameListener.h>
 
 #include "Monster.h"
-#include "Item.h"
+#include "Inventory.h"
 #include "Dungeon.h"
+#include "Flag.h"
 
-struct WorldData
-{
-  int timestamp;
-
-  std::vector<Monster> monsters;
-  std::vector<Item> items;
-  Dungeon dungeon;
-};
+class Monster;//forward declaring for circular dependency
 
 class World
 {
@@ -24,9 +18,12 @@ public:
   ~World(void);
 
   bool frameRenderingQueued(const Ogre::FrameEvent& evt);//perform all world calculations
-
-  WorldData getWorldState();
 private:
-  WorldData data;
+  int timestamp;
+
+  std::vector<Monster> monsters;
+  Inventory items;
+  Dungeon dungeon;
+  Flag flags;
 };
 

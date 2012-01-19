@@ -20,9 +20,9 @@ public:
   Multiplayer(void);
   ~Multiplayer(void);
 
-  WorldData frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void frameRenderingQueued(const Ogre::FrameEvent& evt);
 private:
-  int response;//temp
+  Client* client;
 
   boost::thread listener;
   void listen(const std::string& host, unsigned short port);

@@ -13,6 +13,7 @@ class Service
 {
 public:
   Service(boost::asio::io_service& io_service, unsigned short port);
+  Service(boost::asio::io_service& io_service, std::string host, unsigned short port);
   ~Service(void);
 
 protected:
