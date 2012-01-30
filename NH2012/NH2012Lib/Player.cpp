@@ -1,7 +1,7 @@
 #include "Player.h"
 
 
-Player::Player(Dungeon* dungeon, Ogre::Vector3 position) : Actor()
+Player::Player(Ogre::SceneManager* sceneManager, Dungeon* dungeon, Ogre::Vector3 position) : Actor(sceneManager, position)
 {
   health = Bar(10);
   magic = Bar(10);
@@ -14,7 +14,6 @@ Player::Player(Dungeon* dungeon, Ogre::Vector3 position) : Actor()
   inventory = Inventory();
   attributes = MonsterAttributes();
 
-  this->position = position;
   speed = 1.3;//walking speed
 
   currentDungeon = dungeon;

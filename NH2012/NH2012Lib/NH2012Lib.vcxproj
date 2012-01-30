@@ -90,7 +90,6 @@
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Segment.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="World.h" />
@@ -109,7 +108,6 @@
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Segment.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="World.cpp" />

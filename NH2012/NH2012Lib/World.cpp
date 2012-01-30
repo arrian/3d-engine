@@ -4,9 +4,19 @@
 World::World(Ogre::SceneManager* sceneManager)
 {
   this->sceneManager = sceneManager;
+
+  //sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+
   flags = Flag();
   dungeons = std::vector<Dungeon>();
-  dungeons.push_back(Dungeon(sceneManager));
+  dungeons.push_back(Dungeon(sceneManager,"Many Monsters",DungeonType::PREDEFINED,20,1));
+
+  if(flags.isDebug())
+  {
+    sceneManager->setDisplaySceneNodes(true);
+    sceneManager->setShowDebugShadows(true);
+    sceneManager->showBoundingBoxes(true);
+  }
 }
 
 World::~World(void)

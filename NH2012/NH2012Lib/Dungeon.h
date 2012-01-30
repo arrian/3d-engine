@@ -4,10 +4,10 @@
 #include <OgreString.h>
 #include <OgreColourValue.h>
 #include <OgreEntity.h>
+#include <OgreParticleSystem.h>
 
 #include "Monster.h"
 #include "Item.h"
-#include "Segment.h"
 
 namespace DungeonType
 {
@@ -41,7 +41,6 @@ private:
 
   Ogre::ColourValue colour;
 
-  std::vector<Segment> segments;
   std::vector<Monster> monsters;
   std::vector<Item> items;
 };

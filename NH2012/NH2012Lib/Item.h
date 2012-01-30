@@ -8,7 +8,7 @@
 class Item : public Entity
 {
 public:
-  Item(void);
+  Item(Ogre::SceneManager* sceneManager, Ogre::Vector3 position = Ogre::Vector3(0,0,0));
   virtual ~Item(void);
 
   friend bool operator==(const Item& x, const Item& y);

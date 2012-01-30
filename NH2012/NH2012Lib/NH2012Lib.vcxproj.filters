@@ -69,9 +69,6 @@
     <ClInclude Include="Item.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Segment.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
@@ -126,9 +123,6 @@
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="Segment.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="AI.cpp">

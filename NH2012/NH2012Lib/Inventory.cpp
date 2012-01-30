@@ -13,7 +13,8 @@ Inventory::Inventory(int numberOfItems)
 
   for(int i = 0; i <= numberOfItems; i++)
   {
-    items.push_back(Item());
+    //Need internal inventory item representation
+    //items.push_back(Item());
   }
 }
 

@@ -51,6 +51,7 @@ public:
   bool isHalloween();
   bool isNewYears();
 
+  bool isDebug();
 private:
   //Modes
   bool explore;//explore mode

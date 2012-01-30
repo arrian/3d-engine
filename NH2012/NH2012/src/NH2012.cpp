@@ -77,7 +77,7 @@ bool NH2012::go(void)
     // Show the configuration dialog and initialise the system
     // You can skip this and use root.restoreConfig() to load configuration
     // settings if you were sure there are valid ones saved in ogre.cfg
-    if(mRoot->showConfigDialog())
+    if(mRoot->restoreConfig() || mRoot->showConfigDialog())
     {
         // If returned true, user clicked OK so initialise
         // Here we choose to let the system create a default rendering window by passing 'true'
@@ -96,27 +96,20 @@ bool NH2012::go(void)
         return false;
     }
 
-
     std::cout << " Done." << std::endl;
 
 //-------------------------------------------------------------------------------------    
-    // choose scenemanager
-    // Get the SceneManager, in this case a generic one
-    mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
+    //SceneManager
+    mSceneMgr = mRoot->createSceneManager(Ogre::ST_INTERIOR);//ST_GENERIC);
 //-------------------------------------------------------------------------------------
-    // create camera
-    // Create the camera
+    //Create the camera
     mCamera = mSceneMgr->createCamera("PlayerCam");
-
-    // Position it at 500 in Z direction
-    mCamera->setPosition(Ogre::Vector3(0,0,80));
-    // Look back along -Z
-    mCamera->lookAt(Ogre::Vector3(0,0,-300));
+    mCamera->setPosition(Ogre::Vector3(0,100,80));
+    mCamera->lookAt(Ogre::Vector3(0,100,-300));
     mCamera->setNearClipDistance(5);
 
-    mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
+    mCameraMan = new OgreBites::SdkCameraMan(mCamera);//create a default camera controller
 //-------------------------------------------------------------------------------------
-    // create viewports
     // Create one viewport, entire window
     Ogre::Viewport* vp = mWindow->addViewport(mCamera);
     vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
@@ -178,7 +171,6 @@ bool NH2012::go(void)
 
     mTrayMgr = new OgreBites::SdkTrayManager("InterfaceName", mWindow, mMouse, this);
     mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
-    mTrayMgr->showLogo(OgreBites::TL_BOTTOMRIGHT);
     mTrayMgr->hideCursor();
 
     // create a params panel for displaying sample details
@@ -203,6 +195,7 @@ bool NH2012::go(void)
     mRoot->addFrameListener(this);
 
     std::cout << " Done." << std::endl;
+
 
 //-------------------------------------------------------------------------------------
     std::cout << "Started rendering..." << std::endl;
@@ -230,7 +223,6 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     mTrayMgr->frameRenderingQueued(evt);
 
-    /*
     if (!mTrayMgr->isDialogVisible())
     {
         mCameraMan->frameRenderingQueued(evt);   // if dialog isn't up, then update the camera
@@ -245,7 +237,6 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
             mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
         }
     }
-    */
 
     return true;
 }

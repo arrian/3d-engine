@@ -3,6 +3,7 @@
 
 Flag::Flag(void)
 {
+  debug = false;
 }
 
 Flag::~Flag(void)
@@ -83,6 +84,11 @@ bool Flag::isNewYears()
 {
   Date date = Date();
   return (date.month == 1 && date.day == 1);
+}
+
+bool Flag::isDebug()
+{
+  return debug;
 }
 
 Ogre::Real Flag::calculateMoonPhase(Date date)

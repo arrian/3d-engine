@@ -1,7 +1,7 @@
 #include "Actor.h"
 
 
-Actor::Actor(void) : Entity()
+Actor::Actor(Ogre::SceneManager* sceneManager, Ogre::Vector3 position) : Entity(sceneManager, "actor.mesh", position)
 {
 }
 

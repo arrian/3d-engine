@@ -11,7 +11,7 @@
 class Player : public Actor
 {
 public:
-  Player(Dungeon* dungeon, Ogre::Vector3 position);
+  Player(Ogre::SceneManager* sceneManager, Dungeon* dungeon, Ogre::Vector3 position);
   ~Player(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);

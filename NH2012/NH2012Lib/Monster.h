@@ -15,7 +15,7 @@ class Dungeon;//forward declaring for circular dependency
 class Monster : public Actor
 {
 public:
-  Monster(Ogre::Vector3 position = Ogre::Vector3(0,0,0), int difficulty = 1);
+  Monster(Ogre::SceneManager* sceneManager, Ogre::Vector3 position, int difficulty = 1);
   virtual ~Monster(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);

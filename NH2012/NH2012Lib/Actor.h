@@ -2,6 +2,7 @@
 
 #include <OgreFrameListener.h>
 #include <OgreVector3.h>
+#include <OgreSceneManager.h>
 
 #include "Bar.h"
 #include "Inventory.h"
@@ -11,13 +12,12 @@
 class Actor : public Entity
 {
 public:
-  Actor(void);
+  Actor(Ogre::SceneManager* sceneManager, Ogre::Vector3 position = Ogre::Vector3(0,0,0));
   ~Actor(void);
 
   virtual void frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
 protected:
-  Ogre::Vector3 position;
-  Ogre::Real speed;
+  Ogre::Real speed;//number of units to move per second ~100 = 1 metre per second
 
   Bar level;
   Bar health;

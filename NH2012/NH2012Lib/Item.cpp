@@ -1,7 +1,7 @@
 #include "Item.h"
 
 
-Item::Item(void) : Entity()
+Item::Item(Ogre::SceneManager* sceneManager, Ogre::Vector3 position) : Entity(sceneManager, "item.mesh", position)
 {
   value = 0;
   name = "rock";

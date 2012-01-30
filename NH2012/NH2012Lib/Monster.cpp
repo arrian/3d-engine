@@ -1,7 +1,7 @@
 #include "Monster.h"
 
 
-Monster::Monster(Ogre::Vector3 position, int difficulty) : Actor()
+Monster::Monster(Ogre::SceneManager* sceneManager, Ogre::Vector3 position, int difficulty) : Actor(sceneManager, position)
 {
   health = Bar(difficulty * difficulty);
   magic = Bar(difficulty * difficulty);
@@ -23,9 +23,8 @@ Monster::Monster(Ogre::Vector3 position, int difficulty) : Actor()
   attributes = MonsterAttributes();
 
   //other
-  this->position = position;
   target = Ogre::Vector3(0,0,0);
-  speed = 0;
+  speed = 130;
 }
 
 
@@ -38,9 +37,20 @@ void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
   if(health.current <= 0) attributes.awareness = MonsterAttribute::DEAD;
 
   //moving
-  if(evt.timeSinceLastFrame == 0) return;//divide by zero... ignore this frame
-  position += ((target - position) * speed) * evt.timeSinceLastFrame;
-  std::cout << position << std::endl;
+  if(evt.timeSinceLastFrame == 0 || target == node->getPosition()) return;//divide by zero or no need to move... ignore movement for this frame
+
+  Ogre::Vector3 unitDirection = target - node->getPosition();
+  Ogre::Real distance = unitDirection.normalise();
+  Ogre::Real move = speed * evt.timeSinceLastFrame;
+  distance -= move;
+  if (distance <= 0.0f)
+  {
+    node->setPosition(target);
+  }
+  else
+  {
+    node->translate(unitDirection * move);
+  }
 }
 
 void Monster::setTarget(Ogre::Vector3 target)
