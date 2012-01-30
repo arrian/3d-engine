@@ -1,18 +1,14 @@
 #pragma once
+
+#include <OgreMath.h>
+
 class Bar
 {
 public:
-  Bar();
-  Bar(int maxValue);
+  Bar(Ogre::Real maxValue = 0);
   ~Bar(void);
 
-  int getCurrent();
-  int getMax();
-
-  void increaseMax(int amount);
-  void increaseCurrent(int amount);
-private:
-  int max;
-  int current;
+  Ogre::Real max;
+  Ogre::Real current;
 };
 

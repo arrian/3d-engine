@@ -1,13 +1,14 @@
 #include "Item.h"
 
 
-Item::Item(void)
+Item::Item(void) : Entity()
 {
+  value = 0;
   name = "rock";
 
   attributes = ItemAttributes();
 
-  attributes.buc = ItemAttribute::CURSED;
+  attributes.buc = ItemAttribute::UNCURSED;
   attributes.type = ItemAttribute::GEM;
 }
 

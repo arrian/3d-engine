@@ -7,7 +7,7 @@
 class Game
 {
 public:
-  Game();
+  Game(void);
   virtual ~Game(void);
 
   virtual void frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;

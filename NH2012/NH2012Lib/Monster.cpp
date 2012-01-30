@@ -1,15 +1,10 @@
 #include "Monster.h"
 
 
-Monster::Monster(int difficulty)
+Monster::Monster(Ogre::Vector3 position, int difficulty) : Actor()
 {
-  //health
   health = Bar(difficulty * difficulty);
-  
-  //magic
-  magic = Bar(health.getMax());
-  
-  //level
+  magic = Bar(difficulty * difficulty);
   level = Bar(difficulty);
 
   //generating name
@@ -26,6 +21,11 @@ Monster::Monster(int difficulty)
 
   //filling attributes
   attributes = MonsterAttributes();
+
+  //other
+  this->position = position;
+  target = Ogre::Vector3(0,0,0);
+  speed = 0;
 }
 
 
@@ -35,10 +35,12 @@ Monster::~Monster(void)
 
 void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-
+  if(health.current <= 0) attributes.awareness = MonsterAttribute::DEAD;
 
   //moving
-  position += ((target - position) * speed) / evt.timeSinceLastFrame;
+  if(evt.timeSinceLastFrame == 0) return;//divide by zero... ignore this frame
+  position += ((target - position) * speed) * evt.timeSinceLastFrame;
+  std::cout << position << std::endl;
 }
 
 void Monster::setTarget(Ogre::Vector3 target)
@@ -46,12 +48,17 @@ void Monster::setTarget(Ogre::Vector3 target)
   this->target = target;
 }
 
-void Monster::fixCollision(World* world)
+void Monster::animation()
 {
 
 }
 
-void Monster::fixAI(World* world)
+void Monster::audio()
+{
+
+}
+
+void Monster::collision()
 {
 
 }

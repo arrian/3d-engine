@@ -2,9 +2,10 @@
 
 #include <OgreString.h>
 
+#include "Entity.h"
 #include "Attributes.h"
 
-class Item
+class Item : public Entity
 {
 public:
   Item(void);
@@ -12,9 +13,6 @@ public:
 
   friend bool operator==(const Item& x, const Item& y);
 private:
-  int id;//unique identifier
-  Ogre::String name;
-
   int value;
 
   ItemAttributes attributes;

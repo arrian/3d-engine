@@ -16,11 +16,12 @@ class Singleplayer :
   public Game
 {
 public:
-  Singleplayer(void);
+  Singleplayer(Ogre::SceneManager* sceneManager);
   ~Singleplayer(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void setSceneManager(Ogre::SceneManager* scene);
 
-  World* world;
+  World world;
 };
 

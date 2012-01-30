@@ -1,11 +1,13 @@
 #include "Multiplayer.h"
 
-Multiplayer::Multiplayer(void)
+Multiplayer::Multiplayer(void) : Game()
 {
   std::string host = "127.0.0.1";
   unsigned short port = 30001;
 
   listener = boost::thread(boost::bind(&Multiplayer::listen, this, host, port));
+
+  frame = 0;
 }
 
 Multiplayer::~Multiplayer(void)

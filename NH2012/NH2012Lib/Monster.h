@@ -4,39 +4,28 @@
 #include <OgreString.h>
 #include <OgreVector3.h>
 
-#include "World.h"
+#include "Actor.h"
+#include "Dungeon.h"
 #include "Inventory.h"
 #include "Attributes.h"
 #include "Bar.h"
 
-class World;//forward declaring for circular dependency
+class Dungeon;//forward declaring for circular dependency
 
-class Monster
+class Monster : public Actor
 {
 public:
-  Monster(int difficulty);
+  Monster(Ogre::Vector3 position = Ogre::Vector3(0,0,0), int difficulty = 1);
   virtual ~Monster(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void setTarget(Ogre::Vector3 target);
 private:
-  int id;//unique identifier for instance
-  Ogre::String name;
-
-  Ogre::Vector3 position;
   Ogre::Vector3 target;
 
-  Ogre::Real speed;
-
-  Bar level;
-  Bar health;
-  Bar magic;
-
-  Inventory inventory;
-  MonsterAttributes attributes;
-
-  void fixCollision(World* world);
-  void fixAI(World* world);
+  void animation();
+  void audio();
+  void collision();
 };
 

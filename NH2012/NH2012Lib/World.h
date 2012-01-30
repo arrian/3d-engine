@@ -4,26 +4,26 @@
 
 #include <OgreFrameListener.h>
 
-#include "Monster.h"
-#include "Inventory.h"
 #include "Dungeon.h"
 #include "Flag.h"
-
-class Monster;//forward declaring for circular dependency
+#include "Player.h"
 
 class World
 {
 public:
-  World(void);
+  World(Ogre::SceneManager* sceneManager);
   ~World(void);
 
+  Flag flags;
+
+  void setSceneManager(Ogre::SceneManager* sceneManager);
   bool frameRenderingQueued(const Ogre::FrameEvent& evt);//perform all world calculations
 private:
+  Ogre::SceneManager* sceneManager;
+
   int timestamp;
 
-  std::vector<Monster> monsters;
-  Inventory items;
-  Dungeon dungeon;
-  Flag flags;
+  std::vector<Dungeon> dungeons;
+  std::vector<Player> players;
 };
 
