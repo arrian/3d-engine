@@ -21,6 +21,12 @@ public:
   ~Multiplayer(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+  void injectKeyDown(const OIS::KeyEvent &arg);
+  void injectKeyUp(const OIS::KeyEvent &arg);
+  void injectMouseMove(const OIS::MouseEvent &arg);
+  void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+  void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 private:
   Client* client;
 

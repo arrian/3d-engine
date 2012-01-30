@@ -9,13 +9,13 @@ Filename:    NH2012.cpp
 //-------------------------------------------------------------------------------------
 NH2012::NH2012(void)
     : mRoot(0),
-    mCamera(0),
+    //mCamera(0),
     mSceneMgr(0),
     mWindow(0),
     mResourcesCfg(Ogre::StringUtil::BLANK),
     mPluginsCfg(Ogre::StringUtil::BLANK),
     mTrayMgr(0),
-    mCameraMan(0),
+    //mCameraMan(0),
     mDetailsPanel(0),
     mCursorWasVisible(false),
     mShutDown(false),
@@ -28,7 +28,7 @@ NH2012::NH2012(void)
 NH2012::~NH2012(void)
 {
     if (mTrayMgr) delete mTrayMgr;
-    if (mCameraMan) delete mCameraMan;
+    //if (mCameraMan) delete mCameraMan;
 
     //Remove ourself as a Window listener
     Ogre::WindowEventUtilities::removeWindowEventListener(mWindow, this);
@@ -102,6 +102,7 @@ bool NH2012::go(void)
     //SceneManager
     mSceneMgr = mRoot->createSceneManager(Ogre::ST_INTERIOR);//ST_GENERIC);
 //-------------------------------------------------------------------------------------
+    /*
     //Create the camera
     mCamera = mSceneMgr->createCamera("PlayerCam");
     mCamera->setPosition(Ogre::Vector3(0,100,80));
@@ -117,6 +118,7 @@ bool NH2012::go(void)
     // Alter the camera aspect ratio to match the viewport
     mCamera->setAspectRatio(
         Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+        */
 //-------------------------------------------------------------------------------------
     // Set default mipmap level (NB some APIs ignore this)
     Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
@@ -132,7 +134,7 @@ bool NH2012::go(void)
     if(true)
     {
       std::cout << "singleplayer...";
-      game = new Singleplayer(mSceneMgr);
+      game = new Singleplayer(mSceneMgr, mWindow);
     }
     else
     {
@@ -223,9 +225,10 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     mTrayMgr->frameRenderingQueued(evt);
 
+    /*
     if (!mTrayMgr->isDialogVisible())
     {
-        mCameraMan->frameRenderingQueued(evt);   // if dialog isn't up, then update the camera
+        //mCameraMan->frameRenderingQueued(evt);   // if dialog isn't up, then update the camera
         if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
         {
             mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
@@ -237,6 +240,7 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
             mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
         }
     }
+    */
 
     return true;
 }
@@ -298,6 +302,7 @@ bool NH2012::keyPressed( const OIS::KeyEvent &arg )
     }
     else if (arg.key == OIS::KC_R)   // cycle polygon rendering mode
     {
+      /*
         Ogre::String newVal;
         Ogre::PolygonMode pm;
 
@@ -318,6 +323,7 @@ bool NH2012::keyPressed( const OIS::KeyEvent &arg )
 
         mCamera->setPolygonMode(pm);
         mDetailsPanel->setParamValue(10, newVal);
+        */
     }
     else if(arg.key == OIS::KC_F5)   // refresh all textures
     {
@@ -349,34 +355,34 @@ bool NH2012::keyPressed( const OIS::KeyEvent &arg )
       material->getTechnique(0)->getPass(0)->setDiffuse(newDiffuse);
     }
 
-    mCameraMan->injectKeyDown(arg);
+    game->injectKeyDown(arg);
     return true;
 }
 
 bool NH2012::keyReleased( const OIS::KeyEvent &arg )
 {
-    mCameraMan->injectKeyUp(arg);
+    game->injectKeyUp(arg);
     return true;
 }
 
 bool NH2012::mouseMoved( const OIS::MouseEvent &arg )
 {
     if (mTrayMgr->injectMouseMove(arg)) return true;
-    mCameraMan->injectMouseMove(arg);
+    game->injectMouseMove(arg);
     return true;
 }
 
 bool NH2012::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
     if (mTrayMgr->injectMouseDown(arg, id)) return true;
-    mCameraMan->injectMouseDown(arg, id);
+    game->injectMouseDown(arg, id);
     return true;
 }
 
 bool NH2012::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
     if (mTrayMgr->injectMouseUp(arg, id)) return true;
-    mCameraMan->injectMouseUp(arg, id);
+    game->injectMouseUp(arg, id);
     return true;
 }
 

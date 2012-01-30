@@ -25,7 +25,7 @@ Filename:    NH2012.h
 #include <OISMouse.h>
 
 #include <SdkTrays.h>
-#include <SdkCameraMan.h>
+//#include <SdkCameraMan.h>
 
 #include "../Game.h"
 #include "../Singleplayer.h"
@@ -39,7 +39,7 @@ public:
     bool go(void);
 protected:
     Ogre::Root *mRoot;
-    Ogre::Camera* mCamera;
+    //Ogre::Camera* mCamera;
     Ogre::SceneManager* mSceneMgr;
     Ogre::RenderWindow* mWindow;
     Ogre::String mResourcesCfg;
@@ -49,7 +49,7 @@ protected:
 
     // OgreBites
     OgreBites::SdkTrayManager* mTrayMgr;
-    OgreBites::SdkCameraMan* mCameraMan;     // basic camera controller
+    //OgreBites::SdkCameraMan* mCameraMan;     // basic camera controller
     OgreBites::ParamsPanel* mDetailsPanel;   // sample details panel
     bool mCursorWasVisible;                  // was cursor visible before dialog appeared
     bool mShutDown;
@@ -61,8 +61,8 @@ protected:
 
     // Ogre::FrameListener
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
-    void preRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);
-    void postRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);
+    //void preRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);
+    //void postRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);
 
     // OIS::KeyListener
     virtual bool keyPressed( const OIS::KeyEvent &arg );

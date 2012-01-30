@@ -37,3 +37,27 @@ void Multiplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
   frame++;
 }
 
+void Multiplayer::injectKeyDown(const OIS::KeyEvent &arg)
+{
+
+}
+
+void Multiplayer::injectKeyUp(const OIS::KeyEvent &arg)
+{
+
+}
+
+void Multiplayer::injectMouseMove(const OIS::MouseEvent &arg)
+{
+
+}
+
+void Multiplayer::injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+
+}
+
+void Multiplayer::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+
+}
