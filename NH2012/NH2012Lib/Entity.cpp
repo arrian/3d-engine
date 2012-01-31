@@ -1,6 +1,7 @@
 #include "Entity.h"
 
-Entity::Entity(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, Ogre::String meshName, Ogre::Vector3 position, int id, Ogre::String name)
+Entity::Entity(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
+               Ogre::String meshName, Ogre::Vector3 position, int id, Ogre::String name)
 {
   this->id = id;
   this->name = name;

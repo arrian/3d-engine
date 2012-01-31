@@ -1,7 +1,9 @@
 #include "Monster.h"
 
 
-Monster::Monster(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, Ogre::Vector3 position, int id, int difficulty) : Actor(sceneManager, physics, position, id)
+Monster::Monster(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
+                 Ogre::Vector3 position, int id, int difficulty)
+  : Actor(sceneManager, physics, position, id)
 {
   health = Bar(difficulty * difficulty);
   magic = Bar(difficulty * difficulty);
@@ -37,7 +39,7 @@ void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
   if(health.current <= 0) attributes.awareness = MonsterAttribute::DEAD;
 
   //moving
-  if(evt.timeSinceLastFrame == 0 || target == node->getPosition()) return;//divide by zero or no need to move... ignore movement for this frame
+  if(evt.timeSinceLastFrame == 0 || target == node->getPosition()) return;
 
   Ogre::Vector3 unitDirection = target - node->getPosition();
   Ogre::Real distance = unitDirection.normalise();

@@ -19,7 +19,8 @@ class Dungeon;
 class Player : public Actor
 {
 public:
-  Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, Ogre::RenderWindow* window, Ogre::Vector3 position);
+  Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
+         Ogre::RenderWindow* window, Ogre::Vector3 position);
   ~Player(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -45,14 +46,14 @@ private:
   void collision();
 
   //Camera movement stuff
-	Ogre::Vector3 mVelocity;
-	bool mGoingForward;
-	bool mGoingBack;
-	bool mGoingLeft;
-	bool mGoingRight;
-	bool mGoingUp;
-	bool mGoingDown;
-	bool mFastMove;
+  Ogre::Vector3 mVelocity;
+  bool mGoingForward;
+  bool mGoingBack;
+  bool mGoingLeft;
+  bool mGoingRight;
+  bool mGoingUp;
+  bool mGoingDown;
+  bool mFastMove;
 
   void stop();//manually stops the player movement
 };

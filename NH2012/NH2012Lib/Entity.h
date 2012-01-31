@@ -42,7 +42,9 @@
 class Entity
 {
 public:
-  Entity(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, Ogre::String meshName = Ogre::String("default.mesh"), Ogre::Vector3 position = Ogre::Vector3(0,0,0), int id = 0, Ogre::String name = Ogre::String("DefaultEntity"));
+  Entity(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
+         Ogre::String meshName = Ogre::String("default.mesh"), Ogre::Vector3 position = Ogre::Vector3(0,0,0), 
+         int id = 0, Ogre::String name = Ogre::String("DefaultEntity"));
   ~Entity(void);
 protected:
   int id;

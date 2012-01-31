@@ -12,7 +12,8 @@
 class Actor : public Entity
 {
 public:
-  Actor(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, Ogre::Vector3 position = Ogre::Vector3(0,0,0), int id = 0);
+  Actor(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
+        Ogre::Vector3 position = Ogre::Vector3(0,0,0), int id = 0);
   ~Actor(void);
 
   virtual void frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;

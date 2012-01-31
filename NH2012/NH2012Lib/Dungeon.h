@@ -64,7 +64,10 @@ class Monster;//forward declaring for circular dependency
 class Dungeon
 {
 public:
-  Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, Ogre::String name = Ogre::String("Default Dungeon"), DungeonType::Type type = DungeonType::PREDEFINED, int numMonsters = 0, int numItems = 0, Ogre::ColourValue colour = Ogre::ColourValue(1,1,1));
+  Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, 
+          Ogre::String name = Ogre::String("Default Dungeon"), 
+          DungeonType::Type type = DungeonType::PREDEFINED, int numMonsters = 0, 
+          int numItems = 0, Ogre::ColourValue colour = Ogre::ColourValue(1,1,1));
   ~Dungeon(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -89,6 +92,8 @@ private:
   std::vector<Item*> items;
   Player* player;
 
-  OgreBulletDynamics::RigidBody* Dungeon::addStaticTrimesh(Ogre::Entity* entity, Ogre::SceneNode* node, Ogre::Real restitution, const Ogre::Real friction);//NOTE: Not deleted at destruction
+  //NOTE: Not deleted at destruction
+  OgreBulletDynamics::RigidBody* Dungeon::addStaticTrimesh(Ogre::Entity* entity, Ogre::SceneNode* node, 
+                                                           Ogre::Real restitution, const Ogre::Real friction);
 };
 

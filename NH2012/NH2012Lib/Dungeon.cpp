@@ -1,12 +1,16 @@
 #include "Dungeon.h"
 
-Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, Ogre::String name, DungeonType::Type type, int numMonsters, int numItems, Ogre::ColourValue colour)
+Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, 
+                 Ogre::String name, DungeonType::Type type, int numMonsters, 
+                 int numItems, Ogre::ColourValue colour)
 {
   this->sceneManager = sceneManager;
 
   debugPause = true;
   
-  physics = new OgreBulletDynamics::DynamicsWorld(sceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000,-10000,-10000),Ogre::Vector3(10000,10000,10000)), Ogre::Vector3(0,-9.807,0));
+  physics = new OgreBulletDynamics::DynamicsWorld(sceneManager, 
+                                                  Ogre::AxisAlignedBox(Ogre::Vector3(-10000,-10000,-10000),
+                                                  Ogre::Vector3(10000,10000,10000)), Ogre::Vector3(0,-9.807,0));
   physics->setShowDebugShapes(true);
 
   std::cout << "Creating player" << std::endl;
@@ -140,7 +144,8 @@ void Dungeon::frameRenderingQueued(const Ogre::FrameEvent& evt)
   }
 }
 
-OgreBulletDynamics::RigidBody* Dungeon::addStaticTrimesh(Ogre::Entity* entity, Ogre::SceneNode* node, Ogre::Real restitution, const Ogre::Real friction)
+OgreBulletDynamics::RigidBody* Dungeon::addStaticTrimesh(Ogre::Entity* entity, Ogre::SceneNode* node, 
+                                                         Ogre::Real restitution, const Ogre::Real friction)
 {
   OgreBulletCollisions::StaticMeshToShapeConverter* trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
   OgreBulletCollisions::TriangleMeshCollisionShape* sceneTriMeshShape = trimeshConverter->createTrimesh();
