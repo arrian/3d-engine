@@ -1,7 +1,7 @@
 #include "Monster.h"
 
 
-Monster::Monster(Ogre::SceneManager* sceneManager, Ogre::Vector3 position, int difficulty) : Actor(sceneManager, position)
+Monster::Monster(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, Ogre::Vector3 position, int id, int difficulty) : Actor(sceneManager, physics, position, id)
 {
   health = Bar(difficulty * difficulty);
   magic = Bar(difficulty * difficulty);
@@ -23,7 +23,7 @@ Monster::Monster(Ogre::SceneManager* sceneManager, Ogre::Vector3 position, int d
   attributes = MonsterAttributes();
 
   //other
-  target = Ogre::Vector3(0,0,0);
+  target = Ogre::Vector3(0,51,0);
   speed = 130;
 }
 

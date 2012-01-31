@@ -1,25 +1,36 @@
 #include "Dungeon.h"
 
-Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::String name, DungeonType::Type type, int numMonsters, int numItems, Ogre::ColourValue colour)
+Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, Ogre::String name, DungeonType::Type type, int numMonsters, int numItems, Ogre::ColourValue colour)
 {
   this->sceneManager = sceneManager;
+
+  debugPause = true;
+  
+  physics = new OgreBulletDynamics::DynamicsWorld(sceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000,-10000,-10000),Ogre::Vector3(10000,10000,10000)), Ogre::Vector3(0,-9.807,0));
+  physics->setShowDebugShapes(true);
+
+  std::cout << "Creating player" << std::endl;
+  player = new Player(sceneManager, physics, window, Ogre::Vector3(0,51,0));
 
   this->name = name;
   this->type = type;
   this->colour = colour;
 
-  monsters = std::vector<Monster>();
+  std::cout << "Creating monsters" << std::endl;
+  monsters = std::vector<Monster*>();
   for(int i = 1; i <= numMonsters; i++)
   {
-    monsters.push_back(Monster(sceneManager, Ogre::Vector3(200*i + 100,0,0)));
+    monsters.push_back(new Monster(sceneManager, physics, Ogre::Vector3(40*i + 40,51,0), i));
   }
-
-  items = std::vector<Item>();
+  
+  std::cout << "Creating items" << std::endl;
+  items = std::vector<Item*>();
   for(int i = 1; i <= numItems; i++)
   {
-    items.push_back(Item(sceneManager, Ogre::Vector3(0,0,200*i + 100)));
+    items.push_back(new Item(sceneManager, physics, Ogre::Vector3(0,10,200*i + 100), i + numMonsters + 1));
   }
 
+  std::cout << "Creating scenery" << std::endl;
   if(type == DungeonType::PREDEFINED)
   {
     Ogre::Entity* r1 = sceneManager->createEntity("r1.mesh");
@@ -53,6 +64,9 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::String name, DungeonTyp
     testRoom->attachObject(r12);
     testRoom->attachObject(r13);
     testRoom->attachObject(r14);
+
+    addStaticTrimesh(r6,testRoom,0.5,0.5);
+
 
     //Set ambient light
     sceneManager->setAmbientLight(Ogre::ColourValue(0,0,0));
@@ -93,12 +107,77 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::String name, DungeonTyp
 
 Dungeon::~Dungeon(void)
 {
+  if(player) delete player;
+  player = 0;
+  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) if(*it) 
+  {
+    delete (*it);
+    (*it) = 0;
+  }
+  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) if(*it) 
+  {
+    delete (*it);
+    (*it) = 0;
+  }
+  if(physics) delete physics;
+  physics = 0;
 }
 
 void Dungeon::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  for(std::vector<Monster>::iterator it = monsters.begin(); it != monsters.end(); ++it) 
+  if(!debugPause) physics->stepSimulation(evt.timeSinceLastFrame);
+
+  player->frameRenderingQueued(evt);
+
+  if(!debugPause) 
   {
-    it->frameRenderingQueued(evt);
+    for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) 
+    {
+      (*it)->frameRenderingQueued(evt);
+    }
+
+    physics->stepSimulation(evt.timeSinceLastFrame);
   }
+}
+
+OgreBulletDynamics::RigidBody* Dungeon::addStaticTrimesh(Ogre::Entity* entity, Ogre::SceneNode* node, Ogre::Real restitution, const Ogre::Real friction)
+{
+  OgreBulletCollisions::StaticMeshToShapeConverter* trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
+  OgreBulletCollisions::TriangleMeshCollisionShape* sceneTriMeshShape = trimeshConverter->createTrimesh();
+  delete trimeshConverter;
+  OgreBulletDynamics::RigidBody* sceneRigid = new OgreBulletDynamics::RigidBody(
+      "test Rigid" + Ogre::StringConverter::toString(1),
+      physics);
+  sceneRigid->setStaticShape(node, sceneTriMeshShape, restitution, friction);
+
+  return sceneRigid;
+}
+
+void Dungeon::injectKeyDown(const OIS::KeyEvent &arg)
+{
+  if(arg.key == OIS::KC_Q) debugPause = !debugPause;
+
+  if(arg.key == OIS::KC_Q) debugPause = !debugPause;
+
+  player->injectKeyDown(arg);
+}
+
+void Dungeon::injectKeyUp(const OIS::KeyEvent &arg)
+{
+  player->injectKeyUp(arg);
+}
+
+void Dungeon::injectMouseMove(const OIS::MouseEvent &arg)
+{
+  player->injectMouseMove(arg);
+}
+
+void Dungeon::injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+  player->injectMouseDown(arg,id);
+}
+
+void Dungeon::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+  player->injectMouseUp(arg,id);
 }

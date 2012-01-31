@@ -14,27 +14,28 @@
 #include "Attributes.h"
 #include "Dungeon.h"
 
+class Dungeon;
+
 class Player : public Actor
 {
 public:
-  Player(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, Ogre::Vector3 position, Dungeon* dungeon = 0);
+  Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, Ogre::RenderWindow* window, Ogre::Vector3 position);
   ~Player(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
-  void setDungeon(Dungeon* dungeon);
 
   void injectKeyDown(const OIS::KeyEvent &evt);
   void injectKeyUp(const OIS::KeyEvent &evt);
   void injectMouseMove(const OIS::MouseEvent &evt);
   void injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
   void injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
+
+  Ogre::Vector3 getPosition();
 private:
   //hardcore mode
   Bar water;
   Bar food;
   Bar sleep;
-
-  Dungeon* currentDungeon;
 
   Ogre::Camera* camera;
   //OgreBites::SdkCameraMan* cameraMovement;
@@ -44,7 +45,6 @@ private:
   void collision();
 
   //Camera movement stuff
-  Ogre::Real mTopSpeed;
 	Ogre::Vector3 mVelocity;
 	bool mGoingForward;
 	bool mGoingBack;

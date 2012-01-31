@@ -1,9 +1,8 @@
 #include "Player.h"
 
 
-Player::Player(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, Ogre::Vector3 position, Dungeon* dungeon) 
-  : Actor(sceneManager, position)
-	, mTopSpeed(200)
+Player::Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, Ogre::RenderWindow* window, Ogre::Vector3 position) 
+  : Actor(sceneManager, physics, position)
 	, mVelocity(Ogre::Vector3::ZERO)
 	, mGoingForward(false)
 	, mGoingBack(false)
@@ -24,9 +23,7 @@ Player::Player(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, Ogr
   inventory = Inventory();
   attributes = MonsterAttributes();
 
-  speed = 1.3;//walking speed
-
-  currentDungeon = dungeon;
+  speed = 200;//walking speed
 
 
   //Create the camera
@@ -48,20 +45,16 @@ Player::Player(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, Ogr
 
 Player::~Player(void)
 {
-  //if (cameraMovement) delete cameraMovement;
   if(camera) delete camera;
 }
 
 void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(food.current > 0) health.current -= 0.00001 * evt.timeSinceLastFrame;
-  if(water.current > 0) water.current -= 0.000015 * evt.timeSinceLastFrame;
-  if(sleep.current > 0) sleep.current -= 0.00001 * evt.timeSinceLastFrame;
-
-  //cameraMovement->frameRenderingQueued(evt);
+  if(food.current > 0) food.current -= 0.0001 * evt.timeSinceLastFrame;
+  if(water.current > 0) water.current -= 0.00015 * evt.timeSinceLastFrame;
+  if(food.current <= 0 || water.current <= 0) attributes.awareness = MonsterAttribute::DEAD;
 
   //Camera update 
-  // build our acceleration vector based on keyboard input composite
 	Ogre::Vector3 accel = Ogre::Vector3::ZERO;
 	if (mGoingForward) accel += camera->getDirection();
 	if (mGoingBack) accel -= camera->getDirection();
@@ -71,7 +64,7 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	if (mGoingDown) accel -= camera->getUp();
 
 	// if accelerating, try to reach top speed in a certain time
-	Ogre::Real topSpeed = mFastMove ? mTopSpeed * 20 : mTopSpeed;
+	Ogre::Real topSpeed = mFastMove ? speed * 2 : speed;
 	if (accel.squaredLength() != 0)
 	{
 		accel.normalise();
@@ -92,11 +85,6 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 		mVelocity = Ogre::Vector3::ZERO;
 
 	if (mVelocity != Ogre::Vector3::ZERO) camera->move(mVelocity * evt.timeSinceLastFrame);
-}
-
-void Player::setDungeon(Dungeon* dungeon)
-{
-  this->currentDungeon = dungeon;
 }
 
 void Player::animation()
@@ -144,7 +132,7 @@ void Player::injectMouseMove(const OIS::MouseEvent &evt)
 
 void Player::injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-
+  
 }
 
 void Player::injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
@@ -161,4 +149,9 @@ void Player::stop()
   mGoingUp = false;
   mGoingDown = false;
   mVelocity = Ogre::Vector3::ZERO;
+}
+
+Ogre::Vector3 Player::getPosition()
+{
+  return camera->getPosition();
 }

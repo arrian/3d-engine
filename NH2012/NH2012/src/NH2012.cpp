@@ -222,7 +222,6 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
     game->frameRenderingQueued(evt);
     //std::cout << game->frame << std::endl;
 
-
     mTrayMgr->frameRenderingQueued(evt);
 
     /*

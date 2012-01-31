@@ -32,9 +32,8 @@ private:
 
   int timestamp;
 
-  std::vector<Dungeon> dungeons;
+  std::vector<Dungeon*> dungeons;
 
-  Player player;
   //std::vector<Player> players;
 };
 
