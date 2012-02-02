@@ -102,24 +102,6 @@ bool NH2012::go(void)
     //SceneManager
     mSceneMgr = mRoot->createSceneManager(Ogre::ST_INTERIOR);//ST_GENERIC);
 //-------------------------------------------------------------------------------------
-    /*
-    //Create the camera
-    mCamera = mSceneMgr->createCamera("PlayerCam");
-    mCamera->setPosition(Ogre::Vector3(0,100,80));
-    mCamera->lookAt(Ogre::Vector3(0,100,-300));
-    mCamera->setNearClipDistance(5);
-
-    mCameraMan = new OgreBites::SdkCameraMan(mCamera);//create a default camera controller
-//-------------------------------------------------------------------------------------
-    // Create one viewport, entire window
-    Ogre::Viewport* vp = mWindow->addViewport(mCamera);
-    vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
-
-    // Alter the camera aspect ratio to match the viewport
-    mCamera->setAspectRatio(
-        Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
-        */
-//-------------------------------------------------------------------------------------
     // Set default mipmap level (NB some APIs ignore this)
     Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
 //-------------------------------------------------------------------------------------
@@ -173,6 +155,7 @@ bool NH2012::go(void)
 
     mTrayMgr = new OgreBites::SdkTrayManager("InterfaceName", mWindow, mMouse, this);
     mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
+    mTrayMgr->toggleAdvancedFrameStats();
     mTrayMgr->hideCursor();
 
     // create a params panel for displaying sample details

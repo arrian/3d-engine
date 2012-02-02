@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <iostream>
-#include "Item.h"
+#include "ItemData.h"
 
 class Inventory
 {
@@ -11,10 +11,10 @@ public:
   Inventory(int numberOfItems);
   virtual ~Inventory(void);
 
-  bool contains(Item item);
-  void add(Item item);
+  bool contains(ItemData item);
+  void add(ItemData item);
 private:
-  std::vector<Item> items;
+  std::vector<ItemData> items;
 
   void clear();
 };

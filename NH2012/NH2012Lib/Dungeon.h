@@ -9,38 +9,26 @@
 #include "Player.h."
 #include "Monster.h"
 #include "Item.h"
-
-
+#include "Architecture.h"
 
 
 #include "OgreBulletCollisionsShape.h"
-
- 
 #include "Shapes/OgreBulletCollisionsBoxShape.h"
 #include "Shapes/OgreBulletCollisionsSphereShape.h"
 #include "Shapes/OgreBulletCollisionsConeShape.h"
 #include "Shapes/OgreBulletCollisionsCylinderShape.h"
 #include "Shapes/OgreBulletCollisionsTriangleShape.h"
 #include "Shapes/OgreBulletCollisionsStaticPlaneShape.h"
-
 #include "Shapes/OgreBulletCollisionsCompoundShape.h"
-
 #include "Shapes/OgreBulletCollisionsMultiSphereShape.h"
-
 #include "Shapes/OgreBulletCollisionsConvexHullShape.h"
 #include "Shapes/OgreBulletCollisionsMinkowskiSumShape.h"
-
 #include "Shapes/OgreBulletCollisionsTrimeshShape.h"
-
 #include "Utils/OgreBulletCollisionsMeshToShapeConverter.h"
-
 #include "OgreBulletCollisionsRay.h"
-
 #include "Debug/OgreBulletCollisionsDebugLines.h"
-
 #include "OgreBulletDynamicsWorld.h"
 #include "OgreBulletDynamicsRigidBody.h"
-
 #include "OgreBulletDynamicsConstraint.h"
 #include "Constraints/OgreBulletDynamicsPoint2pointConstraint.h" 
 
@@ -88,12 +76,12 @@ private:
 
   Ogre::ColourValue colour;
 
+  Architecture* architecture;
+  std::vector<Ogre::Light*> lights;
   std::vector<Monster*> monsters;
   std::vector<Item*> items;
   Player* player;
 
-  //NOTE: Not deleted at destruction
-  OgreBulletDynamics::RigidBody* Dungeon::addStaticTrimesh(Ogre::Entity* entity, Ogre::SceneNode* node, 
-                                                           Ogre::Real restitution, const Ogre::Real friction);
+  int instanceNumber;
 };
 

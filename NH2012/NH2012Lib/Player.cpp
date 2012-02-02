@@ -51,8 +51,8 @@ Player::~Player(void)
 
 void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(food.current > 0) food.current -= 0.0001 * evt.timeSinceLastFrame;
-  if(water.current > 0) water.current -= 0.00015 * evt.timeSinceLastFrame;
+  if(food.current > 0) food.current -= Ogre::Real(0.0001) * evt.timeSinceLastFrame;
+  if(water.current > 0) water.current -= Ogre::Real(0.00015) * evt.timeSinceLastFrame;
   if(food.current <= 0 || water.current <= 0) attributes.awareness = MonsterAttribute::DEAD;
 
   //Camera update 

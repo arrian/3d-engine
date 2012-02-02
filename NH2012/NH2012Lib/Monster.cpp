@@ -5,18 +5,18 @@ Monster::Monster(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsW
                  Ogre::Vector3 position, int id, int difficulty)
   : Actor(sceneManager, physics, position, id)
 {
-  health = Bar(difficulty * difficulty);
-  magic = Bar(difficulty * difficulty);
-  level = Bar(difficulty);
+  health = Bar(Ogre::Real(difficulty * difficulty));
+  magic = Bar(Ogre::Real(difficulty * difficulty));
+  level = Bar(Ogre::Real(difficulty));
 
   //generating name
-  if(difficulty < 5) name = "jackal";
-  if(difficulty < 10) name = "troll";
-  if(difficulty < 20) name = "minotaur";
-  if(difficulty < 30) name = "arch-lich";
-  if(difficulty < 40) name = "Wizard of Yendor";
-  if(difficulty < 50) name = "Baalzebub";
-  if(difficulty < 60) name = "Demogorgon";
+  if(difficulty < 5) entityName = "jackal";
+  if(difficulty < 10) entityName = "troll";
+  if(difficulty < 20) entityName = "minotaur";
+  if(difficulty < 30) entityName = "arch-lich";
+  if(difficulty < 40) entityName = "Wizard of Yendor";
+  if(difficulty < 50) entityName = "Baalzebub";
+  if(difficulty < 60) entityName = "Demogorgon";
 
   //filling inventory
   inventory = Inventory(difficulty);

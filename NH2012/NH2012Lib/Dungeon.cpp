@@ -7,14 +7,17 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window,
   this->sceneManager = sceneManager;
 
   debugPause = true;
+
+  instanceNumber = 0;
   
   physics = new OgreBulletDynamics::DynamicsWorld(sceneManager, 
                                                   Ogre::AxisAlignedBox(Ogre::Vector3(-10000,-10000,-10000),
                                                   Ogre::Vector3(10000,10000,10000)), Ogre::Vector3(0,-9.807,0));
-  physics->setShowDebugShapes(true);
+  //physics->setShowDebugShapes(true);
 
   std::cout << "Creating player" << std::endl;
   player = new Player(sceneManager, physics, window, Ogre::Vector3(0,51,0));
+  instanceNumber++;
 
   this->name = name;
   this->type = type;
@@ -24,58 +27,52 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window,
   monsters = std::vector<Monster*>();
   for(int i = 1; i <= numMonsters; i++)
   {
-    monsters.push_back(new Monster(sceneManager, physics, Ogre::Vector3(40*i + 40,51,0), i));
+    monsters.push_back(new Monster(sceneManager, physics, Ogre::Vector3(40*i + 40,51,0), instanceNumber));
+    instanceNumber++;
   }
   
   std::cout << "Creating items" << std::endl;
   items = std::vector<Item*>();
   for(int i = 1; i <= numItems; i++)
   {
-    items.push_back(new Item(sceneManager, physics, Ogre::Vector3(0,10,200*i + 100), i + numMonsters + 1));
+    items.push_back(new Item(sceneManager, physics, Ogre::Vector3(0,10,200*i + 100), instanceNumber));
+    instanceNumber++;
   }
 
   std::cout << "Creating scenery" << std::endl;
+  architecture = new Architecture(sceneManager, physics);
+  lights = std::vector<Ogre::Light*>();
   if(type == DungeonType::PREDEFINED)
   {
-    Ogre::Entity* r1 = sceneManager->createEntity("r1.mesh");
-    Ogre::Entity* r2 = sceneManager->createEntity("r2.mesh");
-    Ogre::Entity* r3 = sceneManager->createEntity("r3.mesh");
-    Ogre::Entity* r4 = sceneManager->createEntity("r4.mesh");
-    Ogre::Entity* r5 = sceneManager->createEntity("r5.mesh");
-    Ogre::Entity* r6 = sceneManager->createEntity("r6.mesh");
-    Ogre::Entity* r7 = sceneManager->createEntity("r7.mesh");
-    Ogre::Entity* r8 = sceneManager->createEntity("r8.mesh");
-    Ogre::Entity* r9 = sceneManager->createEntity("r9.mesh");
-    Ogre::Entity* r10 = sceneManager->createEntity("r10.mesh");
-    Ogre::Entity* r11 = sceneManager->createEntity("r11.mesh");
-    Ogre::Entity* r12 = sceneManager->createEntity("r12.mesh");
-    Ogre::Entity* r13 = sceneManager->createEntity("r13.mesh");
-    Ogre::Entity* r14 = sceneManager->createEntity("r14.mesh");
+    architecture->add("r1.mesh");
+    architecture->add("r2.mesh");
+    architecture->add("r3.mesh");
+    architecture->add("r4.mesh");
+    architecture->add("r5.mesh");
+    architecture->add("r6.mesh");
+    architecture->add("r7.mesh");
+    architecture->add("r8.mesh");
+    architecture->add("r9.mesh");
+    architecture->add("r10.mesh");
+    architecture->add("r11.mesh");
+    architecture->add("r12.mesh");
+    architecture->add("r13.mesh");
+    architecture->add("r14.mesh");
+    architecture->add("connector.mesh", Ogre::Vector3(-380,0,0));
 
-    Ogre::SceneNode* testRoom = sceneManager->getRootSceneNode()->createChildSceneNode();
-
-    testRoom->attachObject(r1);
-    testRoom->attachObject(r2);
-    testRoom->attachObject(r3);
-    testRoom->attachObject(r4);
-    testRoom->attachObject(r5);
-    testRoom->attachObject(r6);
-    testRoom->attachObject(r7);
-    testRoom->attachObject(r8);
-    testRoom->attachObject(r9);
-    testRoom->attachObject(r10);
-    testRoom->attachObject(r11);
-    testRoom->attachObject(r12);
-    testRoom->attachObject(r13);
-    testRoom->attachObject(r14);
-
-    addStaticTrimesh(r6,testRoom,0.5,0.5);
-
-
-    //Set ambient light
-    sceneManager->setAmbientLight(Ogre::ColourValue(0,0,0));
-
+    architecture->add("hall.mesh", Ogre::Vector3(-445,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-545,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-645,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-745,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-845,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-945,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-1045,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-1145,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-1245,0,0));
+    architecture->add("hall.mesh", Ogre::Vector3(-1345,0,0));
+    
     /*
+    std::cout << "Creating particles" << std::endl;
     //Particles
     Ogre::ParticleSystem* sunParticle = sceneManager->createParticleSystem("Rain", "Examples/Rain");
     sunParticle->fastForward(20);
@@ -85,11 +82,35 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window,
     particleNode->attachObject(sunParticle);
     */
 
-    // Create a light
+    // Create lights
+    std::cout << "Creating lights" << std::endl;
+
+    //Set ambient light
+    sceneManager->setAmbientLight(Ogre::ColourValue(0,0,0));
+
     Ogre::Light* l = sceneManager->createLight("MainLight");
+    lights.push_back(l);
     l->setPosition(50,50,50);
     l->setAttenuation(3250, 1.0, 0.0014, 0.000007);
     l->setCastShadows(true);
+
+    Ogre::Light* l2 = sceneManager->createLight("light2");
+    lights.push_back(l2);
+    l2->setPosition(-600,50,0);
+    l2->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+    l2->setCastShadows(true);
+
+    Ogre::Light* l3 = sceneManager->createLight("light3");
+    lights.push_back(l3);
+    l3->setPosition(-800,50,0);
+    l3->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+    l3->setCastShadows(true);
+
+    Ogre::Light* l4 = sceneManager->createLight("light4");
+    lights.push_back(l4);
+    l4->setPosition(-1200,50,0);
+    l4->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+    l4->setCastShadows(true);
   }
   else if(type == DungeonType::CAVE)
   {
@@ -113,14 +134,21 @@ Dungeon::~Dungeon(void)
 {
   if(player) delete player;
   player = 0;
-  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) if(*it) 
+  if(architecture) delete architecture;
+  architecture = 0;
+  for(std::vector<Ogre::Light*>::iterator it = lights.begin(); it != lights.end(); ++it)
   {
-    delete (*it);
+    if(*it) delete (*it);
     (*it) = 0;
   }
-  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) if(*it) 
+  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
   {
-    delete (*it);
+    if(*it) delete (*it);
+    (*it) = 0;
+  }
+  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it)
+  {
+    if(*it) delete (*it);
     (*it) = 0;
   }
   if(physics) delete physics;
@@ -144,25 +172,15 @@ void Dungeon::frameRenderingQueued(const Ogre::FrameEvent& evt)
   }
 }
 
-OgreBulletDynamics::RigidBody* Dungeon::addStaticTrimesh(Ogre::Entity* entity, Ogre::SceneNode* node, 
-                                                         Ogre::Real restitution, const Ogre::Real friction)
-{
-  OgreBulletCollisions::StaticMeshToShapeConverter* trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
-  OgreBulletCollisions::TriangleMeshCollisionShape* sceneTriMeshShape = trimeshConverter->createTrimesh();
-  delete trimeshConverter;
-  OgreBulletDynamics::RigidBody* sceneRigid = new OgreBulletDynamics::RigidBody(
-      "test Rigid" + Ogre::StringConverter::toString(1),
-      physics);
-  sceneRigid->setStaticShape(node, sceneTriMeshShape, restitution, friction);
-
-  return sceneRigid;
-}
-
 void Dungeon::injectKeyDown(const OIS::KeyEvent &arg)
 {
   if(arg.key == OIS::KC_Q) debugPause = !debugPause;
 
-  if(arg.key == OIS::KC_Q) debugPause = !debugPause;
+  if(arg.key == OIS::KC_1) 
+  {
+    items.push_back(new Item(sceneManager, physics, Ogre::Vector3(0,51,200), instanceNumber));
+    instanceNumber++;
+  }
 
   player->injectKeyDown(arg);
 }

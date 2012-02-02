@@ -9,7 +9,7 @@ World::World(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window)
 
   flags = Flag();
   dungeons = std::vector<Dungeon*>();
-  dungeons.push_back(new Dungeon(sceneManager, window, "Entrance", DungeonType::PREDEFINED, 20, 0));
+  dungeons.push_back(new Dungeon(sceneManager, window, "Entrance", DungeonType::PREDEFINED, 0, 0));
 
   if(flags.isDebug())
   {

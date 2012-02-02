@@ -3,23 +3,20 @@
 
 Item::Item(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
            Ogre::Vector3 position, int id)
- : Entity(sceneManager, physics, "item.mesh", position, id)
+ : Entity(sceneManager, physics, "item.mesh", position, id, "rock")
 {
-  value = 0;
-  name = "rock";
 
-  attributes = ItemAttributes();
-
-  attributes.buc = ItemAttribute::UNCURSED;
-  attributes.type = ItemAttribute::GEM;
+  //Physics
+  physicsShape = new OgreBulletCollisions::BoxCollisionShape(entity->getBoundingBox().getSize()/2);
+  physicsBody = new OgreBulletDynamics::RigidBody("entity" + Ogre::StringConverter::toString(id), physics);
+  physicsBody->setShape(node, physicsShape, 0.2f, 0.5f, 0.1f, position);
 }
 
 
 Item::~Item(void)
 {
-}
-
-bool operator==(const Item& x, const Item& y)
-{
-  return (x.name == y.name);//should also check if all attributes are identical
+  if(physicsBody) delete physicsBody;
+  physicsBody = 0;
+  if(physicsShape) delete physicsShape;
+  physicsShape = 0;
 }

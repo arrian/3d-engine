@@ -3,19 +3,18 @@
 #include <OgreString.h>
 
 #include "Entity.h"
-#include "Attributes.h"
+#include "ItemData.h"
 
-class Item : public Entity
+class Item : public Entity, public ItemData
 {
 public:
   Item(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
        Ogre::Vector3 position = Ogre::Vector3(0,0,0), int id = 0);
   virtual ~Item(void);
 
-  friend bool operator==(const Item& x, const Item& y);
+  
 private:
-  int value;
-
-  ItemAttributes attributes;
+  OgreBulletCollisions::BoxCollisionShape* physicsShape;
+  OgreBulletDynamics::RigidBody* physicsBody;
 };
 

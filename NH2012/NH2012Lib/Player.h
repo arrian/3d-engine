@@ -14,6 +14,14 @@
 #include "Attributes.h"
 #include "Dungeon.h"
 
+
+#include "BulletCollision/CollisionShapes/btConvexHullShape.h"
+class btCharacterControllerInterface;
+class btDynamicCharacterController;
+class btKinematicCharacterController;
+class btCollisionShape;
+
+
 class Dungeon;
 
 class Player : public Actor

@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AI.h" />
+    <ClInclude Include="Architecture.h" />
     <ClInclude Include="Attributes.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="Client.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemData.h" />
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Player.h" />
@@ -97,6 +99,7 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="Architecture.cpp" />
     <ClCompile Include="Attributes.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="Client.cpp" />
@@ -105,6 +108,7 @@
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Player.cpp" />
