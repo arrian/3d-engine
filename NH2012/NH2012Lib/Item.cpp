@@ -9,7 +9,7 @@ Item::Item(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* 
   //Physics
   physicsShape = new OgreBulletCollisions::BoxCollisionShape(entity->getBoundingBox().getSize()/2);
   physicsBody = new OgreBulletDynamics::RigidBody("entity" + Ogre::StringConverter::toString(id), physics);
-  physicsBody->setShape(node, physicsShape, 0.2f, 0.5f, 0.1f, position);
+  physicsBody->setShape(node, physicsShape, 0.2f, 0.95f, 1000.0f, position);
 }
 
 

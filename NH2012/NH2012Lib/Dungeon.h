@@ -10,6 +10,7 @@
 #include "Monster.h"
 #include "Item.h"
 #include "Architecture.h"
+#include "Flag.h"
 
 
 #include "OgreBulletCollisionsShape.h"
@@ -53,7 +54,7 @@ class Dungeon
 {
 public:
   Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, 
-          Ogre::String name = Ogre::String("Default Dungeon"), 
+          Flag* flags, Ogre::String name = Ogre::String("Default Dungeon"), 
           DungeonType::Type type = DungeonType::PREDEFINED, int numMonsters = 0, 
           int numItems = 0, Ogre::ColourValue colour = Ogre::ColourValue(1,1,1));
   ~Dungeon(void);
@@ -66,7 +67,7 @@ public:
   void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
   void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 private:
-  bool debugPause;
+  Flag* flags;
 
   Ogre::SceneManager* sceneManager;
   OgreBulletDynamics::DynamicsWorld* physics;

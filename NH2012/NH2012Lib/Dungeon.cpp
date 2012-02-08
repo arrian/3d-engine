@@ -1,22 +1,21 @@
 #include "Dungeon.h"
 
 Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, 
-                 Ogre::String name, DungeonType::Type type, int numMonsters, 
-                 int numItems, Ogre::ColourValue colour)
+                 Flag* flags, Ogre::String name, DungeonType::Type type, 
+                 int numMonsters, int numItems, Ogre::ColourValue colour)
 {
   this->sceneManager = sceneManager;
-
-  debugPause = true;
+  this->flags = flags;
 
   instanceNumber = 0;
   
   physics = new OgreBulletDynamics::DynamicsWorld(sceneManager, 
                                                   Ogre::AxisAlignedBox(Ogre::Vector3(-10000,-10000,-10000),
                                                   Ogre::Vector3(10000,10000,10000)), Ogre::Vector3(0,-9.807,0));
-  //physics->setShowDebugShapes(true);
+  physics->setShowDebugShapes(flags->showCollisionDebug);
 
   std::cout << "Creating player" << std::endl;
-  player = new Player(sceneManager, physics, window, Ogre::Vector3(0,51,0));
+  player = new Player(sceneManager, physics, flags, window, Ogre::Vector3(0,50,0));
   instanceNumber++;
 
   this->name = name;
@@ -82,35 +81,38 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window,
     particleNode->attachObject(sunParticle);
     */
 
-    // Create lights
-    std::cout << "Creating lights" << std::endl;
+    if(flags->enableLights)
+    {
+      // Create lights
+      std::cout << "Creating lights" << std::endl;
 
-    //Set ambient light
-    sceneManager->setAmbientLight(Ogre::ColourValue(0,0,0));
+      //Set ambient light
+      sceneManager->setAmbientLight(Ogre::ColourValue(0,0,0));
 
-    Ogre::Light* l = sceneManager->createLight("MainLight");
-    lights.push_back(l);
-    l->setPosition(50,50,50);
-    l->setAttenuation(3250, 1.0, 0.0014, 0.000007);
-    l->setCastShadows(true);
+      Ogre::Light* l = sceneManager->createLight("MainLight");
+      lights.push_back(l);
+      l->setPosition(50,50,50);
+      l->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+      l->setCastShadows(true);
 
-    Ogre::Light* l2 = sceneManager->createLight("light2");
-    lights.push_back(l2);
-    l2->setPosition(-600,50,0);
-    l2->setAttenuation(3250, 1.0, 0.0014, 0.000007);
-    l2->setCastShadows(true);
+      Ogre::Light* l2 = sceneManager->createLight("light2");
+      lights.push_back(l2);
+      l2->setPosition(-600,50,0);
+      l2->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+      l2->setCastShadows(true);
 
-    Ogre::Light* l3 = sceneManager->createLight("light3");
-    lights.push_back(l3);
-    l3->setPosition(-800,50,0);
-    l3->setAttenuation(3250, 1.0, 0.0014, 0.000007);
-    l3->setCastShadows(true);
+      Ogre::Light* l3 = sceneManager->createLight("light3");
+      lights.push_back(l3);
+      l3->setPosition(-800,50,0);
+      l3->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+      l3->setCastShadows(true);
 
-    Ogre::Light* l4 = sceneManager->createLight("light4");
-    lights.push_back(l4);
-    l4->setPosition(-1200,50,0);
-    l4->setAttenuation(3250, 1.0, 0.0014, 0.000007);
-    l4->setCastShadows(true);
+      Ogre::Light* l4 = sceneManager->createLight("light4");
+      lights.push_back(l4);
+      l4->setPosition(-1200,50,0);
+      l4->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+      l4->setCastShadows(true);
+    }
   }
   else if(type == DungeonType::CAVE)
   {
@@ -136,11 +138,16 @@ Dungeon::~Dungeon(void)
   player = 0;
   if(architecture) delete architecture;
   architecture = 0;
-  for(std::vector<Ogre::Light*>::iterator it = lights.begin(); it != lights.end(); ++it)
+
+  if(flags->enableLights)
   {
-    if(*it) delete (*it);
-    (*it) = 0;
+    for(std::vector<Ogre::Light*>::iterator it = lights.begin(); it != lights.end(); ++it)
+    {
+      if(*it) delete (*it);
+      (*it) = 0;
+    }
   }
+
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
   {
     if(*it) delete (*it);
@@ -157,11 +164,11 @@ Dungeon::~Dungeon(void)
 
 void Dungeon::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(!debugPause) physics->stepSimulation(evt.timeSinceLastFrame);
+  if(!flags->freezeCollisionDebug) physics->stepSimulation(evt.timeSinceLastFrame);
 
   player->frameRenderingQueued(evt);
 
-  if(!debugPause) 
+  if(!flags->freezeCollisionDebug) 
   {
     for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) 
     {
@@ -174,7 +181,7 @@ void Dungeon::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 void Dungeon::injectKeyDown(const OIS::KeyEvent &arg)
 {
-  if(arg.key == OIS::KC_Q) debugPause = !debugPause;
+  if(arg.key == flags->controls.freezeCollision) flags->freezeCollisionDebug = !flags->freezeCollisionDebug;
 
   if(arg.key == OIS::KC_1) 
   {

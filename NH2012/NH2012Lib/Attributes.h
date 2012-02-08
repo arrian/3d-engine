@@ -19,7 +19,9 @@ namespace MonsterAttribute
   {
     NORMAL,
     PETRIFIES,
-    FLAYS_MINDS
+    FLAYS_MINDS,
+    BITES,
+    TELEPORT //quantum mechanic
   };
 
   enum Awareness
@@ -55,11 +57,6 @@ namespace MonsterAttribute
     UNDEAD
   };
 
-  enum Dislikes
-  {
-
-  };
-
   enum Gender
   {
     MALE,
@@ -67,7 +64,7 @@ namespace MonsterAttribute
     UNDEFINED
   };
 
-  enum Likes
+  enum LikesDislikes
   {
     GOLD,
     MAGIC,
@@ -96,7 +93,8 @@ namespace MonsterAttribute
     STRUCTURES,
     TUNNELS,
     EGGS,
-    LIGHT
+    LIGHT,
+    SMOKE
   };
 
   enum Status
@@ -159,7 +157,15 @@ namespace GeneralAttribute
     OMNIVOR,
     HERBIVOR,
     CARNIVOR,
-    METALLIVOR
+    METALLIVOR,
+    FOODLESS,
+    ATHEIST,
+    PACIFIST,
+    ILLITERATE,
+    NO_MELEE,
+    NO_GENOCIDE,
+    NO_POLYMORPH,
+    NO_WISHES
   };
 
   enum FoodSafety
@@ -255,9 +261,9 @@ public:
   MonsterAttribute::Behaviour behaviour;
   std::vector<MonsterAttribute::Body> body;
   std::vector<MonsterAttribute::Type> types;
-  std::vector<MonsterAttribute::Dislikes> dislikes;
+  std::vector<MonsterAttribute::LikesDislikes> dislikes;
   MonsterAttribute::Gender gender;
-  std::vector<MonsterAttribute::Likes> likes;
+  std::vector<MonsterAttribute::LikesDislikes> likes;
   MonsterAttribute::Size size;
   std::vector<MonsterAttribute::Produces> produces;
   std::vector<GeneralAttribute::Intrinsics> intrinsics;

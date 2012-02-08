@@ -5,13 +5,15 @@ World::World(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window)
 {
   this->sceneManager = sceneManager;
 
-  //sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+  flags = new Flag();
+  flags->parseIni("c:\\nh2012.ini");
 
-  flags = Flag();
+  if(flags->enableShadows) sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+
   dungeons = std::vector<Dungeon*>();
-  dungeons.push_back(new Dungeon(sceneManager, window, "Entrance", DungeonType::PREDEFINED, 0, 0));
+  dungeons.push_back(new Dungeon(sceneManager, window, flags, "Entrance", DungeonType::PREDEFINED, 0, 0));
 
-  if(flags.isDebug())
+  if(flags->isDebug())
   {
     sceneManager->setDisplaySceneNodes(true);
     sceneManager->setShowDebugShadows(true);
@@ -25,6 +27,9 @@ World::~World(void)
   {
     if(*it) delete (*it);
   }
+
+  if(flags) delete flags;
+  flags = 0;
 }
 
 bool World::frameRenderingQueued(const Ogre::FrameEvent& evt)

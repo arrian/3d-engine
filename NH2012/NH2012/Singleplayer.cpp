@@ -5,7 +5,7 @@ Singleplayer::Singleplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow*
   Game(),
   world(sceneManager, window)
 {
-  std::cout << "Moon phase : " << world.flags.getMoonPhase() << std::endl;
+  std::cout << "Moon phase : " << world.flags->getMoonPhase() << std::endl;
   frame = 0;
 }
 

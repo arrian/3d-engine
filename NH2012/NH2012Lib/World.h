@@ -17,7 +17,7 @@ public:
   World(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window);
   ~World(void);
 
-  Flag flags;
+  Flag* flags;
 
   void setSceneManager(Ogre::SceneManager* sceneManager);
   bool frameRenderingQueued(const Ogre::FrameEvent& evt);//perform all world calculations

@@ -13,14 +13,12 @@
 #include "Inventory.h"
 #include "Attributes.h"
 #include "Dungeon.h"
+#include "Flag.h"
 
-
-#include "BulletCollision/CollisionShapes/btConvexHullShape.h"
-class btCharacterControllerInterface;
-class btDynamicCharacterController;
-class btKinematicCharacterController;
-class btCollisionShape;
-
+//character physics
+#include "Shapes\OgreBulletCollisionsCapsuleShape.h"
+#include "OgreBulletCollisions.h"
+#include "OgreBulletDynamics.h"
 
 class Dungeon;
 
@@ -28,7 +26,7 @@ class Player : public Actor
 {
 public:
   Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
-         Ogre::RenderWindow* window, Ogre::Vector3 position);
+         Flag* flags, Ogre::RenderWindow* window, Ogre::Vector3 position);
   ~Player(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -40,29 +38,40 @@ public:
   void injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
 
   Ogre::Vector3 getPosition();
+
 private:
   //hardcore mode
   Bar water;
   Bar food;
   Bar sleep;
 
+  Ogre::SceneNode* cameraNode;
   Ogre::Camera* camera;
-  //OgreBites::SdkCameraMan* cameraMovement;
+  Ogre::Real playerHeight;//!
+
+  Flag* flags;
 
   void animation();
   void audio();
   void collision();
 
+  Ogre::Vector3 gravityVector;
+
   //Camera movement stuff
-  Ogre::Vector3 mVelocity;
-  bool mGoingForward;
-  bool mGoingBack;
-  bool mGoingLeft;
-  bool mGoingRight;
-  bool mGoingUp;
-  bool mGoingDown;
-  bool mFastMove;
+  Ogre::Vector3 velocity;
+  bool moveForward;
+  bool moveBack;
+  bool moveLeft;
+  bool moveRight;
+  bool run;
+
+  bool leftHand;
+  bool rightHand;
 
   void stop();//manually stops the player movement
+
+  //physics
+  OgreBulletCollisions::CapsuleCollisionShape* capsule;
+  OgreBulletDynamics::RigidBody* capsuleBody;
 };
 

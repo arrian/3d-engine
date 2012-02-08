@@ -10,35 +10,98 @@ Flag::~Flag(void)
 {
 }
 
-/*
-void Flag::parseIni()
+
+void Flag::parseIni(std::string filename)
 {
-  boost::property_tree::ptree pt;
-  boost::property_tree::ini_parser::read_ini("nh2012.ini", pt);
+  std::cout << "Getting initialisation data..." << std::endl;
 
-  enableCollision = (pt.get<std::string>("General.EnableCollision") == "true");
-  enablePhysics = (pt.get<std::string>("General.EnablePhysics") == "true");
-  enableAI = (pt.get<std::string>("General.EnableCollision") == "true");
-  enableAudio = (pt.get<std::string>("General.EnableCollision") == "true");
+  try
+  {
+    std::ifstream s(filename);
+
+    if(!s)
+    {
+      std::cout << "Error opening file" << std::endl;
+      return;
+    }
+
+    boost::property_tree::ptree pt;
+    boost::property_tree::ini_parser::read_ini(s, pt);
+
+    //General
+    enableCollision = (pt.get<std::string>("General.EnableCollision") == "true");
+    enableGravity = (pt.get<std::string>("General.EnableGravity") == "true");
+    enableAI = (pt.get<std::string>("General.EnableAI") == "true");
+    enableAudio = (pt.get<std::string>("General.EnableAudio") == "true");
+
+    hardcore = (pt.get<std::string>("General.HardcoreMode") == "true");
+    wizard = (pt.get<std::string>("General.WizardMode") == "true");
+    explore = (pt.get<std::string>("General.ExploreMode") == "true");
   
-  debug = (pt.get<std::string>("General.EnableCollision") == "true");
-  verbose = (pt.get<std::string>("General.VerboseLogging") == "true");
-  hardcore = (pt.get<std::string>("Player.HardcoreMode") == "true");
-  wizard = (pt.get<std::string>("Player.WizardMode") == "true");
-  explore = (pt.get<std::string>("Player.ExploreMode") == "true");
+    //Controls //temp default values
+    controls.moveForward = OIS::KC_W;
+    controls.moveLeft = OIS::KC_A;
+    controls.moveBack = OIS::KC_S;
+    controls.moveRight = OIS::KC_D;
 
-  hdr = (pt.get<std::string>("Environment.HDR") == "true");
-  bloom = (pt.get<std::string>("Environment.Bloom") == "true");
-  shadows = (pt.get<std::string>("Environment.Shadows") == "true");
-  lights = (pt.get<std::string>("Environment.Lights") == "true");
-  particles = (pt.get<std::string>("Environment.Particles") == "true");
-  decals = (pt.get<std::string>("Environment.Decals") == "true");
-  sprites = (pt.get<std::string>("Environment.Sprites") == "true");
+    controls.jump = OIS::KC_SPACE;
+    controls.kick = OIS::KC_F;
+    controls.run = OIS::KC_LSHIFT;
+    controls.leftHand = OIS::MB_Left;
+    controls.rightHand = OIS::MB_Right;
 
-  monsterDataFilename = pt.get<std::string>("Monsters.DataFile");
-  itemDataFilename = pt.get<std::string>("Items.DataFile");
+    controls.quickslots.push_back(OIS::KC_1);
+    controls.quickslots.push_back(OIS::KC_2);
+    controls.quickslots.push_back(OIS::KC_3);
+    controls.quickslots.push_back(OIS::KC_4);
+    controls.quickslots.push_back(OIS::KC_5);
+    controls.quickslots.push_back(OIS::KC_6);
+    controls.quickslots.push_back(OIS::KC_7);
+    controls.quickslots.push_back(OIS::KC_8);
+    controls.quickslots.push_back(OIS::KC_9);
+    controls.quickslots.push_back(OIS::KC_0);
+
+    controls.exit = OIS::KC_ESCAPE;
+
+    controls.freezeCollision = OIS::KC_Q;
+
+    //Environment
+    enableHDR = (pt.get<std::string>("Environment.HDR") == "true");
+    enableBloom = (pt.get<std::string>("Environment.Bloom") == "true");
+    enableShadows = (pt.get<std::string>("Environment.Shadows") == "true");
+    enableLights = (pt.get<std::string>("Environment.Lights") == "true");
+    enableParticles = (pt.get<std::string>("Environment.Particles") == "true");
+    enableDecals = (pt.get<std::string>("Environment.Decals") == "true");
+    enableSprites = (pt.get<std::string>("Environment.Sprites") == "true");
+    enableWater = (pt.get<std::string>("Environment.Water") == "true");
+    enableSky = (pt.get<std::string>("Environment.Sky") == "true");
+
+    //Monsters
+    monsterDataFilename = pt.get<std::string>("Monsters.Data");
+
+    //Items
+    itemDataFilename = pt.get<std::string>("Items.Data");
+
+    //Debug
+    debug = (pt.get<std::string>("Debug.DebugMode") == "true");
+    verbose = (pt.get<std::string>("Debug.VerboseMode") == "true");
+
+    freeCameraDebug = (pt.get<std::string>("Debug.FreeCamera") == "true");
+    wireframeDebug = (pt.get<std::string>("Debug.Wireframe") == "true");
+    freezeCollisionDebug = (pt.get<std::string>("Debug.FreezeCollision") == "true");
+    showCollisionDebug = (pt.get<std::string>("Debug.ShowCollisionsDebug") == "true");
+    showShadowDebug = (pt.get<std::string>("Debug.ShowShadowDebug") == "true");
+
+  }
+  catch(boost::property_tree::ini_parser::ini_parser_error e)
+  {
+    std::cout << e.what() << std::endl;
+  }
+  catch(boost::property_tree::ptree_bad_path e)
+  {
+    std::cout << e.what() << std::endl;
+  }
 }
-*/
 
 Date Flag::getDate()
 {

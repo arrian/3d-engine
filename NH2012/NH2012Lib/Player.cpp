@@ -1,18 +1,40 @@
 #include "Player.h"
 
+/*
+/// Initialisation
+- Add a capsule
+
+// Next two lines will keep the capsule always up
+- capsule setSleepingThresholds(0.0, 0.0);
+- capsule setAngularFactor(0.0);
+
+/// Loop
+// Then, you move the capsule with LinearVelocity
+
+To make LinearVelocity move the capsule in the direction you are looking, use ths :
+// Angle is the angle Y rotation of your camera
+
+lVelocityX = sin( angle * PI / 180 ) * 2;
+lVelocityY = capsule getLinearVelocity().y();
+lVelocityZ = cos( angle * PI / 180 ) * 2;
+*/
+
 
 Player::Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
-               Ogre::RenderWindow* window, Ogre::Vector3 position) 
+               Flag* flags, Ogre::RenderWindow* window, Ogre::Vector3 position) 
   : Actor(sceneManager, physics, position), 
-    mVelocity(Ogre::Vector3::ZERO), 
-    mGoingForward(false), 
-    mGoingBack(false), 
-    mGoingLeft(false), 
-    mGoingRight(false), 
-    mGoingUp(false), 
-    mGoingDown(false), 
-    mFastMove(false)
+    velocity(Ogre::Vector3::ZERO),
+    gravityVector(Ogre::Vector3::ZERO),
+    moveForward(false), 
+    moveBack(false), 
+    moveLeft(false), 
+    moveRight(false), 
+    run(false),
+    leftHand(false),
+    rightHand(false)
 {
+  this->flags = flags;
+
   health = Bar(10);
   magic = Bar(10);
   level = Bar(1);
@@ -26,14 +48,15 @@ Player::Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWor
 
   speed = 200;//walking speed
 
-
   //Create the camera
+  cameraNode = node->createChildSceneNode(Ogre::Vector3(0,30,0));
   camera = sceneManager->createCamera("PlayerCamera");
-  camera->setPosition(Ogre::Vector3(0,100,80));
-  camera->lookAt(Ogre::Vector3(0,100,-300));
+  //camera->setPosition(Ogre::Vector3(0,100,80));
+  camera->lookAt(Ogre::Vector3(0,80,-300));
   camera->setNearClipDistance(5);
+  cameraNode->attachObject(camera);
 
-  //cameraMovement = new OgreBites::SdkCameraMan(camera);
+  if(flags->wireframeDebug) camera->setPolygonMode(Ogre::PM_WIREFRAME);
 
   // Create one viewport, entire window
   Ogre::Viewport* vp = window->addViewport(camera);
@@ -41,6 +64,16 @@ Player::Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWor
 
   // Alter the camera aspect ratio to match the viewport
   camera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+
+  //physics
+  capsule = new OgreBulletCollisions::CapsuleCollisionShape(15.0f, 50.0f, Ogre::Vector3(0,1,0));
+
+  capsuleBody = new OgreBulletDynamics::RigidBody("character", physics);
+  capsuleBody->setShape(node, capsule, 0.0f, 0.0f, 10.0f, position);
+  capsuleBody->getBulletRigidBody()->setAngularFactor(0.0);
+  capsuleBody->getBulletRigidBody()->setSleepingThresholds(0.0, 0.0);
+
+  stop();
 }
 
 
@@ -57,35 +90,41 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
   //Camera update 
   Ogre::Vector3 accel = Ogre::Vector3::ZERO;
-  if (mGoingForward) accel += camera->getDirection();
-  if (mGoingBack) accel -= camera->getDirection();
-  if (mGoingRight) accel += camera->getRight();
-  if (mGoingLeft) accel -= camera->getRight();
-  if (mGoingUp) accel += camera->getUp();
-  if (mGoingDown) accel -= camera->getUp();
+  if (moveForward) accel += camera->getDirection();
+  if (moveBack) accel -= camera->getDirection();
+  if (moveRight) accel += camera->getRight();
+  if (moveLeft) accel -= camera->getRight();
 
   // if accelerating, try to reach top speed in a certain time
-  Ogre::Real topSpeed = mFastMove ? speed * 2 : speed;
+  Ogre::Real topSpeed = run ? speed * 2 : speed;
   if (accel.squaredLength() != 0)
   {
     accel.normalise();
-    mVelocity += accel * topSpeed * evt.timeSinceLastFrame * 10;
+    velocity += accel * topSpeed * evt.timeSinceLastFrame * 10;
   }
   // if not accelerating, try to stop in a certain time
-  else mVelocity -= mVelocity * evt.timeSinceLastFrame * 10;
+  else velocity -= velocity * evt.timeSinceLastFrame * 10;
 
   Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
 
   // keep camera velocity below top speed and above epsilon
-  if (mVelocity.squaredLength() > topSpeed * topSpeed)
+  if (velocity.squaredLength() > topSpeed * topSpeed)
   {
-    mVelocity.normalise();
-    mVelocity *= topSpeed;
+    velocity.normalise();
+    velocity *= topSpeed;
   }
-  else if (mVelocity.squaredLength() < tooSmall * tooSmall)
-    mVelocity = Ogre::Vector3::ZERO;
+  else if (velocity.squaredLength() < tooSmall * tooSmall)
+    velocity = Ogre::Vector3::ZERO;
 
-  if (mVelocity != Ogre::Vector3::ZERO) camera->move(mVelocity * evt.timeSinceLastFrame);
+  if (flags->freeCameraDebug) 
+  {
+    if(velocity != Ogre::Vector3::ZERO) camera->move(velocity * evt.timeSinceLastFrame);
+    node->setPosition(camera->getPosition());
+  }
+  else 
+  {
+    if(velocity != Ogre::Vector3::ZERO && capsuleBody->getLinearVelocity() != Ogre::Vector3::ZERO) capsuleBody->setLinearVelocity(velocity);
+  }
 }
 
 void Player::animation()
@@ -105,54 +144,54 @@ void Player::collision()
 
 void Player::injectKeyDown(const OIS::KeyEvent &evt)
 {
-  if (evt.key == OIS::KC_W || evt.key == OIS::KC_UP) mGoingForward = true;
-  else if (evt.key == OIS::KC_S || evt.key == OIS::KC_DOWN) mGoingBack = true;
-  else if (evt.key == OIS::KC_A || evt.key == OIS::KC_LEFT) mGoingLeft = true;
-  else if (evt.key == OIS::KC_D || evt.key == OIS::KC_RIGHT) mGoingRight = true;
-  else if (evt.key == OIS::KC_PGUP) mGoingUp = true;
-  else if (evt.key == OIS::KC_PGDOWN) mGoingDown = true;
-  else if (evt.key == OIS::KC_LSHIFT) mFastMove = true;
+  if (evt.key == flags->controls.moveForward) moveForward = true;
+  else if (evt.key == flags->controls.moveBack) moveBack = true;
+  else if (evt.key == flags->controls.moveLeft) moveLeft = true;
+  else if (evt.key == flags->controls.moveRight) moveRight = true;
+  else if (evt.key == flags->controls.run) run = true;
 }
 
 void Player::injectKeyUp(const OIS::KeyEvent &evt)
 {
-  if (evt.key == OIS::KC_W || evt.key == OIS::KC_UP) mGoingForward = false;
-  else if (evt.key == OIS::KC_S || evt.key == OIS::KC_DOWN) mGoingBack = false;
-  else if (evt.key == OIS::KC_A || evt.key == OIS::KC_LEFT) mGoingLeft = false;
-  else if (evt.key == OIS::KC_D || evt.key == OIS::KC_RIGHT) mGoingRight = false;
-  else if (evt.key == OIS::KC_PGUP) mGoingUp = false;
-  else if (evt.key == OIS::KC_PGDOWN) mGoingDown = false;
-  else if (evt.key == OIS::KC_LSHIFT) mFastMove = false;
+  if (evt.key == flags->controls.moveForward) moveForward = false;
+  else if (evt.key == flags->controls.moveBack) moveBack = false;
+  else if (evt.key == flags->controls.moveLeft) moveLeft = false;
+  else if (evt.key == flags->controls.moveRight) moveRight = false;
+  else if (evt.key == flags->controls.run) run = false;
 }
 
 void Player::injectMouseMove(const OIS::MouseEvent &evt)
 {
-  camera->yaw(Ogre::Degree(-evt.state.X.rel * 0.15f));
-  camera->pitch(Ogre::Degree(-evt.state.Y.rel * 0.15f));
+
+  float lookSensitivity = 0.15f;
+  if(leftHand || rightHand) lookSensitivity = 0.05f; 
+  camera->yaw(Ogre::Degree(-evt.state.X.rel * lookSensitivity));
+  camera->pitch(Ogre::Degree(-evt.state.Y.rel * lookSensitivity));
 }
 
 void Player::injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  
+  if(id == flags->controls.leftHand) leftHand = true;
+  if(id == flags->controls.rightHand) rightHand = true;
 }
 
 void Player::injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-
+  if(id == flags->controls.leftHand) leftHand = false;
+  if(id == flags->controls.rightHand) rightHand = false;
 }
 
 void Player::stop()
 {
-  mGoingForward = false;
-  mGoingBack = false;
-  mGoingLeft = false;
-  mGoingRight = false;
-  mGoingUp = false;
-  mGoingDown = false;
-  mVelocity = Ogre::Vector3::ZERO;
+  moveForward = false;
+  moveBack = false;
+  moveLeft = false;
+  moveRight = false;
+  velocity = Ogre::Vector3::ZERO;
 }
 
 Ogre::Vector3 Player::getPosition()
 {
-  return camera->getPosition();
+  return node->getPosition();
 }
+
