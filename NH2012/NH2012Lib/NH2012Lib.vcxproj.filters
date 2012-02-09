@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="Diagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inventory.h">
@@ -84,6 +85,9 @@
     <ClInclude Include="Architecture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gorilla.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MeshGenerator.cpp">
@@ -138,6 +142,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Architecture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gorilla.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

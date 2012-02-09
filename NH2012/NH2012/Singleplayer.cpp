@@ -20,6 +20,8 @@ void Singleplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
   if(frame > 1000) frame = 0;
 }
 
+//TODO find solution to chaining of events between classes
+
 void Singleplayer::injectKeyDown(const OIS::KeyEvent &arg)
 {
   world.injectKeyDown(arg);

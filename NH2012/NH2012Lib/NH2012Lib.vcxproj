@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="Diagram.cd" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +87,7 @@
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Flag.h" />
+    <ClInclude Include="Gorilla.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemData.h" />
@@ -106,6 +108,7 @@
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="Gorilla.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemData.cpp" />

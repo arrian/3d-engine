@@ -20,6 +20,8 @@
 #include "OgreBulletCollisions.h"
 #include "OgreBulletDynamics.h"
 
+#include "Gorilla.h"
+
 class Dungeon;
 
 class Player : public Actor

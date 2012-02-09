@@ -75,6 +75,7 @@ namespace MonsterAttribute
     LAVA,
     ROCK,
     METAL,
+    TEA,
     PINA_COLADAS
   };
 

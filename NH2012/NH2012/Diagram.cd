@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="NH2012">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EigAAEAAAAAAAAwLAAAQAQAAAAAkACAYAEAAADIIQQA=</HashCode>
+      <FileName>include\NH2012.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="game" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Singleplayer">
+    <Position X="5.25" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAEEAAAAAAAAAABAAAACAAABAgQgAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Singleplayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Multiplayer">
+    <Position X="2.75" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAADAAAAAAAABIAQgAAAggAABAAAAAA=</HashCode>
+      <FileName>Multiplayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game">
+    <Position X="4" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAABAiQgAAAAgAAAQAAAAA=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

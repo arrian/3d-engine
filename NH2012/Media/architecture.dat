@@ -1,0 +1,98 @@
+#MESH_NAME
+
+[Feudal Hall]
+hall.mesh
+hall_2way.mesh
+hall_3way.mesh
+hall_4way.mesh
+hall_4way_loft.mesh
+hall_endcap.mesh
+hall_stairs.mesh
+
+[Feudal Hall Tall]
+hall_tall.mesh
+hall_tall_entrance.mesh
+
+[Feudal Room]
+room_centre.mesh
+room_corner.mesh
+room_corner_entrance_a.mesh
+room_corner_entrance_b.mesh
+room_corner_entrance_two_way.mesh
+room_corner_single.mesh
+room_edge.mesh
+room_edge_entrance.mesh
+
+[Castle Hall]
+
+[Castle Room]
+
+[Cave Hall]
+
+[Cave Room]
+
+[Prison]
+
+[Town]
+cottage.mesh
+
+[Shop]
+
+[Trees]
+
+[Bushes]
+
+[Grass]
+
+[Rocks]
+
+[Entrance Preset]
+r1.mesh
+r2.mesh
+r3.mesh
+r4.mesh
+r5.mesh
+r6.mesh
+r7.mesh
+r8.mesh
+r9.mesh
+r10.mesh
+r11.mesh
+r12.mesh
+r13.mesh
+r14.mesh
+
+[Lobby Preset]
+lobby.mesh
+
+[Astral Preset]
+
+[Beehive Preset]
+
+[Throne Room Preset]
+
+[Zoo Preset]
+
+[Temple Preset]
+
+[Anthole Preset]
+
+[Barracks Preset]
+
+[Graveyard Preset]
+
+[Leprechaun Hall Preset]
+
+[Vlad's Tower Preset]
+
+[Medusa's Island Preset]
+
+[Sokoban Preset]
+
+[Cockatrice Nest Preset]
+
+[Vault Preset]
+
+
+
+

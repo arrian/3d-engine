@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Actor">
+    <Position X="4.5" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="Entity" FixedToPoint="true">
+      <Path>
+        <Point X="5.25" Y="3.017" />
+        <Point X="5.25" Y="3.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAgAAFAAAAAIABAAEAEQACAAAAAAABABg=</HashCode>
+      <FileName>actor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Entity">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQAAARAAAAAAAgAAAAAAAAAAACAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Entity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Item">
+    <Position X="2.75" Y="3.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="ItemData" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.132" />
+        <Point X="1.25" Y="4.523" />
+        <Point X="2.75" Y="4.523" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAECAAAAAAAAAAAAAEAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Item.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Monster">
+    <Position X="3.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAggAAAAAAAAABKAAAAIABAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>monster.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player">
+    <Position X="5.5" Y="8.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAoyAAEgAgAAEBAIAAAcABBAAwgQAAIgQACUAAADY=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemData">
+    <Position X="0.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAECAAAAAAAgAAAAE=</HashCode>
+      <FileName>ItemData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="World">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAEAAABAAAAABAAAAAgAABgASgAAAAgAABAAAAAQ=</HashCode>
+      <FileName>world.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Architecture">
+    <Position X="6.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAoAAAAAAAAAAAAIAAQAIAAAABAACJAA=</HashCode>
+      <FileName>Architecture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Dungeon">
+    <Position X="8.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FAAAAgAAQAAAggABAAgAAAAABAIVgAAJAgAABAAAAAQ=</HashCode>
+      <FileName>dungeon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Flag">
+    <Position X="11" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAIAgQAgVAAABEAASACMMADUAQEBIDCSYAQAAQAmEgA=</HashCode>
+      <FileName>flag.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Inventory">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFAAAAAAAAAAAABAAAgAAAAAAAAAAAAAAAAAAgACAAA=</HashCode>
+      <FileName>Inventory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

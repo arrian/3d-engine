@@ -6,7 +6,8 @@ World::World(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window)
   this->sceneManager = sceneManager;
 
   flags = new Flag();
-  flags->parseIni("c:\\nh2012.ini");
+  //TODO extract absolute path and use boost to get relative path from current exe
+  flags->parseIni("C:\\Dev\\Nethack2012\\NH2012\\NH2012Lib\\nh2012.ini");
 
   if(flags->enableShadows) sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
@@ -19,6 +20,15 @@ World::World(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window)
     sceneManager->setShowDebugShadows(true);
     sceneManager->showBoundingBoxes(true);
   }
+
+  //TODO implement console and fps display in gorilla
+  //Gorilla
+  Gorilla::Silverback* gorilla = new Gorilla::Silverback();
+  gorilla->loadAtlas("dejavu");
+  //Gorilla::Screen* mScreen = gorilla->createScreen(vp, "dejavu");
+  //gorilla->
+  //Gorilla::Layer* mFPSLayer = mScreen->createLayer(14);
+  //Gorilla::Caption* mFPS = mFPSLayer->createCaption(14, 10,10, this->entityName);
 }
 
 World::~World(void)

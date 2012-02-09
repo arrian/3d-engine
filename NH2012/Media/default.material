@@ -1,0 +1,18 @@
+
+material Error_Colour
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 0.870588 0 1
+			diffuse 1 0.870588 0 1
+			specular 0 0 0 1 10
+			emissive 0.42 0.42 0.42 1
+		}
+
+	}
+
+}
+
+

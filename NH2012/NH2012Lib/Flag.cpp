@@ -37,7 +37,7 @@ void Flag::parseIni(std::string filename)
     hardcore = (pt.get<std::string>("General.HardcoreMode") == "true");
     wizard = (pt.get<std::string>("General.WizardMode") == "true");
     explore = (pt.get<std::string>("General.ExploreMode") == "true");
-  
+
     //Controls //temp default values
     controls.moveForward = OIS::KC_W;
     controls.moveLeft = OIS::KC_A;
