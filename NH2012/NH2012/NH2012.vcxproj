@@ -114,19 +114,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h" />
     <ClInclude Include="include\NH2012.h" />
-    <ClInclude Include="Multiplayer.h" />
     <ClInclude Include="res\Resource.h" />
-    <ClInclude Include="Singleplayer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Multiplayer.cpp" />
-    <ClCompile Include="Singleplayer.cpp" />
     <ClCompile Include="src\NH2012.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Diagram.cd" />
     <None Include="docs\ReadMe.txt" />
     <None Include="res\NH2012.ico" />
   </ItemGroup>

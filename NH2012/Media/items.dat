@@ -1,4 +1,4 @@
-#Item data file
+#ITEMS
 
 [Amulets]
 amulet of change	$150	20	130c	Y
@@ -13,61 +13,73 @@ amulet versus poison	150	20	165	Y
 imitation AoY	0	20	0	 
 Amulet of Yendor	30000	20	0
 
-[Weapons]
-Dagger	b	b	b	s	b	-	-	E	E	b	E	E	E	 	 	 	 	 
+[Daggers]	 	 	 	 	 
 orcish dagger	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d3	2	d3	2
 dagger	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d4	2.5	d3	2
 silver dagger	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d4	2.5	d3	2
 athame	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d4	2.5	d3	2
 elven dagger	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d5	3	d3	2
-Knife	b	-	s	E	b	-	-	s	E	s	s	-	s	 	 	 	 	 
+
+[Knives]
 worm tooth	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
 knife (shito)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d3	2	d2	1.5
 stiletto	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d3	2	d2	1.5
 scalpel	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d3	2	d3	2
 crysknife	 	 	 	 	 	 	 	 	 	 	 	 	 	3	d10	5.5	d10	5.5
-Axe	-	E	s	-	s	-	-	s	-	-	b	E	s	 	 	 	 	 
+
+[Axes]
 axe	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d4	2.5
 battle-axe	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8+d4	7.0	d6+2d4	8.5
 Pick-axe	E	s	b	-	b	-	-	b	-	-	b	s	-	 	 	 	 	 
 pick-axe	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d3	2
 dwarvish mattock	 	 	 	 	 	 	 	 	 	 	 	 	 	-1	d12	6.5	d8+2d6	11.5
-WEAPON	A	B	C	H	K	M	P	Ra	Ro	S	T	V	W	=+HIT	SDAM	SAVG	LDAM	LAVG
-Short sword	b	E	-	s	s	-	-	b	E	E	E	s	b	 	 	 	 	 
+
+[Short Swords]
 orcish short sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d5	3	d8	4.5
 short sword (wakizashi)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
 dwarvish short sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d7	4	d8	4.5
 elven short sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d8	4.5
-Broadsword	-	s	-	-	s	-	-	-	s	s	b	s	-	 	 	 	 	 
+
+[Broadswords]
 broadsword (ninja-to)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d6+1	4.5
 runesword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d6+1	4.5
 elven broadsword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+d	4 6.0	d6+1	4.5
-Long sword	-	s	-	-	E	-	-	-	s	E	b	E	-	 	 	 	 	 
+
+[Long Swords]
 long sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d12	6.5
 katana	 	 	 	 	 	 	 	 	 	 	 	 	 	1	d10	5.5	d12	6.5
-Two-handed sword	-	E	-	-	s	-	-	-	b	E	b	E	-	 	 	 	 	 
+
+[Two-handed Swords]
 two-handed sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d12	6.5	3d6	10.5
 tsurugi	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d16	8.5	d8+2d6	11.5
-Scimitar	s	s	-	b	b	-	-	-	s	b	s	b	-	 	 	 	 	 
+
+[Scimitars]
 scimitar	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d8	4.5
-Saber	E	b	-	b	s	-	-	-	s	b	s	b	-	 	 	 	 	 
+
+[Sabers]
 silver saber	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d8	4.5
-WEAPON	A	B	C	H	K	M	P	Ra	Ro	S	T	V	W	=+HIT	SDAM	SAVG	LDAM	LAVG
-Club	s	s	E	s	b	-	E	-	s	-	-	-	s	 	 	 	 	 
+
+[Clubs]
 club	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d3	2
 aklys	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d3	2
-Mace	-	s	E	b	s	-	E	-	s	-	b	-	b	 	 	 	 	 
+
+[Maces]
 mace	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+1	4.5	d6	3.5
-Morning star	-	s	b	-	s	-	E	b	b	-	b	-	-	 	 	 	 	 
+
+[Morning Stars]
 morning star	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d6+1	4.5
-Flail	-	b	s	-	b	-	E	s	b	s	b	-	-	 	 	 	 	 
+
+[Flails]
 flail (nunchaku)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+1	4.5	2d4	5
 grappling hook	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d6	3.5
-Hammer	-	E	s	-	b	-	E	b	b	-	b	E	-	 	 	 	 	 
+
+[Hammers]
 war hammer	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d4+1	3.5	d4	2.5
-Quarterstaff	s	b	E	E	-	b	E	b	-	b	b	b	E	 	 	 	 	 
+
+[Quarterstaffs]
 quarterstaff	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
-Polearm	-	-	s	b	s	-	s	s	b	s	b	s	s	 	 	 	 	 
+
+[Polearms]
 partisan	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6+1	4.5
 fauchard	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
 glaive (naginata)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d10	5.5
@@ -80,31 +92,37 @@ voulge	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	2d4	5
 bill-guisarme	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d10	5.5
 bardiche	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	3d4	7.5
 halberd	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d10	5.5	2d6	7
-WEAPON	A	B	C	H	K	M	P	Ra	Ro	S	T	V	W	=+HIT	SDAM	SAVG	LDAM	LAVG
-Spear	-	s	E	b	s	b	s	s	b	b	b	s	b	 	 	 	 	 
+
+[Spears]
 orcish spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d5	3	d8	4.5
 spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
 silver spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
 elven spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d7	4	d8	4.5
 dwarvish spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d8	4.5
-Javelin	-	-	s	b	s	b	s	E	-	b	b	b	b	 	 	 	 	 
+
+[Javelins]
 javelin	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
-Trident	-	s	s	b	b	-	s	b	-	-	b	b	b	 	 	 	 	 
+
+[Tridents]
 trident	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+1	4.5	3d4	7.5
-Lance	-	-	-	-	E	-	b	-	-	s	b	s	-	 	 	 	 	 
+
+[Lances]
 lance	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
-Bow	-	b	s	-	b	-	b	E	-	E	b	-	-	 	 	 	 	 
+
+[Bows]
 orcish bow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
 bow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
 elven bow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
-yumi	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
+yumi
+
+[Arrows]	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
 orcish arrow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d5	3	d6	3.5
 arrow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
 silver arrow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
 elven arrow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d7	4	d6	3.5
 ya	 	 	 	 	 	 	 	 	 	 	 	 	 	1	d7	4	d7	4
-WEAPON	A	B	C	H	K	M	P	Ra	Ro	S	T	V	W	=+HIT	SDAM	SAVG	LDAM	LAVG
-Sling	s	-	E	s	-	-	b	E	-	-	b	b	s	 	 	 	 	 
+
+[Slings]
 sling	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
 flintstone	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
 other rocks/ gems/ glass	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d3	2	d3	2
@@ -127,10 +145,11 @@ Riding	b	b	-	-	E	-	-	b	b	s	b	s	b
 Bare-handed combat	E	M	M	b	E	-	b	b	E	-	s	E	b	 	d2	1.5	d2	1.5
 Martial arts	-	-	-	-	-	G	-	-	-	M	-	-	-	 	d4	2.5	d4	2.5
 
-[Armour]
+[Shirts]
 Hawaiian shirt	$ 3	5	8	0	C	Shops	--
 T-shirt	2	5	2	0	C	Shops	--
-SUITS	COST	WGT	PR	AC	M	EFFECT	APPEARANCE
+
+[Suits]
 leather jacket	10	30	12	1	L	 	--
 leather armor	5	150	82	2	L	 	--
 orcish ring mail	80	250	20	2	I	#	crude ring mail
@@ -146,7 +165,8 @@ dwarvish mithril coat	240	150	10	6	M	###	--
 bronze plate mail	400	450	25	6	B	 	--
 plate mail (tanko)	600	450	44	7	I	##	--
 crystal plate mail	820	450	10	7	G	##	--
-DRAGON SUITS	COST	WGT	PR	AC	M	EFFECT	APPEARANCE
+
+[Dragon Suits]
 red dragon scales	500	40	0	3	D	Fire	--
 white dragon scales	500	40	0	3	D	Cold	--
 orange dragon scales	500	40	0	3	D	Sleep	--
@@ -165,7 +185,8 @@ yellow dragon scale mail	900	40	0	9	D	Acd	--
 black dragon scale mail	1200	40	0	9	D	Disint	--
 silver dragon scale mail	1200	40	0	9	D	Reflect	--
 gray dragon scale mail	1200	40	0	9	D	Magic	--
-CLOAKS	COST	WGT	PR	AC	M	EFFECT	APPEARANCE
+
+[Cloaks]
 mummy wrapping	2	3	0	0	C	#Vis	--
 orcish cloak	40	10	8	0	C	##	coarse mantelet
 dwarvish cloak	50	10	8	0	C	##	hooded cloak
@@ -178,7 +199,8 @@ clk of magic resistance	60	10	2	1	C	###Magic	*ornamental cope
 elven cloak	60	10	8	1	C	###Stlth	faded pall
 robe	50	15	3	2	C	###Spell	--
 cloak of protection	50	10	9	3	C	###Prot	*tattered cape
-HELMETS	COST	WGT	PR	AC	M	EFFECT	APPEARANCE
+
+[Helmets]
 fedora	1	3	0	0	C	 	--
 dunce cap	1	4	3	0	C	Stupid	conical hat
 cornuthaum	80	4	3	0	C	##Clair	conical hat
@@ -190,12 +212,14 @@ helm of brilliance	50	50	6	1	I	Int+Wis	*etched helmet
 hm of opposite alignment	50	50	6c	1	I	Align	*crested helmet
 helm of telepathy	50	50	2	1	I	ESP	*visored helmet
 dwarvish iron helm	20	40	6	2	I	 	hard hat
-GLOVES	COST	WGT	PR	AC	M	EFFECT	APPEARANCE
+
+[Gloves]
 leather gloves (yugake)	8	10	16	1	L	 	*old gloves
 gauntlets of dexterity	50	10	8	1	L	Dex	*padded gloves
 gauntlets of fumbling	50	10	8c	1	L	Fumble	*riding gloves
 gauntlets of power	50	30	8	1	I	Str	*fencing gloves
-SHIELDS	COST	WGT	PR	AC	M	EFFECT	APPEARANCE
+
+[Shields]
 small shield	3	30	6	1	W	 	--
 orcish shield	7	50	2	1	I	 	red-eyed
 Uruk-hai shield	7	50	2	1	I	 	white-handed
@@ -203,7 +227,8 @@ elven shield	7	40	2	2	W	 	blue and green
 dwarvish roundshield	10	100	4	2	I	 	large round
 large shield	10	100	7	2	I	 	--
 shield of reflection	50	50	3	2	S	Reflect	polished silver
-BOOTS	COST	WGT	PR	AC	M	EFFECT	APPEARANCE
+
+[Boots]
 low boots	8	10	25	1	L	 	walking shoes
 elven boots	8	15	12	1	L	Stlth	*mud boots
 kicking boots	8	15	12	1	I	Kick	*buckled boots
@@ -235,7 +260,8 @@ banana	9	2	10	80	40	1
 orange	9	2	10	80	40	1
 melon	10	5	10	100	20	1
 slime mold	17	5	75	250	50	1
-People food	COST	WGT	PROB	NUTR	NUTR/WGT	TIME
+
+[Human Food]
 fortune cookie	7	1	55	40	40	1
 candy bar	10	2	13	100	50	1
 cream pie	10	10	25	100	10	1
@@ -248,8 +274,7 @@ food ration (gunyoki)	45	20	380	800	40	5
 lembas wafer	45	5	20	800	160	2
 tin	5	10	75	vary	vary	vary
 
-[Tools]
-Containers
+[Containers]
 sack	$2	15	35	 	bag
 large box	8	350	40	 	--
 chest	16	600	35	 	--
@@ -257,18 +282,21 @@ ice box	42	900	5	 	--
 bag of holding	100	15	20	 	bag
 bag of tricks	100	15	20	20	bag
 oilskin sack	100	15	5	 	bag
-Unlocking tools
+
+[Unlocking Tools]
 credit card *	10	1	15	 	--
 lock pick (osaku)	20	4	60	 	--
 skeleton key	10	3	80	 	key
-Light sources
+
+[Light Sources]
 tallow candle	10	2	20	 	candle
 wax candle	20	2	5	 	candle
 brass lantern	12	30	30	1499	--
 oil lamp	10	20	45	1499	lamp
 magic lamp	50	20	15	 	lamp
 Candelabrum of Invocation	5000	10	0	 	candelabrum
-Instruments
+
+[Instruments]
 tin whistle	10	3	100	 	whistle
 magic whistle	10	3	30	 	whistle
 bugle	15	10	4	 	--
@@ -284,10 +312,13 @@ wooden harp (koto)	50	30	4	 	harp
 magic harp	50	30	2	8	harp
 bell	50	30	2	 	--
 Bell of Opening	5000	10	0	3	silver bell
+
+[Traps]
 Traps
 beartrap	60	200	0	 	--
 land mine	180	300	0	 	--
-Weapon-Tools
+
+[Tools]
 pick-axe	50	100	20	 	--
 grappling hook	50	30	5	 	iron hook
 unicorn horn	100	20	0	 	--
@@ -348,7 +379,6 @@ loadstone	1	500	10	soft	gray stone
 rock	0	10	100	soft	rock
 
 [Miscellaneous]
-ITEM	COST	WGT	PROB	SYM	DAMAGE	NUTR
 gold piece	$ 1	0.01	1000	$	0	0.01
 boulder	0	6000	100	'	d20	2000
 statue	0	vary	900	'	d20	2500

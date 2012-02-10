@@ -87,15 +87,18 @@
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Flag.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Gorilla.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="Multiplayer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="Service.h" />
+    <ClInclude Include="Singleplayer.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -108,15 +111,18 @@
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gorilla.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Multiplayer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Service.cpp" />
+    <ClCompile Include="Singleplayer.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

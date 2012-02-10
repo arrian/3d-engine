@@ -1,400 +1,220 @@
-/*
------------------------------------------------------------------------------
-Filename:    NH2012.cpp
------------------------------------------------------------------------------
-*/
 #include "NH2012.h"
 
 
 //-------------------------------------------------------------------------------------
 NH2012::NH2012(void)
-    : mRoot(0),
-    //mCamera(0),
-    mSceneMgr(0),
-    mWindow(0),
-    mResourcesCfg(Ogre::StringUtil::BLANK),
-    mPluginsCfg(Ogre::StringUtil::BLANK),
-    mTrayMgr(0),
-    //mCameraMan(0),
-    mDetailsPanel(0),
-    mCursorWasVisible(false),
-    mShutDown(false),
-    mInputManager(0),
-    mMouse(0),
-    mKeyboard(0)
+: root(0),
+  sceneManager(0),
+  window(0),
+  resources(Ogre::StringUtil::BLANK),
+  plugins(Ogre::StringUtil::BLANK),
+  cursorWasVisible(false),
+  shutDown(false),
+  inputManager(0),
+  mouse(0),
+  keyboard(0),
+  game(0)
 {
 }
+
 //-------------------------------------------------------------------------------------
 NH2012::~NH2012(void)
 {
-    if (mTrayMgr) delete mTrayMgr;
-    //if (mCameraMan) delete mCameraMan;
-
-    //Remove ourself as a Window listener
-    Ogre::WindowEventUtilities::removeWindowEventListener(mWindow, this);
-    windowClosed(mWindow);
-    delete mRoot;
+  //Remove window listener from this
+  Ogre::WindowEventUtilities::removeWindowEventListener(window, this);
+  windowClosed(window);
+  delete root;
 }
 
+//-------------------------------------------------------------------------------------
 bool NH2012::go(void)
 {
 #ifdef _DEBUG
-    mResourcesCfg = "resources_d.cfg";
-    mPluginsCfg = "plugins_d.cfg";
+  resources = "resources_d.cfg";
+  plugins = "plugins_d.cfg";
 #else
-    mResourcesCfg = "resources.cfg";
-    mPluginsCfg = "plugins.cfg";
+  mResourcesCfg = "resources.cfg";
+  mPluginsCfg = "plugins.cfg";
 #endif
 
-    // construct Ogre::Root
-    mRoot = new Ogre::Root(mPluginsCfg);
+  root = new Ogre::Root(plugins);
 
-//-------------------------------------------------------------------------------------
-    // setup resources
-    // Load resource paths from config file
-    Ogre::ConfigFile cf;
-    cf.load(mResourcesCfg);
+  Ogre::ConfigFile cf;
+  cf.load(resources);
+  Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
-    // Go through all sections & settings in the file
-    Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
-
-    Ogre::String secName, typeName, archName;
-    while (seci.hasMoreElements())
+  Ogre::String secName, typeName, archName;
+  while (seci.hasMoreElements())
+  {
+    secName = seci.peekNextKey();
+    Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
+    Ogre::ConfigFile::SettingsMultiMap::iterator i;
+    for (i = settings->begin(); i != settings->end(); ++i)
     {
-        secName = seci.peekNextKey();
-        Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
-        Ogre::ConfigFile::SettingsMultiMap::iterator i;
-        for (i = settings->begin(); i != settings->end(); ++i)
-        {
-            typeName = i->first;
-            archName = i->second;
-            Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
-                archName, typeName, secName);
-        }
+      typeName = i->first;
+      archName = i->second;
+      Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+          archName, typeName, secName);
     }
-//-------------------------------------------------------------------------------------
-    // configure
-    // Show the configuration dialog and initialise the system
-    // You can skip this and use root.restoreConfig() to load configuration
-    // settings if you were sure there are valid ones saved in ogre.cfg
-    if(mRoot->restoreConfig() || mRoot->showConfigDialog())
-    {
-        // If returned true, user clicked OK so initialise
-        // Here we choose to let the system create a default rendering window by passing 'true'
-        mWindow = mRoot->initialise(true, "NH2012 Render Window");
+  }
 
-        // Let's add a nice window icon
+  if(root->restoreConfig() || root->showConfigDialog())
+  {
+    window = root->initialise(true, "NH2012");
+
+    //Window icon
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        HWND hwnd;
-        mWindow->getCustomAttribute("WINDOW", (void*)&hwnd);
-        LONG iconID   = (LONG)LoadIcon( GetModuleHandle(0), MAKEINTRESOURCE(IDI_APPICON) );
-        SetClassLong( hwnd, GCL_HICON, iconID );
+    HWND hwnd;
+    window->getCustomAttribute("WINDOW", (void*)&hwnd);
+    LONG iconID   = (LONG)LoadIcon( GetModuleHandle(0), MAKEINTRESOURCE(IDI_APPICON) );
+    SetClassLong( hwnd, GCL_HICON, iconID );
 #endif
-    }
-    else
-    {
-        return false;
-    }
+  }
+  else
+  {
+      return false;
+  }
 
-    std::cout << " Done." << std::endl;
+  sceneManager = root->createSceneManager(Ogre::ST_INTERIOR);//ST_GENERIC);
+  Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);//Set default mipmap level (NB some APIs ignore this)
+  Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
-//-------------------------------------------------------------------------------------    
-    //SceneManager
-    mSceneMgr = mRoot->createSceneManager(Ogre::ST_INTERIOR);//ST_GENERIC);
-//-------------------------------------------------------------------------------------
-    // Set default mipmap level (NB some APIs ignore this)
-    Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
-//-------------------------------------------------------------------------------------
-    // Create any resource listeners (for loading screens)
-    //createResourceListener();
-//-------------------------------------------------------------------------------------
-    // load resources
-    Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-//-------------------------------------------------------------------------------------
-    std::cout << "Creating game client for ";
+  if(true)
+  {
+    std::cout << "Singleplayer" << std::endl;
+    game = new Singleplayer(sceneManager, window);
+  }
+  else
+  {
+    std::cout << "Multiplayer" << std::endl;
+    game = new Multiplayer(sceneManager, window);
+  }
 
-    if(true)
-    {
-      std::cout << "singleplayer...";
-      game = new Singleplayer(mSceneMgr, mWindow);
-    }
-    else
-    {
-      std::cout << "multiplayer...";
-      game = new Multiplayer();
-    }
+  //Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
+  OIS::ParamList pl;
+  size_t windowHnd = 0;
+  std::ostringstream windowHndStr;
 
-    std::cout << " Done." << std::endl;
+  window->getCustomAttribute("WINDOW", &windowHnd);
+  windowHndStr << windowHnd;
+  pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 
-//-------------------------------------------------------------------------------------
+  inputManager = OIS::InputManager::createInputSystem( pl );
 
-    //create FrameListener
-    std::cout << "Creating frame listener...";
-    Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
-    OIS::ParamList pl;
-    size_t windowHnd = 0;
-    std::ostringstream windowHndStr;
+  keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject( OIS::OISKeyboard, true ));
+  mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject( OIS::OISMouse, true ));
 
-    mWindow->getCustomAttribute("WINDOW", &windowHnd);
-    windowHndStr << windowHnd;
-    pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+  mouse->setEventCallback(this);
+  keyboard->setEventCallback(this);
 
-    mInputManager = OIS::InputManager::createInputSystem( pl );
+  
+  windowResized(window);//Set initial mouse clipping size
 
-    mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, true ));
-    mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject( OIS::OISMouse, true ));
+  Ogre::WindowEventUtilities::addWindowEventListener(window, this);//Register as a Window listener
 
-    mMouse->setEventCallback(this);
-    mKeyboard->setEventCallback(this);
-
-    //Set initial mouse clipping size
-    windowResized(mWindow);
-
-    //Register as a Window listener
-    Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this);
-
-    mTrayMgr = new OgreBites::SdkTrayManager("InterfaceName", mWindow, mMouse, this);
-    mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
-    mTrayMgr->toggleAdvancedFrameStats();
-    mTrayMgr->hideCursor();
-
-    // create a params panel for displaying sample details
-    Ogre::StringVector items;
-    items.push_back("cam.pX");
-    items.push_back("cam.pY");
-    items.push_back("cam.pZ");
-    items.push_back("");
-    items.push_back("cam.oW");
-    items.push_back("cam.oX");
-    items.push_back("cam.oY");
-    items.push_back("cam.oZ");
-    items.push_back("");
-    items.push_back("Filtering");
-    items.push_back("Poly Mode");
-
-    mDetailsPanel = mTrayMgr->createParamsPanel(OgreBites::TL_NONE, "DetailsPanel", 200, items);
-    mDetailsPanel->setParamValue(9, "Bilinear");
-    mDetailsPanel->setParamValue(10, "Solid");
-    mDetailsPanel->hide();
-
-    mRoot->addFrameListener(this);
-
-    std::cout << " Done." << std::endl;
-
-
-//-------------------------------------------------------------------------------------
-    std::cout << "Started rendering..." << std::endl;
-    mRoot->startRendering();
-
-    return true;
+  root->addFrameListener(this);
+  root->startRendering();
+  return true;
 }
 
 bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-    if(mWindow->isClosed())
-        return false;
+  if(window->isClosed()) return false;
+  if(shutDown) return false;
 
-    if(mShutDown)
-        return false;
+  keyboard->capture();
+  mouse->capture();
 
-    //Need to capture/update each device
-    mKeyboard->capture();
-    mMouse->capture();
+  game->frameRenderingQueued(evt);
 
-    //advancing the world
-    game->frameRenderingQueued(evt);
-    //std::cout << game->frame << std::endl;
+  //std::cout << window->getAverageFPS() << std::endl;
 
-    mTrayMgr->frameRenderingQueued(evt);
-
-    /*
-    if (!mTrayMgr->isDialogVisible())
-    {
-        //mCameraMan->frameRenderingQueued(evt);   // if dialog isn't up, then update the camera
-        if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
-        {
-            mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
-            mDetailsPanel->setParamValue(1, Ogre::StringConverter::toString(mCamera->getDerivedPosition().y));
-            mDetailsPanel->setParamValue(2, Ogre::StringConverter::toString(mCamera->getDerivedPosition().z));
-            mDetailsPanel->setParamValue(4, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().w));
-            mDetailsPanel->setParamValue(5, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().x));
-            mDetailsPanel->setParamValue(6, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().y));
-            mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
-        }
-    }
-    */
-
-    return true;
+  return true;
 }
 
 //-------------------------------------------------------------------------------------
 bool NH2012::keyPressed( const OIS::KeyEvent &arg )
 {
-    if (mTrayMgr->isDialogVisible()) return true;   // don't process any more keys if dialog is up
-
-    if (arg.key == OIS::KC_F)   // toggle visibility of advanced frame stats
-    {
-        mTrayMgr->toggleAdvancedFrameStats();
-    }
-    else if (arg.key == OIS::KC_G)   // toggle visibility of even rarer debugging details
-    {
-        if (mDetailsPanel->getTrayLocation() == OgreBites::TL_NONE)
-        {
-            mTrayMgr->moveWidgetToTray(mDetailsPanel, OgreBites::TL_TOPRIGHT, 0);
-            mDetailsPanel->show();
-        }
-        else
-        {
-            mTrayMgr->removeWidgetFromTray(mDetailsPanel);
-            mDetailsPanel->hide();
-        }
-    }
-    else if (arg.key == OIS::KC_T)   // cycle polygon rendering mode
-    {
-        Ogre::String newVal;
-        Ogre::TextureFilterOptions tfo;
-        unsigned int aniso;
-
-        switch (mDetailsPanel->getParamValue(9).asUTF8()[0])
-        {
-        case 'B':
-            newVal = "Trilinear";
-            tfo = Ogre::TFO_TRILINEAR;
-            aniso = 1;
-            break;
-        case 'T':
-            newVal = "Anisotropic";
-            tfo = Ogre::TFO_ANISOTROPIC;
-            aniso = 8;
-            break;
-        case 'A':
-            newVal = "None";
-            tfo = Ogre::TFO_NONE;
-            aniso = 1;
-            break;
-        default:
-            newVal = "Bilinear";
-            tfo = Ogre::TFO_BILINEAR;
-            aniso = 1;
-        }
-
-        Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(tfo);
-        Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(aniso);
-        mDetailsPanel->setParamValue(9, newVal);
-    }
-    else if (arg.key == OIS::KC_R)   // cycle polygon rendering mode
-    {
-      /*
-        Ogre::String newVal;
-        Ogre::PolygonMode pm;
-
-        switch (mCamera->getPolygonMode())
-        {
-        case Ogre::PM_SOLID:
-            newVal = "Wireframe";
-            pm = Ogre::PM_WIREFRAME;
-            break;
-        case Ogre::PM_WIREFRAME:
-            newVal = "Points";
-            pm = Ogre::PM_POINTS;
-            break;
-        default:
-            newVal = "Solid";
-            pm = Ogre::PM_SOLID;
-        }
-
-        mCamera->setPolygonMode(pm);
-        mDetailsPanel->setParamValue(10, newVal);
-        */
-    }
-    else if(arg.key == OIS::KC_F5)   // refresh all textures
-    {
-        Ogre::TextureManager::getSingleton().reloadAll();
-    }
-    else if (arg.key == OIS::KC_SYSRQ)   // take a screenshot
-    {
-        mWindow->writeContentsToTimestampedFile("screenshot", ".jpg");
-    }
-    else if (arg.key == OIS::KC_ESCAPE)
-    {
-        mShutDown = true;
-    }
-    else if (arg.key == OIS::KC_C)
-    {
-      std::cout << "Changing material" << std::endl;
-      Ogre::MaterialPtr  material = static_cast<Ogre::MaterialPtr> ( Ogre::MaterialManager::getSingleton().getByName("Material.004") );
-      Ogre::ColourValue oldDiffuse = material->getTechnique(0)->getPass(0)->getDiffuse();
+  if (arg.key == OIS::KC_SYSRQ)//Screenshot
+  {
+    window->writeContentsToTimestampedFile("screenshot", ".jpg");
+  }
+  else if (arg.key == OIS::KC_ESCAPE)//Exit
+  {
+    shutDown = true;
+  }
+  else if (arg.key == OIS::KC_C)//Change floor colour
+  {
+    std::cout << "Changing material" << std::endl;
+    Ogre::MaterialPtr  material = static_cast<Ogre::MaterialPtr> ( Ogre::MaterialManager::getSingleton().getByName("Material.004") );
+    Ogre::ColourValue oldDiffuse = material->getTechnique(0)->getPass(0)->getDiffuse();
       
-      float newR = oldDiffuse.r + 0.01;
-      float newB = oldDiffuse.b - 0.01;
+    float newR = oldDiffuse.r + 0.01f;
+    float newB = oldDiffuse.b - 0.01f;
 
-      if(newR > 1.0) newR = 0;
-      if(newB < 0) newB = 1.0;
+    if(newR > 1.0) newR = 0.0f;
+    if(newB < 0) newB = 1.0f;
 
-      Ogre::ColourValue newDiffuse(newR,0,newB);
+    Ogre::ColourValue newDiffuse(newR,0,newB);
 
-      material->getTechnique(0)->getPass(0)->setAmbient(newDiffuse);
-      material->getTechnique(0)->getPass(0)->setDiffuse(newDiffuse);
-    }
+    material->getTechnique(0)->getPass(0)->setAmbient(newDiffuse);
+    material->getTechnique(0)->getPass(0)->setDiffuse(newDiffuse);
+  }
 
-    game->injectKeyDown(arg);
-    return true;
+  game->injectKeyDown(arg);
+  return true;
 }
 
 bool NH2012::keyReleased( const OIS::KeyEvent &arg )
 {
-    game->injectKeyUp(arg);
-    return true;
+  game->injectKeyUp(arg);
+  return true;
 }
 
 bool NH2012::mouseMoved( const OIS::MouseEvent &arg )
 {
-    if (mTrayMgr->injectMouseMove(arg)) return true;
-    game->injectMouseMove(arg);
-    return true;
+  game->injectMouseMove(arg);
+  return true;
 }
 
 bool NH2012::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-    if (mTrayMgr->injectMouseDown(arg, id)) return true;
-    game->injectMouseDown(arg, id);
-    return true;
+  game->injectMouseDown(arg, id);
+  return true;
 }
 
 bool NH2012::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-    if (mTrayMgr->injectMouseUp(arg, id)) return true;
-    game->injectMouseUp(arg, id);
-    return true;
+  game->injectMouseUp(arg, id);
+  return true;
 }
 
 //Adjust mouse clipping area
 void NH2012::windowResized(Ogre::RenderWindow* rw)
 {
-    unsigned int width, height, depth;
-    int left, top;
-    rw->getMetrics(width, height, depth, left, top);
+  unsigned int width, height, depth;
+  int left, top;
+  rw->getMetrics(width, height, depth, left, top);
 
-    const OIS::MouseState &ms = mMouse->getMouseState();
-    ms.width = width;
-    ms.height = height;
+  const OIS::MouseState &ms = mouse->getMouseState();
+  ms.width = width;
+  ms.height = height;
 }
 
 //Unattach OIS before window shutdown (very important under Linux)
 void NH2012::windowClosed(Ogre::RenderWindow* rw)
 {
-    //Only close for window that created OIS (the main window in these demos)
-    if( rw == mWindow )
+  if(rw == window)
+  {
+    if(inputManager)
     {
-        if( mInputManager )
-        {
-            mInputManager->destroyInputObject( mMouse );
-            mInputManager->destroyInputObject( mKeyboard );
+      inputManager->destroyInputObject(mouse);
+      inputManager->destroyInputObject(keyboard);
 
-            OIS::InputManager::destroyInputSystem(mInputManager);
-            mInputManager = 0;
-        }
+      OIS::InputManager::destroyInputSystem(inputManager);
+      inputManager = 0;
     }
+  }
 }
 
 
@@ -405,41 +225,43 @@ void NH2012::windowClosed(Ogre::RenderWindow* rw)
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C" 
+{
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
+  INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
 #else
-    int main(int argc, char *argv[])
+  int main(int argc, char *argv[])
 #endif
-    {
+  {
 
 //Console
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#if defined _DEBUG
-        AllocConsole();
-        freopen("CONOUT$","wb",stdout);
-
-        std::cout << "Starting...";
+#ifdef _DEBUG
+    AllocConsole();
+    freopen("CONOUT$","wb",stdout);
 #endif
 #endif
-        // Create application object
-        NH2012 app;
 
-        try {
-            app.go();
-        } catch( Ogre::Exception& e ) {
+    //Create application
+    NH2012 app;
+
+    try 
+    {
+      app.go();
+    } 
+    catch( Ogre::Exception& e ) 
+    {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-            MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+      MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 #else
-            std::cerr << "An exception has occured: " <<
-                e.getFullDescription().c_str() << std::endl;
+      std::cerr << "An exception has occured: " << e.getFullDescription().c_str() << std::endl;
 #endif
-        }
-
-        return 0;
     }
+
+    return 0;
+  }
 
 #ifdef __cplusplus
 }

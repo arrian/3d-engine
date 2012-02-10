@@ -17,7 +17,7 @@ class Multiplayer :
   public Game
 {
 public:
-  Multiplayer(void);
+  Multiplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window);
   ~Multiplayer(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);

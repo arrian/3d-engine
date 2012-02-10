@@ -1,6 +1,6 @@
 #include "Multiplayer.h"
 
-Multiplayer::Multiplayer(void) : Game()
+Multiplayer::Multiplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window) : Game()
 {
   std::string host = "127.0.0.1";
   unsigned short port = 30001;

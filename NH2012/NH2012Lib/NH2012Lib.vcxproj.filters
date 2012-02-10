@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Entity">
       <UniqueIdentifier>{ae8106b5-375d-4eab-b784-fdfaa850d86f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{dac9996f-b396-4e10-b7b2-40e20464ee20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{bdd6fae6-1a78-49b6-879b-67e1f94feda1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -88,6 +94,15 @@
     <ClInclude Include="Gorilla.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Singleplayer.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Multiplayer.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MeshGenerator.cpp">
@@ -146,6 +161,15 @@
     </ClCompile>
     <ClCompile Include="Gorilla.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Multiplayer.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Singleplayer.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
