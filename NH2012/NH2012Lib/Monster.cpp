@@ -21,9 +21,6 @@ Monster::Monster(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsW
   //filling inventory
   inventory = Inventory(difficulty);
 
-  //filling attributes
-  attributes = MonsterAttributes();
-
   //other
   target = Ogre::Vector3(0,51,0);
   speed = 130;

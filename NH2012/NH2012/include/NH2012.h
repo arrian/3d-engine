@@ -24,6 +24,7 @@ Filename:    NH2012.h
 #include <Game.h>
 #include <Singleplayer.h>
 #include <Multiplayer.h>
+#include <Gorilla.h>
 
 class NH2012 : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {
@@ -33,6 +34,12 @@ public:
     bool go(void);
 protected:
     Game* game;
+
+    Gorilla::Silverback* debugGUI;
+    Gorilla::Screen* debugScreen;
+    Gorilla::Layer* debugLayer;
+    Gorilla::Caption* debugFPS;
+    Gorilla::Caption* debugBatchCount;
 
     Ogre::Root *root;
     Ogre::SceneManager* sceneManager;
@@ -56,9 +63,9 @@ protected:
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
     //Render events
-    void preRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);
+    //void preRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);
     bool frameRenderingQueued(const Ogre::FrameEvent& evt);
-    void postRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);
+    //void postRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);
 
     //Window events
     virtual void windowResized(Ogre::RenderWindow* rw);

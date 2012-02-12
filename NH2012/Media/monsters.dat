@@ -1,5 +1,5 @@
-#MONSTERS
-#SYMBOL,SPECIES,DIFFICULTY,FREQUENCY,ALIGNMENT_STRENGTH,SIZE,WEIGHT,NUTRITION,GENOCIDEABLE,CORPSE%
+#Monsters
+#Symbol,Name,Difficulty,Frequency,Alignment_Strength,Size,Weight,Nutrition,Genocideable,Corpse%
 
 [Insects]
 a,giant ant,4,3,0,tiny,10,10,Yes,33
@@ -395,8 +395,8 @@ Z,skeleton,14,X,0,medium,300,0,No,0
 @,Croesus,22,X,15,medium,1450,400,No,33
 
 [Ghosts]
-,,ghost,12,X,-5,medium,1450,0,No,0
-,,shade,14,X,0,medium,1450,0,No,0
+ ,ghost,12,X,-5,medium,1450,0,No,0
+ ,shade,14,X,0,medium,1450,0,No,0
 
 [Demons]
 &,water demon,11,X,-7,medium,1450,0,No,0

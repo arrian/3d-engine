@@ -2,6 +2,7 @@
 
 #include <vector>
 
+/*! Monster attributes.*/
 namespace MonsterAttribute
 {
   enum Ability
@@ -111,6 +112,7 @@ namespace MonsterAttribute
   };
 }
 
+/*! Item attributes.*/
 namespace ItemAttribute
 {
   enum BUC
@@ -150,6 +152,7 @@ namespace ItemAttribute
   };
 }
 
+/*! General Attributes.*/
 namespace GeneralAttribute
 {
   
@@ -249,36 +252,3 @@ namespace GeneralAttribute
     PARTCHED
   };
 }
-
-struct MonsterAttributes
-{
-public:
-  MonsterAttributes(void);
-  ~MonsterAttributes(void);
-
-  std::vector<MonsterAttribute::Ability> abilities;
-  MonsterAttribute::Attack attack;
-  MonsterAttribute::Awareness awareness;
-  MonsterAttribute::Behaviour behaviour;
-  std::vector<MonsterAttribute::Body> body;
-  std::vector<MonsterAttribute::Type> types;
-  std::vector<MonsterAttribute::LikesDislikes> dislikes;
-  MonsterAttribute::Gender gender;
-  std::vector<MonsterAttribute::LikesDislikes> likes;
-  MonsterAttribute::Size size;
-  std::vector<MonsterAttribute::Produces> produces;
-  std::vector<GeneralAttribute::Intrinsics> intrinsics;
-  MonsterAttribute::Status status;
-};
-
-struct ItemAttributes
-{
-public:
-  ItemAttributes(void);
-  ~ItemAttributes(void);
-
-  ItemAttribute::BUC buc;
-  ItemAttribute::Status status;
-  ItemAttribute::Type type;
-  std::vector<GeneralAttribute::Intrinsics> intrinsics;
-};

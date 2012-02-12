@@ -99,10 +99,10 @@ bool NH2012::go(void)
   windowHndStr << windowHnd;
   pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 
-  inputManager = OIS::InputManager::createInputSystem( pl );
+  inputManager = OIS::InputManager::createInputSystem(pl);
 
-  keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject( OIS::OISKeyboard, true ));
-  mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject( OIS::OISMouse, true ));
+  keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject(OIS::OISKeyboard, true));
+  mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject(OIS::OISMouse, true));
 
   mouse->setEventCallback(this);
   keyboard->setEventCallback(this);
@@ -111,6 +111,14 @@ bool NH2012::go(void)
   windowResized(window);//Set initial mouse clipping size
 
   Ogre::WindowEventUtilities::addWindowEventListener(window, this);//Register as a Window listener
+
+
+  debugGUI = new Gorilla::Silverback();
+  debugGUI->loadAtlas("dejavu");
+  debugScreen = debugGUI->createScreen(window->getViewport(0), "dejavu");
+  debugLayer = debugScreen->createLayer(14);
+  debugFPS = debugLayer->createCaption(14, 10, 10, "FPS: 0");
+  debugBatchCount = debugLayer->createCaption(14, 10, 34, "Batches: 0");
 
   root->addFrameListener(this);
   root->startRendering();
@@ -122,12 +130,13 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
   if(window->isClosed()) return false;
   if(shutDown) return false;
 
+  debugFPS->text("FPS: " + Ogre::StringConverter::toString(int(window->getAverageFPS())));
+  debugBatchCount->text("Batches: " + Ogre::StringConverter::toString(window->getBatchCount()));
+
   keyboard->capture();
   mouse->capture();
 
   game->frameRenderingQueued(evt);
-
-  //std::cout << window->getAverageFPS() << std::endl;
 
   return true;
 }

@@ -103,12 +103,12 @@
     <ClInclude Include="Multiplayer.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MeshGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Attributes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Bar.cpp">
@@ -170,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="Singleplayer.cpp">
       <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterData.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

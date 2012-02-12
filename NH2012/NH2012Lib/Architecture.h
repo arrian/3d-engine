@@ -31,19 +31,21 @@ public:
   Architecture(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics);
   ~Architecture(void);
 
+  /*! Adds a static mesh to the current dungeon architecture.*/
   void add(Ogre::String meshName, Ogre::Vector3 position = Ogre::Vector3(0,0,0));
 private:
+  /*! Current number of physics items.*/
   int instanceNumber;
 
+  /*! Pointers to the ogre scene nodes.*/
   std::vector<Ogre::SceneNode*> nodes;
+
   std::vector<Ogre::Entity*> entities;
   std::vector<OgreBulletDynamics::RigidBody*> bodies;
   std::vector<OgreBulletCollisions::CollisionShape*> shapes;
 
   OgreBulletDynamics::DynamicsWorld* physics;
   Ogre::SceneManager* sceneManager;
-
-
 
   OgreBulletDynamics::RigidBody* addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position);
 };

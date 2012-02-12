@@ -1,388 +1,448 @@
-#ITEMS
+#Items
+#Name
 
 [Amulets]
-amulet of change	$150	20	130c	Y
-amulet of ESP	150	20	175	Y
-amulet of life saving	150	20	75	 
-amulet of magical breathing	150	20	65	Y
-amulet of reflection	150	20	75	 
-amulet of restful sleep	150	20	135c	Y
-amulet of strangulation	150	20	135c	Y
-amulet of unchanging	150	20	45	Y
-amulet versus poison	150	20	165	Y
-imitation AoY	0	20	0	 
-Amulet of Yendor	30000	20	0
+amulet of change
+amulet of ESP
+amulet of life saving
+amulet of magical breathing
+amulet of reflection
+amulet of restful sleep
+amulet of strangulation
+amulet of unchanging
+amulet versus poison
+imitation amulet of Yendor
+Amulet of Yendor
 
-[Daggers]	 	 	 	 	 
-orcish dagger	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d3	2	d3	2
-dagger	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d4	2.5	d3	2
-silver dagger	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d4	2.5	d3	2
-athame	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d4	2.5	d3	2
-elven dagger	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d5	3	d3	2
+[Daggers] 	 
+orcish dagger
+dagger
+silver dagger
+athame
+elven dagger
 
 [Knives]
-worm tooth	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
-knife (shito)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d3	2	d2	1.5
-stiletto	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d3	2	d2	1.5
-scalpel	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d3	2	d3	2
-crysknife	 	 	 	 	 	 	 	 	 	 	 	 	 	3	d10	5.5	d10	5.5
+worm tooth
+knife
+stiletto
+scalpel
+crysknife
 
 [Axes]
-axe	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d4	2.5
-battle-axe	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8+d4	7.0	d6+2d4	8.5
-Pick-axe	E	s	b	-	b	-	-	b	-	-	b	s	-	 	 	 	 	 
-pick-axe	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d3	2
-dwarvish mattock	 	 	 	 	 	 	 	 	 	 	 	 	 	-1	d12	6.5	d8+2d6	11.5
+axe
+battle-axe
+
+[Picks]
+pick-axe
+dwarvish mattock
 
 [Short Swords]
-orcish short sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d5	3	d8	4.5
-short sword (wakizashi)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
-dwarvish short sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d7	4	d8	4.5
-elven short sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d8	4.5
+orcish short sword
+short sword
+dwarvish short sword
+elven short sword
 
 [Broadswords]
-broadsword (ninja-to)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d6+1	4.5
-runesword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d6+1	4.5
-elven broadsword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+d	4 6.0	d6+1	4.5
+broadsword
+runesword
+elven broadsword
 
 [Long Swords]
-long sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d12	6.5
-katana	 	 	 	 	 	 	 	 	 	 	 	 	 	1	d10	5.5	d12	6.5
+long sword
+katana
 
 [Two-handed Swords]
-two-handed sword	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d12	6.5	3d6	10.5
-tsurugi	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d16	8.5	d8+2d6	11.5
+two-handed sword
+tsurugi
 
 [Scimitars]
-scimitar	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d8	4.5
+scimitar
 
 [Sabers]
-silver saber	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d8	4.5
+silver saber
 
 [Clubs]
-club	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d3	2
-aklys	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d3	2
+club
+aklys
 
 [Maces]
-mace	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+1	4.5	d6	3.5
+mace
 
 [Morning Stars]
-morning star	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d6+1	4.5
+morning star
 
 [Flails]
-flail (nunchaku)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+1	4.5	2d4	5
-grappling hook	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d6	3.5
+flail
+grappling hook
 
 [Hammers]
-war hammer	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d4+1	3.5	d4	2.5
+war hammer
 
 [Quarterstaffs]
-quarterstaff	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
+quarterstaff
 
 [Polearms]
-partisan	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6+1	4.5
-fauchard	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
-glaive (naginata)	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d10	5.5
-bec-de-corbin	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d6	3.5
-spetum	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+1	4.5	2d6	7
-lucern hammer	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d6	3.5
-guisarme	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d8	4.5
-ranseur	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	2d4	5
-voulge	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	2d4	5
-bill-guisarme	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	d10	5.5
-bardiche	 	 	 	 	 	 	 	 	 	 	 	 	 	 	2d4	5	3d4	7.5
-halberd	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d10	5.5	2d6	7
+partisan
+fauchard
+glaive
+bec-de-corbin
+spetum
+lucern hammer
+guisarme
+ranseur
+voulge
+bill-guisarme
+bardiche
+halberd
 
 [Spears]
-orcish spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d5	3	d8	4.5
-spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
-silver spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
-elven spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d7	4	d8	4.5
-dwarvish spear	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d8	4.5	d8	4.5
+orcish spear
+spear
+silver spear
+elven spear
+dwarvish spear
 
 [Javelins]
-javelin	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
+javelin
 
 [Tridents]
-trident	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6+1	4.5	3d4	7.5
+trident
 
 [Lances]
-lance	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d8	4.5
+lance
 
 [Bows]
-orcish bow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
-bow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
-elven bow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
+orcish bow
+bow
+elven bow
 yumi
 
-[Arrows]	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
-orcish arrow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d5	3	d6	3.5
-arrow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
-silver arrow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
-elven arrow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d7	4	d6	3.5
-ya	 	 	 	 	 	 	 	 	 	 	 	 	 	1	d7	4	d7	4
+[Arrows]
+orcish arrow
+arrow
+silver arrow
+elven arrow
+ya
 
 [Slings]
-sling	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
-flintstone	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d6	3.5	d6	3.5
-other rocks/ gems/ glass	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d3	2	d3	2
-Crossbow	-	-	-	-	s	b	b	E	E	-	b	-	-	 	 	 	 	 
-crossbow	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	d2	1.5
-crossbow bolt	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d4+1	3.5	d6+1	4.5
-Dart	b	-	-	E	-	-	b	E	E	-	E	-	E	 	 	 	 	 
-dart	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d3	2	d2	1.5
-Shuriken	-	-	-	s	-	b	b	s	s	E	b	-	b	 	 	 	 	 
-shuriken	 	 	 	 	 	 	 	 	 	 	 	 	 	2	d8	4.5	d6	3.5
-Boomerang	E	-	E	-	-	-	b	E	-	-	b	-	-	 	 	 	 	 
-boomerang	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d9	5	d9	5
-Whip	E	-	-	-	-	-	-	b	-	-	b	-	-	 	 	 	 	 
-bullwhip	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d2	1.5	1	1
-rubber hose	 	 	 	 	 	 	 	 	 	 	 	 	 	 	d4	2.5	d3	2
-Unicorn horn	s	-	b	E	-	-	s	-	-	-	s	-	-	 	 	 	 	 
-unicorn horn	 	 	 	 	 	 	 	 	 	 	 	 	 	1	d12	6.5	d12	6.5
-Two weapon combat	b	b	-	-	s	-	-	-	E	E	s	s	-	 	 	 	 	 
-Riding	b	b	-	-	E	-	-	b	b	s	b	s	b	 	 	 	 	 
-Bare-handed combat	E	M	M	b	E	-	b	b	E	-	s	E	b	 	d2	1.5	d2	1.5
-Martial arts	-	-	-	-	-	G	-	-	-	M	-	-	-	 	d4	2.5	d4	2.5
+sling
+flintstone
+
+[Crossbow]
+crossbow
+crossbow bolt
+
+[Dart]
+dart
+
+
+[Shuriken]
+shuriken
+
+[Boomerang]
+boomerang
+
+[Whip]
+bullwhip
+rubber hose
+
+[Unicorn Horn]
+unicorn horn
 
 [Shirts]
-Hawaiian shirt	$ 3	5	8	0	C	Shops	--
-T-shirt	2	5	2	0	C	Shops	--
+Hawaiian shirt
+T-shirt
 
 [Suits]
-leather jacket	10	30	12	1	L	 	--
-leather armor	5	150	82	2	L	 	--
-orcish ring mail	80	250	20	2	I	#	crude ring mail
-studded leather armor	15	200	72	3	L	#	--
-ring mail	100	250	72	3	I	 	--
-scale mail	45	250	72	4	I	 	--
-orcish chain mail	75	300	20	4	I	#	crude chain mail
-chain mail	75	300	72	5	I	#	--
-elven mithril coat	240	150	15	5	M	###	--
-splint mail	80	400	62	6	I	#	--
-banded mail	90	350	72	6	I	 	--
-dwarvish mithril coat	240	150	10	6	M	###	--
-bronze plate mail	400	450	25	6	B	 	--
-plate mail (tanko)	600	450	44	7	I	##	--
-crystal plate mail	820	450	10	7	G	##	--
+leather jacket
+leather armor
+orcish ring mail
+crude ring mail
+studded leather armor
+ring mail
+scale mail
+orcish chain mail
+crude chain mail
+chain mail
+elven mithril coat
+splint mail
+banded mail
+dwarvish mithril coat
+bronze plate mail
+plate mail
+crystal plate mail
+
+[Dragon Scales]
+red dragon scales
+white dragon scales
+orange dragon scales
+blue dragon scales
+green dragon scales
+yellow dragon scales
+black dragon scales
+silver dragon scales
+gray dragon scales
 
 [Dragon Suits]
-red dragon scales	500	40	0	3	D	Fire	--
-white dragon scales	500	40	0	3	D	Cold	--
-orange dragon scales	500	40	0	3	D	Sleep	--
-blue dragon scales	500	40	0	3	D	Elec	--
-green dragon scales	500	40	0	3	D	Poison	--
-yellow dragon scales	500	40	0	3	D	Acd	--
-black dragon scales	700	40	0	3	D	Disint	--
-silver dragon scales	700	40	0	3	D	Reflect	--
-gray dragon scales	700	40	0	3	D	Magic	--
-red dragon scale mail	900	40	0	9	D	Fire	--
-white dragon scale mail	900	40	0	9	D	Cold	--
-orange dragon scale mail:	900	40	0	9	D	Sleep	--
-blue dragon scale mail	900	40	0	9	D	Elec	--
-green dragon scale mail	900	40	0	9	D	Poison	--
-yellow dragon scale mail	900	40	0	9	D	Acd	--
-black dragon scale mail	1200	40	0	9	D	Disint	--
-silver dragon scale mail	1200	40	0	9	D	Reflect	--
-gray dragon scale mail	1200	40	0	9	D	Magic	--
+red dragon scale mail
+white dragon scale mail
+orange dragon scale mail
+blue dragon scale mail
+green dragon scale mail
+yellow dragon scale mail
+black dragon scale mail
+silver dragon scale mail
+gray dragon scale mail
 
 [Cloaks]
-mummy wrapping	2	3	0	0	C	#Vis	--
-orcish cloak	40	10	8	0	C	##	coarse mantelet
-dwarvish cloak	50	10	8	0	C	##	hooded cloak
-leather cloak	40	15	8	1	L	#	--
-cloak of displacement	50	10	10	1	C	##Displ	*piece of cloth
-oilskin cloak	50	10	10	1	C	###Water	slippery cloak
-alchemy smock	50	10	9	1	C	#Poi+Acd	apron
-cloak of invisibility	60	10	10	1	C	##Invis	*opera cloak
-clk of magic resistance	60	10	2	1	C	###Magic	*ornamental cope
-elven cloak	60	10	8	1	C	###Stlth	faded pall
-robe	50	15	3	2	C	###Spell	--
-cloak of protection	50	10	9	3	C	###Prot	*tattered cape
+mummy wrapping
+orcish cloak
+coarse mantelet
+dwarvish cloak
+hooded cloak
+leather cloak
+cloak of displacement
+piece of cloth
+oilskin cloak
+slippery cloak
+alchemy smock
+apron
+cloak of invisibility
+opera cloak
+clk of magic resistance
+ornamental cope
+elven cloak
+faded pall
+robe
+cloak of protection
+tattered cape
 
 [Helmets]
-fedora	1	3	0	0	C	 	--
-dunce cap	1	4	3	0	C	Stupid	conical hat
-cornuthaum	80	4	3	0	C	##Clair	conical hat
-dented pot	8	10	2	1	I	 	--
-elven leather helm	8	3	6	1	L	 	leather hat
-helmet (kabuto)	10	30	10	1	I	 	*plumed helmet
-orcish helm	10	30	6	1	I	 	iron skull cap
-helm of brilliance	50	50	6	1	I	Int+Wis	*etched helmet
-hm of opposite alignment	50	50	6c	1	I	Align	*crested helmet
-helm of telepathy	50	50	2	1	I	ESP	*visored helmet
-dwarvish iron helm	20	40	6	2	I	 	hard hat
+fedora
+dunce cap
+conical hat
+cornuthaum
+conical hat
+dented pot
+elven leather helm
+leather hat
+helmet
+plumed helmet
+orcish helm
+iron skull cap
+helm of brilliance
+etched helmet
+hm of opposite alignment
+crested helmet
+helm of telepathy
+visored helmet
+dwarvish iron helm
+hard hat
 
 [Gloves]
-leather gloves (yugake)	8	10	16	1	L	 	*old gloves
-gauntlets of dexterity	50	10	8	1	L	Dex	*padded gloves
-gauntlets of fumbling	50	10	8c	1	L	Fumble	*riding gloves
-gauntlets of power	50	30	8	1	I	Str	*fencing gloves
+leather gloves
+old gloves
+gauntlets of dexterity
+padded gloves
+gauntlets of fumbling
+riding gloves
+gauntlets of power
+fencing gloves
 
 [Shields]
-small shield	3	30	6	1	W	 	--
-orcish shield	7	50	2	1	I	 	red-eyed
-Uruk-hai shield	7	50	2	1	I	 	white-handed
-elven shield	7	40	2	2	W	 	blue and green
-dwarvish roundshield	10	100	4	2	I	 	large round
-large shield	10	100	7	2	I	 	--
-shield of reflection	50	50	3	2	S	Reflect	polished silver
+small shield
+orcish shield
+red-eyed shield
+Uruk-hai shield
+white-handed shield
+elven shield
+blue and green shield
+dwarvish roundshield
+large round shield
+large shield
+shield of reflection
+polished silver shield
 
 [Boots]
-low boots	8	10	25	1	L	 	walking shoes
-elven boots	8	15	12	1	L	Stlth	*mud boots
-kicking boots	8	15	12	1	I	Kick	*buckled boots
-fumble boots	30	20	12c	1	L	Fumble	*riding boots
-levitation boots	30	15	12c	1	L	Lev	*snow boots
-jumping boots	50	20	12	1	L	Jump	*hiking boots
-speed boots	50	20	12	1	L	Speed	*combat boots
-water walking boots	50	20	12	1	L	WWalk	*jungle boots
-high boots	12	20	15	2	L	 	jackboots
-iron shoes	16	50	7	2	I	 	hard shoes
+low boots
+walking shoes
+elven boots
+mud boots
+kicking boots
+buckled boots
+fumble boots
+riding boots
+levitation boots
+snow boots
+jumping boots
+hiking boots
+speed boots
+combat boots
+water walking boots
+jungle boots
+high boots
+jackboots
+iron shoes
+hard shoes
 
 [Food]
-meatball	$ 5	1	0	5	5	1
-meat ring	5	1	0	5	5	1
-meat stick	5	1	0	5	5	1
-egg	9	1	85	80	80	1
-tripe ration	15	10	140	200	20	2
-huge chunk of meat	105	400	0	2000	5	20
-corpse	5	vary	0	vary	vary	vary
-Fruits and Vegetables	COST	WGT	PROB	NUTR	NUTR/WGT	TIME
-kelp frond	6	1	0	30	30	1
-eucalyptus leaf	6	1	3	30	30	1
-clove of garlic	7	1	7	40	40	1
-sprig of wolfsbane	7	1	7	40	40	1
-apple	7	2	15	50	25	1
-carrot	7	2	15	50	25	1
-pear	7	2	10	50	25	1
-banana	9	2	10	80	40	1
-orange	9	2	10	80	40	1
-melon	10	5	10	100	20	1
-slime mold	17	5	75	250	50	1
+meatball
+meat ring
+meat stick
+egg
+tripe ration
+huge chunk of meat
+corpse
+
+[Fruits and Vegetables]
+kelp frond
+eucalyptus leaf
+clove of garlic
+sprig of wolfsbane
+apple
+carrot
+pear
+banana
+orange
+melon
+slime mold
 
 [Human Food]
-fortune cookie	7	1	55	40	40	1
-candy bar	10	2	13	100	50	1
-cream pie	10	10	25	100	10	1
-lump of royal jelly	15	2	0	200	100	1
-pancake	15	2	25	200	100	2
-C-ration	20	10	0	300	30	1
-K-ration	25	10	0	400	40	1
-cram ration	35	15	20	600	40	3
-food ration (gunyoki)	45	20	380	800	40	5
-lembas wafer	45	5	20	800	160	2
-tin	5	10	75	vary	vary	vary
+fortune cookie
+candy bar
+cream pie
+lump of royal jelly
+pancake
+C-ration
+K-ration
+cram ration
+food ration
+lembas wafer
+tin
 
 [Containers]
-sack	$2	15	35	 	bag
-large box	8	350	40	 	--
-chest	16	600	35	 	--
-ice box	42	900	5	 	--
-bag of holding	100	15	20	 	bag
-bag of tricks	100	15	20	20	bag
-oilskin sack	100	15	5	 	bag
+sack
+bag
+large box
+chest
+ice box
+bag of holding
+bag of tricks
+oilskin sack
 
 [Unlocking Tools]
-credit card *	10	1	15	 	--
-lock pick (osaku)	20	4	60	 	--
-skeleton key	10	3	80	 	key
+credit card
+lock pick
+skeleton key
+key
 
 [Light Sources]
-tallow candle	10	2	20	 	candle
-wax candle	20	2	5	 	candle
-brass lantern	12	30	30	1499	--
-oil lamp	10	20	45	1499	lamp
-magic lamp	50	20	15	 	lamp
-Candelabrum of Invocation	5000	10	0	 	candelabrum
+tallow candle
+candle
+wax candle
+brass lantern
+oil lamp
+lamp
+magic lamp
+Candelabrum of Invocation
+candelabrum
 
 [Instruments]
-tin whistle	10	3	100	 	whistle
-magic whistle	10	3	30	 	whistle
-bugle	15	10	4	 	--
-wooden flute	12	5	4	 	flute
-magic flute	36	5	2	8	flute
-tooled horn	15	18	5	 	horn
-frost horn	50	18	2	8	horn
-fire horn	50	18	2	8	horn
-horn of plenty	50	18	2	20	horn
-leather drum	25	25	4	 	drum
-drum of earthquake	25	25	2	8	drum
-wooden harp (koto)	50	30	4	 	harp
-magic harp	50	30	2	8	harp
-bell	50	30	2	 	--
-Bell of Opening	5000	10	0	3	silver bell
+tin whistle
+whistle
+magic whistle
+bugle
+wooden flute
+flute
+magic flute
+tooled horn
+horn
+frost horn
+fire horn
+horn of plenty
+leather drum
+drum
+drum of earthquake
+wooden harp
+harp
+magic harp
+bell
+Bell of Opening
+silver bell
 
 [Traps]
-Traps
-beartrap	60	200	0	 	--
-land mine	180	300	0	 	--
+beartrap
+land mine
 
 [Tools]
-pick-axe	50	100	20	 	--
-grappling hook	50	30	5	 	iron hook
-unicorn horn	100	20	0	 	--
-Other tools
-expensive camera *	200	12	15	99	--
-mirror	10	13	45	 	looking glass
-crystal ball	60	150	15	5	glass orb
-lenses	80	3	5	 	--
-blindfold	20	2	50	 	--
-towel	50	2	50	 	--
-saddle *	150	200	5	 	--
-leash	20	12	65	 	--
-stethoscope	75	4	25	 	--
-tinning kit	30	100	15	99	--
-tin opener	30	4	35	 	--
-can of grease	20	15	15	25	--
-figurine	80	50	25	 	--
-magic marker	50	2	15	99!	--
+pick-axe
+grappling hook
+iron hook
+unicorn horn
+expensive camera
+mirror
+looking glass
+crystal ball
+glass orb
+lenses
+blindfold
+towel
+saddle
+leash
+stethoscope
+tinning kit
+tin opener
+can of grease
+figurine
+magic marker
 
 [Gems]
-dilithium crystal	$4500	1	28*	soft	white
-diamond	4000	1	25*	hard	white
-ruby	3500	1	22*	hard	red
-jacinth	3250	1	19*	hard	orange
-sapphire	3000	1	16*	hard	blue
-black opal	2500	1	13*	hard	black
-emerald	2500	1	10*	hard	green
-turquoise	2000	1	7*	soft	green, blue
-aquamarine	1500	1	1*	hard	green, blue
-citrine	1500	1	4*	soft	yellow
-amber	1000	1	1*	soft	yellowish brown
-topaz	900	1	1*	hard	yellowish brown
-jet	850	1	1*	soft	black
-opal	800	1	1*	soft	white
-chrysoberyl	700	1	1*	soft	yellow
-garnet	700	1	1*	soft	red
-amethyst	600	1	1*	soft	violet
-jasper	500	1	1*	soft	red
-fluorite	400	1	1*	soft	green, blue, white, violet
-jade	300	1	1*	soft	green
-agate	200	1	1*	soft	orange
-obsidian	200	1	1*	soft	black
-Worthless gems	COST	WGT	PROB	ENGR	COLORS
-black glass	0	1	76	soft	black
-blue glass	0	1	77	soft	blue
-green glass	0	1	77	soft	green
-orange glass	0	1	76	soft	orange
-red glass	0	1	77	soft	red
-violet glass	0	1	77	soft	violet
-white glass	0	1	77	soft	white
-yellow glass	0	1	77	soft	yellow
-yellowish brown glass	0	1	77	soft	yellowish brown
-Stones	COST	WGT	PROB	ENGR	COLORS
-luckstone	60	10	10	soft	gray stone
-touchstone	45	10	8	soft	gray stone
-flintstone	1	10	10	soft	gray stone
-loadstone	1	500	10	soft	gray stone
-rock	0	10	100	soft	rock
+dilithium crystal
+diamond
+ruby
+jacinth
+sapphire
+black opal
+emerald
+turquoise
+aquamarine
+citrine
+amber
+topaz
+jet
+opal
+chrysoberyl
+garnet
+amethyst
+jasper
+fluorite
+jade
+agate
+obsidian
+
+[Worthless Gems]
+black glass
+blue glass
+green glass
+orange glass
+red glass
+violet glass
+white glass
+yellow glass
+yellowish brown glass
+
+[Stones]
+luckstone
+touchstone
+flintstone
+loadstone
+rock
 
 [Miscellaneous]
-gold piece	$ 1	0.01	1000	$	0	0.01
-boulder	0	6000	100	'	d20	2000
-statue	0	vary	900	'	d20	2500
-heavy iron ball	10	480*	0	0	d25*	480*
-iron chain	0	120	0	_	d4+1	120
-acid venom	0	1	0	.	2d6	0
-blinding venom	0	1	0	.	0	0
+gold piece
+boulder
+statue
+heavy iron ball
+iron chain
+acid venom
+blinding venom

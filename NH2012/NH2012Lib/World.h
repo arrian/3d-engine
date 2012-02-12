@@ -29,7 +29,6 @@ public:
   void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 private:
   Ogre::SceneManager* sceneManager;
-  Gorilla::Silverback* debugGUI;
 
   int timestamp;
 

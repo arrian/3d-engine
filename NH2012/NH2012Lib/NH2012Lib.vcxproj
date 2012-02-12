@@ -94,6 +94,7 @@
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterData.h" />
     <ClInclude Include="Multiplayer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Server.h" />
@@ -105,7 +106,6 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="Architecture.cpp" />
-    <ClCompile Include="Attributes.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Dungeon.cpp" />
@@ -118,6 +118,7 @@
     <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MonsterData.cpp" />
     <ClCompile Include="Multiplayer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Server.cpp" />

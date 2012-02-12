@@ -20,10 +20,9 @@
 #include "OgreBulletCollisions.h"
 #include "OgreBulletDynamics.h"
 
-#include "Gorilla.h"
-
 class Dungeon;
 
+/*! User data.*/
 class Player : public Actor
 {
 public:
@@ -39,10 +38,11 @@ public:
   void injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
   void injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
 
+  /*! Gets the current position of the player.*/
   Ogre::Vector3 getPosition();
 
 private:
-  //hardcore mode
+  /*! Used in hardcore mode .*/
   Bar water;
   Bar food;
   Bar sleep;

@@ -26,6 +26,7 @@
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
+/*! Structure for storing dates.*/
 struct Date
 {
   Date()
@@ -49,6 +50,7 @@ struct Date
   int day;
 };
 
+/*! Structure for storing controls.*/
 struct Controls
 {
   OIS::KeyCode moveForward;
@@ -74,63 +76,120 @@ struct Controls
   OIS::KeyCode reset;
 };
 
-/**
- * Stores the global game state
- */
+/*! Store the global game state.*/
 class Flag
 {
 public:
   Flag(void);
   virtual ~Flag(void);
 
+  /*! Parses the game settings files.*/
   void parseIni(std::string filename);
 
+  /*! Stores the control mapping.*/
   Controls controls;
 
+  /*! Monster data filename.
+      Default is monsters.dat
+  */
   Ogre::String monsterDataFilename;
+  
+  /*! Item data filename.
+      Default is items.dat
+  */
   Ogre::String itemDataFilename;
 
-  //Dates
+  /*! Gets the current date.*/
   Date getDate();
+
+  /*! Gets the current date as a string.*/
   Ogre::String getDateString();
+
+  /*! Gets the current moon phase as a string.*/
   Ogre::String getMoonPhase();
+
+  /*! Returns true if today is Friday the 13th.*/
   bool isFriday13();
+
+  /*! Returns true if today is one of the developer's birthdays.*/
   bool isBirthday();
+
+  /*! Returns true if today is halloween.*/
   bool isHalloween();
+
+  /*! Returns true if today is new years day.*/
   bool isNewYears();
 
+  /*! Returns true if game is in debug mode.*/
   bool isDebug();
 
-  //Modes
-  bool explore;//explore mode
-  bool wizard;//wizard mode
+    /*! True if explore mode is activated.*/
+  bool explore;
+
+  /*! True if wizard mode is activated.*/
+  bool wizard;
+
+  /*! True if hardcore mode is activated.*/
   bool hardcore;
 
+  /*! True if debug mode is activated.*/
   bool debug;
-  bool verbose;//verbose logging
 
-  //Enabled Features
+  /*! True if verbose logging mode is activated.*/
+  bool verbose;
+
+  /*! True if collision is enabled.*/
   bool enableCollision;
+
+  /*! True if gravity is enabled.*/
   bool enableGravity;
+
+  /*! True if artificial intelligence is activated.*/
   bool enableAI;
+
+  /*! True if audio is enabled*/
   bool enableAudio;
 
-  //Graphics
+  /*! True if high dynamic range rendering is enabled.*/
   bool enableHDR;
+
+  /*! True if bloom is enabled.*/
   bool enableBloom;
+
+  /*! True if shadows are enabled.*/
   bool enableShadows;
+
+  /*! True if lights are enabled.*/
   bool enableLights;
+
+  /*! True if particles are enabled.*/
   bool enableParticles;
+
+  /*! True if decals are enabled.*/
   bool enableDecals;
+
+  /*! True if sprites are enabled.*/
   bool enableSprites;
+
+  /*! True if water is enabled.*/
   bool enableWater;
+
+  /*! True if sky is enabled.*/
   bool enableSky;
 
-  //Debug booleans
+  /*! True if camera collision is disabled.*/
   bool freeCameraDebug;
+
+  /*! True if display mode is wireframe.*/
   bool wireframeDebug;
+
+  /*! True if shadows are enabled.*/
   bool freezeCollisionDebug;
+
+  /*! True if collision debug is visible.*/
   bool showCollisionDebug;
+
+  /*! True if shadow debug is visible.*/
   bool showShadowDebug;
 
 private:

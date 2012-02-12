@@ -125,6 +125,24 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
   {
     if(velocity != Ogre::Vector3::ZERO && capsuleBody->getLinearVelocity() != Ogre::Vector3::ZERO) capsuleBody->setLinearVelocity(velocity);
   }
+
+  /*
+  //Accurate ray casting for bullet world
+  //Ray casting
+  btVector3 from = btVector3(node->getPosition().x,node->getPosition().y,node->getPosition().z);
+  //std::cout << "testing: " << node->getPosition() << std::endl; 
+  btVector3 to = btVector3(0,0,0);
+  btCollisionWorld::ClosestRayResultCallback resultCallback(from, to);
+  physics->getBulletCollisionWorld()->rayTest(from, to, resultCallback);
+
+  if(resultCallback.hasHit())
+  {
+    std::cout << "ray hit object" << std::endl;
+    // some object was hit
+  }
+  */
+
+  
 }
 
 void Player::animation()

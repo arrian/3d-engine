@@ -6,8 +6,6 @@ Multiplayer::Multiplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* w
   unsigned short port = 30001;
 
   listener = boost::thread(boost::bind(&Multiplayer::listen, this, host, port));
-
-  frame = 0;
 }
 
 Multiplayer::~Multiplayer(void)
@@ -34,7 +32,6 @@ void Multiplayer::listen(const std::string& host, unsigned short port)
  */
 void Multiplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  frame++;
 }
 
 void Multiplayer::injectKeyDown(const OIS::KeyEvent &arg)
