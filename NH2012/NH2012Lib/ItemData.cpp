@@ -5,10 +5,16 @@ ItemData::ItemData(void)
 {
   value = 0;
 
+  name = "rock";
+
   buc = ItemAttribute::UNCURSED;
   type = ItemAttribute::GEM;
 }
 
+ItemData::ItemData(Ogre::String name)
+{
+
+}
 
 ItemData::~ItemData(void)
 {

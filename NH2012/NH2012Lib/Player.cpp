@@ -31,23 +31,14 @@ Player::Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWor
     moveRight(false), 
     run(false),
     leftHand(false),
-    rightHand(false)
+    rightHand(false),
+    food(10),
+    water(10),
+    sleep(10)
 {
   this->flags = flags;
 
-  health = Bar(10);
-  magic = Bar(10);
-  level = Bar(1);
-
-  food = Bar(10);
-  water = Bar(10);
-  sleep = Bar(10);
-
   inventory = Inventory();
-  attributes = MonsterAttributes();
-
-  speed = 200;//walking speed
-
   //Create the camera
   cameraNode = node->createChildSceneNode(Ogre::Vector3(0,30,0));
   camera = sceneManager->createCamera("PlayerCamera");
@@ -86,7 +77,7 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   if(food.current > 0) food.current -= Ogre::Real(0.0001) * evt.timeSinceLastFrame;
   if(water.current > 0) water.current -= Ogre::Real(0.00015) * evt.timeSinceLastFrame;
-  if(food.current <= 0 || water.current <= 0) attributes.awareness = MonsterAttribute::DEAD;
+  if(food.current <= 0 || water.current <= 0) awareness = MonsterAttribute::DEAD;
 
   //Camera update 
   Ogre::Vector3 accel = Ogre::Vector3::ZERO;
@@ -143,21 +134,6 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
   */
 
   
-}
-
-void Player::animation()
-{
-
-}
-
-void Player::audio()
-{
-
-}
-
-void Player::collision()
-{
-
 }
 
 void Player::injectKeyDown(const OIS::KeyEvent &evt)

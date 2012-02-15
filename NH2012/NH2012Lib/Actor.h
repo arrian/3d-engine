@@ -4,12 +4,10 @@
 #include <OgreVector3.h>
 #include <OgreSceneManager.h>
 
-#include "Bar.h"
-#include "Inventory.h"
-#include "Attributes.h"
 #include "Entity.h"
+#include "MonsterData.h"
 
-class Actor : public Entity
+class Actor : public Entity, public MonsterData
 {
 public:
   Actor(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
@@ -18,20 +16,6 @@ public:
 
   virtual void frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
 protected:
-  Ogre::Real speed;//number of units to move per second ~100 = 1 metre per second
 
-  Bar level;
-  Bar health;
-  Bar magic;
-
-  int magicResistance;
-  int meleeResistance;
-
-  Inventory inventory;
-  MonsterAttributes attributes;
-
-  virtual void animation() = 0;
-  virtual void audio() = 0;
-  virtual void collision() = 0;
 };
 

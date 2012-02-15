@@ -2,6 +2,10 @@
 
 
 MonsterData::MonsterData(void)
+  : health(10),
+    magic(10),
+    level(1),
+    speed(200)
 {
 }
 

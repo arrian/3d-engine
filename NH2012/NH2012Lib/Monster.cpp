@@ -17,7 +17,7 @@ Monster::Monster(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsW
   if(difficulty < 40) entityName = "Wizard of Yendor";
   if(difficulty < 50) entityName = "Baalzebub";
   if(difficulty < 60) entityName = "Demogorgon";
-
+   
   //filling inventory
   inventory = Inventory(difficulty);
 
@@ -33,7 +33,7 @@ Monster::~Monster(void)
 
 void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(health.current <= 0) attributes.awareness = MonsterAttribute::DEAD;
+  if(health.current <= 0) awareness = MonsterAttribute::DEAD;
 
   //moving
   if(evt.timeSinceLastFrame == 0 || target == node->getPosition()) return;
@@ -57,17 +57,3 @@ void Monster::setTarget(Ogre::Vector3 target)
   this->target = target;
 }
 
-void Monster::animation()
-{
-
-}
-
-void Monster::audio()
-{
-
-}
-
-void Monster::collision()
-{
-
-}

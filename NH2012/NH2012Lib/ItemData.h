@@ -8,7 +8,12 @@
 class ItemData
 {
 public:
+  /*! Construct random item data*/
   ItemData(void);
+
+  /*! Construct an item of the given name.*/
+  ItemData(Ogre::String name);
+
   virtual ~ItemData(void);
 
   friend bool operator==(const ItemData& x, const ItemData& y);

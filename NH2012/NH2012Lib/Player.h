@@ -53,10 +53,6 @@ private:
 
   Flag* flags;
 
-  void animation();
-  void audio();
-  void collision();
-
   Ogre::Vector3 gravityVector;
 
   //Camera movement stuff
@@ -70,7 +66,8 @@ private:
   bool leftHand;
   bool rightHand;
 
-  void stop();//manually stops the player movement
+  /*! Manually stops the player movement.*/
+  void stop();
 
   //physics
   OgreBulletCollisions::CapsuleCollisionShape* capsule;

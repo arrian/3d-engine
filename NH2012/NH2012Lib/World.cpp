@@ -13,7 +13,7 @@ World::World(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window)
   if(flags->enableShadows) sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
   dungeons = std::vector<Dungeon*>();
-  dungeons.push_back(new Dungeon(sceneManager, window, flags, "Entrance", DungeonType::PREDEFINED, 0, 0));
+  dungeons.push_back(new Dungeon(sceneManager, window, flags, "Entrance", DungeonType::DUNGEON,0,0));//::PREDEFINED, 0, 0));
 
   if(flags->isDebug())
   {

@@ -31,7 +31,7 @@
 #include "OgreBulletDynamicsWorld.h"
 #include "OgreBulletDynamicsRigidBody.h"
 #include "OgreBulletDynamicsConstraint.h"
-#include "Constraints/OgreBulletDynamicsPoint2pointConstraint.h" 
+#include "Constraints/OgreBulletDynamicsPoint2pointConstraint.h"
 
 namespace DungeonType
 {
@@ -84,5 +84,14 @@ private:
   Player* player;
 
   int instanceNumber;
+
+
+  void generateOverworld();
+  void generateUnderworld();
+  void generateCave();
+  void generateDungeon();
+  void generateTown();
+  void generatePredefined();
+  void generateAstral();
 };
 

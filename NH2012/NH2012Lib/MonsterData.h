@@ -3,6 +3,8 @@
 #include <OgreString.h>
 
 #include "Attributes.h"
+#include "Bar.h"
+#include "Inventory.h"
 
 class MonsterData
 {
@@ -28,5 +30,20 @@ protected:
   std::vector<MonsterAttribute::Produces> produces;
   std::vector<GeneralAttribute::Intrinsics> intrinsics;
   MonsterAttribute::Status status;
+
+  /*! Number of units to move per second ~100 = 1 metre per second.*/
+  Ogre::Real speed;
+
+  /*! Height of the actor in units.*/
+  Ogre::Real height;
+
+  Bar level;
+  Bar health;
+  Bar magic;
+
+  Ogre::Real magicResistance;
+  Ogre::Real meleeResistance;
+
+  Inventory inventory;
 };
 

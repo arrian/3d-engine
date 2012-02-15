@@ -41,94 +41,58 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window,
   std::cout << "Creating scenery" << std::endl;
   architecture = new Architecture(sceneManager, physics);
   lights = std::vector<Ogre::Light*>();
-  if(type == DungeonType::PREDEFINED)
+
+  std::cout << "Creating architecture" << std::endl;
+  if(type == DungeonType::PREDEFINED) generatePredefined();
+  else if(type == DungeonType::CAVE) generateCave();
+  else if(type == DungeonType::OVERWORLD) generateOverworld();
+  else if(type == DungeonType::DUNGEON) generateDungeon();
+  else if(type == DungeonType::TOWN) generateTown();
+  else if(type == DungeonType::UNDERWORLD) generateUnderworld();
+  else if(type == DungeonType::ASTRAL) generateAstral();
+
+  /*
+  std::cout << "Creating particles" << std::endl;
+  //Particles
+  Ogre::ParticleSystem* sunParticle = sceneManager->createParticleSystem("Rain", "Examples/Rain");
+  sunParticle->fastForward(20);
+  Ogre::SceneNode* particleNode = sceneManager->getRootSceneNode()->createChildSceneNode("Particle");
+  particleNode->setPosition(-100,1000,0);
+  particleNode->setScale(0.5,0.5,0.5);
+  particleNode->attachObject(sunParticle);
+  */
+
+  if(flags->enableLights)
   {
-    architecture->add("r1.mesh");
-    architecture->add("r2.mesh");
-    architecture->add("r3.mesh");
-    architecture->add("r4.mesh");
-    architecture->add("r5.mesh");
-    architecture->add("r6.mesh");
-    architecture->add("r7.mesh");
-    architecture->add("r8.mesh");
-    architecture->add("r9.mesh");
-    architecture->add("r10.mesh");
-    architecture->add("r11.mesh");
-    architecture->add("r12.mesh");
-    architecture->add("r13.mesh");
-    architecture->add("r14.mesh");
-    architecture->add("connector.mesh", Ogre::Vector3(-380,0,0));
+    // Create lights
+    std::cout << "Creating lights" << std::endl;
 
-    architecture->add("hall.mesh", Ogre::Vector3(-445,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-545,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-645,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-745,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-845,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-945,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-1045,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-1145,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-1245,0,0));
-    architecture->add("hall.mesh", Ogre::Vector3(-1345,0,0));
-    
-    /*
-    std::cout << "Creating particles" << std::endl;
-    //Particles
-    Ogre::ParticleSystem* sunParticle = sceneManager->createParticleSystem("Rain", "Examples/Rain");
-    sunParticle->fastForward(20);
-    Ogre::SceneNode* particleNode = sceneManager->getRootSceneNode()->createChildSceneNode("Particle");
-    particleNode->setPosition(-100,1000,0);
-    particleNode->setScale(0.5,0.5,0.5);
-    particleNode->attachObject(sunParticle);
-    */
+    //Set ambient light
+    sceneManager->setAmbientLight(Ogre::ColourValue(0,0,0));
 
-    if(flags->enableLights)
-    {
-      // Create lights
-      std::cout << "Creating lights" << std::endl;
+    Ogre::Light* l = sceneManager->createLight("MainLight");
+    lights.push_back(l);
+    l->setPosition(50,50,50);
+    l->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+    l->setCastShadows(true);
 
-      //Set ambient light
-      sceneManager->setAmbientLight(Ogre::ColourValue(0,0,0));
+    Ogre::Light* l2 = sceneManager->createLight("light2");
+    lights.push_back(l2);
+    l2->setPosition(-600,50,0);
+    l2->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+    l2->setCastShadows(true);
 
-      Ogre::Light* l = sceneManager->createLight("MainLight");
-      lights.push_back(l);
-      l->setPosition(50,50,50);
-      l->setAttenuation(3250, 1.0, 0.0014, 0.000007);
-      l->setCastShadows(true);
+    Ogre::Light* l3 = sceneManager->createLight("light3");
+    lights.push_back(l3);
+    l3->setPosition(-800,50,0);
+    l3->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+    l3->setCastShadows(true);
 
-      Ogre::Light* l2 = sceneManager->createLight("light2");
-      lights.push_back(l2);
-      l2->setPosition(-600,50,0);
-      l2->setAttenuation(3250, 1.0, 0.0014, 0.000007);
-      l2->setCastShadows(true);
-
-      Ogre::Light* l3 = sceneManager->createLight("light3");
-      lights.push_back(l3);
-      l3->setPosition(-800,50,0);
-      l3->setAttenuation(3250, 1.0, 0.0014, 0.000007);
-      l3->setCastShadows(true);
-
-      Ogre::Light* l4 = sceneManager->createLight("light4");
-      lights.push_back(l4);
-      l4->setPosition(-1200,50,0);
-      l4->setAttenuation(3250, 1.0, 0.0014, 0.000007);
-      l4->setCastShadows(true);
-    }
-  }
-  else if(type == DungeonType::CAVE)
-  {
-    //generate perlin noise cave
-  }
-  else if(type == DungeonType::OVERWORLD)
-  {
-    //generate perlin noise landscape
-  }
-  else if(type == DungeonType::DUNGEON)
-  {
-    //generate nethack style dungeon
-  }
-  else
-  {
-    //generate other...
+    Ogre::Light* l4 = sceneManager->createLight("light4");
+    lights.push_back(l4);
+    l4->setPosition(-1200,50,0);
+    l4->setAttenuation(3250, 1.0, 0.0014, 0.000007);
+    l4->setCastShadows(true);
   }
 }
 
@@ -210,4 +174,64 @@ void Dungeon::injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 void Dungeon::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
   player->injectMouseUp(arg,id);
+}
+
+void Dungeon::generateOverworld()
+{
+
+}
+
+void Dungeon::generateUnderworld()
+{
+
+}
+
+void Dungeon::generateCave()
+{
+
+}
+
+void Dungeon::generateDungeon()
+{
+
+}
+
+void Dungeon::generateTown()
+{
+
+}
+
+void Dungeon::generatePredefined()
+{
+  architecture->add("r1.mesh");
+  architecture->add("r2.mesh");
+  architecture->add("r3.mesh");
+  architecture->add("r4.mesh");
+  architecture->add("r5.mesh");
+  architecture->add("r6.mesh");
+  architecture->add("r7.mesh");
+  architecture->add("r8.mesh");
+  architecture->add("r9.mesh");
+  architecture->add("r10.mesh");
+  architecture->add("r11.mesh");
+  architecture->add("r12.mesh");
+  architecture->add("r13.mesh");
+  architecture->add("r14.mesh");
+  architecture->add("connector.mesh", Ogre::Vector3(-380,0,0));
+
+  architecture->add("hall.mesh", Ogre::Vector3(-445,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-545,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-645,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-745,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-845,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-945,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-1045,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-1145,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-1245,0,0));
+  architecture->add("hall.mesh", Ogre::Vector3(-1345,0,0));
+}
+
+void Dungeon::generateAstral()
+{
+
 }
