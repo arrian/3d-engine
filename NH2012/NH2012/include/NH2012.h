@@ -21,6 +21,8 @@ Filename:    NH2012.h
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
+#include <Dungeon.h>
+
 #include <Game.h>
 #include <Singleplayer.h>
 #include <Multiplayer.h>
