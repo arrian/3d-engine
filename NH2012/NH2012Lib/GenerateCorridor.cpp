@@ -1,4 +1,4 @@
-#include "Corridor.h"
+#include "GenerateCorridor.h"
 
 namespace Generator
 {
@@ -38,6 +38,14 @@ namespace Generator
       if(iter->x == point.x && iter->y == point.y) return true;
     }
     return false;
+  }
+
+  void Corridor::construct(Architecture* architecture)
+  {
+    for(std::vector<Point>::iterator iter = points.begin(); iter < points.end(); ++iter)
+    {
+      architecture->add("hall.mesh", Ogre::Vector3(100*iter->x,0,100*iter->y));
+    }
   }
 }
 

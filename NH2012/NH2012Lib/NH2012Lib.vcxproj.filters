@@ -31,6 +31,12 @@
     <Filter Include="Header Files\Game">
       <UniqueIdentifier>{bdd6fae6-1a78-49b6-879b-67e1f94feda1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Generator">
+      <UniqueIdentifier>{7e23a03c-4af6-4e67-86ee-9020711a4d57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Generator">
+      <UniqueIdentifier>{84ac2cbc-d9b1-41c3-86f6-293f5d203a79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -106,6 +112,21 @@
     <ClInclude Include="MonsterData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DebugConsole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateRoom.h">
+      <Filter>Header Files\Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateCorridor.h">
+      <Filter>Header Files\Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateDungeon.h">
+      <Filter>Header Files\Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratePoint.h">
+      <Filter>Header Files\Generator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MeshGenerator.cpp">
@@ -173,6 +194,18 @@
     </ClCompile>
     <ClCompile Include="MonsterData.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugConsole.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateDungeon.cpp">
+      <Filter>Source Files\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateRoom.cpp">
+      <Filter>Source Files\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateCorridor.cpp">
+      <Filter>Source Files\Generator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

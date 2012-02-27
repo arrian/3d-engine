@@ -68,8 +68,9 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window,
     std::cout << "Creating lights" << std::endl;
 
     //Set ambient light
-    sceneManager->setAmbientLight(Ogre::ColourValue(0,0,0));
+    sceneManager->setAmbientLight(Ogre::ColourValue(1.0f,1.0f,1.0f));
 
+    /*
     Ogre::Light* l = sceneManager->createLight("MainLight");
     lights.push_back(l);
     l->setPosition(50,50,50);
@@ -93,6 +94,7 @@ Dungeon::Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window,
     l4->setPosition(-1200,50,0);
     l4->setAttenuation(3250, 1.0, 0.0014, 0.000007);
     l4->setCastShadows(true);
+    */
   }
 }
 
@@ -193,7 +195,9 @@ void Dungeon::generateCave()
 
 void Dungeon::generateDungeon()
 {
-
+  Generator::Dungeon dungeon = Generator::Dungeon();
+  dungeon.construct(architecture);
+  dungeon.output();
 }
 
 void Dungeon::generateTown()

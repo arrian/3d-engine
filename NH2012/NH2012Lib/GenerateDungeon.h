@@ -5,9 +5,11 @@
 #include <time.h>
 #include <iostream>
 
-#include "Point.h"
-#include "Room.h"
-#include "Corridor.h"
+#include "GeneratePoint.h"
+#include "GenerateRoom.h"
+#include "GenerateCorridor.h"
+
+#include "Architecture.h"
 
 namespace Generator
 {
@@ -25,7 +27,11 @@ namespace Generator
 
     Room* getNearestRoom(Room* room);
 
+    void construct(Architecture* architecture);
     void output();
+
+    int width;
+    int breadth;
   };
 }
 

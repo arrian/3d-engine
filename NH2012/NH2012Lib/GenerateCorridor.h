@@ -1,7 +1,9 @@
 #pragma once
 
 #include <vector>
-#include "Point.h"
+#include "GeneratePoint.h"
+#include "Architecture.h"
+
 
 namespace Generator
 {
@@ -14,5 +16,7 @@ namespace Generator
     std::vector<Point> points;
 
     bool pointInside(Point point);
+
+    void construct(Architecture* architecture);
   };
 }

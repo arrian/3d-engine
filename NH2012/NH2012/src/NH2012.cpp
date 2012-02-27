@@ -90,9 +90,6 @@ bool NH2012::go(void)
     game = new Multiplayer(sceneManager, window);
   }
 
-  Generator::Dungeon dungeon = Generator::Dungeon();
-  dungeon.output();
-
   //Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
   OIS::ParamList pl;
   size_t windowHnd = 0;

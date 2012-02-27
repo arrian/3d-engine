@@ -25,5 +25,10 @@ namespace Generator
     {
       return abs((segmentEnd.x - segmentStart.x) * (segmentStart.y - y) - (segmentStart.x - x) * (segmentEnd.y - segmentStart.y)) / (sqrt(double((segmentEnd.x - segmentStart.x) * (segmentEnd.x - segmentStart.x) + (segmentEnd.y - segmentStart.y) * (segmentEnd.y - segmentStart.y))));
     }
+
+    bool operator==(const Point &other)
+    {
+        return x ==  other.x && y == other.y;
+    }
   };
 }

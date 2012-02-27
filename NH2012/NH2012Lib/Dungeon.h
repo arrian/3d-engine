@@ -12,6 +12,8 @@
 #include "Architecture.h"
 #include "Flag.h"
 
+#include "GenerateDungeon.h"
+
 
 #include "OgreBulletCollisionsShape.h"
 #include "Shapes/OgreBulletCollisionsBoxShape.h"

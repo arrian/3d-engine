@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "Point.h"
+#include "GeneratePoint.h"
+#include "Architecture.h"
 
 namespace Generator
 {
@@ -34,5 +35,7 @@ namespace Generator
 
     bool roomIntersects(Room* room);
     bool pointInside(Point point);
+
+    void construct(Architecture* architecture);
   };
 }
