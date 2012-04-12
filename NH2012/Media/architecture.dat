@@ -1,14 +1,14 @@
 #Architecture
-#Mesh
+#Mesh,Layout
 
 [Feudal Hall]
-hall.mesh
-hall_2way.mesh
-hall_3way.mesh
-hall_4way.mesh
-hall_4way_loft.mesh
-hall_endcap.mesh
-hall_stairs.mesh
+hall.mesh,0001x1000
+hall_2way.mesh,0100x1000
+hall_3way.mesh,0101x1000
+hall_4way.mesh,0101x1010
+hall_4way_loft.mesh,0101h1010
+hall_endcap.mesh,0100x0000
+hall_stairs.mesh,0100x0020
 
 [Feudal Hall Tall]
 hall_tall.mesh

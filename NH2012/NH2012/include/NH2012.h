@@ -24,7 +24,8 @@ Filename:    NH2012.h
 #include <Game.h>
 #include <Singleplayer.h>
 #include <Multiplayer.h>
-#include <Gorilla.h>
+
+#include "../../Engine/Gorilla.h"
 
 class NH2012 : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {
