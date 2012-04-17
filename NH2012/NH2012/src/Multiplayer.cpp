@@ -58,3 +58,8 @@ void Multiplayer::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID i
 {
 
 }
+
+void Multiplayer::notify(Ogre::String comment)
+{
+  std::cout << comment << std::endl;
+}

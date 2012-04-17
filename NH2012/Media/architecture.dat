@@ -1,28 +1,42 @@
-#Architecture
-#Mesh,Layout
+[Feudal]
+1,Hall,hall.mesh
+2,Hall Corner,hall_2way.mesh
+3,Hall 3 Entrances,hall_3way.mesh
+4,Hall 4 Entrances,hall_4way.mesh
+5,Hall 4 Entrances with Loft,hall_4way_loft.mesh
+6,Hall Endcap,hall_endcap.mesh
+7,Hall Stairs,hall_stairs.mesh
 
-[Feudal Hall]
-hall.mesh,0001x1000
-hall_2way.mesh,0100x1000
-hall_3way.mesh,0101x1000
-hall_4way.mesh,0101x1010
-hall_4way_loft.mesh,0101h1010
-hall_endcap.mesh,0100x0000
-hall_stairs.mesh,0100x0020
+8,Hall Tall,hall_tall.mesh
+9,Hall Tall Entrance, hall_tall_entrance.mesh
 
-[Feudal Hall Tall]
-hall_tall.mesh
-hall_tall_entrance.mesh
+10,Room Centre,room_centre.mesh
+11,Room Corner,room_corner.mesh
+12,Room Corner Entrance A,room_corner_entrance_a.mesh
+13,Room Corner Entrance B,room_corner_entrance_b.mesh
+14,Room Corner 2 Entrances,room_corner_entrance_two_way.mesh
+15,Room Corner Single,room_corner_single.mesh
+16,Room Edge,room_edge.mesh
+17,Room Edge Entrance,room_edge_entrance.mesh
 
-[Feudal Room]
-room_centre.mesh
-room_corner.mesh
-room_corner_entrance_a.mesh
-room_corner_entrance_b.mesh
-room_corner_entrance_two_way.mesh
-room_corner_single.mesh
-room_edge.mesh
-room_edge_entrance.mesh
+[Town]
+18,Cottage,cottage.mesh
+
+[Entrance Preset]
+19,Preset 1,r1.mesh
+20,Preset 2,r2.mesh
+21,Preset 3,r3.mesh
+22,Preset 4,r4.mesh
+23,Preset 5,r5.mesh
+24,Preset 6,r6.mesh
+25,Preset 7,r7.mesh
+26,Preset 8,r8.mesh
+27,Preset 9,r9.mesh
+28,Preset 10,r10.mesh
+29,Preset 11,r11.mesh
+30,Preset 12,r12.mesh
+31,Preset 13,r13.mesh
+32,Preset 14,r14.mesh
 
 [Castle Hall]
 
@@ -34,9 +48,6 @@ room_edge_entrance.mesh
 
 [Prison]
 
-[Town]
-cottage.mesh
-
 [Shop]
 
 [Trees]
@@ -47,53 +58,32 @@ cottage.mesh
 
 [Rocks]
 
-[Entrance Preset]
-r1.mesh
-r2.mesh
-r3.mesh
-r4.mesh
-r5.mesh
-r6.mesh
-r7.mesh
-r8.mesh
-r9.mesh
-r10.mesh
-r11.mesh
-r12.mesh
-r13.mesh
-r14.mesh
+[Lobby]
 
-[Lobby Preset]
-lobby.mesh
+[Astral]
 
-[Astral Preset]
+[Hive]
 
-[Beehive Preset]
+[Throne Room]
 
-[Throne Room Preset]
+[Zoo]
 
-[Zoo Preset]
+[Temple]
 
-[Temple Preset]
+[Anthole]
 
-[Anthole Preset]
+[Barracks]
 
-[Barracks Preset]
+[Graveyard]
 
-[Graveyard Preset]
+[Leprechaun Hall]
 
-[Leprechaun Hall Preset]
+[Vlad]
 
-[Vlad's Tower Preset]
+[Medusa]
 
-[Medusa's Island Preset]
+[Sokoban]
 
-[Sokoban Preset]
-
-[Cockatrice Nest Preset]
-
-[Vault Preset]
-
-
+[Vault]
 
 

@@ -25,8 +25,6 @@ Filename:    NH2012.h
 #include <Singleplayer.h>
 #include <Multiplayer.h>
 
-#include "../../Engine/Gorilla.h"
-
 class NH2012 : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {
 public:
@@ -36,14 +34,8 @@ public:
 protected:
     Game* game;
 
-    Gorilla::Silverback* debugGUI;
-    Gorilla::Screen* debugScreen;
-    Gorilla::Layer* debugLayer;
-    Gorilla::Caption* debugFPS;
-    Gorilla::Caption* debugBatchCount;
-
     Ogre::Root *root;
-    Ogre::SceneManager* sceneManager;
+    //Ogre::SceneManager* sceneManager;
     Ogre::RenderWindow* window;
     Ogre::String resources;
     Ogre::String plugins;

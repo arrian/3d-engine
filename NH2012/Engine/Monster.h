@@ -5,12 +5,9 @@
 #include <OgreVector3.h>
 
 #include "Actor.h"
-#include "Dungeon.h"
 #include "Inventory.h"
 #include "Attributes.h"
 #include "Bar.h"
-
-class Dungeon;//forward declaring for circular dependency
 
 class Monster : public Actor
 {

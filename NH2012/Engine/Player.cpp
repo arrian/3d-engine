@@ -20,65 +20,94 @@ lVelocityZ = cos( angle * PI / 180 ) * 2;
 */
 
 
-Player::Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
-               Flag* flags, Ogre::RenderWindow* window, Ogre::Vector3 position) 
-  : Actor(sceneManager, physics, position), 
-    velocity(Ogre::Vector3::ZERO),
+Player::Player(Environment* environment, Ogre::RenderWindow* window) 
+  : velocity(Ogre::Vector3::ZERO),
     gravityVector(Ogre::Vector3::ZERO),
     moveForward(false), 
-    moveBack(false), 
+    moveBack(false),
     moveLeft(false), 
     moveRight(false), 
     run(false),
     leftHand(false),
     rightHand(false),
-    food(10),
-    water(10),
-    sleep(10)
+    window(window),
+    environment(environment),
+    inventory(),
+    speed(200),
+    cell(0),
+    oldCameraWidth(0),
+    oldCameraHeight(0),
+    vp(0)
 {
-  this->flags = flags;
-
-  inventory = Inventory();
-  //Create the camera
-  cameraNode = node->createChildSceneNode(Ogre::Vector3(0,30,0));
-  camera = sceneManager->createCamera("PlayerCamera");
-  //camera->setPosition(Ogre::Vector3(0,100,80));
-  camera->lookAt(Ogre::Vector3(0,80,-300));
-  camera->setNearClipDistance(5);
-  cameraNode->attachObject(camera);
-
-  if(flags->wireframeDebug) camera->setPolygonMode(Ogre::PM_WIREFRAME);
-
-  // Create one viewport, entire window
-  Ogre::Viewport* vp = window->addViewport(camera);
-  vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
-
-  // Alter the camera aspect ratio to match the viewport
-  camera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
-
-  //physics
-  capsule = new OgreBulletCollisions::CapsuleCollisionShape(15.0f, 50.0f, Ogre::Vector3(0,1,0));
-
-  capsuleBody = new OgreBulletDynamics::RigidBody("character", physics);
-  capsuleBody->setShape(node, capsule, 0.0f, 0.0f, 10.0f, position);
-  capsuleBody->getBulletRigidBody()->setAngularFactor(0.0);
-  capsuleBody->getBulletRigidBody()->setSleepingThresholds(0.0, 0.0);
-
-  stop();
 }
-
 
 Player::~Player(void)
 {
   if(camera) delete camera;
 }
 
+void Player::setCell(Cell* cell, Ogre::Vector3 position, Ogre::Vector3 lookAt)
+{
+  if(this->cell)
+  {
+    delete capsuleBody;
+    delete capsule;
+    this->cell->getSceneManager()->destroyCamera(camera);
+    this->cell->getSceneManager()->destroySceneNode(cameraNode);
+    this->cell->getSceneManager()->destroySceneNode(node);
+    this->cell->getSceneManager()->destroyEntity(entity);
+    //maybe remove viewport?
+  }
+
+  window->removeAllViewports();//ensure no viewports remaining
+
+  this->cell = cell;
+
+  entity = cell->getSceneManager()->createEntity("actor.mesh");
+  node = cell->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+  node->setPosition(position);
+  node->attachObject(entity);
+
+  std::cout << "initialised basic player" << std::endl;
+
+  //camera
+  cameraNode = node->createChildSceneNode(Ogre::Vector3(0,30,0));
+  camera = cell->getSceneManager()->createCamera("PlayerCamera");
+  //camera->setPosition(Ogre::Vector3(0,100,80));
+  camera->lookAt(lookAt);
+  camera->setNearClipDistance(5);
+  cameraNode->attachObject(camera);
+
+  if(environment->wireframeDebug) camera->setPolygonMode(Ogre::PM_WIREFRAME);
+
+  // Create one viewport, entire window
+  vp = window->addViewport(camera);
+  vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
+
+  //physics
+  physics = cell->getPhysicsWorld();
+
+  capsule = new OgreBulletCollisions::CapsuleCollisionShape(15.0f, 50.0f, Ogre::Vector3(0,1,0));
+
+  capsuleBody = new OgreBulletDynamics::RigidBody("character", physics);
+  capsuleBody->setShape(node, capsule, 0.0f, 0.0f, 10.0f, getPosition());
+  capsuleBody->getBulletRigidBody()->setAngularFactor(0.0);
+  capsuleBody->getBulletRigidBody()->setSleepingThresholds(0.0, 0.0);
+
+  stop();
+}
+
 void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(food.current > 0) food.current -= Ogre::Real(0.0001) * evt.timeSinceLastFrame;
-  if(water.current > 0) water.current -= Ogre::Real(0.00015) * evt.timeSinceLastFrame;
-  if(food.current <= 0 || water.current <= 0) awareness = MonsterAttribute::DEAD;
 
+  //Checking aspect ratio
+  if(vp->getActualWidth() != oldCameraWidth || vp->getActualHeight() != oldCameraHeight)
+  {
+    camera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+    oldCameraWidth = vp->getActualWidth();
+    oldCameraHeight = vp->getActualHeight();
+  }
+ 
   //Camera update 
   Ogre::Vector3 accel = Ogre::Vector3::ZERO;
   if (moveForward) accel += camera->getDirection();
@@ -107,7 +136,7 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
   else if (velocity.squaredLength() < tooSmall * tooSmall)
     velocity = Ogre::Vector3::ZERO;
 
-  if (flags->freeCameraDebug) 
+  if (environment->freeCameraDebug) 
   {
     if(velocity != Ogre::Vector3::ZERO) camera->move(velocity * evt.timeSinceLastFrame);
     node->setPosition(camera->getPosition());
@@ -138,20 +167,20 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 void Player::injectKeyDown(const OIS::KeyEvent &evt)
 {
-  if (evt.key == flags->controls.moveForward) moveForward = true;
-  else if (evt.key == flags->controls.moveBack) moveBack = true;
-  else if (evt.key == flags->controls.moveLeft) moveLeft = true;
-  else if (evt.key == flags->controls.moveRight) moveRight = true;
-  else if (evt.key == flags->controls.run) run = true;
+  if (evt.key == environment->controls.moveForward) moveForward = true;
+  else if (evt.key == environment->controls.moveBack) moveBack = true;
+  else if (evt.key == environment->controls.moveLeft) moveLeft = true;
+  else if (evt.key == environment->controls.moveRight) moveRight = true;
+  else if (evt.key == environment->controls.run) run = true;
 }
 
 void Player::injectKeyUp(const OIS::KeyEvent &evt)
 {
-  if (evt.key == flags->controls.moveForward) moveForward = false;
-  else if (evt.key == flags->controls.moveBack) moveBack = false;
-  else if (evt.key == flags->controls.moveLeft) moveLeft = false;
-  else if (evt.key == flags->controls.moveRight) moveRight = false;
-  else if (evt.key == flags->controls.run) run = false;
+  if (evt.key == environment->controls.moveForward) moveForward = false;
+  else if (evt.key == environment->controls.moveBack) moveBack = false;
+  else if (evt.key == environment->controls.moveLeft) moveLeft = false;
+  else if (evt.key == environment->controls.moveRight) moveRight = false;
+  else if (evt.key == environment->controls.run) run = false;
 }
 
 void Player::injectMouseMove(const OIS::MouseEvent &evt)
@@ -165,14 +194,14 @@ void Player::injectMouseMove(const OIS::MouseEvent &evt)
 
 void Player::injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  if(id == flags->controls.leftHand) leftHand = true;
-  if(id == flags->controls.rightHand) rightHand = true;
+  if(id == environment->controls.leftHand) leftHand = true;
+  if(id == environment->controls.rightHand) rightHand = true;
 }
 
 void Player::injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  if(id == flags->controls.leftHand) leftHand = false;
-  if(id == flags->controls.rightHand) rightHand = false;
+  if(id == environment->controls.leftHand) leftHand = false;
+  if(id == environment->controls.rightHand) rightHand = false;
 }
 
 void Player::stop()

@@ -42,7 +42,8 @@ private:
   /*! Pointers to the ogre scene nodes.*/
   std::vector<Ogre::SceneNode*> nodes;
 
-  std::vector<Ogre::Entity*> entities;
+  std::map<Ogre::String, Ogre::Entity*> entities;
+  //std::vector<Ogre::Entity*> entities;
   std::vector<OgreBulletDynamics::RigidBody*> bodies;
   std::vector<OgreBulletCollisions::CollisionShape*> shapes;
 

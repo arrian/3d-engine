@@ -5,15 +5,12 @@ Architecture::Architecture(Ogre::SceneManager* sceneManager, OgreBulletDynamics:
   : physics(physics),
     sceneManager(sceneManager),
     instanceNumber(0),
-    geometry(sceneManager->createStaticGeometry("architecture"))
+    geometry(sceneManager->createStaticGeometry("architecture")),
+    nodes(),
+    entities(),
+    bodies(),
+    shapes()
 {
-
-  nodes = std::vector<Ogre::SceneNode*>();
-  entities = std::vector<Ogre::Entity*>();
-  bodies = std::vector<OgreBulletDynamics::RigidBody*>();
-  shapes = std::vector<OgreBulletCollisions::CollisionShape*>();
-
-
 }
 
 
@@ -37,10 +34,10 @@ Architecture::~Architecture(void)
     (*it) = 0;
   }
 
-  for(std::vector<Ogre::Entity*>::iterator it = entities.begin(); it != entities.end(); ++it) 
+  for(std::map<Ogre::String, Ogre::Entity*>::iterator it = entities.begin(); it != entities.end(); ++it) 
   {
-    if(*it) delete (*it);
-    (*it) = 0;
+    if((*it).second) delete (*it).second;
+    (*it).second = 0;
   }
 }
 
@@ -51,44 +48,21 @@ void Architecture::add(Ogre::String meshName, Ogre::Vector3 position, Ogre::Quat
 
 OgreBulletDynamics::RigidBody* Architecture::addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion)
 {
-  // todo: implement static geometry
-  /*
-  int i=0;
-  Ogre::Entity *ent = mSceneMgr->createEntity("cube_02.mesh");
-  Ogre::StaticGeometry *sg = mSceneMgr->createStaticGeometry("cubes");
-  for (i=0;i<5000;i++)
-  {
-      sg->addEntity(ent, Ogre::Vector3(100+i*100,-100,100));
-  }
-  sg->build();
-
-  */
-
-
-  //Ogre::SceneNode* node = sceneManager->getRootSceneNode()->createChildSceneNode();
-  //nodes.push_back(node);
-
   Ogre::Entity* entity = 0;
   
   //searching for previously created entites
-  bool found = false;
-  for(std::vector<Ogre::Entity*>::iterator iter = entities.begin(); iter < entities.end(); ++iter)
+  for(std::map<Ogre::String, Ogre::Entity*>::iterator iter = entities.begin(); iter != entities.end(); ++iter)
   {
-    if(entities.front()->getMesh()->getName() == meshName)
-    {
-      entity = (*iter);
-      found = true;
-    }
+    if((*iter).first == meshName) entity = (*iter).second;
   }
 
   //creating entity if not already created
-  if(!found)
+  if(!entity)
   {
+    std::cout << "creating " << meshName << std::endl;
     entity = sceneManager->createEntity(meshName);
-    entities.push_back(entity);
+    entities.insert(std::pair<Ogre::String,Ogre::Entity*>(meshName, entity));
   }
-
-  //node->attachObject(entity);
 
   OgreBulletCollisions::StaticMeshToShapeConverter* trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
   OgreBulletCollisions::TriangleMeshCollisionShape* shape = trimeshConverter->createTrimesh();

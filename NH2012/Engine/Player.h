@@ -8,27 +8,28 @@
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
+#include "Cell.h"
 #include "Actor.h"
 #include "Bar.h"
 #include "Inventory.h"
 #include "Attributes.h"
-#include "Dungeon.h"
-#include "Flag.h"
+#include "Environment.h"
 
 //character physics
 #include "Shapes\OgreBulletCollisionsCapsuleShape.h"
 #include "OgreBulletCollisions.h"
 #include "OgreBulletDynamics.h"
 
-class Dungeon;
+class Cell;
 
 /*! User data.*/
-class Player : public Actor
+class Player
 {
 public:
-  Player(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
-         Flag* flags, Ogre::RenderWindow* window, Ogre::Vector3 position);
+  Player(Environment* environment, Ogre::RenderWindow* window);
   ~Player(void);
+
+  void setCell(Cell* cell, Ogre::Vector3 position, Ogre::Vector3 lookAt);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
@@ -42,18 +43,19 @@ public:
   Ogre::Vector3 getPosition();
 
 private:
-  /*! Used in hardcore mode .*/
-  Bar water;
-  Bar food;
-  Bar sleep;
+  int oldCameraWidth;
+  int oldCameraHeight;
 
   Ogre::SceneNode* cameraNode;
   Ogre::Camera* camera;
   Ogre::Real playerHeight;//!
 
-  Flag* flags;
+  Environment* environment;
+  Cell* cell;
 
   Ogre::Vector3 gravityVector;
+
+  Ogre::Real speed;
 
   //Camera movement stuff
   Ogre::Vector3 velocity;
@@ -68,6 +70,16 @@ private:
 
   /*! Manually stops the player movement.*/
   void stop();
+
+  Inventory inventory;
+
+  
+  Ogre::Entity* entity;
+  Ogre::SceneNode* node;
+
+  Ogre::RenderWindow* window;
+  Ogre::Viewport* vp;
+  OgreBulletDynamics::DynamicsWorld* physics;
 
   //physics
   OgreBulletCollisions::CapsuleCollisionShape* capsule;

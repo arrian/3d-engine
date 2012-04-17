@@ -4,7 +4,7 @@
 //-------------------------------------------------------------------------------------
 NH2012::NH2012(void)
 : root(0),
-  sceneManager(0),
+  //sceneManager(0),
   window(0),
   resources(Ogre::StringUtil::BLANK),
   plugins(Ogre::StringUtil::BLANK),
@@ -70,55 +70,32 @@ bool NH2012::go(void)
     SetClassLong( hwnd, GCL_HICON, iconID );
 #endif
   }
-  else
-  {
-      return false;
-  }
+  else return false;
 
-  sceneManager = root->createSceneManager(Ogre::ST_INTERIOR);//ST_GENERIC);
+  //sceneManager = root->createSceneManager(Ogre::ST_INTERIOR);//ST_GENERIC);
   Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);//Set default mipmap level (NB some APIs ignore this)
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
-  if(true)
-  {
-    std::cout << "Singleplayer" << std::endl;
-    game = new Singleplayer(sceneManager, window);
-  }
-  else
-  {
-    std::cout << "Multiplayer" << std::endl;
-    game = new Multiplayer(sceneManager, window);
-  }
-
-  //Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
-  OIS::ParamList pl;
+  OIS::ParamList parameters;
   size_t windowHnd = 0;
   std::ostringstream windowHndStr;
 
   window->getCustomAttribute("WINDOW", &windowHnd);
   windowHndStr << windowHnd;
-  pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+  parameters.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 
-  inputManager = OIS::InputManager::createInputSystem(pl);
+  inputManager = OIS::InputManager::createInputSystem(parameters);
 
   keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject(OIS::OISKeyboard, true));
   mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject(OIS::OISMouse, true));
 
+  game = new Singleplayer(root, window, keyboard);
+
   mouse->setEventCallback(this);
   keyboard->setEventCallback(this);
 
-  
   windowResized(window);//Set initial mouse clipping size
-
   Ogre::WindowEventUtilities::addWindowEventListener(window, this);//Register as a Window listener
-
-
-  debugGUI = new Gorilla::Silverback();
-  debugGUI->loadAtlas("dejavu");
-  debugScreen = debugGUI->createScreen(window->getViewport(0), "dejavu");
-  debugLayer = debugScreen->createLayer(14);
-  debugFPS = debugLayer->createCaption(14, 10, 10, "FPS: 0");
-  debugBatchCount = debugLayer->createCaption(14, 10, 34, "Batches: 0");
 
   root->addFrameListener(this);
   root->startRendering();
@@ -129,9 +106,6 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   if(window->isClosed()) return false;
   if(shutDown) return false;
-
-  debugFPS->text("FPS: " + Ogre::StringConverter::toString(int(window->getAverageFPS())));
-  debugBatchCount->text("Batches: " + Ogre::StringConverter::toString(window->getBatchCount()));
 
   keyboard->capture();
   mouse->capture();
@@ -144,31 +118,7 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
 //-------------------------------------------------------------------------------------
 bool NH2012::keyPressed( const OIS::KeyEvent &arg )
 {
-  if (arg.key == OIS::KC_SYSRQ)//Screenshot
-  {
-    window->writeContentsToTimestampedFile("screenshot", ".jpg");
-  }
-  else if (arg.key == OIS::KC_ESCAPE)//Exit
-  {
-    shutDown = true;
-  }
-  else if (arg.key == OIS::KC_C)//Change floor colour
-  {
-    std::cout << "Changing material" << std::endl;
-    Ogre::MaterialPtr  material = static_cast<Ogre::MaterialPtr> ( Ogre::MaterialManager::getSingleton().getByName("Material.004") );
-    Ogre::ColourValue oldDiffuse = material->getTechnique(0)->getPass(0)->getDiffuse();
-      
-    float newR = oldDiffuse.r + 0.01f;
-    float newB = oldDiffuse.b - 0.01f;
-
-    if(newR > 1.0) newR = 0.0f;
-    if(newB < 0) newB = 1.0f;
-
-    Ogre::ColourValue newDiffuse(newR,0,newB);
-
-    material->getTechnique(0)->getPass(0)->setAmbient(newDiffuse);
-    material->getTechnique(0)->getPass(0)->setDiffuse(newDiffuse);
-  }
+  if (arg.key == OIS::KC_ESCAPE) shutDown = true;
 
   game->injectKeyDown(arg);
   return true;

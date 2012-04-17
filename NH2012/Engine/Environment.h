@@ -74,14 +74,16 @@ struct Controls
   OIS::KeyCode addItem;
   OIS::KeyCode addMonster;
   OIS::KeyCode reset;
+
+  OIS::KeyCode console;
 };
 
 /*! Store the global game state.*/
-class Flag
+class Environment
 {
 public:
-  Flag(void);
-  virtual ~Flag(void);
+  Environment(void);
+  virtual ~Environment(void);
 
   /*! Parses the game settings files.*/
   void parseIni(std::string filename);
@@ -193,9 +195,10 @@ public:
   bool showShadowDebug;
 
 private:
-  Ogre::String serialiseMoonPhase(Ogre::Real moonPhase);
+  Ogre::String serialiseMoonPhase(int moonPhase);
   Ogre::Real calculateMoonPhase(Date date);
-  Ogre::String dayOfWeek(Date date);
+  Ogre::String day(Date date);
+  Ogre::String month(Date date);
   Ogre::String serialiseDate(Date date);
 
 };

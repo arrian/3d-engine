@@ -20,5 +20,7 @@ public:
   virtual void injectMouseMove(const OIS::MouseEvent &arg) = 0;
   virtual void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id) = 0;
   virtual void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id) = 0;
+
+  virtual void notify(Ogre::String comment) = 0;
 };
 

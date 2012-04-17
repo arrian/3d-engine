@@ -3,6 +3,7 @@
 #include <OgreFrameListener.h>
 
 #include "Game.h"
+#include "../../Engine/Console.h"
 
 /*! Singleplayer frame generation.
     Far simpler than multiplayer, since rather than threading 
@@ -13,7 +14,7 @@ class Singleplayer :
   public Game
 {
 public:
-  Singleplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window);
+  Singleplayer(Ogre::Root* root, Ogre::RenderWindow* window, OIS::Keyboard* keyboard);
   ~Singleplayer(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -25,6 +26,10 @@ public:
   void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
   void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
+  void notify(Ogre::String comment);
+
+private:
   World world;
+  Console console;
 };
 

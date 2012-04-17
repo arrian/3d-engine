@@ -7,139 +7,99 @@ namespace Generator
       width(60)
   {
     rooms = std::vector<Room*>();
-    addRooms(300);
+    addRooms(15);
+    connectRooms();
+  }
 
-    corridors = std::vector<Corridor*>();
-    addCorridors();
+  Dungeon::Dungeon(int width, int breadth, int numberOfRooms)
+    : breadth(breadth),
+      width(width)
+  {
+    this->rooms = std::vector<Room*>();
+    addRooms(numberOfRooms);
+    connectRooms();
   }
 
   Dungeon::~Dungeon(void)
   {
   }
 
-  void Dungeon::addRooms(int maxRooms)
+  void Dungeon::addRooms(int numberOfRooms)
   {
     srand(1);//time(NULL)
 
-    for(int i = 0; i < maxRooms; i++)
+    int totalIterations = 0;
+    int acceptableIterations = numberOfRooms * 4;
+    int roomCounter = 0;
+    for(; roomCounter < numberOfRooms && totalIterations < acceptableIterations; roomCounter++)
     {
-      Room* room = new Room(Point(rand() % 50, rand() % 50), rand() % 6 + 3, rand() % 6 + 3);
+      Room* room = new Room(Point(rand() % width, rand() % breadth), rand() % 5 + 2, rand() % 5 + 2);
 
       bool noIntersect = true;
       for(std::vector<Room*>::iterator iter = rooms.begin(); iter < rooms.end(); ++iter)
       {
-        /*
-        if(room->roomIntersects(*iter))
+        if(room->intersects(*iter))
         {
           noIntersect = false;
+          roomCounter--;
           delete room;
           break;
         }
-        */
       }
 
       if(noIntersect) rooms.push_back(room);
+
+      totalIterations++;
+    }
+
+    if(numberOfRooms != roomCounter) std::cout << "Could only fit " << roomCounter << " of " << numberOfRooms << " rooms into the dungeon." << std::endl;
+  }
+
+  void Dungeon::connectRooms()
+  {
+    for(std::vector<Room*>::iterator roomIter = rooms.begin(); roomIter < rooms.end(); ++roomIter)
+    {
+      if((*roomIter)->hasEntrance()) continue;
+      Room* closest = closestRoom(*roomIter);
+      if(!closest) continue;
+      (*roomIter)->connectRooms(closest);
     }
   }
 
-  void Dungeon::addCorridors()
+  Room* Dungeon::closestRoom(Room* room)
   {
+    Room* closest = 0;
+    int shortest = INT_MAX;
     for(std::vector<Room*>::iterator iter = rooms.begin(); iter < rooms.end(); ++iter)
     {
-      Room* nearest = getNearestRoom(*iter);
-      /*
-      Point start = nearest->getEntrance(*iter);
-      Point end = (*iter)->getEntrance(nearest);
-
-      nearest->addEntrance(start);
-      (*iter)->addEntrance(end);
-      corridors.push_back(new Corridor(start,end));
-      */
-    }
-  }
-
-  Room* Dungeon::getNearestRoom(Room* room)
-  {
-    Room* nearest = room;
-    double distance = 100000;
-
-    for(std::vector<Room*>::iterator iter = rooms.begin(); iter < rooms.end(); ++iter)
-    {
-      /*
-      double test = room->getCentre().distance((*iter)->getCentre());
-      if(test < distance && test != 0)
+      if(room == *iter) continue;
+      int current = room->distance(*iter);
+      if(current < shortest)
       {
-        nearest = *iter;
-        distance = test;
+        shortest = current;
+        closest = *iter;
       }
-      */
     }
 
-    return nearest;
+    return closest;
   }
-
-  /*
-  void Dungeon::construct(Architecture* architecture)
-  {
-    for(std::vector<Room*>::iterator iter = rooms.begin(); iter < rooms.end(); ++iter)
-    {
-      (*iter)->construct(architecture);
-    }
-
-    for(std::vector<Corridor*>::iterator iter = corridors.begin(); iter < corridors.end(); ++iter)
-    {
-      (*iter)->construct(architecture);
-    }
-  }
-  */
 
   void Dungeon::output()
   {
-    std::vector<std::vector<int>> output = std::vector<std::vector<int>>();
+    char output[100][100];
 
-    //filling vector
-    for(int i = 0; i < width; i++)
-    {
-      std::vector<int> temp = std::vector<int>();
-      for(int j = 0; j < breadth; j++)
-      {
-        temp.push_back(0);
-      }
-      output.push_back(temp);
-    }
+    for(int i = 0; i < width; i++) for(int j = 0; j < breadth; j++) output[i][j] = ' ';
 
-    /*
-    //filling output vector with rooms
     for(std::vector<Room*>::iterator iter = rooms.begin(); iter < rooms.end(); ++iter)
     {
-      for(int i = (*iter)->getLeft(); i < (*iter)->getRight(); i++)
-      {
-        for(int j = (*iter)->getTop(); j < (*iter)->getBottom(); j++)
-        {
-          output[i][j] = 1;
-        }
-      }
+      for(int i = (*iter)->topLeft.x; i <= (*iter)->topRight.x; i++) for(int j = (*iter)->topLeft.y; j <= (*iter)->bottomLeft.y; j++) output[i][j] = '#';
+      for(std::vector<Entrance*>::iterator entrances = (*iter)->entrances.begin(); entrances < (*iter)->entrances.end(); ++entrances) output[(*entrances)->position.x][(*entrances)->position.y] = 'E';
     }
-
-
-    //filling output vector with corridors
-    for(std::vector<Corridor*>::iterator iter = corridors.begin(); iter < corridors.end(); ++iter)
-    {
-      for(std::vector<Point>::iterator pIter = (*iter)->points.begin(); pIter < (*iter)->points.end(); ++pIter)
-      {
-        output[pIter->x][pIter->y] = 1;
-      }
-    }
-        */
 
     //outputting
     for(int i = 0; i < width; i++)
     {
-      for(int j = 0; j < breadth; j++)
-      {
-        if(output[i][j] == 0) std::cout << "#";
-        else std::cout << ".";
-      }
+      for(int j = 0; j < breadth; j++) std::cout << output[i][j];
       std::cout << std::endl;
     }
   }

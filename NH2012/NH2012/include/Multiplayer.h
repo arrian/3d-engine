@@ -26,6 +26,9 @@ public:
   void injectMouseMove(const OIS::MouseEvent &arg);
   void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
   void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+
+  void notify(Ogre::String comment);
+
 private:
   Client* client;
 

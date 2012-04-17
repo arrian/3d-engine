@@ -10,9 +10,12 @@
 #include "Monster.h"
 #include "Item.h"
 #include "Architecture.h"
-#include "Flag.h"
+#include "Environment.h"
 
 #include "../Generator/Dungeon.h"
+#include "../Generator/Room.h"
+#include "../Generator/Entrance.h"
+#include "../Generator/Point.h"
 
 
 #include "OgreBulletCollisionsShape.h"
@@ -35,7 +38,7 @@
 #include "OgreBulletDynamicsConstraint.h"
 #include "Constraints/OgreBulletDynamicsPoint2pointConstraint.h"
 
-namespace DungeonType
+namespace CellType
 {
   enum Type
   {
@@ -45,48 +48,54 @@ namespace DungeonType
     DUNGEON,
     TOWN,
     PREDEFINED,
-    ASTRAL
+    ASTRAL,
+    FILE
   };
 }
 
 class Player;
 class Monster;//forward declaring for circular dependency
 
-class Dungeon
+class Cell
 {
 public:
-  Dungeon(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window, 
-          Flag* flags, Ogre::String name = Ogre::String("Default Dungeon"), 
-          DungeonType::Type type = DungeonType::PREDEFINED, int numMonsters = 0, 
-          int numItems = 0, Ogre::ColourValue colour = Ogre::ColourValue(1,1,1));
-  ~Dungeon(void);
+  Cell(Ogre::Root* root, Environment* environment, 
+       Ogre::String name = Ogre::String("Default Dungeon"), 
+       CellType::Type type = CellType::PREDEFINED);
+  ~Cell(void);
+
+  Ogre::String getName();
+
+  void addPlayer(Player* player);
+  void addMonster(Ogre::Vector3 position);
+  void addItem(Ogre::Vector3 position);
+  void addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range);
+  void addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector3 scale, Ogre::Real speed);
+
+  void removePlayer(Player* player);
+
+  Ogre::SceneManager* getSceneManager();
+  OgreBulletDynamics::DynamicsWorld* getPhysicsWorld();
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
-  void injectKeyDown(const OIS::KeyEvent &arg);
-  void injectKeyUp(const OIS::KeyEvent &arg);
-  void injectMouseMove(const OIS::MouseEvent &arg);
-  void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
-  void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 private:
-  Flag* flags;
+  Environment* environment;
 
   Ogre::SceneManager* sceneManager;
   OgreBulletDynamics::DynamicsWorld* physics;
 
   Ogre::String name;
-  DungeonType::Type type;
-
-  Ogre::ColourValue colour;
+  CellType::Type type;
 
   Architecture* architecture;
   std::vector<Ogre::Light*> lights;
+  std::vector<Ogre::ParticleSystem*> particles;
   std::vector<Monster*> monsters;
   std::vector<Item*> items;
   Player* player;
 
   int instanceNumber;
-
 
   void generateOverworld();
   void generateUnderworld();
@@ -95,5 +104,7 @@ private:
   void generateTown();
   void generatePredefined();
   void generateAstral();
+
+  void load(Ogre::String file);
 };
 

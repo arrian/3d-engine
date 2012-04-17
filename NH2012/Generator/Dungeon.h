@@ -7,7 +7,6 @@
 
 #include "Point.h"
 #include "Room.h"
-#include "Corridor.h"
 
 //#include "Architecture.h"
 
@@ -17,17 +16,16 @@ namespace Generator
   {
   public:
     Dungeon(void);
+    Dungeon(int width, int breadth, int numberOfRooms);
     ~Dungeon(void);
 
     std::vector<Room*> rooms;
-    std::vector<Corridor*> corridors;
 
-    void addRooms(int maxRooms);
-    void addCorridors();
+    void addRooms(int numberOfRooms);
+    void connectRooms();
 
-    Room* getNearestRoom(Room* room);
+    Room* closestRoom(Room* room);
 
-    //void construct(Architecture* architecture);
     void output();
 
     int width;

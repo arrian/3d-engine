@@ -1,6 +1,10 @@
 
 #pragma once
 
+#include <stdlib.h>
+#include <iostream>
+#include <math.h>
+
 namespace Generator
 {
   struct Point

@@ -1,11 +1,11 @@
 #include "Singleplayer.h"
 
 
-Singleplayer::Singleplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window) : 
+Singleplayer::Singleplayer(Ogre::Root* root, Ogre::RenderWindow* window, OIS::Keyboard* keyboard) : 
   Game(),
-  world(sceneManager, window)
+  world(root, window),
+  console(root, window, keyboard, &world)
 {
-  std::cout << "Moon phase : " << world.flags->getMoonPhase() << std::endl;
 }
 
 Singleplayer::~Singleplayer(void)
@@ -14,6 +14,7 @@ Singleplayer::~Singleplayer(void)
 
 void Singleplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
+  console.frameRenderingQueued(evt);
   world.frameRenderingQueued(evt);
 }
 
@@ -21,11 +22,18 @@ void Singleplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 void Singleplayer::injectKeyDown(const OIS::KeyEvent &arg)
 {
+  console.injectKeyDown(arg);
+  if(console.isVisible()) return;//ignore other key notifications while console visible
+
   world.injectKeyDown(arg);
 }
 
 void Singleplayer::injectKeyUp(const OIS::KeyEvent &arg)
 {
+  if(arg.key == world.getEnvironment()->controls.console) console.setVisible(!console.isVisible());
+  console.injectKeyUp(arg);
+  if(console.isVisible()) return;//ignore other key notifications while console visible
+
   world.injectKeyUp(arg);
 }
 
@@ -42,4 +50,9 @@ void Singleplayer::injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonI
 void Singleplayer::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
   world.injectMouseUp(arg,id);
+}
+
+void Singleplayer::notify(Ogre::String comment)
+{
+  console.display(comment);
 }
