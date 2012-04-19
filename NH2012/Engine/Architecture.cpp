@@ -30,13 +30,13 @@ Architecture::~Architecture(void)
   
   for(std::vector<Ogre::SceneNode*>::iterator it = nodes.begin(); it != nodes.end(); ++it) 
   {
-    if(*it) delete (*it);
+    if(sceneManager) sceneManager->destroySceneNode(*it);
     (*it) = 0;
   }
 
   for(std::map<Ogre::String, Ogre::Entity*>::iterator it = entities.begin(); it != entities.end(); ++it) 
   {
-    if((*it).second) delete (*it).second;
+    if(sceneManager) sceneManager->destroyEntity(it->second);
     (*it).second = 0;
   }
 }

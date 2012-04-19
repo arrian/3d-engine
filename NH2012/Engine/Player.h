@@ -30,58 +30,57 @@ public:
   ~Player(void);
 
   void setCell(Cell* cell, Ogre::Vector3 position, Ogre::Vector3 lookAt);
+  Ogre::Vector3 getPosition();
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
-
   void injectKeyDown(const OIS::KeyEvent &evt);
   void injectKeyUp(const OIS::KeyEvent &evt);
   void injectMouseMove(const OIS::MouseEvent &evt);
   void injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
   void injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
 
-  /*! Gets the current position of the player.*/
-  Ogre::Vector3 getPosition();
+  /*! Hooks the player camera to a render window.*/
+  void hook(Ogre::RenderWindow* window);
 
 private:
+  Inventory inventory;
+  
+  /*! Player Camera.*/
   int oldCameraWidth;
   int oldCameraHeight;
-
   Ogre::SceneNode* cameraNode;
   Ogre::Camera* camera;
-  Ogre::Real playerHeight;//!
+  Ogre::Real playerHeight;//TODO implement
+  Ogre::RenderWindow* window;
+  Ogre::Viewport* vp;
 
+  /* Player Environment.*/
   Environment* environment;
   Cell* cell;
 
-  Ogre::Vector3 gravityVector;
+  Ogre::Entity* entity;
+  Ogre::SceneNode* node;
 
-  Ogre::Real speed;
-
-  //Camera movement stuff
+  /*! Player Movement.*/
   Ogre::Vector3 velocity;
   bool moveForward;
   bool moveBack;
   bool moveLeft;
   bool moveRight;
   bool run;
-
   bool leftHand;
   bool rightHand;
+  Ogre::Vector3 leftHandTarget;
+  Ogre::Vector3 rightHandTarget;
+  Ogre::Vector3 gravityVector;
+  Ogre::Real speed;
 
-  /*! Manually stops the player movement.*/
   void stop();
+  void moveLeftHand(const OIS::MouseEvent& evt);
+  void moveRightHand(const OIS::MouseEvent& evt);
 
-  Inventory inventory;
-
-  
-  Ogre::Entity* entity;
-  Ogre::SceneNode* node;
-
-  Ogre::RenderWindow* window;
-  Ogre::Viewport* vp;
+  /*! Player Physics.*/
   OgreBulletDynamics::DynamicsWorld* physics;
-
-  //physics
   OgreBulletCollisions::CapsuleCollisionShape* capsule;
   OgreBulletDynamics::RigidBody* capsuleBody;
 };

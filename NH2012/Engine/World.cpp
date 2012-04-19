@@ -10,26 +10,13 @@ World::World(Ogre::Root* root, Ogre::RenderWindow* window)
   //TODO extract absolute path and use boost to get relative path from current exe
   //TODO post-compile event copy ini file to executable directory
   environment->parseIni("C:\\Dev\\Nethack2012\\NH2012\\Media\\nh2012.ini");
-  
-  /*
-  if(environment->enableShadows) sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
-  if(environment->isDebug())
-  {
-    sceneManager->setDisplaySceneNodes(true);
-    sceneManager->setShowDebugShadows(true);
-    sceneManager->showBoundingBoxes(true);
-  }
-  */
-
-  loadCell("Entrance", CellType::DUNGEON);
-  loadCell("Foyer", CellType::PREDEFINED);
-  std::cout << "completed load cell" << std::endl;
+  //loadCell("Entrance", CellType::DUNGEON);
+  //loadCell("Foyer", CellType::PREDEFINED);
+  loadCell("C:\\Dev\\Nethack2012\\NH2012\\Media\\default.level", CellType::FILE);
   
   player = new Player(environment, window);
-  getCell("Entrance")->addPlayer(player);
-
-  std::cout << "completed add player" << std::endl;
+  getCell("test")->addPlayer(player);
 }
 
 World::~World(void)
@@ -94,32 +81,35 @@ void World::getCellNames(std::vector<Ogre::String> &names)
   }
 }
 
-void World::loadCell(Ogre::String name, CellType::Type type)
+bool World::loadCell(Ogre::String name, CellType::Type type)
 {
   cells.push_back(new Cell(root, environment, name, type));
+  return true;
 }
 
-void World::destroyCell(Cell* cell)
+bool World::destroyCell(Ogre::String name)
 {
-  for(std::vector<Cell*>::iterator it = cells.begin(); it != cells.end(); ++it) 
-  {
-    //delete cell
-  }
-}
+  //is unsafe
 
-void World::saveCell(Cell* cell)
-{
   for(std::vector<Cell*>::iterator it = cells.begin(); it != cells.end(); ++it) 
   {
-    //save cell
+    if((*it)->getName() == name) 
+    {
+      Cell* cell = *it;
+      if(cell->isActive()) return false;//can't destroy active cell
+      cells.erase(it);
+      delete cell;
+      return true;
+    }
   }
+  return false;
 }
 
 bool World::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   for(std::vector<Cell*>::iterator it = cells.begin(); it != cells.end(); ++it) 
   {
-    (*it)->frameRenderingQueued(evt);
+    if((*it)->isActive()) (*it)->frameRenderingQueued(evt);//only send frame events to the active cells
   }
   return true;
 }

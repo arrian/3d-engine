@@ -10,6 +10,7 @@
 #include "Cell.h"
 #include "Environment.h"
 #include "Player.h"
+#include "DataManager.h"
 
 class World
 {
@@ -30,9 +31,11 @@ public:
   int getNumberCells();
   void getCellNames(std::vector<Ogre::String> &names);
 
-  void loadCell(Ogre::String name, CellType::Type type);
-  void destroyCell(Cell* cell);
-  void saveCell(Cell* cell);
+  /* Loads a cell. Returns true if success.*/
+  bool loadCell(Ogre::String name, CellType::Type type);
+
+  /* Destroys a cell. Returns true if success.*/
+  bool destroyCell(Ogre::String name);
 
   void setSceneManager(Ogre::SceneManager* sceneManager);
   bool frameRenderingQueued(const Ogre::FrameEvent& evt);//perform all world calculations

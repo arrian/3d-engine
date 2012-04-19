@@ -50,6 +50,8 @@ protected:
   int id;
   Ogre::String entityName;
 
+  Ogre::SceneManager* sceneManager;
+
   Ogre::Entity* entity;
   Ogre::SceneNode* node;
 

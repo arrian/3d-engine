@@ -2,7 +2,9 @@
 #define EDITOR_H
 
 #include <QtGui/QMainWindow>
+#include <QFileSystemModel>
 #include "ui_editor.h"
+#include "datawrapper.h"
 
 class Editor : public QMainWindow
 {
@@ -14,6 +16,8 @@ public:
 
 private:
     Ui::EditorClass ui;
+
+    
 };
 
 #endif // EDITOR_H

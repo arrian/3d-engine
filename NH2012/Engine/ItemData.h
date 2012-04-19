@@ -24,12 +24,6 @@ protected:
   /*! Item name.*/
   Ogre::String name;
 
-  /*! Blessed/uncursed/cursed.*/
-  ItemAttribute::BUC buc;
-
-  /*! Quest/normal item.*/
-  ItemAttribute::Status status;
-
   /*! eg. book,weapon etc.
       Maps directly to the items.dat file
   */

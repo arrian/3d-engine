@@ -79,8 +79,15 @@ public:
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
+  bool isActive();
+
 private:
+  //should this cell be updated
+  bool active;
+
   Environment* environment;
+
+  Ogre::Root* root;
 
   Ogre::SceneManager* sceneManager;
   OgreBulletDynamics::DynamicsWorld* physics;

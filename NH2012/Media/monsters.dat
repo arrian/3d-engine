@@ -1,504 +1,504 @@
 #Monsters
-#Symbol,Name,Difficulty,Frequency,Alignment_Strength,Size,Weight,Nutrition,Genocideable,Corpse%
+#Id,Name,Difficulty,Frequency,Alignment_Strength,Size,Weight,Nutrition,Genocideable,Corpse%
 
 [Insects]
-a,giant ant,4,3,0,tiny,10,10,Yes,33
-a,killer bee,5,2,0,tiny,1,5,Yes,33
-a,soldier ant,6,2,0,tiny,20,5,Yes,33
-a,fire ant,6,1,0,tiny,30,10,Yes,25
-a,giant beetle,6,3,0,large,10,10,Yes,100
-a,queen bee,12,X,0,tiny,1,5,Yes,25
+1,giant ant,4,3,0,tiny,10,10,Yes,33
+2,killer bee,5,2,0,tiny,1,5,Yes,33
+3,soldier ant,6,2,0,tiny,20,5,Yes,33
+4,fire ant,6,1,0,tiny,30,10,Yes,25
+5,giant beetle,6,3,0,large,10,10,Yes,100
+6,queen bee,12,X,0,tiny,1,5,Yes,25
 
 [Blobs]
-b,acid blob,2,2,0,tiny,30,10,Yes,33
-b,quivering blob,6,2,0,small,200,100,Yes,50
-b,gelatinous cube,8,2,0,large,600,150,Yes,100
+7,acid blob,2,2,0,tiny,30,10,Yes,33
+8,quivering blob,6,2,0,small,200,100,Yes,50
+9,gelatinous cube,8,2,0,large,600,150,Yes,100
 
 [Trices]
-c,chickatrice,7,1,0,tiny,10,10,Yes,25
-c,cockatrice,8,5,0,small,30,30,Yes,50
-c,pyrolisk,8,1,0,small,30,30,Yes,33
+10,chickatrice,7,1,0,tiny,10,10,Yes,25
+11,cockatrice,8,5,0,small,30,30,Yes,50
+12,pyrolisk,8,1,0,small,30,30,Yes,33
 
 [Hounds]
-d,jackal,1,3,0,small,300,250,Yes,50
-d,fox,1,1,0,small,300,250,Yes,33
-d,coyote,2,1,0,small,300,250,Yes,33
-d,werejackal,4,X,-7,small,300,250,No,33#
-d,little dog,3,1,0,small,150,150,Yes,33
-d,dog,5,1,0,medium,400,200,Yes,33
-d,large dog,7,1,0,medium,800,250,Yes,33
-d,dingo,5,1,0,medium,400,200,Yes,33
-d,wolf,6,2,0,medium,500,250,Yes,50
-d,werewolf,7,X,-7,medium,500,250,No,33#
-d,warg,8,2,-5,medium,850,350,Yes,50
-d,winter wolf cub,7,2*,-5,small,250,200,Yes,50
-d,winter wolf,9,1*,0,large,700,300,Yes,100
-d,hell hound pup,9,1#,-5,small,200,200,Yes,33
-d,hell hound,14,1#,0,medium,600,300,Yes,33
+13,jackal,1,3,0,small,300,250,Yes,50
+14,fox,1,1,0,small,300,250,Yes,33
+15,coyote,2,1,0,small,300,250,Yes,33
+16,werejackal,4,X,-7,small,300,250,No,33#
+17,little dog,3,1,0,small,150,150,Yes,33
+18,dog,5,1,0,medium,400,200,Yes,33
+19,large dog,7,1,0,medium,800,250,Yes,33
+20,dingo,5,1,0,medium,400,200,Yes,33
+21,wolf,6,2,0,medium,500,250,Yes,50
+22,werewolf,7,X,-7,medium,500,250,No,33#
+23,warg,8,2,-5,medium,850,350,Yes,50
+24,winter wolf cub,7,2*,-5,small,250,200,Yes,50
+25,winter wolf,9,1*,0,large,700,300,Yes,100
+26,hell hound pup,9,1#,-5,small,200,200,Yes,33
+27,hell hound,14,1#,0,medium,600,300,Yes,33
 
 [Spheres]
-e,gas spore,2,1,0,small,10,0,Yes,0
-e,floating eye,3,5,0,small,10,10,Yes,50
-e,freezing sphere,8,2*,0,small,10,0,Yes,0
-e,flaming sphere,8,2,0,small,10,0,Yes,0
-e,shocking sphere,8,2,0,small,10,0,Yes,0
+28,gas spore,2,1,0,small,10,0,Yes,0
+29,floating eye,3,5,0,small,10,10,Yes,50
+30,freezing sphere,8,2*,0,small,10,0,Yes,0
+31,flaming sphere,8,2,0,small,10,0,Yes,0
+32,shocking sphere,8,2,0,small,10,0,Yes,0
 
 [Cats]
-f,kitten,3,1,0,small,150,150,Yes,33
-f,housecat,5,1,0,small,200,200,Yes,33
-f,jaguar,6,2,0,large,600,300,Yes,100
-f,lynx,7,1,0,small,600,300,Yes,33
-f,panther,7,1,0,large,600,300,Yes,100
-f,large cat,7,1,0,small,250,250,Yes,33
-f,tiger,8,2,0,large,600,300,Yes,100
+33,kitten,3,1,0,small,150,150,Yes,33
+34,housecat,5,1,0,small,200,200,Yes,33
+35,jaguar,6,2,0,large,600,300,Yes,100
+36,lynx,7,1,0,small,600,300,Yes,33
+37,panther,7,1,0,large,600,300,Yes,100
+38,large cat,7,1,0,small,250,250,Yes,33
+39,tiger,8,2,0,large,600,300,Yes,100
 
 [Gremlins and Gargoyles]
-g,gremlin,8,2,-9,small,100,20,Yes,50
-g,gargoyle,8,2,-9,medium,1000,200,Yes,50
-g,winged gargoyle,11,1,12,medium,1200,300,Yes,33
+40,gremlin,8,2,-9,small,100,20,Yes,50
+41,gargoyle,8,2,-9,medium,1000,200,Yes,50
+42,winged gargoyle,11,1,12,medium,1200,300,Yes,33
 
 [Dwarves]
-h,hobbit,2,2,6,small,500,200,Yes,50
-h,dwarf,4,3,4,medium,900,300,Yes,50
-h,bugbear,5,1,-6,large,1250,250,Yes,100
-h,dwarf lord,6,2,5,medium,900,300,Yes,50
-h,dwarf king,8,1,6,medium,900,300,Yes,33
-h,mind flayer,13,1,-8,medium,1450,400,Yes,33
-h,master mind flayer,19,1,-8,medium,1450,400,Yes,33
+43,hobbit,2,2,6,small,500,200,Yes,50
+44,dwarf,4,3,4,medium,900,300,Yes,50
+45,bugbear,5,1,-6,large,1250,250,Yes,100
+46,dwarf lord,6,2,5,medium,900,300,Yes,50
+47,dwarf king,8,1,6,medium,900,300,Yes,33
+48,mind flayer,13,1,-8,medium,1450,400,Yes,33
+49,master mind flayer,19,1,-8,medium,1450,400,Yes,33
 
 [Imps]
-i,manes,3,1,-7,small,100,0,Yes,0
-i,homunculus,3,2,-7,tiny,60,100,Yes,33
-i,imp,4,1,-7,tiny,20,10,Yes,25
-i,lemure,5,1#,-7,medium,150,0,Yes,0
-i,quasit,7,2,-7,small,200,200,Yes,50
-i,tengu,7,3,7,small,300,200,Yes,50
+50,manes,3,1,-7,small,100,0,Yes,0
+51,homunculus,3,2,-7,tiny,60,100,Yes,33
+52,imp,4,1,-7,tiny,20,10,Yes,25
+53,lemure,5,1#,-7,medium,150,0,Yes,0
+54,quasit,7,2,-7,small,200,200,Yes,50
+55,tengu,7,3,7,small,300,200,Yes,50
 
 [Jellies]
-j,blue jelly,5,2,0,medium,50,20,Yes,50
-j,spotted jelly,6,1,0,medium,50,20,Yes,33
-j,ochre jelly,8,2,0,medium,50,20,Yes,50
+56,blue jelly,5,2,0,medium,50,20,Yes,50
+57,spotted jelly,6,1,0,medium,50,20,Yes,33
+58,ochre jelly,8,2,0,medium,50,20,Yes,50
 
 [Kobolds]
-k,kobold,1,1,-2,small,400,100,Yes,33
-k,large kobold,2,1,-3,small,450,150,Yes,33
-k,kobold lord,3,1,-4,small,500,200,Yes,33
-k,kobold shaman,4,1,-4,small,450,150,Yes,33
+59,kobold,1,1,-2,small,400,100,Yes,33
+60,large kobold,2,1,-3,small,450,150,Yes,33
+61,kobold lord,3,1,-4,small,500,200,Yes,33
+62,kobold shaman,4,1,-4,small,450,150,Yes,33
 
 [Leprechauns]
-l,leprechaun,4,4,0,tiny,60,30,Yes,33
+63,leprechaun,4,4,0,tiny,60,30,Yes,33
 
 [Mimics]
-m,small mimic,8,2,0,medium,300,200,Yes,50
-m,large mimic,9,1,0,large,600,400,Yes,100
-m,giant mimic,11,1,0,large,800,500,Yes,100
+64,small mimic,8,2,0,medium,300,200,Yes,50
+65,large mimic,9,1,0,large,600,400,Yes,100
+66,giant mimic,11,1,0,large,800,500,Yes,100
 
 [Nymphs]
-n,wood nymph,5,2,0,medium,600,300,Yes,50
-n,water nymph,5,2,0,medium,600,300,Yes,50
-n,mountain nymph,5,2,0,medium,600,300,Yes,50
+67,wood nymph,5,2,0,medium,600,300,Yes,50
+68,water nymph,5,2,0,medium,600,300,Yes,50
+69,mountain nymph,5,2,0,medium,600,300,Yes,50
 
 [Goblins]
-o,goblin,1,2,-3,small,400,100,Yes,50
-o,hobgoblin,3,2,-4,medium,1000,200,Yes,50
-o,orc,3,X,-3,medium,850,150,Yes,33
-o,hill orc,4,2,-4,medium,1000,200,Yes,50
-o,Mordor orc,5,1,-5,medium,1200,200,Yes,33
-o,Uruk-hai,5,1,-4,medium,1300,300,Yes,33
-o,orc shaman,5,1,-5,medium,1000,300,Yes,33
-o,orc-captain,7,1,-5,medium,1350,350,Yes,33
+70,goblin,1,2,-3,small,400,100,Yes,50
+71,hobgoblin,3,2,-4,medium,1000,200,Yes,50
+72,orc,3,X,-3,medium,850,150,Yes,33
+73,hill orc,4,2,-4,medium,1000,200,Yes,50
+74,Mordor orc,5,1,-5,medium,1200,200,Yes,33
+75,Uruk-hai,5,1,-4,medium,1300,300,Yes,33
+76,orc shaman,5,1,-5,medium,1000,300,Yes,33
+77,orc-captain,7,1,-5,medium,1350,350,Yes,33
 
 [Piercers]
-p,rock piercer,4,4,0,small,200,200,Yes,50
-p,iron piercer,6,2,0,medium,400,300,Yes,50
-p,glass piercer,9,1,0,medium,400,300,Yes,33
+78,rock piercer,4,4,0,small,200,200,Yes,50
+79,iron piercer,6,2,0,medium,400,300,Yes,50
+80,glass piercer,9,1,0,medium,400,300,Yes,33
 
 [Large Rodents]
-q,rothe,4,4,0,large,400,100,Yes,100
-q,mumak,7,1,-2,large,2500,500,Yes,100
-q,leocrotta,8,2,0,large,1200,500,Yes,100
-q,wumpus,9,1,0,large,2500,500,Yes,100
-q,titanothere,13,2,0,large,2650,650,Yes,100
-q,baluchitherium,15,2,0,large,3800,800,Yes,100
-q,mastodon,22,1,0,large,3800,800,Yes,100
+81,rothe,4,4,0,large,400,100,Yes,100
+82,mumak,7,1,-2,large,2500,500,Yes,100
+83,leocrotta,8,2,0,large,1200,500,Yes,100
+84,wumpus,9,1,0,large,2500,500,Yes,100
+85,titanothere,13,2,0,large,2650,650,Yes,100
+86,baluchitherium,15,2,0,large,3800,800,Yes,100
+87,mastodon,22,1,0,large,3800,800,Yes,100
 
 [Small Rodents]
-r,sewer rat,1,1,0,tiny,20,12,Yes,25
-r,giant rat,2,2,0,tiny,30,30,Yes,33
-r,rabid rat,4,1,0,tiny,30,5,Yes,25
-r,wererat,4,X,-7,tiny,40,30,No,25#
-r,rock mole,4,2,0,small,30,30,Yes,50
-r,woodchuck,4,X,0,small,30,30,Yes,33
+88,sewer rat,1,1,0,tiny,20,12,Yes,25
+89,giant rat,2,2,0,tiny,30,30,Yes,33
+90,rabid rat,4,1,0,tiny,30,5,Yes,25
+91,wererat,4,X,-7,tiny,40,30,No,25#
+92,rock mole,4,2,0,small,30,30,Yes,50
+93,woodchuck,4,X,0,small,30,30,Yes,33
 
 [Arachnids]
-s,cave spider,3,2,0,tiny,50,50,Yes,33
-s,centipede,4,1,0,tiny,50,50,Yes,25
-s,giant spider,7,1,0,large,100,100,Yes,100
-s,scorpion,8,2,0,small,50,100,Yes,50
+94,cave spider,3,2,0,tiny,50,50,Yes,33
+95,centipede,4,1,0,tiny,50,50,Yes,25
+96,giant spider,7,1,0,large,100,100,Yes,100
+97,scorpion,8,2,0,small,50,100,Yes,50
 
 [Lurkers and Trappers]
-t,lurker above,12,2,0,huge,800,350,Yes,100
-t,trapper,14,2,0,huge,800,350,Yes,100
+98,lurker above,12,2,0,huge,800,350,Yes,100
+99,trapper,14,2,0,huge,800,350,Yes,100
 
 [Horses]
-u,white unicorn,6,2,7,large,1300,300,Yes,100
-u,gray unicorn,6,1,0,large,1300,300,Yes,100
-u,black unicorn,6,1,-7,large,1300,300,Yes,100
-u,pony,4,2,0,medium,1300,250,Yes,50
-u,horse,7,2,0,large,1500,300,Yes,100
-u,warhorse,9,2,0,large,1800,350,Yes,100
+100,white unicorn,6,2,7,large,1300,300,Yes,100
+101,gray unicorn,6,1,0,large,1300,300,Yes,100
+102,black unicorn,6,1,-7,large,1300,300,Yes,100
+103,pony,4,2,0,medium,1300,250,Yes,50
+104,horse,7,2,0,large,1500,300,Yes,100
+105,warhorse,9,2,0,large,1800,350,Yes,100
 
 [Vortexes]
-v,fog cloud,4,2,0,huge,0,0,Yes,0
-v,dust vortex,6,2,0,huge,0,0,Yes,0
-v,ice vortex,7,1*,0,huge,0,0,Yes,0
-v,energy vortex,9,1,0,huge,0,0,Yes,0
-v,steam vortex,9,2#,0,huge,0,0,Yes,0
-v,fire vortex,10,1#,0,huge,0,0,Yes,0
+106,fog cloud,4,2,0,huge,0,0,Yes,0
+107,dust vortex,6,2,0,huge,0,0,Yes,0
+108,ice vortex,7,1*,0,huge,0,0,Yes,0
+109,energy vortex,9,1,0,huge,0,0,Yes,0
+110,steam vortex,9,2#,0,huge,0,0,Yes,0
+111,fire vortex,10,1#,0,huge,0,0,Yes,0
 
 [Worms]
-w,baby long worm,9,0,0,large,600,250,Yes,100
-w,baby purple worm,9,0,0,large,600,250,Yes,100
-w,long worm,9,2,0,gigantic,1500,500,Yes,100
-w,purple worm,17,2,0,gigantic,2700,700,Yes,100
+112,baby long worm,9,0,0,large,600,250,Yes,100
+113,baby purple worm,9,0,0,large,600,250,Yes,100
+114,long worm,9,2,0,gigantic,1500,500,Yes,100
+115,purple worm,17,2,0,gigantic,2700,700,Yes,100
 
 [Mythical Insects]
-x,grid bug,1,3,0,tiny,15,0,Yes,0
-x,xan,9,3,0,tiny,300,300,Yes,33
+116,grid bug,1,3,0,tiny,15,0,Yes,0
+117,xan,9,3,0,tiny,300,300,Yes,33
 
 [Lights]
-y,yellow light,5,4,0,small,0,0,Yes,0
-y,black light,7,2,0,small,0,0,Yes,0
+118,yellow light,5,4,0,small,0,0,Yes,0
+119,black light,7,2,0,small,0,0,Yes,0
 
 [Zruty]
-z,zruty,11,2,0,large,1200,600,Yes,100
+120,zruty,11,2,0,large,1200,600,Yes,100
 
 [Greater Beings]
-A,couatl,11,1*,7,large,900,0,No,0
-A,Aleax,12,1*,7,medium,1450,0,No,0
-A,Angel,19,1*,12,medium,1450,0,No,0
-A,ki-rin,21,1*,15,large,1450,0,No,0
-A,Archon,26,1*,15,large,1450,0,No,0
+121,couatl,11,1*,7,large,900,0,No,0
+122,Aleax,12,1*,7,medium,1450,0,No,0
+123,Angel,19,1*,12,medium,1450,0,No,0
+124,ki-rin,21,1*,15,large,1450,0,No,0
+125,Archon,26,1*,15,large,1450,0,No,0
 
 [Bats and Birds]
-B,bat,2,1,0,tiny,20,20,Yes,25
-B,giant bat,3,2,0,small,30,30,Yes,50
-B,raven,6,2,0,small,40,20,Yes,50
-B,vampire bat,7,2,0,small,30,20,Yes,50
+126,bat,2,1,0,tiny,20,20,Yes,25
+127,giant bat,3,2,0,small,30,30,Yes,50
+128,raven,6,2,0,small,40,20,Yes,50
+129,vampire bat,7,2,0,small,30,20,Yes,50
 
 [Centaurs]
-C,plains centaur,6,1,0,large,2500,500,Yes,100
-C,forest centaur,8,1,-1,large,2550,600,Yes,100
-C,mountain centaur,9,1,-3,large,2550,500,Yes,100
+130,plains centaur,6,1,0,large,2500,500,Yes,100
+131,forest centaur,8,1,-1,large,2550,600,Yes,100
+132,mountain centaur,9,1,-3,large,2550,500,Yes,100
 
 [Baby Dragons]
-D,baby gray dragon,13,0,0,huge,1500,500,Yes,100
-D,baby silver dragon,13,0,0,huge,1500,500,Yes,100
-D,baby red dragon,13,0,0,huge,1500,500,Yes,100
-D,baby white dragon,13,0,0,huge,1500,500,Yes,100
-D,baby orange dragon,13,0,0,huge,1500,500,Yes,100
-D,baby black dragon,13,0,0,huge,1500,500,Yes,100
-D,baby blue dragon,13,0,0,huge,1500,500,Yes,100
-D,baby green dragon,13,0,0,huge,1500,500,Yes,100
-D,baby yellow dragon,13,0,0,huge,1500,500,Yes,100
+133,baby gray dragon,13,0,0,huge,1500,500,Yes,100
+134,baby silver dragon,13,0,0,huge,1500,500,Yes,100
+135,baby red dragon,13,0,0,huge,1500,500,Yes,100
+136,baby white dragon,13,0,0,huge,1500,500,Yes,100
+137,baby orange dragon,13,0,0,huge,1500,500,Yes,100
+138,baby black dragon,13,0,0,huge,1500,500,Yes,100
+139,baby blue dragon,13,0,0,huge,1500,500,Yes,100
+140,baby green dragon,13,0,0,huge,1500,500,Yes,100
+141,baby yellow dragon,13,0,0,huge,1500,500,Yes,100
 
 [Adult Dragons]
-D,gray dragon,20,1,4,gigantic,4500,1500,Yes,100
-D,silver dragon,20,1,4,gigantic,4500,1500,Yes,100
-D,red dragon,20,1,-4,gigantic,4500,1500,Yes,100
-D,white dragon,20,1,-5,gigantic,4500,1500,Yes,100
-D,orange dragon,20,1,5,gigantic,4500,1500,Yes,100
-D,black dragon,20,1,-6,gigantic,4500,1500,Yes,100
-D,blue dragon,20,1,-7,gigantic,4500,1500,Yes,100
-D,green dragon,20,1,6,gigantic,4500,1500,Yes,100
-D,yellow dragon,20,1,7,gigantic,4500,1500,Yes,100
+142,gray dragon,20,1,4,gigantic,4500,1500,Yes,100
+143,silver dragon,20,1,4,gigantic,4500,1500,Yes,100
+144,red dragon,20,1,-4,gigantic,4500,1500,Yes,100
+145,white dragon,20,1,-5,gigantic,4500,1500,Yes,100
+146,orange dragon,20,1,5,gigantic,4500,1500,Yes,100
+147,black dragon,20,1,-6,gigantic,4500,1500,Yes,100
+148,blue dragon,20,1,-7,gigantic,4500,1500,Yes,100
+149,green dragon,20,1,6,gigantic,4500,1500,Yes,100
+150,yellow dragon,20,1,7,gigantic,4500,1500,Yes,100
 
 [Elementals]
-E,stalker,9,3,0,large,900,400,Yes,100
-E,air elemental,10,1,0,huge,0,0,No,0
-E,fire elemental,10,1,0,huge,0,0,No,0
-E,earth elemental,10,1,0,huge,2500,0,No,0
-E,water elemental,10,1,0,huge,2500,0,No,0
+151,stalker,9,3,0,large,900,400,Yes,100
+152,air elemental,10,1,0,huge,0,0,No,0
+153,fire elemental,10,1,0,huge,0,0,No,0
+154,earth elemental,10,1,0,huge,2500,0,No,0
+155,water elemental,10,1,0,huge,2500,0,No,0
 
 [Moulds]
-F,lichen,1,4,0,small,20,200,Yes,50
-F,brown mold,2,1,0,small,50,30,Yes,33
-F,yellow mold,2,2,0,small,50,30,Yes,50
-F,green mold,2,1,0,small,50,30,Yes,33
-F,red mold,2,1,0,small,50,30,Yes,33
-F,shrieker,2,1,0,small,100,100,Yes,33
-F,violet fungus,5,2,0,small,100,100,Yes,50
+156,lichen,1,4,0,small,20,200,Yes,50
+157,brown mold,2,1,0,small,50,30,Yes,33
+158,yellow mold,2,2,0,small,50,30,Yes,50
+159,green mold,2,1,0,small,50,30,Yes,33
+160,red mold,2,1,0,small,50,30,Yes,33
+161,shrieker,2,1,0,small,100,100,Yes,33
+162,violet fungus,5,2,0,small,100,100,Yes,50
 
 [Gnomes]
-G,gnome,3,1,0,small,650,100,Yes,33
-G,gnome lord,4,2,0,small,700,120,Yes,50
-G,gnomish wizard,5,1,0,small,700,120,Yes,33
-G,gnome king,6,1,0,small,750,150,Yes,33
+163,gnome,3,1,0,small,650,100,Yes,33
+164,gnome lord,4,2,0,small,700,120,Yes,50
+165,gnomish wizard,5,1,0,small,700,120,Yes,33
+166,gnome king,6,1,0,small,750,150,Yes,33
 
 [Giants]
-H,giant,8,X,2,huge,2250,750,Yes,100
-H,stone giant,8,1,2,huge,2250,750,Yes,100
-H,hill giant,10,1,-2,huge,2200,700,Yes,100
-H,fire giant,11,1,2,huge,2250,750,Yes,100
-H,frost giant,13,1*,-3,huge,2250,750,Yes,100
-H,storm giant,19,1,-3,huge,2250,750,Yes,100
-H,ettin,13,1,0,huge,1700,500,Yes,100
-H,titan,20,1,9,huge,2300,900,No,100
-H,minotaur,17,X,0,large,1500,700,Yes,100
+167,giant,8,X,2,huge,2250,750,Yes,100
+168,stone giant,8,1,2,huge,2250,750,Yes,100
+169,hill giant,10,1,-2,huge,2200,700,Yes,100
+170,fire giant,11,1,2,huge,2250,750,Yes,100
+171,frost giant,13,1*,-3,huge,2250,750,Yes,100
+172,storm giant,19,1,-3,huge,2250,750,Yes,100
+173,ettin,13,1,0,huge,1700,500,Yes,100
+174,titan,20,1,9,huge,2300,900,No,100
+175,minotaur,17,X,0,large,1500,700,Yes,100
 
 [Jabberwock]
-J,jabberwock,18,1,0,large,1300,600,Yes,100
+176,jabberwock,18,1,0,large,1300,600,Yes,100
 
 [Keystones]
-K,Keystone Kop,3,X,9,medium,1450,200,Yes,33
-K,Kop Sergeant,4,X,10,medium,1450,200,Yes,33
-K,Kop Lieutenant,5,X,11,medium,1450,200,Yes,33
-K,Kop Kaptain,6,X,12,medium,1450,200,Yes,33
+177,Keystone Kop,3,X,9,medium,1450,200,Yes,33
+178,Kop Sergeant,4,X,10,medium,1450,200,Yes,33
+179,Kop Lieutenant,5,X,11,medium,1450,200,Yes,33
+180,Kop Kaptain,6,X,12,medium,1450,200,Yes,33
 
 [Lichs]
-L,lich,14,1,-9,medium,1200,0,Yes,0
-L,demilich,18,1,12,medium,1200,0,Yes,0
-L,master lich,21,1#,15,medium,1200,0,Yes,0
-L,arch-lich,29,1#,15,medium,1200,0,Yes,0
+181,lich,14,1,-9,medium,1200,0,Yes,0
+182,demilich,18,1,12,medium,1200,0,Yes,0
+183,master lich,21,1#,15,medium,1200,0,Yes,0
+184,arch-lich,29,1#,15,medium,1200,0,Yes,0
 
 [Mummies]
-M,kobold mummy,4,1,-2,small,400,50,Yes,33*#
-M,gnome mummy,5,1,-3,small,650,50,Yes,33*#
-M,orc mummy,6,1,-4,medium,850,75,Yes,33*#
-M,dwarf mummy,6,1,-4,medium,900,150,Yes,33*#
-M,elf mummy,7,1,-5,medium,800,175,Yes,33*#
-M,human mummy,7,1,-5,medium,1450,200,Yes,33*#
-M,ettin mummy,8,1,-6,huge,1700,250,Yes,100*#
-M,giant mummy,10,1,-7,huge,2050,375,Yes,100*#
+185,kobold mummy,4,1,-2,small,400,50,Yes,33*#
+186,gnome mummy,5,1,-3,small,650,50,Yes,33*#
+187,orc mummy,6,1,-4,medium,850,75,Yes,33*#
+188,dwarf mummy,6,1,-4,medium,900,150,Yes,33*#
+189,elf mummy,7,1,-5,medium,800,175,Yes,33*#
+190,human mummy,7,1,-5,medium,1450,200,Yes,33*#
+191,ettin mummy,8,1,-6,huge,1700,250,Yes,100*#
+192,giant mummy,10,1,-7,huge,2050,375,Yes,100*#
 
 [Naga]
-N,red naga hatchling,4,0,0,large,500,100,Yes,100
-N,black naga hatchling,4,0,0,large,500,100,Yes,100
-N,golden naga hatchling,4,0,0,large,500,100,Yes,100
-N,guardian naga hatchling,4,0,0,large,500,100,Yes,100
-N,red naga,8,1,-4,huge,2600,400,Yes,100
-N,black naga,10,1,4,huge,2600,400,Yes,100
-N,golden naga,13,1,5,huge,2600,400,Yes,100
-N,guardian naga,16,1,7,huge,2600,400,Yes,100
+193,red naga hatchling,4,0,0,large,500,100,Yes,100
+194,black naga hatchling,4,0,0,large,500,100,Yes,100
+195,golden naga hatchling,4,0,0,large,500,100,Yes,100
+196,guardian naga hatchling,4,0,0,large,500,100,Yes,100
+197,red naga,8,1,-4,huge,2600,400,Yes,100
+198,black naga,10,1,4,huge,2600,400,Yes,100
+199,golden naga,13,1,5,huge,2600,400,Yes,100
+200,guardian naga,16,1,7,huge,2600,400,Yes,100
 
 [Ogres]
-O,ogre,7,1,-3,large,1600,500,Yes,100
-O,ogre lord,9,2,-5,large,1700,700,Yes,100
-O,ogre king,11,2,-7,large,1700,750,Yes,100
+201,ogre,7,1,-3,large,1600,500,Yes,100
+202,ogre lord,9,2,-5,large,1700,700,Yes,100
+203,ogre king,11,2,-7,large,1700,750,Yes,100
 
 [Oozes, Pudddings and Slimes]
-P,gray ooze,4,2,0,medium,500,250,Yes,50
-P,brown pudding,6,1,0,medium,500,250,Yes,33
-P,black pudding,12,1,0,large,900,250,Yes,100
-P,green slime,8,1#,0,large,400,150,Yes,100
+204,gray ooze,4,2,0,medium,500,250,Yes,50
+205,brown pudding,6,1,0,medium,500,250,Yes,33
+206,black pudding,12,1,0,large,900,250,Yes,100
+207,green slime,8,1#,0,large,400,150,Yes,100
 
 [Mechanics]
-Q,quantum mechanic,9,3,0,medium,1450,20,Yes,50
+208,quantum mechanic,9,3,0,medium,1450,20,Yes,50
 
 [Disenchanters]
-R,rust monster,8,2,0,medium,1000,250,Yes,50
-R,disenchanter,14,2#,-3,large,750,200,Yes,100
+209,rust monster,8,2,0,medium,1000,250,Yes,50
+210,disenchanter,14,2#,-3,large,750,200,Yes,100
 
 [Snakes]
-S,garter snake,3,1,0,tiny,50,60,Yes,25
-S,snake,6,2,0,small,100,80,Yes,50
-S,water moccasin,7,X,0,small,150,80,Yes,33
-S,pit viper,9,1,0,medium,100,60,Yes,33
-S,python,8,1,0,large,250,100,Yes,100
-S,cobra,10,1,0,medium,250,100,Yes,33
+211,garter snake,3,1,0,tiny,50,60,Yes,25
+212,snake,6,2,0,small,100,80,Yes,50
+213,water moccasin,7,X,0,small,150,80,Yes,33
+214,pit viper,9,1,0,medium,100,60,Yes,33
+215,python,8,1,0,large,250,100,Yes,100
+216,cobra,10,1,0,medium,250,100,Yes,33
 
 [Trolls]
-T,troll,9,2,-3,large,800,350,Yes,100
-T,ice troll,12,1*,-3,large,1000,300,Yes,100
-T,rock troll,12,1,-3,large,1200,300,Yes,100
-T,water troll,13,X,-3,large,1200,350,Yes,100
-T,Olog-hai,16,1,-7,large,1500,400,Yes,100
+217,troll,9,2,-3,large,800,350,Yes,100
+218,ice troll,12,1*,-3,large,1000,300,Yes,100
+219,rock troll,12,1,-3,large,1200,300,Yes,100
+220,water troll,13,X,-3,large,1200,350,Yes,100
+221,Olog-hai,16,1,-7,large,1500,400,Yes,100
 
 [Umber Hulk]
-U,umber hulk,12,2,0,large,1200,500,Yes,100
+222,umber hulk,12,2,0,large,1200,500,Yes,100
 
 [Vampires]
-V,vampire,12,1,-8,medium,1450,400,Yes,33*#
-V,vampire lord,14,1,-9,medium,1450,400,Yes,33*#
-V,Vlad the Impaler,18,X,10,medium,1450,0,No,0
+223,vampire,12,1,-8,medium,1450,400,Yes,33*#
+224,vampire lord,14,1,-9,medium,1450,400,Yes,33*#
+225,Vlad the Impaler,18,X,10,medium,1450,0,No,0
 
 [Wights and Wraiths]
-W,barrow wight,7,1,-3,medium,1200,0,Yes,0
-W,wraith,8,2,-6,medium,0,0,Yes,50*
-W,Nazgul,17,1,17,medium,1450,0,Yes,0
+226,barrow wight,7,1,-3,medium,1200,0,Yes,0
+227,wraith,8,2,-6,medium,0,0,Yes,50*
+228,Nazgul,17,1,17,medium,1450,0,Yes,0
 
 [Xorn]
-X,xorn,11,1,0,medium,1200,700,Yes,33
+229,xorn,11,1,0,medium,1200,700,Yes,33
 
 [Primates]
-Y,monkey,4,1,0,small,100,50,Yes,33
-Y,ape,6,2,0,large,1100,500,Yes,100
-Y,owlbear,7,3,0,large,1700,700,Yes,100
-Y,yeti,7,2,0,large,1600,700,Yes,100
-Y,carnivorous ape,8,1,0,large,1250,550,Yes,100
-Y,sasquatch,9,1,2,large,1550,750,Yes,100
+230,monkey,4,1,0,small,100,50,Yes,33
+231,ape,6,2,0,large,1100,500,Yes,100
+232,owlbear,7,3,0,large,1700,700,Yes,100
+233,yeti,7,2,0,large,1600,700,Yes,100
+234,carnivorous ape,8,1,0,large,1250,550,Yes,100
+235,sasquatch,9,1,2,large,1550,750,Yes,100
 
 [Undead]
-Z,kobold zombie,1,1,-2,small,400,50,Yes,33*#
-Z,gnome zombie,2,1,-2,small,650,50,Yes,33*#
-Z,orc zombie,3,1,-3,medium,850,75,Yes,33*#
-Z,dwarf zombie,3,1,-3,medium,900,150,Yes,33*#
-Z,elf zombie,4,1,-3,medium,800,175,Yes,33*#
-Z,human zombie,5,1,-3,medium,1450,200,Yes,33*#
-Z,ettin zombie,7,1,-4,huge,1700,250,Yes,100*#
-Z,giant zombie,9,1,-4,huge,2050,375,Yes,100*#
-Z,ghoul,5,1,-2,small,400,0,Yes,0
-Z,skeleton,14,X,0,medium,300,0,No,0
+236,kobold zombie,1,1,-2,small,400,50,Yes,33*#
+237,gnome zombie,2,1,-2,small,650,50,Yes,33*#
+238,orc zombie,3,1,-3,medium,850,75,Yes,33*#
+239,dwarf zombie,3,1,-3,medium,900,150,Yes,33*#
+240,elf zombie,4,1,-3,medium,800,175,Yes,33*#
+241,human zombie,5,1,-3,medium,1450,200,Yes,33*#
+242,ettin zombie,7,1,-4,huge,1700,250,Yes,100*#
+243,giant zombie,9,1,-4,huge,2050,375,Yes,100*#
+244,ghoul,5,1,-2,small,400,0,Yes,0
+245,skeleton,14,X,0,medium,300,0,No,0
 
 [Golems]
-',straw golem,4,1,0,large,400,0,No,0
-',paper golem,4,1,0,large,400,0,No,0
-',rope golem,6,1,0,large,450,0,No,0
-',gold golem,6,1,0,large,450,0,No,0
-',leather golem,7,1,0,large,800,0,No,0
-',wood golem,8,1,0,large,900,0,No,0
-',flesh golem,10,1,0,large,1400,600,No,100
-',clay golem,12,1,0,large,1550,0,No,0
-',stone golem,15,1,0,large,1900,0,No,0
-',glass golem,18,1,0,large,1800,0,No,0
-',iron golem,22,1,0,large,2000,0,No,0
+246,straw golem,4,1,0,large,400,0,No,0
+247,paper golem,4,1,0,large,400,0,No,0
+248,rope golem,6,1,0,large,450,0,No,0
+249,gold golem,6,1,0,large,450,0,No,0
+250,leather golem,7,1,0,large,800,0,No,0
+251,wood golem,8,1,0,large,900,0,No,0
+252,flesh golem,10,1,0,large,1400,600,No,100
+253,clay golem,12,1,0,large,1550,0,No,0
+254,stone golem,15,1,0,large,1900,0,No,0
+255,glass golem,18,1,0,large,1800,0,No,0
+256,iron golem,22,1,0,large,2000,0,No,0
 
 [Bipeds]
-@,human,2,X,0,medium,1450,400,No,33
-@,wererat,3,1,-7,medium,1450,400,No,33
-@,werejackal,3,1,-7,medium,1450,400,No,33
-@,werewolf,6,1,-7,medium,1450,400,No,33
-@,elf,12,X,-3,medium,800,350,No,33
-@,Woodland-elf,6,2,-5,medium,800,350,Yes,50
-@,Green-elf,7,2,-6,medium,800,350,Yes,50
-@,Grey-elf,8,2,-7,medium,800,350,Yes,50
-@,elf-lord,11,2,-9,medium,800,350,Yes,50
-@,Elvenking,11,1,10,medium,800,350,Yes,33
-@,doppelganger,11,1,0,medium,1450,400,Yes,33
-@,nurse,13,3,0,medium,1450,400,Yes,50
-@,shopkeeper,15,X,0,medium,1450,400,No,33
-@,guard,14,X,10,medium,1450,400,No,33
-@,prisoner,14,X,0,medium,1450,400,No,33
-@,Oracle,13,X,0,medium,1450,400,No,33
-@,aligned priest,15,X,0,medium,1450,400,No,33
-@,high priest,30,X,0,medium,1450,400,No,33
-@,soldier,8,1,-2,medium,1450,400,Yes,33
-@,sergeant,10,1,-3,medium,1450,400,Yes,33
-@,lieutenant,12,1,-4,medium,1450,400,Yes,33
-@,captain,14,1,-5,medium,1450,400,Yes,33
-@,watchman,8,X,-2,medium,1450,400,Yes,33
-@,watch captain,12,X,-4,medium,1450,400,Yes,33
+257,human,2,X,0,medium,1450,400,No,33
+258,wererat,3,1,-7,medium,1450,400,No,33
+259,werejackal,3,1,-7,medium,1450,400,No,33
+260,werewolf,6,1,-7,medium,1450,400,No,33
+261,elf,12,X,-3,medium,800,350,No,33
+262,Woodland-elf,6,2,-5,medium,800,350,Yes,50
+263,Green-elf,7,2,-6,medium,800,350,Yes,50
+264,Grey-elf,8,2,-7,medium,800,350,Yes,50
+265,elf-lord,11,2,-9,medium,800,350,Yes,50
+266,Elvenking,11,1,10,medium,800,350,Yes,33
+267,doppelganger,11,1,0,medium,1450,400,Yes,33
+268,nurse,13,3,0,medium,1450,400,Yes,50
+269,shopkeeper,15,X,0,medium,1450,400,No,33
+270,guard,14,X,10,medium,1450,400,No,33
+271,prisoner,14,X,0,medium,1450,400,No,33
+272,Oracle,13,X,0,medium,1450,400,No,33
+273,aligned priest,15,X,0,medium,1450,400,No,33
+274,high priest,30,X,0,medium,1450,400,No,33
+275,soldier,8,1,-2,medium,1450,400,Yes,33
+276,sergeant,10,1,-3,medium,1450,400,Yes,33
+277,lieutenant,12,1,-4,medium,1450,400,Yes,33
+278,captain,14,1,-5,medium,1450,400,Yes,33
+279,watchman,8,X,-2,medium,1450,400,Yes,33
+280,watch captain,12,X,-4,medium,1450,400,Yes,33
 
 [Unique]
-@,Medusa,25,X,15,large,1450,400,No,100
-@,Wizard of Yendor,34,X,X,medium,1450,400,No,33
-@,Croesus,22,X,15,medium,1450,400,No,33
+281,Medusa,25,X,15,large,1450,400,No,100
+282,Wizard of Yendor,34,X,X,medium,1450,400,No,33
+283,Croesus,22,X,15,medium,1450,400,No,33
 
 [Ghosts]
- ,ghost,12,X,-5,medium,1450,0,No,0
- ,shade,14,X,0,medium,1450,0,No,0
+284,ghost,12,X,-5,medium,1450,0,No,0
+285,shade,14,X,0,medium,1450,0,No,0
 
 [Demons]
-&,water demon,11,X,-7,medium,1450,0,No,0
-&,horned devil,9,2#,11,medium,1450,0,No,0
-&,succubus,8,1,-9,medium,1450,0,No,0
-&,incubus,8,1,-9,medium,1450,0,No,0
-&,erinys,10,2#,10,medium,1450,0,No,0
-&,barbed devil,10,2#,8,medium,1450,0,No,0
-&,marilith,11,1#,12,large,1450,0,No,0
-&,vrock,11,2#,-9,large,1450,0,No,0
-&,hezrou,12,2#,10,large,1450,0,No,0
-&,bone devil,13,2#,-9,large,1450,0,No,0
-&,ice devil,14,2#,12,large,1450,0,No,0
-&,nalfeshnee,15,1#,11,large,1450,0,No,0
-&,pit fiend,16,2#,13,large,1450,0,No,0
-&,balrog,20,1#,14,large,1450,0,No,0
-&,Juiblex,26,X,15,large,1500,0,No,0
-&,Yeenoghu,31,X,15,large,900,0,No,0
-&,Orcus,36,X,20,huge,1500,0,No,0
-&,Geryon,36,X,15,huge,1500,0,No,0
-&,Dispater,40,X,15,medium,1500,0,No,0
-&,Baalzebub,45,X,20,large,1500,0,No,0
-&,Asmodeus,53,X,20,huge,1500,0,No,0
-&,Demogorgon,57,X,20,huge,1500,0,No,0
-&,Death,34,X,0,medium,1450,1,No,100
-&,Pestilence,34,X,0,medium,1450,1,No,100
-&,Famine,34,X,0,medium,1450,1,No,100
-&,djinni,8,X,0,medium,1500,0,No,0
-&,sandestin,15,1#,-5,medium,1500,0,No,0
+286,water demon,11,X,-7,medium,1450,0,No,0
+287,horned devil,9,2#,11,medium,1450,0,No,0
+288,succubus,8,1,-9,medium,1450,0,No,0
+289,incubus,8,1,-9,medium,1450,0,No,0
+290,erinys,10,2#,10,medium,1450,0,No,0
+291,barbed devil,10,2#,8,medium,1450,0,No,0
+292,marilith,11,1#,12,large,1450,0,No,0
+293,vrock,11,2#,-9,large,1450,0,No,0
+294,hezrou,12,2#,10,large,1450,0,No,0
+295,bone devil,13,2#,-9,large,1450,0,No,0
+296,ice devil,14,2#,12,large,1450,0,No,0
+297,nalfeshnee,15,1#,11,large,1450,0,No,0
+298,pit fiend,16,2#,13,large,1450,0,No,0
+299,balrog,20,1#,14,large,1450,0,No,0
+300,Juiblex,26,X,15,large,1500,0,No,0
+301,Yeenoghu,31,X,15,large,900,0,No,0
+302,Orcus,36,X,20,huge,1500,0,No,0
+303,Geryon,36,X,15,huge,1500,0,No,0
+304,Dispater,40,X,15,medium,1500,0,No,0
+305,Baalzebub,45,X,20,large,1500,0,No,0
+306,Asmodeus,53,X,20,huge,1500,0,No,0
+307,Demogorgon,57,X,20,huge,1500,0,No,0
+308,Death,34,X,0,medium,1450,1,No,100
+309,Pestilence,34,X,0,medium,1450,1,No,100
+310,Famine,34,X,0,medium,1450,1,No,100
+311,djinni,8,X,0,medium,1500,0,No,0
+312,sandestin,15,1#,-5,medium,1500,0,No,0
 
 [Aquatic]
-;,jellyfish,5,X,0,small,80,20,Yes,33
-;,piranha,6,X,0,small,60,30,Yes,33
-;,shark,9,X,0,large,500,350,Yes,100
-;,giant eel,7,X,0,huge,200,250,Yes,100
-;,electric eel,10,X,0,huge,200,250,Yes,100
-;,kraken,22,X,-3,huge,1800,1000,Yes,100
-:,newt,1,5,0,tiny,10,20,Yes,33
-:,gecko,2,5,0,tiny,10,20,Yes,33
-:,iguana,3,5,0,tiny,30,30,Yes,33
-:,baby crocodile,4,0,0,medium,200,200,Yes,33
-:,lizard,6,5,0,tiny,10,40,Yes,100
-:,chameleon,7,2,0,tiny,100,100,Yes,33
-:,crocodile,7,1,0,large,1450,400,Yes,100
-:,salamander,12,1#,-9,medium,1500,400,No,33
+313,jellyfish,5,X,0,small,80,20,Yes,33
+314,piranha,6,X,0,small,60,30,Yes,33
+315,shark,9,X,0,large,500,350,Yes,100
+316,giant eel,7,X,0,huge,200,250,Yes,100
+317,electric eel,10,X,0,huge,200,250,Yes,100
+318,kraken,22,X,-3,huge,1800,1000,Yes,100
+319,newt,1,5,0,tiny,10,20,Yes,33
+320,gecko,2,5,0,tiny,10,20,Yes,33
+321,iguana,3,5,0,tiny,30,30,Yes,33
+322,baby crocodile,4,0,0,medium,200,200,Yes,33
+323,lizard,6,5,0,tiny,10,40,Yes,100
+324,chameleon,7,2,0,tiny,100,100,Yes,33
+325,crocodile,7,1,0,large,1450,400,Yes,100
+326,salamander,12,1#,-9,medium,1500,400,No,33
 
 [Player]
-@,archeologist,12,X,3,medium,1450,400,No,100
-@,barbarian,12,X,0,medium,1450,400,No,100
-@,caveman,12,X,1,medium,1450,400,No,100
-@,cavewoman,12,X,1,medium,1450,400,No,100
-@,healer,12,X,0,medium,1450,400,No,100
-@,knight,12,X,3,medium,1450,400,No,100
-@,monk,11,X,0,medium,1450,400,No,100
-@,priest,12,X,0,medium,1450,400,No,100
-@,priestess,12,X,0,medium,1450,400,No,100
-@,ranger,12,X,-3,medium,1450,400,No,100
-@,rogue,12,X,-3,medium,1450,400,No,100
-@,samurai,12,X,3,medium,1450,400,No,100
-@,tourist,12,X,0,medium,1450,400,No,100
-@,valkyrie,12,X,-1,medium,1450,400,No,100
-@,wizard,12,X,0,medium,1450,400,No,100
+327,archeologist,12,X,3,medium,1450,400,No,100
+328,barbarian,12,X,0,medium,1450,400,No,100
+329,caveman,12,X,1,medium,1450,400,No,100
+330,cavewoman,12,X,1,medium,1450,400,No,100
+331,healer,12,X,0,medium,1450,400,No,100
+332,knight,12,X,3,medium,1450,400,No,100
+333,monk,11,X,0,medium,1450,400,No,100
+334,priest,12,X,0,medium,1450,400,No,100
+335,priestess,12,X,0,medium,1450,400,No,100
+336,ranger,12,X,-3,medium,1450,400,No,100
+337,rogue,12,X,-3,medium,1450,400,No,100
+338,samurai,12,X,3,medium,1450,400,No,100
+339,tourist,12,X,0,medium,1450,400,No,100
+340,valkyrie,12,X,-1,medium,1450,400,No,100
+341,wizard,12,X,0,medium,1450,400,No,100
 
 [Quest Related]
-@,Lord Carnarvon,22,X,20,medium,1450,400,No,33
-@,Pelias,22,X,0,medium,1450,400,No,33
-@,Shaman Karnov,22,X,20,medium,1450,400,No,33
-@,Hippocrates,22,X,0,medium,1450,400,No,33
-@,King Arthur,23,X,20,medium,1450,400,No,33
-@,Grand Master,30,X,0,medium,1450,400,No,33
-@,Arch Priest,30,X,0,medium,1450,400,No,33
-@,Orion,22,X,0,medium,1450,400,No,33
-@,Master of Thieves,24,X,20,medium,1450,400,No,33
-@,Lord Sato,23,X,20,medium,1450,400,No,33
-@,Twoflower,22,X,0,medium,1450,400,No,33
-@,Norn,23,X,0,medium,1450,400,No,33
-@,Neferet the Green,23,X,0,medium,1450,400,No,33
-&,Minion of Huhetotl,23,X,14,large,1450,0,No,0
-@,Thoth Amon,22,X,14,medium,1450,0,No,0
-D,Chromatic Dragon,23,X,14,gigantic,4500,1700,No,100
-H,Cyclops,23,X,15,huge,1900,700,No,100
-D,Ixoth,22,X,14,gigantic,4500,1600,No,100
-@,Master Kaen,31,X,20,medium,1450,400,No,33
-&,Nalzok,23,X,127,large,1450,0,No,0
-s,Scorpius,17,X,15,medium,750,350,No,33
-@,Master Assassin,20,X,18,medium,1450,400,No,33
-@,Ashikaga Takauji,19,X,13,medium,1450,0,No,0
-H,Lord Surtur,19,X,12,huge,2250,850,No,100
-@,Dark One,20,X,10,medium,1450,0,No,0
+342,Lord Carnarvon,22,X,20,medium,1450,400,No,33
+343,Pelias,22,X,0,medium,1450,400,No,33
+344,Shaman Karnov,22,X,20,medium,1450,400,No,33
+345,Hippocrates,22,X,0,medium,1450,400,No,33
+346,King Arthur,23,X,20,medium,1450,400,No,33
+347,Grand Master,30,X,0,medium,1450,400,No,33
+348,Arch Priest,30,X,0,medium,1450,400,No,33
+349,Orion,22,X,0,medium,1450,400,No,33
+350,Master of Thieves,24,X,20,medium,1450,400,No,33
+351,Lord Sato,23,X,20,medium,1450,400,No,33
+352,Twoflower,22,X,0,medium,1450,400,No,33
+353,Norn,23,X,0,medium,1450,400,No,33
+354,Neferet the Green,23,X,0,medium,1450,400,No,33
+355,Minion of Huhetotl,23,X,14,large,1450,0,No,0
+356,Thoth Amon,22,X,14,medium,1450,0,No,0
+357,Chromatic Dragon,23,X,14,gigantic,4500,1700,No,100
+358,Cyclops,23,X,15,huge,1900,700,No,100
+359,Ixoth,22,X,14,gigantic,4500,1600,No,100
+360,Master Kaen,31,X,20,medium,1450,400,No,33
+361,Nalzok,23,X,127,large,1450,0,No,0
+362,Scorpius,17,X,15,medium,750,350,No,33
+363,Master Assassin,20,X,18,medium,1450,400,No,33
+364,Ashikaga Takauji,19,X,13,medium,1450,0,No,0
+365,Lord Surtur,19,X,12,huge,2250,850,No,100
+366,Dark One,20,X,10,medium,1450,0,No,0
 
 [Biped Henchmen]
-@,student,7,X,3,medium,1450,400,No,33
-@,chieftain,7,X,0,medium,1450,400,No,33
-@,neanderthal,7,X,1,medium,1450,400,No,33
-@,attendant,7,X,3,medium,1450,400,No,33
-@,page,7,X,3,medium,1450,400,No,33
-@,abbot,8,X,0,medium,1450,400,No,33
-@,acolyte,8,X,0,medium,1450,400,No,33
-@,hunter,7,X,-7,medium,1450,400,No,33
-@,thug,7,X,-3,medium,1450,400,No,33
-@,ninja,7,X,3,medium,1450,400,No,33
-@,roshi,7,X,3,medium,1450,400,No,33
-@,guide,8,X,0,medium,1450,400,No,33
-@,warrior,7,X,-1,medium,1450,400,No,33
-@,apprentice,8,X,0,medium,1450,400,No,33
+367,student,7,X,3,medium,1450,400,No,33
+368,chieftain,7,X,0,medium,1450,400,No,33
+369,neanderthal,7,X,1,medium,1450,400,No,33
+370,attendant,7,X,3,medium,1450,400,No,33
+371,page,7,X,3,medium,1450,400,No,33
+372,abbot,8,X,0,medium,1450,400,No,33
+373,acolyte,8,X,0,medium,1450,400,No,33
+374,hunter,7,X,-7,medium,1450,400,No,33
+375,thug,7,X,-3,medium,1450,400,No,33
+376,ninja,7,X,3,medium,1450,400,No,33
+377,roshi,7,X,3,medium,1450,400,No,33
+378,guide,8,X,0,medium,1450,400,No,33
+379,warrior,7,X,-1,medium,1450,400,No,33
+380,apprentice,8,X,0,medium,1450,400,No,33

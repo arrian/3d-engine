@@ -1,7 +1,8 @@
 #include "Cell.h"
 
 Cell::Cell(Ogre::Root* root, Environment* environment, Ogre::String name, CellType::Type type)
-  : sceneManager(root->createSceneManager(Ogre::ST_INTERIOR)),
+  : root(root),
+    sceneManager(root->createSceneManager(Ogre::ST_INTERIOR)),
     environment(environment),
     instanceNumber(0),
     physics(new OgreBulletDynamics::DynamicsWorld(sceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000,-10000,-10000), Ogre::Vector3(10000,10000,10000)), Ogre::Vector3(0,-9.807,0))),
@@ -12,10 +13,16 @@ Cell::Cell(Ogre::Root* root, Environment* environment, Ogre::String name, CellTy
     architecture(new Architecture(sceneManager, physics)),
     lights(std::vector<Ogre::Light*>()),
     particles(std::vector<Ogre::ParticleSystem*>()),
-    player(0)
+    player(0),
+    active(false)
 {
-  
   physics->setShowDebugShapes(environment->showCollisionDebug);
+
+  if(environment->enableShadows) sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+
+  sceneManager->setDisplaySceneNodes(environment->isDebug());
+  sceneManager->setShowDebugShadows(environment->isDebug());
+  sceneManager->showBoundingBoxes(environment->isDebug());
   
   switch(type)
   {
@@ -56,6 +63,13 @@ Cell::~Cell(void)
 
   if(physics) delete physics;
   physics = 0;
+
+  root->destroySceneManager(sceneManager);
+}
+
+bool Cell::isActive()
+{
+  return active;
 }
 
 Ogre::String Cell::getName()
@@ -75,7 +89,8 @@ OgreBulletDynamics::DynamicsWorld* Cell::getPhysicsWorld()
 
 void Cell::addPlayer(Player* player)
 {
-  player->setCell(this, Ogre::Vector3(0,0,0), Ogre::Vector3(0,0,300));
+  active = true;
+  player->setCell(this, Ogre::Vector3(600,70,600), Ogre::Vector3(0,50,600));
   this->player = player;
 }
 
@@ -115,7 +130,11 @@ void Cell::addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector3
 
 void Cell::removePlayer(Player* player)
 {
-  if(this->player == player) this->player = 0;
+  if(this->player == player) 
+  {
+    this->player = 0;
+    active = false;//when more than one player, will need to check all players before deactivating cell
+  }
 }
 
 void Cell::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -150,10 +169,10 @@ void Cell::generateCave()
 void Cell::generateDungeon()
 {
   int SCALE = 100;
-  Ogre::String CORNER = "room_corner.mesh";
-  Ogre::String CENTRE = "room_centre.mesh";
-  Ogre::String EDGE = "room_edge.mesh";
-  Ogre::String EDGE_ENTRANCE = "room_edge_entrance.mesh";
+  Ogre::String CORNER = environment->getDataManager()->getArchitecture(75)->mesh;
+  Ogre::String CENTRE = environment->getDataManager()->getArchitecture(71)->mesh;
+  Ogre::String EDGE = environment->getDataManager()->getArchitecture(95)->mesh;
+  Ogre::String EDGE_ENTRANCE = environment->getDataManager()->getArchitecture(99)->mesh;
 
   Generator::Dungeon dungeon = Generator::Dungeon(30, 30, 15);
   for(std::vector<Generator::Room*>::iterator it = dungeon.rooms.begin(); it < dungeon.rooms.end(); ++it)
@@ -211,25 +230,12 @@ void Cell::generateTown()
 
 void Cell::generatePredefined()
 {
-  architecture->add("r1.mesh");
-  architecture->add("r2.mesh");
-  architecture->add("r3.mesh");
-  architecture->add("r4.mesh");
-  architecture->add("r5.mesh");
-  architecture->add("r6.mesh");
-  architecture->add("r7.mesh");
-  architecture->add("r8.mesh");
-  architecture->add("r9.mesh");
-  architecture->add("r10.mesh");
-  architecture->add("r11.mesh");
-  architecture->add("r12.mesh");
-  architecture->add("r13.mesh");
-  architecture->add("r14.mesh");
-  architecture->add("connector.mesh", Ogre::Vector3(-380,0,0));
+  for(int i = 19; i <= 32; i++) architecture->add(environment->getDataManager()->getArchitecture(i)->mesh);
+  architecture->add(environment->getDataManager()->getArchitecture(33)->mesh, Ogre::Vector3(-380,0,0));
 
   for(int i = 0; i < 10; i++)
   {
-    architecture->add("hall.mesh", Ogre::Vector3(-445 - 100 * i,0,0));
+    architecture->add(environment->getDataManager()->getArchitecture(47)->mesh, Ogre::Vector3(-445 - 100 * i,0,0));
   }
 }
 
@@ -240,5 +246,27 @@ void Cell::generateAstral()
 
 void Cell::load(Ogre::String file)
 {
+  name = "test";
 
+  std::string line;
+	std::ifstream infile;
+	infile.open(file);
+  int row = 0;
+  while(std::getline(infile, line))
+  {
+    for(int col = 0; col < line.length(); col++)
+    {
+      if(line[col] == '.') continue;
+      Ogre::Vector3 position(row * 100, 0, col * 100);
+
+      Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
+      int remainder = ((int) line[col] - 47) % 4;//getting required rotation
+      rotation.FromAngleAxis(Ogre::Degree(remainder * 90), Ogre::Vector3::UNIT_Y);
+
+      ArchitectureModel* model = environment->getDataManager()->getArchitecture(((int)line[col]) - remainder);
+      if(model) architecture->add(model->mesh, position, rotation);
+    }
+    row++;
+  }
+	infile.close();
 }

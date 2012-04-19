@@ -157,9 +157,9 @@ private:
   void update();
 
   /*!
-  * Displays a boolean as text on console (enabled/disabled).
+  * Displays the no command error.
   **/
-  void display(bool option);
+  void noCommand(Ogre::String command);
 
   /*!
   * Tokenises a string by the given delimiter.

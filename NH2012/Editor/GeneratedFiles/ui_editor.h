@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'editor.ui'
 **
-** Created: Tue 17. Apr 14:02:39 2012
+** Created: Thu 19. Apr 15:20:06 2012
 **      by: Qt User Interface Compiler version 4.8.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -14,7 +14,6 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
-#include <QtGui/QFrame>
 #include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QMainWindow>
@@ -24,20 +23,15 @@
 #include <QtGui/QToolBar>
 #include <QtGui/QTreeView>
 #include <QtGui/QWidget>
+#include "renderer.h"
 
 QT_BEGIN_NAMESPACE
 
 class Ui_EditorClass
 {
 public:
-    QAction *actionOPen;
     QAction *actionSave;
-    QAction *actionSave_As;
-    QAction *actionData_File;
-    QAction *actionCell;
-    QAction *actionCell_2;
     QAction *actionData;
-    QAction *actionSave_2;
     QAction *actionExit;
     QAction *actionUndo;
     QAction *actionRedo;
@@ -47,24 +41,18 @@ public:
     QAction *actionDelete;
     QAction *actionSelect_All;
     QAction *actionSelect_None;
-    QAction *actionData_2;
-    QAction *actionCell_3;
     QAction *actionRenderer;
     QAction *actionEnvironment;
-    QAction *actionNew_Cell;
-    QAction *actionNew_Actor;
-    QAction *actionEdit_Cell;
-    QAction *actionAbout_Editor;
-    QAction *actionEnvironment_2;
-    QAction *actionCell_4;
-    QAction *actionActor;
-    QAction *actionNew_3;
+    QAction *actionCell_View;
     QAction *actionPreferences;
+    QAction *actionData_View;
+    QAction *actionAbout;
+    QAction *actionCopy;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTreeView *cells;
     QTreeView *data;
-    QFrame *renderer;
+    Renderer *renderer;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
@@ -77,23 +65,11 @@ public:
     {
         if (EditorClass->objectName().isEmpty())
             EditorClass->setObjectName(QString::fromUtf8("EditorClass"));
-        EditorClass->resize(974, 755);
-        actionOPen = new QAction(EditorClass);
-        actionOPen->setObjectName(QString::fromUtf8("actionOPen"));
+        EditorClass->resize(1000, 750);
         actionSave = new QAction(EditorClass);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
-        actionSave_As = new QAction(EditorClass);
-        actionSave_As->setObjectName(QString::fromUtf8("actionSave_As"));
-        actionData_File = new QAction(EditorClass);
-        actionData_File->setObjectName(QString::fromUtf8("actionData_File"));
-        actionCell = new QAction(EditorClass);
-        actionCell->setObjectName(QString::fromUtf8("actionCell"));
-        actionCell_2 = new QAction(EditorClass);
-        actionCell_2->setObjectName(QString::fromUtf8("actionCell_2"));
         actionData = new QAction(EditorClass);
         actionData->setObjectName(QString::fromUtf8("actionData"));
-        actionSave_2 = new QAction(EditorClass);
-        actionSave_2->setObjectName(QString::fromUtf8("actionSave_2"));
         actionExit = new QAction(EditorClass);
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         actionUndo = new QAction(EditorClass);
@@ -112,61 +88,66 @@ public:
         actionSelect_All->setObjectName(QString::fromUtf8("actionSelect_All"));
         actionSelect_None = new QAction(EditorClass);
         actionSelect_None->setObjectName(QString::fromUtf8("actionSelect_None"));
-        actionData_2 = new QAction(EditorClass);
-        actionData_2->setObjectName(QString::fromUtf8("actionData_2"));
-        actionCell_3 = new QAction(EditorClass);
-        actionCell_3->setObjectName(QString::fromUtf8("actionCell_3"));
         actionRenderer = new QAction(EditorClass);
         actionRenderer->setObjectName(QString::fromUtf8("actionRenderer"));
+        actionRenderer->setCheckable(true);
+        actionRenderer->setChecked(true);
         actionEnvironment = new QAction(EditorClass);
         actionEnvironment->setObjectName(QString::fromUtf8("actionEnvironment"));
-        actionNew_Cell = new QAction(EditorClass);
-        actionNew_Cell->setObjectName(QString::fromUtf8("actionNew_Cell"));
-        actionNew_Actor = new QAction(EditorClass);
-        actionNew_Actor->setObjectName(QString::fromUtf8("actionNew_Actor"));
-        actionEdit_Cell = new QAction(EditorClass);
-        actionEdit_Cell->setObjectName(QString::fromUtf8("actionEdit_Cell"));
-        actionAbout_Editor = new QAction(EditorClass);
-        actionAbout_Editor->setObjectName(QString::fromUtf8("actionAbout_Editor"));
-        actionEnvironment_2 = new QAction(EditorClass);
-        actionEnvironment_2->setObjectName(QString::fromUtf8("actionEnvironment_2"));
-        actionCell_4 = new QAction(EditorClass);
-        actionCell_4->setObjectName(QString::fromUtf8("actionCell_4"));
-        actionActor = new QAction(EditorClass);
-        actionActor->setObjectName(QString::fromUtf8("actionActor"));
-        actionNew_3 = new QAction(EditorClass);
-        actionNew_3->setObjectName(QString::fromUtf8("actionNew_3"));
+        actionCell_View = new QAction(EditorClass);
+        actionCell_View->setObjectName(QString::fromUtf8("actionCell_View"));
+        actionCell_View->setCheckable(true);
+        actionCell_View->setChecked(true);
         actionPreferences = new QAction(EditorClass);
         actionPreferences->setObjectName(QString::fromUtf8("actionPreferences"));
+        actionData_View = new QAction(EditorClass);
+        actionData_View->setObjectName(QString::fromUtf8("actionData_View"));
+        actionData_View->setCheckable(true);
+        actionData_View->setChecked(true);
+        actionAbout = new QAction(EditorClass);
+        actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
+        actionCopy = new QAction(EditorClass);
+        actionCopy->setObjectName(QString::fromUtf8("actionCopy"));
         centralWidget = new QWidget(EditorClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
-        gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setSpacing(3);
+        gridLayout->setContentsMargins(0, 0, 0, 0);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         cells = new QTreeView(centralWidget);
         cells->setObjectName(QString::fromUtf8("cells"));
+        QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(cells->sizePolicy().hasHeightForWidth());
+        cells->setSizePolicy(sizePolicy);
 
         gridLayout->addWidget(cells, 1, 1, 2, 2);
 
         data = new QTreeView(centralWidget);
         data->setObjectName(QString::fromUtf8("data"));
+        QSizePolicy sizePolicy1(QSizePolicy::Maximum, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(data->sizePolicy().hasHeightForWidth());
+        data->setSizePolicy(sizePolicy1);
         data->setMinimumSize(QSize(300, 0));
 
         gridLayout->addWidget(data, 0, 0, 3, 1);
 
-        renderer = new QFrame(centralWidget);
+        renderer = new Renderer(centralWidget);
         renderer->setObjectName(QString::fromUtf8("renderer"));
+        sizePolicy.setHeightForWidth(renderer->sizePolicy().hasHeightForWidth());
+        renderer->setSizePolicy(sizePolicy);
         renderer->setMinimumSize(QSize(650, 450));
-        renderer->setFrameShape(QFrame::StyledPanel);
-        renderer->setFrameShadow(QFrame::Raised);
+        renderer->setAcceptDrops(true);
 
         gridLayout->addWidget(renderer, 0, 1, 1, 2);
 
         EditorClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(EditorClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 974, 26));
+        menuBar->setGeometry(QRect(0, 0, 1000, 26));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -182,17 +163,19 @@ public:
         statusBar = new QStatusBar(EditorClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         EditorClass->setStatusBar(statusBar);
+        QWidget::setTabOrder(data, cells);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
         menuBar->addAction(menuView->menuAction());
         menuBar->addAction(menuHelp->menuAction());
         menuFile->addAction(actionData);
-        menuFile->addAction(actionSave_2);
+        menuFile->addAction(actionSave);
         menuFile->addAction(actionExit);
         menuEdit->addAction(actionUndo);
         menuEdit->addAction(actionRedo);
         menuEdit->addSeparator();
+        menuEdit->addAction(actionCopy);
         menuEdit->addAction(actionCut);
         menuEdit->addAction(actionPaste);
         menuEdit->addAction(actionDuplicate);
@@ -201,12 +184,12 @@ public:
         menuEdit->addAction(actionSelect_All);
         menuEdit->addAction(actionSelect_None);
         menuEdit->addSeparator();
-        menuEdit->addAction(actionEnvironment_2);
+        menuEdit->addAction(actionEnvironment);
         menuEdit->addAction(actionPreferences);
-        menuView->addAction(actionData_2);
-        menuView->addAction(actionCell_3);
         menuView->addAction(actionRenderer);
-        menuHelp->addAction(actionAbout_Editor);
+        menuView->addAction(actionCell_View);
+        menuView->addAction(actionData_View);
+        menuHelp->addAction(actionAbout);
 
         retranslateUi(EditorClass);
 
@@ -216,36 +199,41 @@ public:
     void retranslateUi(QMainWindow *EditorClass)
     {
         EditorClass->setWindowTitle(QApplication::translate("EditorClass", "Editor", 0, QApplication::UnicodeUTF8));
-        actionOPen->setText(QApplication::translate("EditorClass", "Open", 0, QApplication::UnicodeUTF8));
         actionSave->setText(QApplication::translate("EditorClass", "Save", 0, QApplication::UnicodeUTF8));
-        actionSave_As->setText(QApplication::translate("EditorClass", "Save As", 0, QApplication::UnicodeUTF8));
-        actionData_File->setText(QApplication::translate("EditorClass", "Data File", 0, QApplication::UnicodeUTF8));
-        actionCell->setText(QApplication::translate("EditorClass", "World", 0, QApplication::UnicodeUTF8));
-        actionCell_2->setText(QApplication::translate("EditorClass", "Cell", 0, QApplication::UnicodeUTF8));
+        actionSave->setShortcut(QApplication::translate("EditorClass", "Ctrl+S", 0, QApplication::UnicodeUTF8));
         actionData->setText(QApplication::translate("EditorClass", "Data", 0, QApplication::UnicodeUTF8));
-        actionSave_2->setText(QApplication::translate("EditorClass", "Save", 0, QApplication::UnicodeUTF8));
+        actionData->setShortcut(QApplication::translate("EditorClass", "Ctrl+D", 0, QApplication::UnicodeUTF8));
         actionExit->setText(QApplication::translate("EditorClass", "Exit", 0, QApplication::UnicodeUTF8));
         actionUndo->setText(QApplication::translate("EditorClass", "Undo", 0, QApplication::UnicodeUTF8));
+        actionUndo->setShortcut(QApplication::translate("EditorClass", "Ctrl+Z", 0, QApplication::UnicodeUTF8));
         actionRedo->setText(QApplication::translate("EditorClass", "Redo", 0, QApplication::UnicodeUTF8));
+        actionRedo->setShortcut(QApplication::translate("EditorClass", "Ctrl+Y", 0, QApplication::UnicodeUTF8));
         actionCut->setText(QApplication::translate("EditorClass", "Cut", 0, QApplication::UnicodeUTF8));
+        actionCut->setShortcut(QApplication::translate("EditorClass", "Ctrl+X", 0, QApplication::UnicodeUTF8));
         actionPaste->setText(QApplication::translate("EditorClass", "Paste", 0, QApplication::UnicodeUTF8));
+        actionPaste->setShortcut(QApplication::translate("EditorClass", "Ctrl+V", 0, QApplication::UnicodeUTF8));
         actionDuplicate->setText(QApplication::translate("EditorClass", "Instance", 0, QApplication::UnicodeUTF8));
+        actionDuplicate->setShortcut(QApplication::translate("EditorClass", "Ctrl+I", 0, QApplication::UnicodeUTF8));
         actionDelete->setText(QApplication::translate("EditorClass", "Delete", 0, QApplication::UnicodeUTF8));
+        actionDelete->setShortcut(QApplication::translate("EditorClass", "Del", 0, QApplication::UnicodeUTF8));
         actionSelect_All->setText(QApplication::translate("EditorClass", "Select All", 0, QApplication::UnicodeUTF8));
+        actionSelect_All->setShortcut(QApplication::translate("EditorClass", "Ctrl+A", 0, QApplication::UnicodeUTF8));
         actionSelect_None->setText(QApplication::translate("EditorClass", "Select None", 0, QApplication::UnicodeUTF8));
-        actionData_2->setText(QApplication::translate("EditorClass", "Data", 0, QApplication::UnicodeUTF8));
-        actionCell_3->setText(QApplication::translate("EditorClass", "Cells", 0, QApplication::UnicodeUTF8));
+        actionSelect_None->setShortcut(QApplication::translate("EditorClass", "Ctrl+Shift+A", 0, QApplication::UnicodeUTF8));
         actionRenderer->setText(QApplication::translate("EditorClass", "Renderer", 0, QApplication::UnicodeUTF8));
+        actionRenderer->setShortcut(QApplication::translate("EditorClass", "Ctrl+1", 0, QApplication::UnicodeUTF8));
         actionEnvironment->setText(QApplication::translate("EditorClass", "Environment", 0, QApplication::UnicodeUTF8));
-        actionNew_Cell->setText(QApplication::translate("EditorClass", "New Cell", 0, QApplication::UnicodeUTF8));
-        actionNew_Actor->setText(QApplication::translate("EditorClass", "New Actor", 0, QApplication::UnicodeUTF8));
-        actionEdit_Cell->setText(QApplication::translate("EditorClass", "Edit Cell", 0, QApplication::UnicodeUTF8));
-        actionAbout_Editor->setText(QApplication::translate("EditorClass", "About", 0, QApplication::UnicodeUTF8));
-        actionEnvironment_2->setText(QApplication::translate("EditorClass", "Environment", 0, QApplication::UnicodeUTF8));
-        actionCell_4->setText(QApplication::translate("EditorClass", "Cell", 0, QApplication::UnicodeUTF8));
-        actionActor->setText(QApplication::translate("EditorClass", "Actor", 0, QApplication::UnicodeUTF8));
-        actionNew_3->setText(QApplication::translate("EditorClass", "New", 0, QApplication::UnicodeUTF8));
+        actionEnvironment->setShortcut(QApplication::translate("EditorClass", "Ctrl+E", 0, QApplication::UnicodeUTF8));
+        actionCell_View->setText(QApplication::translate("EditorClass", "Cell View", 0, QApplication::UnicodeUTF8));
+        actionCell_View->setShortcut(QApplication::translate("EditorClass", "Ctrl+2", 0, QApplication::UnicodeUTF8));
         actionPreferences->setText(QApplication::translate("EditorClass", "Preferences", 0, QApplication::UnicodeUTF8));
+        actionPreferences->setShortcut(QApplication::translate("EditorClass", "Ctrl+P", 0, QApplication::UnicodeUTF8));
+        actionData_View->setText(QApplication::translate("EditorClass", "Data View", 0, QApplication::UnicodeUTF8));
+        actionData_View->setShortcut(QApplication::translate("EditorClass", "Ctrl+3", 0, QApplication::UnicodeUTF8));
+        actionAbout->setText(QApplication::translate("EditorClass", "About", 0, QApplication::UnicodeUTF8));
+        actionAbout->setShortcut(QApplication::translate("EditorClass", "F1", 0, QApplication::UnicodeUTF8));
+        actionCopy->setText(QApplication::translate("EditorClass", "Copy", 0, QApplication::UnicodeUTF8));
+        actionCopy->setShortcut(QApplication::translate("EditorClass", "Ctrl+C", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("EditorClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("EditorClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuView->setTitle(QApplication::translate("EditorClass", "View", 0, QApplication::UnicodeUTF8));

@@ -1,23 +1,5 @@
-[Feudal]
-1,Hall,hall.mesh
-2,Hall Corner,hall_2way.mesh
-3,Hall 3 Entrances,hall_3way.mesh
-4,Hall 4 Entrances,hall_4way.mesh
-5,Hall 4 Entrances with Loft,hall_4way_loft.mesh
-6,Hall Endcap,hall_endcap.mesh
-7,Hall Stairs,hall_stairs.mesh
-
-8,Hall Tall,hall_tall.mesh
-9,Hall Tall Entrance, hall_tall_entrance.mesh
-
-10,Room Centre,room_centre.mesh
-11,Room Corner,room_corner.mesh
-12,Room Corner Entrance A,room_corner_entrance_a.mesh
-13,Room Corner Entrance B,room_corner_entrance_b.mesh
-14,Room Corner 2 Entrances,room_corner_entrance_two_way.mesh
-15,Room Corner Single,room_corner_single.mesh
-16,Room Edge,room_edge.mesh
-17,Room Edge Entrance,room_edge_entrance.mesh
+#Architecture
+#Id,Name,Mesh
 
 [Town]
 18,Cottage,cottage.mesh
@@ -37,6 +19,31 @@
 30,Preset 12,r12.mesh
 31,Preset 13,r13.mesh
 32,Preset 14,r14.mesh
+
+[Miscellaneous]
+33,Connector,connector.mesh
+
+[Feudal]
+47,Hall,hall.mesh
+51,Hall Corner,hall_2way.mesh
+55,Hall 3 Entrances,hall_3way.mesh
+59,Hall 4 Entrances,hall_4way.mesh
+63,Hall 4 Entrances with Loft,hall_4way_loft.mesh
+67,Hall Endcap,hall_endcap.mesh
+
+71,Room Centre,room_centre.mesh
+75,Room Corner,room_corner.mesh
+79,Room Corner Entrance A,room_corner_entrance_a.mesh
+83,Room Corner Entrance B,room_corner_entrance_b.mesh
+87,Room Corner 2 Entrances,room_corner_entrance_two_way.mesh
+91,Room Corner Single,room_corner_single.mesh
+95,Room Edge,room_edge.mesh
+99,Room Edge Entrance,room_edge_entrance.mesh
+
+103,Hall Stairs,hall_stairs.mesh
+
+104,Hall Tall,hall_tall.mesh
+105,Hall Tall Entrance, hall_tall_entrance.mesh
 
 [Castle Hall]
 

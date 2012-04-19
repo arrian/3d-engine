@@ -109,27 +109,17 @@ void Console::enter()
     if(elements[0] == "help") help();
     else if(elements[0] == "clear") clear();
     else if(elements[0] == "stats") stats();
-    else if(elements[0] == "date") text += "\n%5" + world->getEnvironment()->getDateString() + "%r";
-    else if(elements[0] == "moon") text += "\n%5" + world->getEnvironment()->getMoonPhase() + "%r";
     else if(elements[0] == "freeze") world->getEnvironment()->freezeCollisionDebug = true;
     else if(elements[0] == "unfreeze") world->getEnvironment()->freezeCollisionDebug = false;
     else if(elements[0] == "freecam") world->getEnvironment()->freeCameraDebug = !world->getEnvironment()->freeCameraDebug;
     else if(elements[0] == "hide") setVisible(false);
-    else if(elements[0] == "numcells") display("number of cells", Ogre::StringConverter::toString(world->getNumberCells()));
-    else if(elements[0] == "size") display("window size", Ogre::StringConverter::toString(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
     else if(elements[0] == "screenshot")
     {
       setVisible(false);
-      window->writeContentsToTimestampedFile("screenshot", ".jpg");
+      display("Screenshot saved to '" + window->writeContentsToTimestampedFile("screenshot", ".jpg") + "'.");
       setVisible(true);
     }
-    else if(elements[0] == "cells")
-    {
-      std::vector<Ogre::String> names;
-      world->getCellNames(names);
-      for(std::vector<Ogre::String>::iterator it = names.begin(); it < names.end(); ++it) display(*it);
-    }
-    else error("there is no command '" + command + "'");
+    else noCommand(command);
   }
   else if(elements.size() == 2)
   {
@@ -139,7 +129,12 @@ void Console::enter()
       if(target) world->movePlayer(world->getPlayer(), target);
       else error("no cell named '" + elements[1] + "'");
     }
-    else error("there is no command '" + command + "'");
+    else if(elements[0] == "unload")
+    {
+      if(world->destroyCell(elements[1])) display("cell unloaded");
+      else error("could not unload the cell");
+    }
+    else noCommand(command);
   }
   else if(elements.size() == 3)
   {
@@ -151,28 +146,84 @@ void Console::enter()
       if(width == 0 || height == 0) error("bad screen dimensions");
       else window->setFullscreen((elements[0] == "fullscreen"), width, height);
     }
-    else error("there is no command '" + command + "'");
+    else if(elements[0] == "load")
+    {
+      CellType::Type type = CellType::DUNGEON;
+      if(elements[2] == "dungeon") type = CellType::DUNGEON;
+      else if(elements[2] == "predefined") type = CellType::PREDEFINED;
+      else if(elements[2] == "file") type = CellType::FILE;
+      world->loadCell(elements[1], type);
+    }
+    else if(elements[0] == "data")
+    {
+      int id = std::atoi(elements[2].c_str());
+      if(elements[1] == "architecture")
+      {
+        ArchitectureModel* model = world->getEnvironment()->getDataManager()->getArchitecture(id);
+        if(model) 
+        {
+          display("name", model->name);
+          display("mesh", model->mesh);
+        }
+        else error("no architecture item has that id");
+      }
+      else if(elements[1] == "item")
+      {
+        ItemModel* model = world->getEnvironment()->getDataManager()->getItem(id);
+        if(model) 
+        {
+          display("name", model->name);
+          display("mesh", model->mesh);
+        }
+        else error("no item has that id");
+      }
+      else if(elements[1] == "monster")
+      {
+        MonsterModel* model = world->getEnvironment()->getDataManager()->getMonster(id);
+        if(model) 
+        {
+          display("name", model->name);
+          display("mesh", model->mesh);
+        }
+        else error("no monster has that id");
+      }
+    }
+    else noCommand(command);
+  }
+  else if(elements.size() == 5)
+  {
+    if(elements[0] == "ambient")
+    {
+      float r = std::atof(elements[2].c_str());
+      float g = std::atof(elements[3].c_str());
+      float b = std::atof(elements[4].c_str());
+      
+      Cell* target = world->getCell(elements[1]);
+      if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(r, g, b));
+      else error("no cell named '" + elements[1] + "'");
+    }
+    else noCommand(command);
   }
   else if(elements.size() == 6)
   {
     if(elements[0] == "add")
     {
-      Cell* target = world->getCell(elements[2]);
+      Cell* target = world->getCell(elements[1]);
       if(target)
       {
         int x = std::atoi(elements[3].c_str());
         int y = std::atoi(elements[4].c_str());
         int z = std::atoi(elements[5].c_str());
         Ogre::Vector3 position = Ogre::Vector3(x, y, z);
-        if(elements[1] == "item") target->addItem(position);
-        else if(elements[1] == "monster") target->addMonster(position);
-        else error("no object type '" + elements[1] + "' exists");
+        if(elements[2] == "item") target->addItem(position);
+        else if(elements[2] == "monster") target->addMonster(position);
+        else error("no object type '" + elements[2] + "' exists");
       }
-      else error("no cell named '" + elements[2] + "'");
+      else error("no cell named '" + elements[1] + "'");
     }
-    else error("there is no command '" + command + "'");
+    else noCommand(command);
   }
-  else error("there is no command '" + command + "'");
+  else noCommand(command);
   
   command = "";
 }
@@ -180,22 +231,21 @@ void Console::enter()
 void Console::help()
 {
   display("help", "shows this list");
-  display("stats", "shows a list of rendering statistics");
+  display("stats", "shows a list of statistics");
   display("clear", "clears the console");
-  display("date", "displays the date");
-  display("moon", "displays the moon phase");
   display("freeze", "freezes physics");
   display("unfreeze", "unfreezes physics");
   display("freecam", "frees the camera");
   display("hide", "hides the console");
-  display("numcells", "displays the number of active cells");
   display("fullscreen [width] [height]", "sets the window to fullscreen mode");
   display("window [width] [height]", "sets the window to windowed mode");
-  display("size", "displays the window dimensions");
-  display("add [type] [cell name] [x] [y] [z]", "adds the given type of entity to the named cell at the given coordinates");
+  display("add [cell name] [item|monster] [x] [y] [z]", "adds the given type of entity to the named cell at the given coordinates");
+  display("data [item|monster|architecture] [id]", "displays the data associated with the id of the given type of entity");
   display("screenshot", "takes a screenshot and outputs to timestamped file");
   display("go [cell name]", "moves the player to the specified cell");
-  display("cells","lists loaded cells");
+  display("load [cell name] [dungeon|predefined|file]", "loads a cell into memory");
+  display("unload [cell name]", "unloads a cell from memory");
+  display("ambient [cell name] [r] [g] [b]", "sets the ambient light in the given cell");
 }
 
 void Console::clear()
@@ -223,6 +273,14 @@ void Console::stats()
   display("colour depth", Ogre::StringConverter::toString(window->getColourDepth()));
   display("number of viewports", Ogre::StringConverter::toString(window->getNumViewports()));
   display("triangle count", Ogre::StringConverter::toString(window->getTriangleCount()));
+  display("window size", Ogre::StringConverter::toString(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
+  display("number of loaded cells", Ogre::StringConverter::toString(world->getNumberCells()));
+
+  std::vector<Ogre::String> names;
+  world->getCellNames(names);
+  Ogre::String list = "";
+  for(std::vector<Ogre::String>::iterator it = names.begin(); it < names.end(); ++it) list += (*it) + " ";
+  display("loaded cells", list);
 }
 
 void Console::display(Ogre::String comment)
@@ -235,21 +293,20 @@ void Console::display(Ogre::String highlight, Ogre::String comment)
   text += "\n%5" + highlight + "%r - " + comment;
 }
 
-void Console::display(bool option)
-{
-  if(option) text += "\nenabled";
-  else text += "\ndisabled";
-}
-
 void Console::error(Ogre::String comment)
 {
   text += "\n%4error%r - " + comment;
 }
 
+void Console::noCommand(Ogre::String command)
+{
+  error("there is no command '" + command + "'");
+}
+
 void Console::split(const std::string &s, char delim, std::vector<std::string> &elems) 
 {
-    std::stringstream ss(s);
-    std::string item;
-    while(std::getline(ss, item, delim)) elems.push_back(item);
+  std::stringstream ss(s);
+  std::string item;
+  while(std::getline(ss, item, delim)) elems.push_back(item);
 }
 

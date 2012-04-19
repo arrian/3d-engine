@@ -4,7 +4,6 @@
 //-------------------------------------------------------------------------------------
 NH2012::NH2012(void)
 : root(0),
-  //sceneManager(0),
   window(0),
   resources(Ogre::StringUtil::BLANK),
   plugins(Ogre::StringUtil::BLANK),

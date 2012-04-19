@@ -2,12 +2,15 @@
 
 
 Environment::Environment(void)
+  : dataManager(new DataManager())
 {
   debug = false;
 }
 
 Environment::~Environment(void)
 {
+  if(dataManager) delete dataManager;
+  dataManager = 0;
 }
 
 
@@ -83,11 +86,17 @@ void Environment::parseIni(std::string filename)
     enableWater = (pt.get<std::string>("Environment.Water") == TRUE);
     enableSky = (pt.get<std::string>("Environment.Sky") == TRUE);
 
+    //Architecture
+    architectureDataFilename = pt.get<std::string>("Architecture.Data");
+    dataManager->addData(architectureDataFilename);
+
     //Monsters
     monsterDataFilename = pt.get<std::string>("Monsters.Data");
+    dataManager->addData(monsterDataFilename);
 
     //Items
     itemDataFilename = pt.get<std::string>("Items.Data");
+    dataManager->addData(itemDataFilename);
 
     //Debug
     debug = (pt.get<std::string>("Debug.DebugMode") == TRUE);
@@ -108,6 +117,11 @@ void Environment::parseIni(std::string filename)
   {
     std::cout << e.what() << std::endl;
   }
+}
+
+DataManager* Environment::getDataManager()
+{
+  return dataManager;
 }
 
 Date Environment::getDate()

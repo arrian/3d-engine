@@ -2,14 +2,13 @@
 
 Entity::Entity(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
                Ogre::String meshName, Ogre::Vector3 position, int id, Ogre::String name)
+  : id(id),
+    entityName(entityName),
+    sceneManager(sceneManager),
+    physics(physics),
+    entity(sceneManager->createEntity(meshName)),
+    node(sceneManager->getRootSceneNode()->createChildSceneNode())
 {
-  this->id = id;
-  this->entityName = entityName;
-
-  this->physics = physics;
-
-  entity = sceneManager->createEntity(meshName);
-  node = sceneManager->getRootSceneNode()->createChildSceneNode();
   node->setPosition(position);
   node->attachObject(entity);
 }
@@ -17,8 +16,9 @@ Entity::Entity(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWor
 
 Entity::~Entity(void)
 {
-  if(entity) delete entity;
+  if(entity && sceneManager) sceneManager->destroyEntity(entity);
   entity = 0;
-  if(node) delete node;
+  if(node && sceneManager) sceneManager->destroySceneNode(node);
   node = 0;
+  sceneManager = 0;
 }

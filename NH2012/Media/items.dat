@@ -1,448 +1,374 @@
 #Items
-#Name
+#Id,Name,Mesh
 
 [Amulets]
-amulet of change
-amulet of ESP
-amulet of life saving
-amulet of magical breathing
-amulet of reflection
-amulet of restful sleep
-amulet of strangulation
-amulet of unchanging
-amulet versus poison
-imitation amulet of Yendor
-Amulet of Yendor
+1,amulet of change,amulet.mesh
+2,amulet of ESP,amulet.mesh
+3,amulet of life saving,amulet.mesh
+4,amulet of magical breathing,amulet.mesh
+5,amulet of reflection,amulet.mesh
+6,amulet of restful sleep,amulet.mesh
+7,amulet of strangulation,amulet.mesh
+8,amulet of unchanging,amulet.mesh
+9,amulet versus poison,amulet.mesh
+10,imitation amulet of Yendor,amulet.mesh
+11,Amulet of Yendor,amulet.mesh
 
 [Daggers] 	 
-orcish dagger
-dagger
-silver dagger
-athame
-elven dagger
+12,orcish dagger,dagger.mesh
+13,dagger,dagger.mesh
+14,silver dagger,dagger.mesh
+15,athame,dagger.mesh
+16,elven dagger,dagger.mesh
 
 [Knives]
-worm tooth
-knife
-stiletto
-scalpel
-crysknife
+17,worm tooth,knife.mesh
+18,knife,knife.mesh
+19,stiletto,knife.mesh
+20,scalpel,knife.mesh
+21,crysknife,knife.mesh
 
 [Axes]
-axe
-battle-axe
+22,axe,axe.mesh
+23,battle-axe,axe.mesh
 
 [Picks]
-pick-axe
-dwarvish mattock
+24,pick-axe,pick.mesh
+25,dwarvish mattock,pick.mesh
 
 [Short Swords]
-orcish short sword
-short sword
-dwarvish short sword
-elven short sword
+26,orcish short sword,sword.mesh
+27,short sword,sword.mesh
+28,dwarvish short sword,sword.mesh
+29,elven short sword,sword.mesh
 
 [Broadswords]
-broadsword
-runesword
-elven broadsword
+30,broadsword,sword.mesh
+31,runesword,sword.mesh
+32,elven broadsword,sword.mesh
 
 [Long Swords]
-long sword
-katana
+33,long sword,sword.mesh
+34,katana,sword.mesh
 
 [Two-handed Swords]
-two-handed sword
-tsurugi
-
-[Scimitars]
-scimitar
-
-[Sabers]
-silver saber
-
-[Clubs]
-club
-aklys
-
-[Maces]
-mace
-
-[Morning Stars]
-morning star
-
-[Flails]
-flail
-grappling hook
-
-[Hammers]
-war hammer
+35,two-handed sword,sword.mesh
+36,tsurugi,sword.mesh
+37,scimitar,sword.mesh
 
 [Quarterstaffs]
-quarterstaff
-
-[Polearms]
-partisan
-fauchard
-glaive
-bec-de-corbin
-spetum
-lucern hammer
-guisarme
-ranseur
-voulge
-bill-guisarme
-bardiche
-halberd
-
-[Spears]
-orcish spear
-spear
-silver spear
-elven spear
-dwarvish spear
-
-[Javelins]
-javelin
-
-[Tridents]
-trident
-
-[Lances]
-lance
+46,quarterstaff,staff.mesh
 
 [Bows]
-orcish bow
-bow
-elven bow
-yumi
+67,orcish bow,bow.mesh
+68,bow,bow.mesh
+69,elven bow,bow.mesh
+70,yumi,bow.mesh
 
 [Arrows]
-orcish arrow
-arrow
-silver arrow
-elven arrow
-ya
-
-[Slings]
-sling
-flintstone
-
-[Crossbow]
-crossbow
-crossbow bolt
-
-[Dart]
-dart
-
-
-[Shuriken]
-shuriken
-
-[Boomerang]
-boomerang
-
-[Whip]
-bullwhip
-rubber hose
+71,orcish arrow,arrow.mesh
+72,arrow,arrow.mesh
+73,silver arrow,arrow.mesh
+74,elven arrow,arrow.mesh
+75,ya,arrow.mesh
 
 [Unicorn Horn]
-unicorn horn
+85,unicorn horn,horn.mesh
 
 [Shirts]
-Hawaiian shirt
-T-shirt
+86,Hawaiian shirt,shirt.mesh
+87,T-shirt,shirt.mesh
 
 [Suits]
-leather jacket
-leather armor
-orcish ring mail
-crude ring mail
-studded leather armor
-ring mail
-scale mail
-orcish chain mail
-crude chain mail
-chain mail
-elven mithril coat
-splint mail
-banded mail
-dwarvish mithril coat
-bronze plate mail
-plate mail
-crystal plate mail
+88,leather jacket,armour.mesh
+89,leather armor,armour.mesh
+90,orcish ring mail,armour.mesh
+91,crude ring mail,armour.mesh
+92,studded leather armor,armour.mesh
+93,ring mail,armour.mesh
+94,scale mail,armour.mesh
+95,orcish chain mail,armour.mesh
+96,crude chain mail,armour.mesh
+97,chain mail,armour.mesh
+98,elven mithril coat,armour.mesh
+99,splint mail,armour.mesh
+100,banded mail,armour.mesh
+101,dwarvish mithril coat,armour.mesh
+102,bronze plate mail,armour.mesh
+103,plate mail,armour.mesh
+104,crystal plate mail,armour.mesh
 
 [Dragon Scales]
-red dragon scales
-white dragon scales
-orange dragon scales
-blue dragon scales
-green dragon scales
-yellow dragon scales
-black dragon scales
-silver dragon scales
-gray dragon scales
+105,red dragon scales,scales.mesh
+106,white dragon scales,scales.mesh
+107,orange dragon scales,scales.mesh
+108,blue dragon scales,scales.mesh
+109,green dragon scales,scales.mesh
+110,yellow dragon scales,scales.mesh
+111,black dragon scales,scales.mesh
+112,silver dragon scales,scales.mesh
+113,gray dragon scales,scales.mesh
 
 [Dragon Suits]
-red dragon scale mail
-white dragon scale mail
-orange dragon scale mail
-blue dragon scale mail
-green dragon scale mail
-yellow dragon scale mail
-black dragon scale mail
-silver dragon scale mail
-gray dragon scale mail
+114,red dragon scale mail,armour.mesh
+115,white dragon scale mail,armour.mesh
+116,orange dragon scale mail,armour.mesh
+117,blue dragon scale mail,armour.mesh
+118,green dragon scale mail,armour.mesh
+119,yellow dragon scale mail,armour.mesh
+120,black dragon scale mail,armour.mesh
+121,silver dragon scale mail,armour.mesh
+122,gray dragon scale mail,armour.mesh
 
 [Cloaks]
-mummy wrapping
-orcish cloak
-coarse mantelet
-dwarvish cloak
-hooded cloak
-leather cloak
-cloak of displacement
-piece of cloth
-oilskin cloak
-slippery cloak
-alchemy smock
-apron
-cloak of invisibility
-opera cloak
-clk of magic resistance
-ornamental cope
-elven cloak
-faded pall
-robe
-cloak of protection
-tattered cape
+123,mummy wrapping,cloak.mesh
+124,orcish cloak,cloak.mesh
+125,coarse mantelet,cloak.mesh
+126,dwarvish cloak,cloak.mesh
+127,hooded cloak,cloak.mesh
+128,leather cloak,cloak.mesh
+129,cloak of displacement,cloak.mesh
+130,piece of cloth,cloak.mesh
+131,oilskin cloak,cloak.mesh
+132,slippery cloak,cloak.mesh
+133,alchemy smock,cloak.mesh
+134,apron,cloak.mesh
+135,cloak of invisibility,cloak.mesh
+136,opera cloak,cloak.mesh
+137,cloak of magic resistance,cloak.mesh
+138,ornamental cope,cloak.mesh
+139,elven cloak,cloak.mesh
+140,faded pall,cloak.mesh
+141,robe,cloak.mesh
+142,cloak of protection,cloak.mesh
+143,tattered cape,cloak.mesh
 
 [Helmets]
-fedora
-dunce cap
-conical hat
-cornuthaum
-conical hat
-dented pot
-elven leather helm
-leather hat
-helmet
-plumed helmet
-orcish helm
-iron skull cap
-helm of brilliance
-etched helmet
-hm of opposite alignment
-crested helmet
-helm of telepathy
-visored helmet
-dwarvish iron helm
-hard hat
+144,fedora,hat.mesh
+145,dunce cap,hat.mesh
+146,conical hat,hat.mesh
+147,cornuthaum,hat.mesh
+148,conical hat,hat.mesh
+150,elven leather helm,helmet.mesh
+151,leather hat,hat.mesh
+152,helmet,helmet.mesh
+153,plumed helmet,helmet.mesh
+154,orcish helm,helmet.mesh
+155,iron skull cap,helmet.mesh
+156,helm of brilliance,helmet.mesh
+157,etched helmet,helmet.mesh
+158,helm of opposite alignment,helmet.mesh
+159,crested helmet,helmet.mesh
+160,helm of telepathy,helmet.mesh
+161,visored helmet,helmet.mesh
+162,dwarvish iron helm,helmet.mesh
+163,hard hat,hat.mesh
 
 [Gloves]
-leather gloves
-old gloves
-gauntlets of dexterity
-padded gloves
-gauntlets of fumbling
-riding gloves
-gauntlets of power
-fencing gloves
+164,leather gloves
+165,old gloves
+166,gauntlets of dexterity
+167,padded gloves
+168,gauntlets of fumbling
+169,riding gloves
+170,gauntlets of power
+171,fencing gloves
 
 [Shields]
-small shield
-orcish shield
-red-eyed shield
-Uruk-hai shield
-white-handed shield
-elven shield
-blue and green shield
-dwarvish roundshield
-large round shield
-large shield
-shield of reflection
-polished silver shield
+172,small shield
+173,orcish shield
+174,red-eyed shield
+175,Uruk-hai shield
+176,white-handed shield
+177,elven shield
+178,blue and green shield
+179,dwarvish roundshield
+180,large round shield
+181,large shield
+182,shield of reflection
+183,polished silver shield
 
 [Boots]
-low boots
-walking shoes
-elven boots
-mud boots
-kicking boots
-buckled boots
-fumble boots
-riding boots
-levitation boots
-snow boots
-jumping boots
-hiking boots
-speed boots
-combat boots
-water walking boots
-jungle boots
-high boots
-jackboots
-iron shoes
-hard shoes
+184,low boots
+185,walking shoes
+186,elven boots
+187,mud boots
+188,kicking boots
+189,buckled boots
+190,fumble boots
+191,riding boots
+192,levitation boots
+193,snow boots
+194,jumping boots
+195,hiking boots
+196,speed boots
+197,combat boots
+198,water walking boots
+199,jungle boots
+200,high boots
+201,jackboots
+202,iron shoes
+203,hard shoes
 
 [Food]
-meatball
-meat ring
-meat stick
-egg
-tripe ration
-huge chunk of meat
-corpse
+204,meatball
+205,meat ring
+206,meat stick
+207,egg
+208,tripe ration
+209,huge chunk of meat
+210,corpse
 
 [Fruits and Vegetables]
-kelp frond
-eucalyptus leaf
-clove of garlic
-sprig of wolfsbane
-apple
-carrot
-pear
-banana
-orange
-melon
-slime mold
+211,kelp frond
+212,eucalyptus leaf
+213,clove of garlic
+214,sprig of wolfsbane
+215,apple
+216,carrot
+217,pear
+218,banana
+219,orange
+220,melon
+221,slime mold
 
 [Human Food]
-fortune cookie
-candy bar
-cream pie
-lump of royal jelly
-pancake
-C-ration
-K-ration
-cram ration
-food ration
-lembas wafer
-tin
+222,fortune cookie
+223,candy bar
+224,cream pie
+225,lump of royal jelly
+226,pancake
+227,C-ration
+228,K-ration
+229,cram ration
+230,food ration
+231,lembas wafer
+232,tin
 
 [Containers]
-sack
-bag
-large box
-chest
-ice box
-bag of holding
-bag of tricks
-oilskin sack
+233,sack
+234,bag
+235,large box
+236,chest
+237,ice box
+238,bag of holding
+239,bag of tricks
+240,oilskin sack
 
 [Unlocking Tools]
-credit card
-lock pick
-skeleton key
-key
+241,credit card
+242,lock pick
+243,skeleton key
+244,key
 
 [Light Sources]
-tallow candle
-candle
-wax candle
-brass lantern
-oil lamp
-lamp
-magic lamp
-Candelabrum of Invocation
-candelabrum
+245,tallow candle
+246,candle
+247,wax candle
+248,brass lantern
+249,oil lamp
+250,lamp
+251,magic lamp
+252,Candelabrum of Invocation
+253,candelabrum
 
 [Instruments]
-tin whistle
-whistle
-magic whistle
-bugle
-wooden flute
-flute
-magic flute
-tooled horn
-horn
-frost horn
-fire horn
-horn of plenty
-leather drum
-drum
-drum of earthquake
-wooden harp
-harp
-magic harp
-bell
-Bell of Opening
-silver bell
+254,tin whistle
+255,whistle
+256,magic whistle
+257,bugle
+258,wooden flute
+259,flute
+260,magic flute
+261,tooled horn
+262,horn
+263,frost horn
+264,fire horn
+265,horn of plenty
+266,leather drum
+267,drum
+268,drum of earthquake
+269,wooden harp
+270,harp
+271,magic harp
+272,bell
+273,Bell of Opening
+274,silver bell
 
 [Traps]
-beartrap
-land mine
+275,beartrap
+276,land mine
 
 [Tools]
-pick-axe
-grappling hook
-iron hook
-unicorn horn
-expensive camera
-mirror
-looking glass
-crystal ball
-glass orb
-lenses
-blindfold
-towel
-saddle
-leash
-stethoscope
-tinning kit
-tin opener
-can of grease
-figurine
-magic marker
+277,pick-axe
+278,grappling hook
+279,iron hook
+280,unicorn horn
+281,expensive camera
+282,mirror
+283,looking glass
+284,crystal ball
+285,glass orb
+286,lenses
+287,blindfold
+288,towel
+289,saddle
+290,leash
+291,stethoscope
+292,tinning kit
+293,tin opener
+294,can of grease
+295,figurine
+296,magic marker
 
 [Gems]
-dilithium crystal
-diamond
-ruby
-jacinth
-sapphire
-black opal
-emerald
-turquoise
-aquamarine
-citrine
-amber
-topaz
-jet
-opal
-chrysoberyl
-garnet
-amethyst
-jasper
-fluorite
-jade
-agate
-obsidian
+297,dilithium crystal
+298,diamond
+299,ruby
+300,jacinth
+301,sapphire
+302,black opal
+303,emerald
+304,turquoise
+305,aquamarine
+306,citrine
+307,amber
+308,topaz
+309,jet
+310,opal
+311,chrysoberyl
+312,garnet
+313,amethyst
+314,jasper
+315,fluorite
+316,jade
+317,agate
+318,obsidian
 
 [Worthless Gems]
-black glass
-blue glass
-green glass
-orange glass
-red glass
-violet glass
-white glass
-yellow glass
-yellowish brown glass
+319,black glass
+320,blue glass
+321,green glass
+322,orange glass
+323,red glass
+324,violet glass
+325,white glass
+326,yellow glass
+327,yellowish brown glass
 
 [Stones]
-luckstone
-touchstone
-flintstone
-loadstone
-rock
+328,luckstone
+329,touchstone
+330,flintstone
+331,loadstone
+332,rock
 
 [Miscellaneous]
-gold piece
-boulder
-statue
-heavy iron ball
-iron chain
-acid venom
-blinding venom
+333,gold piece
+334,boulder
+335,statue
+336,heavy iron ball
+337,iron chain
+338,acid venom
+339,blinding venom
+

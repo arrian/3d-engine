@@ -26,6 +26,8 @@
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
+#include "DataManager.h"
+
 /*! Structure for storing dates.*/
 struct Date
 {
@@ -88,8 +90,15 @@ public:
   /*! Parses the game settings files.*/
   void parseIni(std::string filename);
 
+  DataManager* getDataManager();
+
   /*! Stores the control mapping.*/
   Controls controls;
+
+  /*! Architecture data filename.
+      Default is architecture.dat
+  */
+  Ogre::String architectureDataFilename;
 
   /*! Monster data filename.
       Default is monsters.dat
@@ -195,6 +204,8 @@ public:
   bool showShadowDebug;
 
 private:
+  DataManager* dataManager;
+
   Ogre::String serialiseMoonPhase(int moonPhase);
   Ogre::Real calculateMoonPhase(Date date);
   Ogre::String day(Date date);
