@@ -53,14 +53,17 @@
     <ClCompile Include="renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="datawrapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_datawrapper.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_datamodel.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_datawrapper.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_datamodel.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="datamodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dataitem.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,13 +79,16 @@
     <CustomBuild Include="renderer.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="datawrapper.h">
+    <CustomBuild Include="datamodel.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_editor.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dataitem.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

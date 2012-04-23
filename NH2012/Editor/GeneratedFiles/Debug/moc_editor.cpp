@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'editor.h'
 **
-** Created: Thu 19. Apr 22:19:18 2012
+** Created: Mon 23. Apr 15:10:43 2012
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!

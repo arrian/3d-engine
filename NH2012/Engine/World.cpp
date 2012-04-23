@@ -1,21 +1,31 @@
 #include "World.h"
 
 
-World::World(Ogre::Root* root, Ogre::RenderWindow* window)
-  : root(root),
-    environment(new Environment()),
+World::World(Ogre::Root* root)
+  : Environment(),
+    root(root),
     cells(std::vector<Cell*>()),
-    player(0)
+    player(0),
+    physicsFoundation(0),
+    physicsWorld(0)
 {
+  //loading initialisation file
   //TODO extract absolute path and use boost to get relative path from current exe
   //TODO post-compile event copy ini file to executable directory
-  environment->parseIni("C:\\Dev\\Nethack2012\\NH2012\\Media\\nh2012.ini");
-
-  //loadCell("Entrance", CellType::DUNGEON);
-  //loadCell("Foyer", CellType::PREDEFINED);
-  loadCell("C:\\Dev\\Nethack2012\\NH2012\\Media\\default.level", CellType::FILE);
+  parseIni("C:\\Dev\\Nethack2012\\NH2012\\Media\\nh2012.ini");
   
-  player = new Player(environment, window);
+  //creating physics
+  physx::PxAllocatorCallback* allocator = &allocatorCallback;
+  physicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *allocator, getErrorCallback());
+  bool recordMemoryAllocations = true;
+  physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations);
+  if(!physicsWorld) std::cout << "physics world could not be created" << std::endl;
+
+  //creating initial cell
+  loadCell(defaultStartLevel, FILE_CHAR);
+  
+  //creating player and placing in initial cell
+  player = new Player(this);
   getCell("test")->addPlayer(player);
 }
 
@@ -29,19 +39,17 @@ World::~World(void)
     if(*it) delete (*it);
     (*it) = 0;
   }
+}
 
-  if(environment) delete environment;
-  environment = 0;
+void World::hookWindow(Ogre::RenderWindow* window)
+{
+  assert(player);
+  player->hook(window);
 }
 
 Player* World::getPlayer()
 {
   return player;
-}
-
-Environment* World::getEnvironment()
-{
-  return environment;
 }
 
 Cell* World::getCell(Ogre::String name)
@@ -64,6 +72,21 @@ int World::getNumberCells()
   return cells.size();
 }
 
+Ogre::Root* World::getRoot()
+{
+  return root;
+}
+
+physx::PxPhysics* World::getPhysics()
+{
+  return physicsWorld;
+}
+
+const physx::PxTolerancesScale& World::getTolerancesScale()
+{
+  return physicsWorld->getTolerancesScale();
+}
+
 void World::movePlayer(Player* player, Cell* target)
 {
   for(std::vector<Cell*>::iterator it = cells.begin(); it != cells.end(); ++it) 
@@ -81,9 +104,9 @@ void World::getCellNames(std::vector<Ogre::String> &names)
   }
 }
 
-bool World::loadCell(Ogre::String name, CellType::Type type)
+bool World::loadCell(Ogre::String name, SceneType type)
 {
-  cells.push_back(new Cell(root, environment, name, type));
+  cells.push_back(new Cell(this, name, type));
   return true;
 }
 
@@ -137,5 +160,11 @@ void World::injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 void World::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
   player->injectMouseUp(arg, id);
+}
+
+physx::PxErrorCallback& World::getErrorCallback()
+{
+  static PhysicsErrorCallback defaultCallback;
+  return defaultCallback;
 }
 

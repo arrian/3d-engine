@@ -86,6 +86,9 @@ void Environment::parseIni(std::string filename)
     enableWater = (pt.get<std::string>("Environment.Water") == TRUE);
     enableSky = (pt.get<std::string>("Environment.Sky") == TRUE);
 
+    //Levels
+    defaultStartLevel = pt.get<std::string>("Levels.DefaultStartLevel");
+
     //Architecture
     architectureDataFilename = pt.get<std::string>("Architecture.Data");
     dataManager->addData(architectureDataFilename);

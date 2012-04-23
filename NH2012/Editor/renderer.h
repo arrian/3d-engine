@@ -5,6 +5,7 @@
 #include <QGLWidget>
 #include <QX11Info>
 
+#include <OgreException.h>
 #include "../../Engine/World.h"
  
 class Renderer : public QGLWidget
@@ -12,34 +13,33 @@ class Renderer : public QGLWidget
   //Q_OBJECT;
  
  public:
-  Renderer( QWidget *parent=0 ):
-    QGLWidget( parent ),
-    mOgreWindow(NULL)
-    {
-      init("plugins_d.cfg");
-    }
+  Renderer(QWidget *parent = 0)
+    : QGLWidget(parent),
+      window(NULL),
+      world(0)
+  {
+  }
  
   virtual ~Renderer()
-    {
-      mOgreRoot->shutdown();
-      delete mOgreRoot;
-      destroy();
-    }
+  {
+    root->shutdown();
+    delete root;
+    destroy();
+  }
+
+  void init(World* world, std::string plugins);
  
  protected:
   virtual void initializeGL();
   virtual void resizeGL(int , int );
   virtual void paintGL();
  
-  void init(std::string plugins);
- 
   virtual Ogre::RenderSystem* chooseRenderer(Ogre::RenderSystemList* rsl);
  
-  Ogre::Root *mOgreRoot;
-  Ogre::RenderWindow *mOgreWindow;
-  Ogre::Camera *mCamera;
-  Ogre::Viewport *mViewport;
-  Ogre::SceneManager *mSceneMgr;
+  World* world;
+
+  Ogre::Root *root;
+  Ogre::RenderWindow *window;
 };
 
 #endif // RENDERER_H

@@ -6,6 +6,8 @@
 #include <OgreEntity.h>
 #include <OgreParticleSystem.h>
 
+#include "SceneType.h"
+#include "World.h"
 #include "Player.h."
 #include "Monster.h"
 #include "Item.h"
@@ -17,6 +19,8 @@
 #include "../Generator/Entrance.h"
 #include "../Generator/Point.h"
 
+#include <PxPhysX.h>
+#include "PxPhysicsAPI.h"
 
 #include "OgreBulletCollisionsShape.h"
 #include "Shapes/OgreBulletCollisionsBoxShape.h"
@@ -38,30 +42,16 @@
 #include "OgreBulletDynamicsConstraint.h"
 #include "Constraints/OgreBulletDynamicsPoint2pointConstraint.h"
 
-namespace CellType
-{
-  enum Type
-  {
-    OVERWORLD,
-    UNDERWORLD,
-    CAVE,
-    DUNGEON,
-    TOWN,
-    PREDEFINED,
-    ASTRAL,
-    FILE
-  };
-}
 
+class World;
 class Player;
 class Monster;//forward declaring for circular dependency
 
 class Cell
 {
 public:
-  Cell(Ogre::Root* root, Environment* environment, 
-       Ogre::String name = Ogre::String("Default Dungeon"), 
-       CellType::Type type = CellType::PREDEFINED);
+  Cell(World* world, Ogre::String name = Ogre::String("Default Dungeon"), 
+       SceneType type = PREDEFINED);
   ~Cell(void);
 
   Ogre::String getName();
@@ -76,24 +66,20 @@ public:
 
   Ogre::SceneManager* getSceneManager();
   OgreBulletDynamics::DynamicsWorld* getPhysicsWorld();
+  physx::PxScene* getPhysicsManager();
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   bool isActive();
 
 private:
-  //should this cell be updated
-  bool active;
-
-  Environment* environment;
-
-  Ogre::Root* root;
-
+  World* world;
   Ogre::SceneManager* sceneManager;
   OgreBulletDynamics::DynamicsWorld* physics;
+  physx::PxScene* physicsManager;
 
   Ogre::String name;
-  CellType::Type type;
+  SceneType type;
 
   Architecture* architecture;
   std::vector<Ogre::Light*> lights;
@@ -102,16 +88,16 @@ private:
   std::vector<Item*> items;
   Player* player;
 
+  bool active;
+
   int instanceNumber;
 
-  void generateOverworld();
-  void generateUnderworld();
   void generateCave();
   void generateDungeon();
   void generateTown();
   void generatePredefined();
-  void generateAstral();
 
-  void load(Ogre::String file);
+  void loadCharLevel(Ogre::String file);
+  void loadXmlLevel(Ogre::String file);
 };
 

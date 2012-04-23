@@ -2,16 +2,16 @@
 #define DATAWRAPPER_H
 
 #include <QAbstractItemModel>
+#include "dataitem.h"
 
-class DataWrapper : public QAbstractItemModel
+class DataModel : public QAbstractItemModel
 {
   Q_OBJECT
 
  public:
-     DataWrapper(const QString &data, QObject *parent = 0);
-     ~DataWrapper();
+     DataModel(const QString &data, QObject *parent = 0);
+     ~DataModel();
 
-     /*
      QVariant data(const QModelIndex &index, int role) const;
      Qt::ItemFlags flags(const QModelIndex &index) const;
      QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
@@ -19,11 +19,10 @@ class DataWrapper : public QAbstractItemModel
      QModelIndex parent(const QModelIndex &index) const;
      int rowCount(const QModelIndex &parent = QModelIndex()) const;
      int columnCount(const QModelIndex &parent = QModelIndex()) const;
-     */
  private:
-     //void setupModelData(const QStringList &lines, TreeItem *parent);
+     void setupModelData(const QStringList &lines, DataItem *parent);
 
-     //TreeItem *rootItem;
+     DataItem *rootItem;
 };
 
 #endif // DATAWRAPPER_H

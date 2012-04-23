@@ -3,9 +3,11 @@
 
 Singleplayer::Singleplayer(Ogre::Root* root, Ogre::RenderWindow* window, OIS::Keyboard* keyboard) : 
   Game(),
-  world(root, window),
-  console(root, window, keyboard, &world)
+  world(root),
+  console(&world, keyboard)
 {
+  world.hookWindow(window);
+  console.hookWindow(window);
 }
 
 Singleplayer::~Singleplayer(void)
@@ -30,7 +32,7 @@ void Singleplayer::injectKeyDown(const OIS::KeyEvent &arg)
 
 void Singleplayer::injectKeyUp(const OIS::KeyEvent &arg)
 {
-  if(arg.key == world.getEnvironment()->controls.console) console.setVisible(!console.isVisible());
+  if(arg.key == world.controls.console) console.setVisible(!console.isVisible());
   console.injectKeyUp(arg);
   if(console.isVisible()) return;//ignore other key notifications while console visible
 

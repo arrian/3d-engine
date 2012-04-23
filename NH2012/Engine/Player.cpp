@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Environment* environment, Ogre::RenderWindow* window) 
+Player::Player(World* world) 
   : velocity(Ogre::Vector3::ZERO),
     gravityVector(Ogre::Vector3::ZERO),
     moveForward(false), 
@@ -10,13 +10,13 @@ Player::Player(Environment* environment, Ogre::RenderWindow* window)
     run(false),
     leftHand(false),
     rightHand(false),
-    window(window),
-    environment(environment),
+    world(world),
     inventory(),
     speed(200),
     cell(0),
     oldCameraWidth(0),
     oldCameraHeight(0),
+    window(0),
     vp(0)
 {
 }
@@ -34,16 +34,25 @@ void Player::setCell(Cell* cell, Ogre::Vector3 position, Ogre::Vector3 lookAt)
     delete capsule;
     this->cell->getSceneManager()->destroyCamera(camera);
     this->cell->getSceneManager()->destroySceneNode(cameraNode);
+    this->cell->getSceneManager()->destroySceneNode(leftHandTarget);
+    this->cell->getSceneManager()->destroySceneNode(rightHandTarget);
     this->cell->getSceneManager()->destroySceneNode(node);
     this->cell->getSceneManager()->destroyEntity(entity);
   }
 
   this->cell = cell;
-
   entity = cell->getSceneManager()->createEntity("actor.mesh");
   node = cell->getSceneManager()->getRootSceneNode()->createChildSceneNode();
   node->setPosition(position);
   node->attachObject(entity);
+
+  node->showBoundingBox(true);
+
+  //hands
+  leftHandTarget = node->createChildSceneNode();
+  leftHandTarget->setPosition(Ogre::Vector3(10,0,10));
+  rightHandTarget = node->createChildSceneNode();
+  rightHandTarget->setPosition(Ogre::Vector3(10,0,-10));
 
   //camera
   cameraNode = node->createChildSceneNode(Ogre::Vector3(0,30,0));
@@ -53,12 +62,7 @@ void Player::setCell(Cell* cell, Ogre::Vector3 position, Ogre::Vector3 lookAt)
   camera->setNearClipDistance(5);
   cameraNode->attachObject(camera);
 
-  if(environment->wireframeDebug) camera->setPolygonMode(Ogre::PM_WIREFRAME);
-
-  // Create one viewport, entire window
-  //window->removeAllViewports();//ensure no viewports remaining
-  //vp = window->addViewport(camera);
-  //vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
+  if(world->wireframeDebug) camera->setPolygonMode(Ogre::PM_WIREFRAME);
 
   //physics
   physics = cell->getPhysicsWorld();
@@ -68,7 +72,7 @@ void Player::setCell(Cell* cell, Ogre::Vector3 position, Ogre::Vector3 lookAt)
   capsuleBody->getBulletRigidBody()->setAngularFactor(0.0);
   capsuleBody->getBulletRigidBody()->setSleepingThresholds(0.0, 0.0);
 
-  hook(window);//hooks the render window to the new camera
+  if(window) hook(window);//if the player has a render window then connect camera to new cell
 
   stop();
 }
@@ -112,7 +116,7 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
   else if (velocity.squaredLength() < tooSmall * tooSmall)
     velocity = Ogre::Vector3::ZERO;
 
-  if (environment->freeCameraDebug) 
+  if (world->freeCameraDebug) 
   {
     if(velocity != Ogre::Vector3::ZERO) camera->move(velocity * evt.timeSinceLastFrame);
     node->setPosition(camera->getPosition());
@@ -121,66 +125,75 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
   {
     if(velocity != Ogre::Vector3::ZERO && capsuleBody->getLinearVelocity() != Ogre::Vector3::ZERO) capsuleBody->setLinearVelocity(velocity);
   }
-
-  /*
-  //Accurate ray casting for bullet world
-  //Ray casting
-  btVector3 from = btVector3(node->getPosition().x,node->getPosition().y,node->getPosition().z);
-  //std::cout << "testing: " << node->getPosition() << std::endl; 
-  btVector3 to = btVector3(0,0,0);
-  btCollisionWorld::ClosestRayResultCallback resultCallback(from, to);
-  physics->getBulletCollisionWorld()->rayTest(from, to, resultCallback);
-
-  if(resultCallback.hasHit())
-  {
-    std::cout << "ray hit object" << std::endl;
-    // some object was hit
-  }
-  */
 }
 
 void Player::injectKeyDown(const OIS::KeyEvent &evt)
 {
-  if (evt.key == environment->controls.moveForward) moveForward = true;
-  else if (evt.key == environment->controls.moveBack) moveBack = true;
-  else if (evt.key == environment->controls.moveLeft) moveLeft = true;
-  else if (evt.key == environment->controls.moveRight) moveRight = true;
-  else if (evt.key == environment->controls.run) run = true;
+  if (evt.key == world->controls.moveForward) moveForward = true;
+  else if (evt.key == world->controls.moveBack) moveBack = true;
+  else if (evt.key == world->controls.moveLeft) moveLeft = true;
+  else if (evt.key == world->controls.moveRight) moveRight = true;
+  else if (evt.key == world->controls.run) run = true;
 }
 
 void Player::injectKeyUp(const OIS::KeyEvent &evt)
 {
-  if (evt.key == environment->controls.moveForward) moveForward = false;
-  else if (evt.key == environment->controls.moveBack) moveBack = false;
-  else if (evt.key == environment->controls.moveLeft) moveLeft = false;
-  else if (evt.key == environment->controls.moveRight) moveRight = false;
-  else if (evt.key == environment->controls.run) run = false;
+  if (evt.key == world->controls.moveForward) moveForward = false;
+  else if (evt.key == world->controls.moveBack) moveBack = false;
+  else if (evt.key == world->controls.moveLeft) moveLeft = false;
+  else if (evt.key == world->controls.moveRight) moveRight = false;
+  else if (evt.key == world->controls.run) run = false;
 }
 
 void Player::injectMouseMove(const OIS::MouseEvent &evt)
 {
   float lookResponsiveness = 0.15f;
-  if(leftHand || rightHand) lookResponsiveness = 0.05f; 
-  camera->yaw(Ogre::Degree(-evt.state.X.rel * lookResponsiveness));
-  camera->pitch(Ogre::Degree(-evt.state.Y.rel * lookResponsiveness));
+  float handResponsiveness = 0.15f;
+  if(leftHand || rightHand) lookResponsiveness = 0.05f;
+
+  Ogre::Degree xHand = Ogre::Degree(-evt.state.X.rel * lookResponsiveness);
+  Ogre::Degree yHand = Ogre::Degree(-evt.state.Y.rel * lookResponsiveness);
+
+  Ogre::Degree xLook = Ogre::Degree(-evt.state.X.rel * lookResponsiveness);
+  Ogre::Degree yLook = Ogre::Degree(-evt.state.Y.rel * lookResponsiveness);
+
+  if(leftHand)
+  {
+    leftHandTarget->yaw(xHand);
+    leftHandTarget->pitch(yHand);
+  }
+  if(rightHand)
+  {
+    rightHandTarget->yaw(xHand);
+    rightHandTarget->pitch(yHand);
+  }
+
+  camera->yaw(xLook);
+  camera->pitch(yLook);
+  leftHandTarget->yaw(xLook);
+  leftHandTarget->pitch(yLook);
+  rightHandTarget->yaw(xLook);
+  rightHandTarget->pitch(yLook);
 }
 
 void Player::injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  if(id == environment->controls.leftHand) leftHand = true;
-  if(id == environment->controls.rightHand) rightHand = true;
+  if(id == world->controls.leftHand) leftHand = true;
+  if(id == world->controls.rightHand) rightHand = true;
 }
 
 void Player::injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  if(id == environment->controls.leftHand) leftHand = false;
-  if(id == environment->controls.rightHand) rightHand = false;
+  if(id == world->controls.leftHand) leftHand = false;
+  if(id == world->controls.rightHand) rightHand = false;
 }
 
 void Player::hook(Ogre::RenderWindow* window)
 {
+  assert(window && cell);
+  this->window = window;
+  vp = 0;
   window->removeAllViewports();
-  //vp has old pointer for a moment here. not thread safe.
   vp = window->addViewport(camera);
   vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
 }
@@ -199,16 +212,5 @@ Ogre::Vector3 Player::getPosition()
   return node->getPosition();
 }
 
-void Player::moveLeftHand(const OIS::MouseEvent& evt)
-{
-  float handResponsiveness = 0.15f;
-  leftHandTarget += Ogre::Vector3(evt.state.X.rel * handResponsiveness, 0, evt.state.Y.rel * handResponsiveness);
-}
-
-void Player::moveRightHand(const OIS::MouseEvent& evt)
-{
-  float handResponsiveness = 0.15f;
-  rightHandTarget += Ogre::Vector3(evt.state.X.rel * handResponsiveness, 0, evt.state.Y.rel * handResponsiveness);
-}
 
 

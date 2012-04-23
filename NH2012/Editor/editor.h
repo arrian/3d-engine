@@ -4,20 +4,24 @@
 #include <QtGui/QMainWindow>
 #include <QFileSystemModel>
 #include "ui_editor.h"
-#include "datawrapper.h"
+#include "datamodel.h"
+
+#include "../../Engine/World.h"
 
 class Editor : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    Editor(QWidget *parent = 0, Qt::WFlags flags = 0);
-    ~Editor();
+  Editor(QWidget *parent = 0, Qt::WFlags flags = 0);
+  ~Editor();
 
 private:
-    Ui::EditorClass ui;
+  World* world;
 
-    
+  Ui::EditorClass ui;
+
+  DataModel model;
 };
 
 #endif // EDITOR_H

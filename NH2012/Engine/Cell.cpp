@@ -1,11 +1,10 @@
 #include "Cell.h"
 
-Cell::Cell(Ogre::Root* root, Environment* environment, Ogre::String name, CellType::Type type)
-  : root(root),
-    sceneManager(root->createSceneManager(Ogre::ST_INTERIOR)),
-    environment(environment),
+Cell::Cell(World* world, Ogre::String name, SceneType type)
+  : world(world),
+    sceneManager(world->getRoot()->createSceneManager(Ogre::ST_INTERIOR)),
     instanceNumber(0),
-    physics(new OgreBulletDynamics::DynamicsWorld(sceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000,-10000,-10000), Ogre::Vector3(10000,10000,10000)), Ogre::Vector3(0,-9.807,0))),
+    physics(new OgreBulletDynamics::DynamicsWorld(sceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000.0f,-10000.0f,-10000.0f), Ogre::Vector3(10000.0f,10000.0f,10000.0f)), Ogre::Vector3(0.0f,-9.807f,0.0f))),
     name(name),
     type(type),
     monsters(std::vector<Monster*>()),
@@ -14,30 +13,30 @@ Cell::Cell(Ogre::Root* root, Environment* environment, Ogre::String name, CellTy
     lights(std::vector<Ogre::Light*>()),
     particles(std::vector<Ogre::ParticleSystem*>()),
     player(0),
-    active(false)
+    active(false),
+    physicsManager(0)
 {
-  physics->setShowDebugShapes(environment->showCollisionDebug);
+  //scene physics
+  physx::PxSceneDesc desc(world->getTolerancesScale());
+  desc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
+  physicsManager = world->getPhysics()->createScene(desc);
+  physics->setShowDebugShapes(world->showCollisionDebug);
 
-  if(environment->enableShadows) sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+  if(world->enableShadows) sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
-  sceneManager->setDisplaySceneNodes(environment->isDebug());
-  sceneManager->setShowDebugShadows(environment->isDebug());
-  sceneManager->showBoundingBoxes(environment->isDebug());
+  sceneManager->setDisplaySceneNodes(world->isDebug());
+  sceneManager->setShowDebugShadows(world->isDebug());
+  sceneManager->showBoundingBoxes(world->isDebug());
   
   switch(type)
   {
-  case CellType::PREDEFINED: generatePredefined(); break;
-  case CellType::CAVE: generateCave(); break;
-  case CellType::OVERWORLD: generateOverworld(); break;
-  case CellType::DUNGEON: generateDungeon(); break;
-  case CellType::TOWN: generateTown(); break;
-  case CellType::UNDERWORLD: generateUnderworld(); break;
-  case CellType::ASTRAL: generateAstral(); break;
-  case CellType::FILE: load(name); break;
+  case PREDEFINED: generatePredefined(); break;
+  case DUNGEON: generateDungeon(); break;
+  case FILE_CHAR: loadCharLevel(name); break;
   default: break;
   }
 
-  if(environment->enableLights) addLight(Ogre::Vector3(50,50,50), true, 3250);
+  if(world->enableLights) sceneManager->setAmbientLight(Ogre::ColourValue(0.053f,0.05f,0.05f));
   else sceneManager->setAmbientLight(Ogre::ColourValue(1.0f,1.0f,1.0f));
 
   //building static geometry
@@ -46,6 +45,7 @@ Cell::Cell(Ogre::Root* root, Environment* environment, Ogre::String name, CellTy
 
 Cell::~Cell(void)
 {
+
   if(architecture) delete architecture;
   architecture = 0;
 
@@ -64,7 +64,7 @@ Cell::~Cell(void)
   if(physics) delete physics;
   physics = 0;
 
-  root->destroySceneManager(sceneManager);
+  world->getRoot()->destroySceneManager(sceneManager);
 }
 
 bool Cell::isActive()
@@ -87,10 +87,15 @@ OgreBulletDynamics::DynamicsWorld* Cell::getPhysicsWorld()
   return physics;
 }
 
+physx::PxScene* Cell::getPhysicsManager()
+{
+  return physicsManager;
+}
+
 void Cell::addPlayer(Player* player)
 {
   active = true;
-  player->setCell(this, Ogre::Vector3(600,70,600), Ogre::Vector3(0,50,600));
+  player->setCell(this, Ogre::Vector3(800,50,200), Ogre::Vector3(800,50,600));
   this->player = player;
 }
 
@@ -111,7 +116,8 @@ void Cell::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range)
   Ogre::Light* light = sceneManager->createLight("light" + Ogre::StringConverter::toString(instanceNumber));
   lights.push_back(light);
   light->setPosition(position);
-  light->setAttenuation(range, 1.0, 0.0014, 0.000007);
+  light->setAttenuation(range, 1.0f, 0.0014f, 0.000007f);
+  light->setDiffuseColour(Ogre::ColourValue(1.0f, 1.0f, 0.95f));
   light->setCastShadows(castShadows);
   instanceNumber++;
 }
@@ -139,26 +145,16 @@ void Cell::removePlayer(Player* player)
 
 void Cell::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(!environment->freezeCollisionDebug) physics->stepSimulation(evt.timeSinceLastFrame);
+  if(!world->freezeCollisionDebug) physics->stepSimulation(evt.timeSinceLastFrame);
 
   if(player) player->frameRenderingQueued(evt);
 
-  if(!environment->freezeCollisionDebug) 
+  if(!world->freezeCollisionDebug) 
   {
     for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->frameRenderingQueued(evt);
 
     physics->stepSimulation(evt.timeSinceLastFrame);
   }
-}
-
-void Cell::generateOverworld()
-{
-
-}
-
-void Cell::generateUnderworld()
-{
-
 }
 
 void Cell::generateCave()
@@ -169,10 +165,10 @@ void Cell::generateCave()
 void Cell::generateDungeon()
 {
   int SCALE = 100;
-  Ogre::String CORNER = environment->getDataManager()->getArchitecture(75)->mesh;
-  Ogre::String CENTRE = environment->getDataManager()->getArchitecture(71)->mesh;
-  Ogre::String EDGE = environment->getDataManager()->getArchitecture(95)->mesh;
-  Ogre::String EDGE_ENTRANCE = environment->getDataManager()->getArchitecture(99)->mesh;
+  Ogre::String CORNER = world->getDataManager()->getArchitecture(75)->mesh;
+  Ogre::String CENTRE = world->getDataManager()->getArchitecture(71)->mesh;
+  Ogre::String EDGE = world->getDataManager()->getArchitecture(95)->mesh;
+  Ogre::String EDGE_ENTRANCE = world->getDataManager()->getArchitecture(99)->mesh;
 
   Generator::Dungeon dungeon = Generator::Dungeon(30, 30, 15);
   for(std::vector<Generator::Room*>::iterator it = dungeon.rooms.begin(); it < dungeon.rooms.end(); ++it)
@@ -230,21 +226,16 @@ void Cell::generateTown()
 
 void Cell::generatePredefined()
 {
-  for(int i = 19; i <= 32; i++) architecture->add(environment->getDataManager()->getArchitecture(i)->mesh);
-  architecture->add(environment->getDataManager()->getArchitecture(33)->mesh, Ogre::Vector3(-380,0,0));
+  for(int i = 19; i <= 32; i++) architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
+  architecture->add(world->getDataManager()->getArchitecture(33)->mesh, Ogre::Vector3(-380,0,0));
 
   for(int i = 0; i < 10; i++)
   {
-    architecture->add(environment->getDataManager()->getArchitecture(47)->mesh, Ogre::Vector3(-445 - 100 * i,0,0));
+    architecture->add(world->getDataManager()->getArchitecture(47)->mesh, Ogre::Vector3(-445 - 100 * i,0,0));
   }
 }
 
-void Cell::generateAstral()
-{
-
-}
-
-void Cell::load(Ogre::String file)
+void Cell::loadCharLevel(Ogre::String file)
 {
   name = "test";
 
@@ -257,16 +248,32 @@ void Cell::load(Ogre::String file)
     for(int col = 0; col < line.length(); col++)
     {
       if(line[col] == '.') continue;
-      Ogre::Vector3 position(row * 100, 0, col * 100);
 
+      Ogre::Vector3 position(row * 100, 0, col * 100);
+      if(line[col] == '!') 
+      {
+        architecture->add(world->getDataManager()->getArchitecture(71)->mesh, position);
+        addLight(Ogre::Vector3(row * 100 + 50, 50, col * 100 + 50),true,4000);
+      }
+      
       Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
       int remainder = ((int) line[col] - 47) % 4;//getting required rotation
       rotation.FromAngleAxis(Ogre::Degree(remainder * 90), Ogre::Vector3::UNIT_Y);
 
-      ArchitectureModel* model = environment->getDataManager()->getArchitecture(((int)line[col]) - remainder);
+      ArchitectureModel* model = world->getDataManager()->getArchitecture(((int)line[col]) - remainder);
       if(model) architecture->add(model->mesh, position, rotation);
     }
     row++;
   }
 	infile.close();
 }
+
+void Cell::loadXmlLevel(Ogre::String file)
+{
+
+
+
+}
+
+
+

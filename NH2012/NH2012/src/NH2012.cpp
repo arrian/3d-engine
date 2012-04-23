@@ -71,8 +71,7 @@ bool NH2012::go(void)
   }
   else return false;
 
-  //sceneManager = root->createSceneManager(Ogre::ST_INTERIOR);//ST_GENERIC);
-  Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);//Set default mipmap level (NB some APIs ignore this)
+  //Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);//Set default mipmap level (NB some APIs ignore this)//causes errors with d3d11
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
   OIS::ParamList parameters;

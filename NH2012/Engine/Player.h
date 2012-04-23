@@ -8,6 +8,7 @@
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
+#include "World.h"
 #include "Cell.h"
 #include "Actor.h"
 #include "Bar.h"
@@ -21,12 +22,13 @@
 #include "OgreBulletDynamics.h"
 
 class Cell;
+class World;
 
 /*! User data.*/
 class Player
 {
 public:
-  Player(Environment* environment, Ogre::RenderWindow* window);
+  Player(World* world);
   ~Player(void);
 
   void setCell(Cell* cell, Ogre::Vector3 position, Ogre::Vector3 lookAt);
@@ -54,8 +56,8 @@ private:
   Ogre::RenderWindow* window;
   Ogre::Viewport* vp;
 
-  /* Player Environment.*/
-  Environment* environment;
+  /* Player World.*/
+  World* world;
   Cell* cell;
 
   Ogre::Entity* entity;
@@ -70,14 +72,12 @@ private:
   bool run;
   bool leftHand;
   bool rightHand;
-  Ogre::Vector3 leftHandTarget;
-  Ogre::Vector3 rightHandTarget;
+  Ogre::SceneNode* leftHandTarget;
+  Ogre::SceneNode* rightHandTarget;
   Ogre::Vector3 gravityVector;
   Ogre::Real speed;
 
   void stop();
-  void moveLeftHand(const OIS::MouseEvent& evt);
-  void moveRightHand(const OIS::MouseEvent& evt);
 
   /*! Player Physics.*/
   OgreBulletDynamics::DynamicsWorld* physics;

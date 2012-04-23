@@ -1,38 +1,48 @@
 #include "Console.h"
 
-Console::Console(Ogre::Root* root, Ogre::RenderWindow* window, OIS::Keyboard* keyboard, World* world)
-  : gui(new Gorilla::Silverback),
+Console::Console(World* world, OIS::Keyboard* keyboard)
+  : overlay(new Gorilla::Silverback),
     keyboard(keyboard),
     isShift(false),
     isControl(false),
-    window(window),
     world(world),
-    root(root)
+    window(0),
+    screen(0),
+    layer(0),
+    view(0)
 {
-  gui->loadAtlas("dejavu");
+  overlay->loadAtlas("dejavu");
   text = "";
   command = "";
-
-  screen = gui->createScreen(window->getViewport(0), "dejavu");
-  layer = screen->createLayer();
-  view = layer->createMarkupText(9, 0, 0, "");
-
-  update();
-  setVisible(false);
 }
 
 Console::~Console(void)
 {
 }
 
+void Console::hookWindow(Ogre::RenderWindow* window)
+{
+  assert(window);
+  bool visibleTemp = isVisible();
+  if(screen) overlay->destroyScreen(screen);
+  this->window = window;
+  screen = overlay->createScreen(window->getViewport(0), "dejavu");
+  layer = screen->createLayer();
+  view = layer->createMarkupText(9, 0, 0, "");
+
+  update();
+  setVisible(visibleTemp);
+}
+
 void Console::setVisible(bool visible)
 {
-  layer->setVisible(visible);
+  if(layer) layer->setVisible(visible);
 }
 
 bool Console::isVisible()
 {
-  return layer->isVisible();
+  if(layer) return layer->isVisible();
+  return false;
 }
 
 void Console::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -107,12 +117,14 @@ void Console::enter()
   else if(elements.size() == 1)
   {
     if(elements[0] == "help") help();
+    else if(elements[0] == "about") display("Copyright Arrian Purcell 2012\n");
     else if(elements[0] == "clear") clear();
     else if(elements[0] == "stats") stats();
-    else if(elements[0] == "freeze") world->getEnvironment()->freezeCollisionDebug = true;
-    else if(elements[0] == "unfreeze") world->getEnvironment()->freezeCollisionDebug = false;
-    else if(elements[0] == "freecam") world->getEnvironment()->freeCameraDebug = !world->getEnvironment()->freeCameraDebug;
+    else if(elements[0] == "freeze") world->freezeCollisionDebug = true;
+    else if(elements[0] == "unfreeze") world->freezeCollisionDebug = false;
+    else if(elements[0] == "freecam") world->freeCameraDebug = !world->freeCameraDebug;
     else if(elements[0] == "hide") setVisible(false);
+    else if(elements[0] == "refresh") hookWindow(window);
     else if(elements[0] == "screenshot")
     {
       setVisible(false);
@@ -134,6 +146,29 @@ void Console::enter()
       if(world->destroyCell(elements[1])) display("cell unloaded");
       else error("could not unload the cell");
     }
+    else if(elements[0] == "physics")
+    {
+      Cell* target = world->getCell(elements[1]);
+      if(target) 
+      {
+        physx::PxScene* physics = target->getPhysicsManager();
+        if(physics)
+        {
+          display("gravity", Ogre::StringConverter::toString(physics->getGravity().magnitude()));
+          display("current timestamp", Ogre::StringConverter::toString(physics->getTimestamp()));
+          display("number of rigid static actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_STATIC))));
+          display("number of rigid dynamic actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_DYNAMIC))));
+          display("number of cloth actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eCLOTH))));
+          display("number of particle fluid actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_FLUID))));
+          display("number of particle system actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_SYSTEM))));
+          display("number of aggregates", Ogre::StringConverter::toString(physics->getNbAggregates()));
+          display("number of articulations", Ogre::StringConverter::toString(physics->getNbArticulations()));
+          display("number of contraints", Ogre::StringConverter::toString(physics->getNbConstraints()));
+        }
+        else error("no physics associated with this cell");
+      }
+      else error("no cell named '" + elements[1] + "'");
+    }
     else noCommand(command);
   }
   else if(elements.size() == 3)
@@ -148,18 +183,20 @@ void Console::enter()
     }
     else if(elements[0] == "load")
     {
-      CellType::Type type = CellType::DUNGEON;
-      if(elements[2] == "dungeon") type = CellType::DUNGEON;
-      else if(elements[2] == "predefined") type = CellType::PREDEFINED;
-      else if(elements[2] == "file") type = CellType::FILE;
-      world->loadCell(elements[1], type);
+      SceneType type = DUNGEON;
+      if(elements[2] == "dungeon") type = DUNGEON;
+      else if(elements[2] == "predefined") type = PREDEFINED;
+      else if(elements[2] == "file") type = FILE_CHAR;
+      
+      if(world->loadCell(elements[1], type)) display("cell loaded");
+      else display("could not load the cell");
     }
     else if(elements[0] == "data")
     {
       int id = std::atoi(elements[2].c_str());
       if(elements[1] == "architecture")
       {
-        ArchitectureModel* model = world->getEnvironment()->getDataManager()->getArchitecture(id);
+        ArchitectureModel* model = world->getDataManager()->getArchitecture(id);
         if(model) 
         {
           display("name", model->name);
@@ -169,7 +206,7 @@ void Console::enter()
       }
       else if(elements[1] == "item")
       {
-        ItemModel* model = world->getEnvironment()->getDataManager()->getItem(id);
+        ItemModel* model = world->getDataManager()->getItem(id);
         if(model) 
         {
           display("name", model->name);
@@ -179,7 +216,7 @@ void Console::enter()
       }
       else if(elements[1] == "monster")
       {
-        MonsterModel* model = world->getEnvironment()->getDataManager()->getMonster(id);
+        MonsterModel* model = world->getDataManager()->getMonster(id);
         if(model) 
         {
           display("name", model->name);
@@ -231,12 +268,13 @@ void Console::enter()
 void Console::help()
 {
   display("help", "shows this list");
-  display("stats", "shows a list of statistics");
+  display("stats", "shows a list of statistics and a list of loaded cells");
   display("clear", "clears the console");
   display("freeze", "freezes physics");
   display("unfreeze", "unfreezes physics");
   display("freecam", "frees the camera");
   display("hide", "hides the console");
+  display("refresh", "temp method to rehook console to viewport");
   display("fullscreen [width] [height]", "sets the window to fullscreen mode");
   display("window [width] [height]", "sets the window to windowed mode");
   display("add [cell name] [item|monster] [x] [y] [z]", "adds the given type of entity to the named cell at the given coordinates");
@@ -246,6 +284,7 @@ void Console::help()
   display("load [cell name] [dungeon|predefined|file]", "loads a cell into memory");
   display("unload [cell name]", "unloads a cell from memory");
   display("ambient [cell name] [r] [g] [b]", "sets the ambient light in the given cell");
+  display("physics [cell name]", "shows physx physics stats for the given cell");
 }
 
 void Console::clear()
@@ -256,7 +295,7 @@ void Console::clear()
 
 void Console::update()
 {
-  view->text(text + "\n%3> " + command + "_");
+  if(view) view->text(text + "\n%3> " + command + "_");
 }
 
 void Console::backspace()
@@ -267,6 +306,12 @@ void Console::backspace()
 
 void Console::stats()
 {
+  if(!window) 
+  {
+    error("no render window");
+    return;
+  }
+
   display("average fps", Ogre::StringConverter::toString(int(window->getAverageFPS())));
   display("best fps", Ogre::StringConverter::toString(window->getBestFPS()));
   display("batches", Ogre::StringConverter::toString(window->getBatchCount()));
@@ -309,4 +354,6 @@ void Console::split(const std::string &s, char delim, std::vector<std::string> &
   std::string item;
   while(std::getline(ss, item, delim)) elems.push_back(item);
 }
+
+
 

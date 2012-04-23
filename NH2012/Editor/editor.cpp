@@ -1,23 +1,13 @@
 #include "editor.h"
 
 Editor::Editor(QWidget *parent, Qt::WFlags flags)
-    : QMainWindow(parent, flags)
+    : QMainWindow(parent, flags),
+      model(DataModel("dummy data")),
+      world(0)
 {
   ui.setupUi(this);
-
-  QFileSystemModel model;
-  model.setRootPath("");
-
-  //DataWrapper gameData(0);
+  ui.renderer->init(world, "plugins_d.cfg");
   ui.data->setModel(&model);
-
-  ui.data->setAnimated(false);
-  ui.data->setIndentation(20);
-  ui.data->setSortingEnabled(true);
-
-  ui.data->setWindowTitle(QObject::tr("Data"));
-  ui.data->resize(640, 480);
-
   ui.data->show();
 }
 
