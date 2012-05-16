@@ -1,20 +1,47 @@
 #include "Item.h"
 
+#include "Scene.h"
 
-Item::Item(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
-           Ogre::Vector3 position, int id)
- : Entity(sceneManager, physics, "item.mesh", position, id, "rock"),
-   physicsShape(new OgreBulletCollisions::BoxCollisionShape(entity->getBoundingBox().getSize()/2)),
-   physicsBody(new OgreBulletDynamics::RigidBody("item" + Ogre::StringConverter::toString(id), physics))
+
+Item::Item()
+  : BasicComponent(),
+    visual("item.mesh"),
+    physical(),
+    node(0)
 {
-  physicsBody->setShape(node, physicsShape, 0.2f, 0.95f, 1000.0f, position);
+  setPosition(Ogre::Vector3::ZERO);
+  //physicsBody->setShape(node, physicsShape, 0.2f, 0.95f, 1000.0f, position);
 }
 
+void Item::hasSceneChange()
+{
+  if(oldScene && node) oldScene->getSceneManager()->destroySceneNode(node);
+  node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+  node->setPosition(position);
+  visual.setNode(scene, node);
+  physical.setNode(scene, node);
+}
 
 Item::~Item(void)
 {
-  if(physicsBody) delete physicsBody;
-  physicsBody = 0;
-  if(physicsShape) delete physicsShape;
-  physicsShape = 0;
+  if(scene && node) scene->getSceneManager()->destroySceneNode(node);
+  node = 0;
 }
+
+bool operator==(const Item& x, const Item& y)
+{
+  return x.name == y.name && x.type == y.type && x.value == y.value;
+}
+
+void Item::frameRenderingQueued(const Ogre::FrameEvent& evt)
+{
+  physical.frameRenderingQueued(evt);
+}
+
+void Item::setPosition(Ogre::Vector3 position)
+{
+  this->position = position;
+  if(node) node->setPosition(position);
+}
+
+

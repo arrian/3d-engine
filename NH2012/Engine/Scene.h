@@ -19,40 +19,20 @@
 #include "../Generator/Entrance.h"
 #include "../Generator/Point.h"
 
-#include <PxPhysX.h>
 #include "PxPhysicsAPI.h"
+#include "characterkinematic/PxControllerManager.h"
 
-#include "OgreBulletCollisionsShape.h"
-#include "Shapes/OgreBulletCollisionsBoxShape.h"
-#include "Shapes/OgreBulletCollisionsSphereShape.h"
-#include "Shapes/OgreBulletCollisionsConeShape.h"
-#include "Shapes/OgreBulletCollisionsCylinderShape.h"
-#include "Shapes/OgreBulletCollisionsTriangleShape.h"
-#include "Shapes/OgreBulletCollisionsStaticPlaneShape.h"
-#include "Shapes/OgreBulletCollisionsCompoundShape.h"
-#include "Shapes/OgreBulletCollisionsMultiSphereShape.h"
-#include "Shapes/OgreBulletCollisionsConvexHullShape.h"
-#include "Shapes/OgreBulletCollisionsMinkowskiSumShape.h"
-#include "Shapes/OgreBulletCollisionsTrimeshShape.h"
-#include "Utils/OgreBulletCollisionsMeshToShapeConverter.h"
-#include "OgreBulletCollisionsRay.h"
-#include "Debug/OgreBulletCollisionsDebugLines.h"
-#include "OgreBulletDynamicsWorld.h"
-#include "OgreBulletDynamicsRigidBody.h"
-#include "OgreBulletDynamicsConstraint.h"
-#include "Constraints/OgreBulletDynamicsPoint2pointConstraint.h"
-
-
+//forward declaring for circular dependency
 class World;
 class Player;
-class Monster;//forward declaring for circular dependency
+class Monster;
 
-class Cell
+class Scene
 {
 public:
-  Cell(World* world, Ogre::String name = Ogre::String("Default Dungeon"), 
+  Scene(World* world, Ogre::String name = Ogre::String("Default Dungeon"), 
        SceneType type = PREDEFINED);
-  ~Cell(void);
+  ~Scene(void);
 
   Ogre::String getName();
 
@@ -65,18 +45,28 @@ public:
   void removePlayer(Player* player);
 
   Ogre::SceneManager* getSceneManager();
-  OgreBulletDynamics::DynamicsWorld* getPhysicsWorld();
   physx::PxScene* getPhysicsManager();
+  physx::PxControllerManager* getControllerManager();
+  World* getWorld();
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   bool isActive();
 
+  int getNewInstanceNumber();
+
+  bool addItems;
+  float genRadius;
+  float genAngle;
+  float genXOrigin;
+  float genYOrigin;
+
+
 private:
   World* world;
   Ogre::SceneManager* sceneManager;
-  OgreBulletDynamics::DynamicsWorld* physics;
   physx::PxScene* physicsManager;
+  physx::PxControllerManager* controllerManager;//may only need one manager in the world
 
   Ogre::String name;
   SceneType type;
@@ -99,5 +89,7 @@ private:
 
   void loadCharLevel(Ogre::String file);
   void loadXmlLevel(Ogre::String file);
+
+  bool advancePhysics(Ogre::Real dt);
 };
 

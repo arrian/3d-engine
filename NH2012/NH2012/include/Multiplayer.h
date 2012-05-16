@@ -16,7 +16,7 @@ class Multiplayer :
   public Game
 {
 public:
-  Multiplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window);
+  Multiplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* renderWindow);
   ~Multiplayer(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -28,6 +28,8 @@ public:
   void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
   void notify(Ogre::String comment);
+
+  void sceneChanged();
 
 private:
   Client* client;

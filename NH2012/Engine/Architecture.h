@@ -5,30 +5,15 @@
 #include <OgreString.h>
 #include <OgreVector3.h>
 
-#include "OgreBulletCollisionsShape.h"
-#include "Shapes/OgreBulletCollisionsBoxShape.h"
-#include "Shapes/OgreBulletCollisionsSphereShape.h"
-#include "Shapes/OgreBulletCollisionsConeShape.h"
-#include "Shapes/OgreBulletCollisionsCylinderShape.h"
-#include "Shapes/OgreBulletCollisionsTriangleShape.h"
-#include "Shapes/OgreBulletCollisionsStaticPlaneShape.h"
-#include "Shapes/OgreBulletCollisionsCompoundShape.h"
-#include "Shapes/OgreBulletCollisionsMultiSphereShape.h"
-#include "Shapes/OgreBulletCollisionsConvexHullShape.h"
-#include "Shapes/OgreBulletCollisionsMinkowskiSumShape.h"
-#include "Shapes/OgreBulletCollisionsTrimeshShape.h"
-#include "Utils/OgreBulletCollisionsMeshToShapeConverter.h"
-#include "OgreBulletCollisionsRay.h"
-#include "Debug/OgreBulletCollisionsDebugLines.h"
-#include "OgreBulletDynamicsWorld.h"
-#include "OgreBulletDynamicsRigidBody.h"
-#include "OgreBulletDynamicsConstraint.h"
-#include "Constraints/OgreBulletDynamicsPoint2pointConstraint.h" 
+#include "PxPhysicsAPI.h"
+
+class Scene;
 
 class Architecture
 {
 public:
-  Architecture(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics);
+  Architecture(Scene* scene);
+
   ~Architecture(void);
 
   /*! Adds a static mesh to the current dungeon architecture.*/
@@ -36,22 +21,17 @@ public:
 
   void build();
 private:
+  Scene* scene;
+  
   /*! Current number of physics items.*/
   int instanceNumber;
 
-  /*! Pointers to the ogre scene nodes.*/
   std::vector<Ogre::SceneNode*> nodes;
-
   std::map<Ogre::String, Ogre::Entity*> entities;
-  //std::vector<Ogre::Entity*> entities;
-  std::vector<OgreBulletDynamics::RigidBody*> bodies;
-  std::vector<OgreBulletCollisions::CollisionShape*> shapes;
-
-  OgreBulletDynamics::DynamicsWorld* physics;
-  Ogre::SceneManager* sceneManager;
-
-  OgreBulletDynamics::RigidBody* addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion);
+  std::vector<physx::PxTriangleMesh*> bodies;
 
   Ogre::StaticGeometry* geometry;
+
+  void addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion);
 };
 

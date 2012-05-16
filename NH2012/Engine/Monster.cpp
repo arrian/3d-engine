@@ -1,41 +1,50 @@
 #include "Monster.h"
 
+#include "Scene.h"
 
-Monster::Monster(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
-                 Ogre::Vector3 position, int id, int difficulty)
-  : Actor(sceneManager, physics, position, id)
+Monster::Monster()
+  : BasicComponent(),
+    speed(200),
+    node(0),
+    inventory(),
+    intelligence(),
+    visual("actor.mesh"),
+    skeleton()
 {
+  setPosition(Ogre::Vector3::ZERO);
+  setTarget(Ogre::Vector3::ZERO);
+
+  /*
   health = Bar(Ogre::Real(difficulty * difficulty));
   magic = Bar(Ogre::Real(difficulty * difficulty));
   level = Bar(Ogre::Real(difficulty));
 
   //generating name
-  if(difficulty < 5) entityName = "jackal";
-  if(difficulty < 10) entityName = "troll";
-  if(difficulty < 20) entityName = "minotaur";
-  if(difficulty < 30) entityName = "arch-lich";
-  if(difficulty < 40) entityName = "Wizard of Yendor";
-  if(difficulty < 50) entityName = "Baalzebub";
-  if(difficulty < 60) entityName = "Demogorgon";
-   
-  //filling inventory
-  inventory = Inventory(difficulty);
+  if(difficulty < 5) name = "jackal";
+  else if(difficulty < 10) name = "troll";
+  else if(difficulty < 20) name = "minotaur";
+  else if(difficulty < 30) name = "arch-lich";
+  else if(difficulty < 40) name = "Wizard of Yendor";
+  else if(difficulty < 50) name = "Baalzebub";
+  else if(difficulty < 60) name = "Demogorgon";
+  */
 
-  //other
-  target = Ogre::Vector3(0,51,0);
-  speed = 130;
 }
-
 
 Monster::~Monster(void)
 {
+
+  //scene->getSceneManager()->destroySceneNode(node);
 }
 
 void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(health.current <= 0) awareness = MonsterAttribute::DEAD;
+  intelligence.frameRenderingQueued(evt);
+  skeleton.frameRenderingQueued(evt);
+  //if(health.getCurrent() <= 0) awareness = MonsterAttribute::DEAD;
 
   //moving
+  /*
   if(evt.timeSinceLastFrame == 0 || target == node->getPosition()) return;
 
   Ogre::Vector3 unitDirection = target - node->getPosition();
@@ -49,7 +58,28 @@ void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
   else
   {
     node->translate(unitDirection * move);
-  }
+  }*/
+}
+
+bool operator==(const Monster& x, const Monster& y)
+{
+  return false;//(x.name == y.name);
+}
+
+void Monster::hasSceneChange()
+{
+  if(oldScene && node) oldScene->getSceneManager()->destroySceneNode(node);
+  node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+  node->setPosition(position);
+
+  intelligence.setNode(scene, node);
+  visual.setNode(scene, node);
+  skeleton.setNode(scene, node);
+}
+
+void Monster::setPosition(Ogre::Vector3 position)
+{
+  this->position = position;
 }
 
 void Monster::setTarget(Ogre::Vector3 target)

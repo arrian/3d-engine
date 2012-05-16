@@ -5,6 +5,7 @@
 class Bar
 {
 public:
+  Bar(void);
   Bar(Ogre::Real maxValue);
   Bar(Ogre::Real maxValue, Ogre::Real currentValue);
   ~Bar(void);
@@ -18,6 +19,16 @@ public:
   /*! Gets the fraction of the bar that is full.*/
   Ogre::Real getFraction();
 
+  Ogre::Real getMax();
+  Ogre::Real getCurrent();
+
+  void setCurrent(Ogre::Real current);
+  void setMax(Ogre::Real max);
+
+  void setFull();
+  void setEmpty();
+
+private:
   /*! Maximum value of the bar.*/
   Ogre::Real max;
 

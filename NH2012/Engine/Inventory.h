@@ -2,26 +2,24 @@
 
 #include <vector>
 #include <iostream>
-#include "ItemData.h"
+
+class Item;
 
 class Inventory
 {
 public:
   /*! Construct an empty inventory.*/
   Inventory(void);
-
-  /*! Construct an inventory with a given number of random items.*/
-  Inventory(int numberOfItems);
   
   virtual ~Inventory(void);
 
   /*! Checks if inventory contains particular item.*/
-  bool contains(ItemData item);
+  bool contains(Item* item);
 
   /*! Adds an item to the inventory.*/
-  void add(ItemData item);
+  void add(Item* item);
 private:
-  std::vector<ItemData> items;
+  std::vector<Item*> items;
 
   /*! Clears the inventory.*/
   void clear();

@@ -6,11 +6,12 @@
 #include <OgreFrameListener.h>
 
 #include "../../Engine/World.h"
+#include "../../Engine/SceneChangeListener.h"
 
-class Game
+class Game : public SceneChangeListener
 {
 public:
-  Game(void);
+  Game(Ogre::RenderWindow* renderWindow);
   virtual ~Game(void);
 
   virtual void frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
@@ -22,5 +23,8 @@ public:
   virtual void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id) = 0;
 
   virtual void notify(Ogre::String comment) = 0;
+
+protected:
+  Ogre::RenderWindow* renderWindow;
 };
 

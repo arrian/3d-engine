@@ -1,5 +1,6 @@
 #include "Environment.h"
 
+#include "NHException.h"
 
 Environment::Environment(void)
   : dataManager(new DataManager())
@@ -22,11 +23,7 @@ void Environment::parseIni(std::string filename)
   {
     std::ifstream s(filename);
 
-    if(!s)
-    {
-      std::cout << "Error opening initialisation file. Check that it exists at " << filename << "." << std::endl;
-      return;
-    }
+    if(!s) throw NHException("Error opening initialisation file.");
 
     boost::property_tree::ptree pt;
     boost::property_tree::ini_parser::read_ini(s, pt);
@@ -34,14 +31,11 @@ void Environment::parseIni(std::string filename)
     std::string TRUE = "true";
 
     //General
-    enableCollision = (pt.get<std::string>("General.EnableCollision") == TRUE);
-    enableGravity = (pt.get<std::string>("General.EnableGravity") == TRUE);
+    enablePhysics = (pt.get<std::string>("General.EnablePhysics") == TRUE);
     enableAI = (pt.get<std::string>("General.EnableAI") == TRUE);
     enableAudio = (pt.get<std::string>("General.EnableAudio") == TRUE);
 
-    hardcore = (pt.get<std::string>("General.HardcoreMode") == TRUE);
-    wizard = (pt.get<std::string>("General.WizardMode") == TRUE);
-    explore = (pt.get<std::string>("General.ExploreMode") == TRUE);
+    gravity = pt.get<float>("General.Gravity");
 
     //Controls //temp default values
     controls.moveForward = OIS::KC_W;
@@ -178,7 +172,7 @@ bool Environment::isDebug()
   return debug;
 }
 
-Ogre::Real Environment::calculateMoonPhase(Date date)
+int Environment::calculateMoonPhase(Date date)
 {
   /*
   calculates the moon phase (0-7), accurate to 1 segment.
@@ -195,13 +189,13 @@ Ogre::Real Environment::calculateMoonPhase(Date date)
       date.month += 12;
   }
   ++date.month;
-  c = 365.25 * date.year;
-  e = 30.6 * date.month;
+  c = boost::lexical_cast<int>(365.25 * date.year);
+  e = boost::lexical_cast<int>(30.6 * date.month);
   jd = c + e + date.day - 694039.09;  /* jd is total days elapsed */
   jd /= 29.53;           /* divide by the moon cycle (29.53 days) */
-  b = jd;		   /* int(jd) -> b, take integer part of jd */
+  b = boost::lexical_cast<int>(jd);		   /* int(jd) -> b, take integer part of jd */
   jd -= b;		   /* subtract integer part to leave fractional part of original jd */
-  b = jd * 8 + 0.5;	   /* scale fraction from 0-8 and round by adding 0.5 */
+  b = boost::lexical_cast<int>(jd * 8 + 0.5);	   /* scale fraction from 0-8 and round by adding 0.5 */
   b = b & 7;		   /* 0 and 8 are the same so turn 8 into 0 */
   
   return b;

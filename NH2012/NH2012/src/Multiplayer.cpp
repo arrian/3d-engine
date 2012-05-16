@@ -1,6 +1,7 @@
 #include "Multiplayer.h"
 
-Multiplayer::Multiplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window) : Game()
+Multiplayer::Multiplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* renderWindow) 
+  : Game(renderWindow)
 {
   std::string host = "127.0.0.1";
   unsigned short port = 30001;
@@ -62,4 +63,9 @@ void Multiplayer::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID i
 void Multiplayer::notify(Ogre::String comment)
 {
   std::cout << comment << std::endl;
+}
+
+void Multiplayer::sceneChanged()
+{
+
 }

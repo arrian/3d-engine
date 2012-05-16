@@ -73,7 +73,7 @@ namespace Generator
     for(std::vector<Room*>::iterator iter = rooms.begin(); iter < rooms.end(); ++iter)
     {
       if(room == *iter) continue;
-      int current = room->distance(*iter);
+      int current = (int) room->distance(*iter);
       if(current < shortest)
       {
         shortest = current;

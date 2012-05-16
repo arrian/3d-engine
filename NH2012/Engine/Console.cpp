@@ -1,5 +1,7 @@
 #include "Console.h"
 
+#include "Scene.h"
+
 Console::Console(World* world, OIS::Keyboard* keyboard)
   : overlay(new Gorilla::Silverback),
     keyboard(keyboard),
@@ -9,11 +11,11 @@ Console::Console(World* world, OIS::Keyboard* keyboard)
     window(0),
     screen(0),
     layer(0),
-    view(0)
+    view(0),
+    text(""),
+    command("")
 {
   overlay->loadAtlas("dejavu");
-  text = "";
-  command = "";
 }
 
 Console::~Console(void)
@@ -117,7 +119,7 @@ void Console::enter()
   else if(elements.size() == 1)
   {
     if(elements[0] == "help") help();
-    else if(elements[0] == "about") display("Copyright Arrian Purcell 2012\n");
+    else if(elements[0] == "about") display("Copyright Arrian Purscene 2012\n");
     else if(elements[0] == "clear") clear();
     else if(elements[0] == "stats") stats();
     else if(elements[0] == "freeze") world->freezeCollisionDebug = true;
@@ -135,39 +137,39 @@ void Console::enter()
   }
   else if(elements.size() == 2)
   {
-    if(elements[0] == "go")//moves the player to the specified cell
+    if(elements[0] == "go")//moves the player to the specified scene
     {
-      Cell* target = world->getCell(elements[1]);
+      Scene* target = world->getScene(elements[1]);
       if(target) world->movePlayer(world->getPlayer(), target);
-      else error("no cell named '" + elements[1] + "'");
+      else error("no scene named '" + elements[1] + "'");
     }
     else if(elements[0] == "unload")
     {
-      if(world->destroyCell(elements[1])) display("cell unloaded");
-      else error("could not unload the cell");
+      if(world->destroyScene(elements[1])) display("scene unloaded");
+      else error("could not unload the scene");
     }
     else if(elements[0] == "physics")
     {
-      Cell* target = world->getCell(elements[1]);
+      Scene* target = world->getScene(elements[1]);
       if(target) 
       {
         physx::PxScene* physics = target->getPhysicsManager();
         if(physics)
         {
-          display("gravity", Ogre::StringConverter::toString(physics->getGravity().magnitude()));
-          display("current timestamp", Ogre::StringConverter::toString(physics->getTimestamp()));
-          display("number of rigid static actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_STATIC))));
-          display("number of rigid dynamic actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_DYNAMIC))));
-          display("number of cloth actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eCLOTH))));
-          display("number of particle fluid actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_FLUID))));
-          display("number of particle system actors", Ogre::StringConverter::toString(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_SYSTEM))));
-          display("number of aggregates", Ogre::StringConverter::toString(physics->getNbAggregates()));
-          display("number of articulations", Ogre::StringConverter::toString(physics->getNbArticulations()));
-          display("number of contraints", Ogre::StringConverter::toString(physics->getNbConstraints()));
+          display("gravity", boost::lexical_cast<std::string>(physics->getGravity().magnitude()));
+          display("current timestamp", boost::lexical_cast<std::string>(physics->getTimestamp()));
+          display("number of rigid static actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_STATIC))));
+          display("number of rigid dynamic actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_DYNAMIC))));
+          display("number of cloth actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eCLOTH))));
+          display("number of particle fluid actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_FLUID))));
+          display("number of particle system actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_SYSTEM))));
+          display("number of aggregates", boost::lexical_cast<std::string>(physics->getNbAggregates()));
+          display("number of articulations", boost::lexical_cast<std::string>(physics->getNbArticulations()));
+          display("number of contraints", boost::lexical_cast<std::string>(physics->getNbConstraints()));
         }
-        else error("no physics associated with this cell");
+        else error("no physics associated with this scene");
       }
-      else error("no cell named '" + elements[1] + "'");
+      else error("no scene named '" + elements[1] + "'");
     }
     else noCommand(command);
   }
@@ -175,8 +177,8 @@ void Console::enter()
   {
     if(elements[0] == "fullscreen" || elements[0] == "window") 
     {
-      int width = std::atoi(elements[1].c_str());
-      int height = std::atoi(elements[2].c_str());
+      int width = boost::lexical_cast<int>(elements[1]);
+      int height = boost::lexical_cast<int>(elements[2]);
 
       if(width == 0 || height == 0) error("bad screen dimensions");
       else window->setFullscreen((elements[0] == "fullscreen"), width, height);
@@ -188,12 +190,12 @@ void Console::enter()
       else if(elements[2] == "predefined") type = PREDEFINED;
       else if(elements[2] == "file") type = FILE_CHAR;
       
-      if(world->loadCell(elements[1], type)) display("cell loaded");
-      else display("could not load the cell");
+      if(world->loadScene(elements[1], type)) display("scene loaded");
+      else display("could not load the scene");
     }
     else if(elements[0] == "data")
     {
-      int id = std::atoi(elements[2].c_str());
+      int id = boost::lexical_cast<int>(elements[2]);
       if(elements[1] == "architecture")
       {
         ArchitectureModel* model = world->getDataManager()->getArchitecture(id);
@@ -231,13 +233,13 @@ void Console::enter()
   {
     if(elements[0] == "ambient")
     {
-      float r = std::atof(elements[2].c_str());
-      float g = std::atof(elements[3].c_str());
-      float b = std::atof(elements[4].c_str());
+      float r = boost::lexical_cast<float>(elements[2]);
+      float g = boost::lexical_cast<float>(elements[3]);
+      float b = boost::lexical_cast<float>(elements[4]);
       
-      Cell* target = world->getCell(elements[1]);
+      Scene* target = world->getScene(elements[1]);
       if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(r, g, b));
-      else error("no cell named '" + elements[1] + "'");
+      else error("no scene named '" + elements[1] + "'");
     }
     else noCommand(command);
   }
@@ -245,18 +247,18 @@ void Console::enter()
   {
     if(elements[0] == "add")
     {
-      Cell* target = world->getCell(elements[1]);
+      Scene* target = world->getScene(elements[1]);
       if(target)
       {
-        int x = std::atoi(elements[3].c_str());
-        int y = std::atoi(elements[4].c_str());
-        int z = std::atoi(elements[5].c_str());
-        Ogre::Vector3 position = Ogre::Vector3(x, y, z);
+        float x = boost::lexical_cast<float>(elements[3]);
+        float y = boost::lexical_cast<float>(elements[4]);
+        float z = boost::lexical_cast<float>(elements[5]);
+        Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(x), Ogre::Real(y), Ogre::Real(z));
         if(elements[2] == "item") target->addItem(position);
         else if(elements[2] == "monster") target->addMonster(position);
         else error("no object type '" + elements[2] + "' exists");
       }
-      else error("no cell named '" + elements[1] + "'");
+      else error("no scene named '" + elements[1] + "'");
     }
     else noCommand(command);
   }
@@ -268,7 +270,7 @@ void Console::enter()
 void Console::help()
 {
   display("help", "shows this list");
-  display("stats", "shows a list of statistics and a list of loaded cells");
+  display("stats", "shows a list of statistics and a list of loaded scenes");
   display("clear", "clears the console");
   display("freeze", "freezes physics");
   display("unfreeze", "unfreezes physics");
@@ -277,14 +279,14 @@ void Console::help()
   display("refresh", "temp method to rehook console to viewport");
   display("fullscreen [width] [height]", "sets the window to fullscreen mode");
   display("window [width] [height]", "sets the window to windowed mode");
-  display("add [cell name] [item|monster] [x] [y] [z]", "adds the given type of entity to the named cell at the given coordinates");
+  display("add [scene name] [item|monster] [x] [y] [z]", "adds the given type of entity to the named scene at the given coordinates");
   display("data [item|monster|architecture] [id]", "displays the data associated with the id of the given type of entity");
   display("screenshot", "takes a screenshot and outputs to timestamped file");
-  display("go [cell name]", "moves the player to the specified cell");
-  display("load [cell name] [dungeon|predefined|file]", "loads a cell into memory");
-  display("unload [cell name]", "unloads a cell from memory");
-  display("ambient [cell name] [r] [g] [b]", "sets the ambient light in the given cell");
-  display("physics [cell name]", "shows physx physics stats for the given cell");
+  display("go [scene name]", "moves the player to the specified scene");
+  display("load [scene name] [dungeon|predefined|file]", "loads a scene into memory");
+  display("unload [scene name]", "unloads a scene from memory");
+  display("ambient [scene name] [r] [g] [b]", "sets the ambient light in the given scene");
+  display("physics [scene name]", "shows physx physics stats for the given scene");
 }
 
 void Console::clear()
@@ -319,31 +321,31 @@ void Console::stats()
   display("number of viewports", Ogre::StringConverter::toString(window->getNumViewports()));
   display("triangle count", Ogre::StringConverter::toString(window->getTriangleCount()));
   display("window size", Ogre::StringConverter::toString(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
-  display("number of loaded cells", Ogre::StringConverter::toString(world->getNumberCells()));
+  display("number of loaded scenes", Ogre::StringConverter::toString(world->getNumberScenes()));
 
   std::vector<Ogre::String> names;
-  world->getCellNames(names);
+  world->getSceneNames(names);
   Ogre::String list = "";
-  for(std::vector<Ogre::String>::iterator it = names.begin(); it < names.end(); ++it) list += (*it) + " ";
-  display("loaded cells", list);
+  for(std::vector<std::string>::iterator it = names.begin(); it < names.end(); ++it) list += (*it) + " ";
+  display("loaded scenes", list);
 }
 
-void Console::display(Ogre::String comment)
+void Console::display(std::string comment)
 {
   text += "\n" + comment;
 }
 
-void Console::display(Ogre::String highlight, Ogre::String comment)
+void Console::display(std::string highlight, std::string comment)
 {
   text += "\n%5" + highlight + "%r - " + comment;
 }
 
-void Console::error(Ogre::String comment)
+void Console::error(std::string comment)
 {
   text += "\n%4error%r - " + comment;
 }
 
-void Console::noCommand(Ogre::String command)
+void Console::noCommand(std::string command)
 {
   error("there is no command '" + command + "'");
 }

@@ -2,19 +2,49 @@
 
 #include <OgreString.h>
 
-#include "Entity.h"
-#include "ItemData.h"
 
-class Item : public Entity, public ItemData
+#include "Attributes.h"
+#include "VisualComponent.h"
+#include "PhysicalComponent.h"
+#include "BasicComponent.h"
+
+class Scene;
+
+class Item : public BasicComponent
 {
 public:
-  Item(Ogre::SceneManager* sceneManager, OgreBulletDynamics::DynamicsWorld* physics, 
-       Ogre::Vector3 position = Ogre::Vector3(0,0,0), int id = 0);
+  Item();
   virtual ~Item(void);
 
+  friend bool operator==(const Item& x, const Item& y);
+
+  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+  void setPosition(Ogre::Vector3 position);
+
+protected:
+  Ogre::Vector3 position;
+
+  Ogre::SceneNode* node;
+
+  /*! Gold value of the item.*/
+  int value;
+
+  /*! Item name.*/
+  Ogre::String name;
+
+  /*! eg. book,weapon etc.
+      Maps directly to the items.dat file
+  */
+  ItemAttribute::Type type;
   
+  /*! Item's 'special abilities'.*/
+  std::vector<GeneralAttribute::Intrinsics> intrinsics;
+
+  void hasSceneChange();
+
 private:
-  OgreBulletCollisions::BoxCollisionShape* physicsShape;
-  OgreBulletDynamics::RigidBody* physicsBody;
+  VisualComponent visual;
+  PhysicalComponent physical;
 };
 

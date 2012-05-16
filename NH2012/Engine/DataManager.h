@@ -34,7 +34,7 @@ struct MonsterModel
 {
   MonsterModel(Ogre::String name, Ogre::String mesh)
     : name(name),
-      mesh(mesh)
+    mesh(mesh)
   {
   }
 
@@ -47,6 +47,18 @@ struct MonsterModel
   Ogre::Real weight;
 };
 
+struct SceneDesc
+{
+  SceneDesc(Ogre::String name, Ogre::String file)
+    : name(name),
+    file(file)
+  {
+  }
+
+  Ogre::String file;
+  Ogre::String name;
+};
+
 typedef std::map<int, ArchitectureModel > ArchitectureList;
 typedef std::map<Ogre::String, std::vector<ArchitectureModel*> > ArchitectureGroups;
 
@@ -56,6 +68,8 @@ typedef std::map<Ogre::String, std::vector<ItemModel*> > ItemGroups;
 typedef std::map<int, MonsterModel > MonsterList;
 typedef std::map<Ogre::String, std::vector<MonsterModel*> > MonsterGroups;
 
+typedef std::map<int, SceneDesc > SceneList;
+typedef std::map<Ogre::String, std::vector<SceneDesc*> > SceneGroups;
 
 /* Handles the loading of object mesh names from the data files.*/
 class DataManager
@@ -70,6 +84,7 @@ public:
   ItemModel* getItem(int id);
   MonsterModel* getMonster(int id);
   ArchitectureModel* getArchitecture(int id);
+  SceneDesc* getScene(int id);
 private:
   std::vector<Ogre::String> files;
 
@@ -81,5 +96,8 @@ private:
 
   MonsterList monsters;
   MonsterGroups monsterGroups;
+
+  SceneList scenes;
+  SceneGroups sceneGroups;
 };
 

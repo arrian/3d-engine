@@ -7,21 +7,22 @@
 
 #include <OgreFrameListener.h>
 
-#include <PxPhysX.h>
 #include "PxPhysicsAPI.h"
-
 //#include "extensions/PxDefaultErrorCallback.h"
 #include "extensions/PxDefaultAllocator.h"
+#include "cooking/PxCooking.h"
 
 #include "SceneType.h"
-#include "Cell.h"
 #include "Environment.h"
-#include "Player.h"
 #include "DataManager.h"
 #include "PhysicsErrorCallback.h"
+#include "SceneChangeListener.h"
+#include "NHException.h"
 
 class Player;
-class Cell;
+class Monster;
+class Item;
+class Scene;
 
 class World : public Environment
 {
@@ -29,9 +30,11 @@ public:
   World(Ogre::Root* root);
   ~World(void);
 
+  void initialise(std::string iniFile);
+
   Player* getPlayer();
-  Cell* getCell(Ogre::String name);
-  Cell* getCell(unsigned int index);
+  Scene* getScene(Ogre::String name);
+  Scene* getScene(unsigned int index);
 
   Ogre::Root* getRoot();
   physx::PxPhysics* getPhysics();
@@ -39,17 +42,25 @@ public:
 
   void hookWindow(Ogre::RenderWindow* window);//convenience method for hooking the render window to the player
 
-  /* Moves the player to the target cell.*/
-  void movePlayer(Player* player, Cell* target);
+  /* Moves the player to the target scene.*/
+  void movePlayer(Player* player, Scene* target);
 
-  int getNumberCells();
-  void getCellNames(std::vector<Ogre::String> &names);
+  int getNumberScenes();
+  void getSceneNames(std::vector<Ogre::String> &names);
 
-  /* Loads a cell. Returns true if success.*/
-  bool loadCell(Ogre::String name, SceneType type);
+  /* Loads a scene. Returns the loaded scene.*/
+  Scene* loadScene(Ogre::String name, SceneType type);
 
-  /* Destroys a cell. Returns true if success.*/
-  bool destroyCell(Ogre::String name);
+  Item* createItem();
+  Monster* createMonster();
+  void releaseItem(Item* item);
+  void releaseMonster(Monster* monster);
+
+  /* Destroys a scene. Returns true if success.*/
+  bool destroyScene(Ogre::String name);
+
+  SceneChangeListener* getSceneChangeListener();
+  void setSceneChangeListener(SceneChangeListener* listener);
 
   void setSceneManager(Ogre::SceneManager* sceneManager);
   bool frameRenderingQueued(const Ogre::FrameEvent& evt);//perform all world calculations
@@ -59,18 +70,26 @@ public:
   void injectMouseMove(const OIS::MouseEvent &arg);
   void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
   void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+
+  physx::PxMaterial* getDefaultPhysicsMaterial();
 private:
   Ogre::Root* root;
+  SceneChangeListener* sceneChangeListener;
   
+  //PhysX
+  PhysicsErrorCallback errorCallback;
   physx::PxDefaultAllocator allocatorCallback;//for allocating memory to physics manager
   physx::PxFoundation* physicsFoundation;
+  physx::PxCooking* physicsCooking;
   physx::PxPhysics* physicsWorld;
+  physx::PxMaterial* physicsMaterial;//default material
+  physx::PxConvexMesh* createConvexMesh(Ogre::Entity* e);
+  physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
 
-  Player* player;
-  //std::vector<Player> players;
-  //std::vector<Monster*> monsters;//should make monsters worlwide objects
-  std::vector<Cell*> cells;
-
-  physx::PxErrorCallback& World::getErrorCallback();
+  //World Items
+  Player* player;//std::vector<Player> players;
+  std::vector<Monster*> monsters;
+  std::vector<Item*> items;
+  std::vector<Scene*> scenes;
 };
 

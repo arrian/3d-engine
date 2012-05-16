@@ -1,8 +1,8 @@
 #include "Game.h"
 
-Game::Game(void)
+Game::Game(Ogre::RenderWindow* renderWindow)
+  : renderWindow(renderWindow)
 {
-
 }
 
 Game::~Game(void)

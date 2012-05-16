@@ -22,6 +22,7 @@ void DataManager::addData(Ogre::String file)
   std::string ARCHITECTURE = "#Architecture";
   std::string MONSTERS = "#Monsters";
   std::string ITEMS = "#Items";
+  std::string SCENES = "#Scenes";
 
   files.push_back(file);
 

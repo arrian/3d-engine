@@ -28,6 +28,8 @@ public:
 
   void notify(Ogre::String comment);
 
+  void sceneChanged();
+
 private:
   World world;
   Console console;

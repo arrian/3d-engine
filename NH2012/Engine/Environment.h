@@ -112,6 +112,11 @@ public:
   */
   Ogre::String itemDataFilename;
 
+  /*! Level data filename.
+      Default is levels.dat
+  */
+  Ogre::String levelDataFilename;
+
   /*! Gets the current date.*/
   Date getDate();
 
@@ -136,26 +141,14 @@ public:
   /*! Returns true if game is in debug mode.*/
   bool isDebug();
 
-    /*! True if explore mode is activated.*/
-  bool explore;
-
-  /*! True if wizard mode is activated.*/
-  bool wizard;
-
-  /*! True if hardcore mode is activated.*/
-  bool hardcore;
-
   /*! True if debug mode is activated.*/
   bool debug;
 
   /*! True if verbose logging mode is activated.*/
   bool verbose;
 
-  /*! True if collision is enabled.*/
-  bool enableCollision;
-
-  /*! True if gravity is enabled.*/
-  bool enableGravity;
+  /*! True if physics are enabled.*/
+  bool enablePhysics;
 
   /*! True if artificial intelligence is activated.*/
   bool enableAI;
@@ -205,11 +198,14 @@ public:
   /*! True if shadow debug is visible.*/
   bool showShadowDebug;
 
+  /** Gravity factor.*/
+  float gravity;
+
 private:
   DataManager* dataManager;
 
   Ogre::String serialiseMoonPhase(int moonPhase);
-  Ogre::Real calculateMoonPhase(Date date);
+  int calculateMoonPhase(Date date);
   Ogre::String day(Date date);
   Ogre::String month(Date date);
   Ogre::String serialiseDate(Date date);

@@ -1,13 +1,22 @@
 #include "Singleplayer.h"
 
 
-Singleplayer::Singleplayer(Ogre::Root* root, Ogre::RenderWindow* window, OIS::Keyboard* keyboard) : 
-  Game(),
-  world(root),
-  console(&world, keyboard)
+Singleplayer::Singleplayer(Ogre::Root* root, Ogre::RenderWindow* renderWindow, OIS::Keyboard* keyboard) 
+  : Game(renderWindow),
+    world(root),
+    console(&world, keyboard)
 {
-  world.hookWindow(window);
-  console.hookWindow(window);
+  try
+  {
+    world.initialise("C:\\Dev\\Nethack2012\\NH2012\\Media\\nh2012.ini");
+    world.hookWindow(renderWindow);
+    console.hookWindow(renderWindow);
+    world.setSceneChangeListener(this);//listens for a scene change. used for reconnecting the console to the render window.
+  }
+  catch (NHException e)
+  {
+  	std::cout << e.what() << std::endl;
+  }
 }
 
 Singleplayer::~Singleplayer(void)
@@ -19,8 +28,6 @@ void Singleplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
   console.frameRenderingQueued(evt);
   world.frameRenderingQueued(evt);
 }
-
-//TODO find solution to chaining of events between classes
 
 void Singleplayer::injectKeyDown(const OIS::KeyEvent &arg)
 {
@@ -58,3 +65,10 @@ void Singleplayer::notify(Ogre::String comment)
 {
   console.display(comment);
 }
+
+void Singleplayer::sceneChanged()
+{
+  console.hookWindow(renderWindow);//reconnect the console to the scene
+}
+
+

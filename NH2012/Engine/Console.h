@@ -43,13 +43,13 @@ public:
   void injectKeyUp(const OIS::KeyEvent &arg);
 
   /* Displays a simple line of text.*/
-  void display(Ogre::String comment);
+  void display(std::string comment);
 
   /* Displays a highlighted section of text followed by normal text.*/
-  void display(Ogre::String highlight, Ogre::String comment);
+  void display(std::string highlight, std::string comment);
 
   /* Displays an error on the console.*/
-  void error(Ogre::String comment);
+  void error(std::string comment);
 
 private:
   /* True if shift is pressed.*/
@@ -83,10 +83,10 @@ private:
   Gorilla::MarkupText* view;
 
   /* Console internal text.*/
-  Ogre::String text;
+  std::string text;
 
   /* Current console command.*/
-  Ogre::String command;
+  std::string command;
 
   /* Submit the command for processing.*/
   void enter();
@@ -107,7 +107,7 @@ private:
   void update();
 
   /* Displays the no command error.*/
-  void noCommand(Ogre::String command);
+  void noCommand(std::string command);
 
   /* Tokenises a string by the given delimiter.*/
   void split(const std::string &s, char delim, std::vector<std::string> &elems);
