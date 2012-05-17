@@ -22,7 +22,7 @@ PhysicalComponent::~PhysicalComponent(void)
 
 void PhysicalComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(!physical) throw NHException("Physical component missed frame rendering because it is not yet created.");
+  //if(!physical) throw NHException("Physical component missed frame rendering because it is not yet created.");
 
   physx::PxTransform transform = physical->getGlobalPose();
   node->setPosition(Ogre::Vector3(transform.p.x, transform.p.y, transform.p.z));
@@ -35,8 +35,7 @@ void PhysicalComponent::hasNodeChange()
   if(physical) physical->release();//also releases shape
 
   float density = 0.0005f;
-  float radius = 10.0f;
-  float side = 15.0f;
+  float side = 0.5f;
 
   Ogre::Vector3 oPosition = node->getPosition();
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
@@ -47,3 +46,12 @@ void PhysicalComponent::hasNodeChange()
 
   physx::PxRigidBodyExt::updateMassAndInertia(*physical, density);
 }
+
+void PhysicalComponent::mapPhysical(void* target)
+{
+  physical->userData = target;
+}
+
+
+
+

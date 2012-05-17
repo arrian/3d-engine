@@ -44,7 +44,7 @@ void CameraComponent::hasNodeChange()
     camera = scene->getSceneManager()->createCamera("CameraComponent");
   }
 
-  camera->setNearClipDistance(1.0f);
+  camera->setNearClipDistance(0.01f);
   //if(world->wireframeDebug) camera->setPolygonMode(Ogre::PM_WIREFRAME);
   
   node->attachObject(camera);

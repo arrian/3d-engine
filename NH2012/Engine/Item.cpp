@@ -20,6 +20,7 @@ void Item::hasSceneChange()
   node->setPosition(position);
   visual.setNode(scene, node);
   physical.setNode(scene, node);
+  physical.mapPhysical(this);
 }
 
 Item::~Item(void)

@@ -112,5 +112,12 @@ Ogre::Vector3 Player::getPosition()
   return node->getPosition();
 }
 
+void Player::setPosition(Ogre::Vector3 position)
+{
+  node->setPosition(position);
+  skeleton.setNode(scene, node);
+  camera.setNode(scene, skeleton.getHead());
+}
+
 
 

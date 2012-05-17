@@ -56,11 +56,6 @@ public:
   int getNewInstanceNumber();
 
   bool addItems;
-  float genRadius;
-  float genAngle;
-  float genXOrigin;
-  float genYOrigin;
-
 
 private:
   World* world;

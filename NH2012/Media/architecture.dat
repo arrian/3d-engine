@@ -22,6 +22,7 @@
 
 [Miscellaneous]
 33,Connector,connector.mesh
+34,Test Room,room_test.mesh
 
 [Feudal]
 47,Hall,hall.mesh

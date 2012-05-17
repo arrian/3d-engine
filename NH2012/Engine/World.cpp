@@ -6,6 +6,7 @@
 #include "Monster.h"
 
 #include "extensions/PxVisualDebuggerExt.h"
+#include "PxTkStream.h"
 
 World::World(Ogre::Root* root)
   : Environment(),
@@ -65,6 +66,7 @@ void World::initialise(std::string iniFile)
 
   //creating initial scene
   loadScene(defaultStartLevel, FILE_CHAR);
+  //loadScene("test", PREDEFINED);
 
   //creating player and placing in initial scene
   player = new Player(this);
@@ -433,14 +435,12 @@ physx::PxTriangleMesh* World::createTriangleMesh(Ogre::Entity* e)
   //meshDesc.triangles.data    = mMeshFaces;
 
   
-  /*
-  MemoryWriteBuffer buf;
-  physx::PxOutputStream buf2;
+  PxToolkit::MemoryOutputStream buf;//MemoryWriteBuffer buf;
+  //physx::PxOutputStream buf2;
   bool status = physicsCooking->cookTriangleMesh(meshDesc, buf);
   
-  physx::PxTriangleMesh* triangleMesh = physicsWorld->createTriangleMesh(MemoryReadBuffer(buf.data));
-  */
-  physx::PxTriangleMesh* triangleMesh = 0;//temp
+  physx::PxTriangleMesh* triangleMesh = physicsWorld->createTriangleMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));//MemoryReadBuffer(buf.data));
+  //physx::PxTriangleMesh* triangleMesh = 0;//temp
 
   delete []vertices;
   delete []indices;

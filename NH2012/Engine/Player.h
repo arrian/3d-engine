@@ -26,6 +26,7 @@ public:
   ~Player(void);
 
   void setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt);
+  void setPosition(Ogre::Vector3 position);
   Ogre::Vector3 getPosition();
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);

@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{69c308ba-14f3-4e1d-bcd9-b5f304554d83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{47fb5c1c-47d7-4c1b-ad4b-d0835c834745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{552d10ee-5c15-40f6-8ca3-d3ecd5d15fed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Architecture.h">
@@ -39,9 +45,6 @@
     <ClInclude Include="Console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gorilla.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -49,15 +52,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DataManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsErrorCallback.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneChangeListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IntelligenceComponent.h">
@@ -96,15 +90,24 @@
     <ClInclude Include="PhysicalComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsErrorCallback.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
     <ClInclude Include="NHException.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneChangeListener.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneType.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Gorilla.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Architecture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Gorilla.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
@@ -126,12 +129,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DataManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsErrorCallback.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneChangeListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntelligenceComponent.cpp">
@@ -170,8 +167,17 @@
     <ClCompile Include="PhysicalComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsErrorCallback.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
     <ClCompile Include="NHException.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneChangeListener.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Gorilla.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

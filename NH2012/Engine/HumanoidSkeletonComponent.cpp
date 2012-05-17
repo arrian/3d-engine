@@ -7,8 +7,8 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
   : NodeComponent(),
     physx::PxControllerBehaviorCallback(),
     controller(0),
-    speed(40),
-    gravity(-98.1f),
+    speed(3),
+    gravity(-9.81f),
     velocity(Ogre::Vector3::ZERO)
 {
 }
@@ -20,6 +20,17 @@ HumanoidSkeletonComponent::~HumanoidSkeletonComponent(void)
 
 void HumanoidSkeletonComponent::hasNodeChange()
 {
+  if(oldScene)
+  {
+    if(head) oldScene->getSceneManager()->destroySceneNode(head);
+    if(rightHand) oldScene->getSceneManager()->destroySceneNode(rightHand);
+    if(leftHand) oldScene->getSceneManager()->destroySceneNode(leftHand);
+
+    head = 0;
+    rightHand = 0;
+    leftHand = 0;
+  }
+
   //pulling down
   //if(entity) entity->detachFromParent();
   //if(scene) scene->getSceneManager()->destroySceneNode(body);
@@ -33,13 +44,14 @@ void HumanoidSkeletonComponent::hasNodeChange()
 
   physx::PxCapsuleControllerDesc desc;
   desc.material = scene->getWorld()->getDefaultPhysicsMaterial();
-  desc.radius = 30;
-  desc.height = 80;
-  desc.density = 10;
+  desc.radius = 0.5f;
+  desc.height = 1.0f;
+  desc.density = 1.0f;
   desc.position = physx::PxExtendedVec3(node->getPosition().x, node->getPosition().y, node->getPosition().z);
-  desc.scaleCoeff = 1;
+  desc.scaleCoeff = 1.0f;
   desc.behaviorCallback = this;
   desc.callback = this;
+  desc.stepOffset = 0.4f;
 
   //set character controller desc options here
   controller = scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
@@ -51,6 +63,7 @@ void HumanoidSkeletonComponent::hasNodeChange()
   stop();
 
   head = node->createChildSceneNode();
+  head->setPosition(Ogre::Vector3(0,1.0f,0));
   rightHand = node->createChildSceneNode();
   leftHand = node->createChildSceneNode();
 }
@@ -84,9 +97,9 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
   if (accel.squaredLength() != 0)
   {
     accel.normalise();
-    velocity += accel * topSpeed * evt.timeSinceLastFrame * 10;
+    velocity += accel * topSpeed * evt.timeSinceLastFrame * 10.0f;
   }
-  else velocity -= velocity * evt.timeSinceLastFrame * 30;
+  else velocity -= velocity * evt.timeSinceLastFrame * 30.0f;
 
   Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
 
@@ -102,7 +115,7 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
   velocity.y = oldY;
   velocity.y += gravity * evt.timeSinceLastFrame;
 
-  physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * 10.0f, velocity.y * evt.timeSinceLastFrame * 10.0f, velocity.z * evt.timeSinceLastFrame * 10.0f), 0.5f, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
+  physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * 10.0f, velocity.y * evt.timeSinceLastFrame * 10.0f, velocity.z * evt.timeSinceLastFrame * 10.0f), 0.001f, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
   
   if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;
   
@@ -165,7 +178,7 @@ Ogre::SceneNode* HumanoidSkeletonComponent::getHead()
 
 void HumanoidSkeletonComponent::jump()
 {
-  velocity.y = 25.0f;
+  velocity.y = 2.5f;
 }
 
 physx::PxU32 HumanoidSkeletonComponent::getBehaviorFlags(const physx::PxShape& shape)
@@ -196,95 +209,5 @@ void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hi
   }
 }
 
-/*
-void Player::Update(double timeSinceLastFrame)
-{
-   updateAnimations(timeSinceLastFrame);
-   
-   //|||||||||||||||||||||||||||||||||||||||||||||||
-   // Turn
-   //|||||||||||||||||||||||||||||||||||||||||||||||
 
-   if (bTurnCharacter)
-   {
-      gYaw += gTurn * timeSinceLastFrame * gCharacterTurnSpeed;
-      mController->setDisplayYaw(gYaw);
-      bTurnCharacter = false;
-   }
-
-   //|||||||||||||||||||||||||||||||||||||||||||||||
-   // Movement
-   //|||||||||||||||||||||||||||||||||||||||||||||||
-   NxOgre::Vec3 disp(0,-GRAVITY,0); // default gravity
-
-   float rotation = mController->getDisplayYaw();
-   rotation *= 3.141592654f / 180; // Convert to radians
-   
-   if(bPushCharacter)
-   {
-      NxOgre::Vec3 horizontalDisp;;
-      horizontalDisp.y = 0.0f;
-      horizontalDisp.x = gCharacterVec.z * NxOgre::Math::sin(rotation) + gCharacterVec.x * NxOgre::Math::cos(rotation);
-      horizontalDisp.z = gCharacterVec.z * NxOgre::Math::cos(-rotation) + gCharacterVec.x * NxOgre::Math::sin(-rotation);
-      horizontalDisp.normalise();
-      disp += horizontalDisp * gCharacterMoveSpeed;
-      bPushCharacter = false;
-   }
-
-   disp *= timeSinceLastFrame;
-
-   //|||||||||||||||||||||||||||||||||||||||||||||||
-   // Jump
-   //|||||||||||||||||||||||||||||||||||||||||||||||
-
-   float height = GetHeight(timeSinceLastFrame); // compute height(Y) in jumping
-   if (height != 0.0f)
-   {
-      disp.y += height;
-   }
-   
-   unsigned int collisionFlags;
-   mController->move(disp,COLLIDABLE_MASK,0.000001f,collisionFlags,1.0f);
-   if(collisionFlags & NxOgre::Enums::ControllerFlag_Down)
-      StopJump(); //stop jump
-}
-
-
-void Player::move(NxOgre::Vec3 dir)
-{
-   gCharacterVec = dir;
-   bPushCharacter = true;
-}
-
-void Player::jump()
-{
-   if (gJump)  return;
-   gJumpTime = 0.0f;
-   gV0   = gJumpSpeed;
-   setBaseAnimation(ANIM_JUMP_START, true);
-   setTopAnimation(ANIM_NONE);
-}
-
-void Player::turn(float f)
-{
-   gTurn = f;
-   bTurnCharacter = true;
-}
-
-float Player::GetHeight(double elapsedTime)
-{
-    if (!gJump)  return 0.0f;
-    float Vt = gV0 - GRAVITY*gJumpTime; // Vt = Vo + GT
-    gJumpTime += elapsedTime;
-    return Vt*elapsedTime - 1/2*GRAVITY*elapsedTime*elapsedTime; // S = VtT + 1/2GT^2
-   return 0.0f;
-}
-
-void Player::StopJump()
-{
-   gJump = false;
-   if (mBaseAnimID == ANIM_JUMP_LOOP)
-      setBaseAnimation(ANIM_JUMP_END, true);
-}
-*/
 

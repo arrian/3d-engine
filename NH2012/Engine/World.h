@@ -53,6 +53,8 @@ public:
 
   Item* createItem();
   Monster* createMonster();
+  physx::PxConvexMesh* createConvexMesh(Ogre::Entity* e);
+  physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
   void releaseItem(Item* item);
   void releaseMonster(Monster* monster);
 
@@ -83,8 +85,6 @@ private:
   physx::PxCooking* physicsCooking;
   physx::PxPhysics* physicsWorld;
   physx::PxMaterial* physicsMaterial;//default material
-  physx::PxConvexMesh* createConvexMesh(Ogre::Entity* e);
-  physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
 
   //World Items
   Player* player;//std::vector<Player> players;

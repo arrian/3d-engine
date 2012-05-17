@@ -229,6 +229,18 @@ void Console::enter()
     }
     else noCommand(command);
   }
+  else if(elements.size() == 4)
+  {
+    if(elements[0] == "player_pos")
+    {
+      float x = boost::lexical_cast<float>(elements[1]);
+      float y = boost::lexical_cast<float>(elements[2]);
+      float z = boost::lexical_cast<float>(elements[3]);
+      Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(x), Ogre::Real(y), Ogre::Real(z));
+      world->getPlayer()->setPosition(position);
+    }
+    else noCommand(command);
+  }
   else if(elements.size() == 5)
   {
     if(elements[0] == "ambient")
@@ -287,6 +299,7 @@ void Console::help()
   display("unload [scene name]", "unloads a scene from memory");
   display("ambient [scene name] [r] [g] [b]", "sets the ambient light in the given scene");
   display("physics [scene name]", "shows physx physics stats for the given scene");
+  display("player_pos [x] [y] [z]", "sets the player position");
 }
 
 void Console::clear()

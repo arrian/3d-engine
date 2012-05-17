@@ -9,6 +9,18 @@
 
 class Scene;
 
+struct StaticEntity
+{
+  Ogre::Entity* entity;
+  physx::PxTriangleMesh* mesh;
+
+  StaticEntity(Ogre::Entity* entity, physx::PxTriangleMesh* mesh)
+    : entity(entity),
+      mesh(mesh)
+  {
+  }
+};
+
 class Architecture
 {
 public:
@@ -27,8 +39,8 @@ private:
   int instanceNumber;
 
   std::vector<Ogre::SceneNode*> nodes;
-  std::map<Ogre::String, Ogre::Entity*> entities;
-  std::vector<physx::PxTriangleMesh*> bodies;
+  std::map<Ogre::String, StaticEntity> statics;
+  std::vector<physx::PxRigidStatic*> actors;
 
   Ogre::StaticGeometry* geometry;
 

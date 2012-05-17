@@ -12,6 +12,9 @@ public:
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
+  /* Provides a 1:1 mapping between the physical representation and the given object.*/
+  void mapPhysical(void* target);
+
 protected:
   void hasNodeChange();
 

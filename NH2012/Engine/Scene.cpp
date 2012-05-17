@@ -19,11 +19,7 @@ Scene::Scene(World* world, Ogre::String name, SceneType type)
     particles(),
     player(0),
     active(false),
-    addItems(false),
-    genRadius(500),
-    genAngle(0),
-    genXOrigin(800),
-    genYOrigin(200)
+    addItems(false)
 {
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
@@ -53,10 +49,10 @@ Scene::Scene(World* world, Ogre::String name, SceneType type)
 
   switch(type)
   {
-  case PREDEFINED: generatePredefined(); break;
-  case DUNGEON: generateDungeon(); break;
-  case FILE_CHAR: loadCharLevel(name); break;
-  default: break;
+    case PREDEFINED: generatePredefined(); break;
+    case DUNGEON: generateDungeon(); break;
+    case FILE_CHAR: loadCharLevel(name); break;
+    default: break;
   }
 
   if(world->enableLights) sceneManager->setAmbientLight(Ogre::ColourValue(0.053f,0.05f,0.05f));
@@ -64,11 +60,6 @@ Scene::Scene(World* world, Ogre::String name, SceneType type)
 
   //building static geometry
   architecture->build();
-
-  //temporary ground plane
-  physx::PxRigidStatic* plane = PxCreatePlane(*world->getPhysics(), physx::PxPlane(physx::PxVec3(0,1,0), 0), *world->getDefaultPhysicsMaterial());
-  physicsManager->addActor(*plane);
-
 }
 
 Scene::~Scene(void)
@@ -126,7 +117,7 @@ physx::PxControllerManager* Scene::getControllerManager()
 void Scene::addPlayer(Player* player)
 {
   active = true;
-  player->setScene(this, Ogre::Vector3(800,80,200), Ogre::Vector3(800,50,600));
+  player->setScene(this, Ogre::Vector3(0,100,0), Ogre::Vector3(800,50,600));
   this->player = player;
 }
 
@@ -192,12 +183,10 @@ void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
   physicsManager->fetchResults(true);
   if(player) player->frameRenderingQueued(evt);
 
-  //if(!world->freezeCollisionDebug)
+  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->frameRenderingQueued(evt);//iterate monsters
+  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) (*it)->frameRenderingQueued(evt);//iterate items
 
-  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) if(*it) (*it)->frameRenderingQueued(evt);//iterate monsters
-  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) if(*it) (*it)->frameRenderingQueued(evt);//iterate items
-
-  advancePhysics(evt.timeSinceLastFrame);
+  if(!world->freezeCollisionDebug) advancePhysics(evt.timeSinceLastFrame);
 }
 
 bool Scene::advancePhysics(Ogre::Real dt)
@@ -208,9 +197,18 @@ bool Scene::advancePhysics(Ogre::Real dt)
   physicsManager->simulate(stepSize);
 
   //profiling box creation
-  if(addItems) addItem(Ogre::Vector3(genXOrigin + genRadius * std::cos(genAngle),300,genYOrigin + genRadius * std::sin(genAngle)));
-  genAngle += 0.1f;
-
+  if(addItems)
+  {
+    addItem(Ogre::Vector3(800,2,200));
+    addItem(Ogre::Vector3(800,2,200));
+    addItem(Ogre::Vector3(800,2,200));
+    addItem(Ogre::Vector3(800,2,200));
+    addItem(Ogre::Vector3(800,2,200));
+    addItem(Ogre::Vector3(800,2,200));
+    addItem(Ogre::Vector3(800,2,200));
+    addItem(Ogre::Vector3(800,2,200));
+    addItem(Ogre::Vector3(800,2,200));
+  }
 
   return true;
 }
@@ -284,6 +282,8 @@ void Scene::generateTown()
 
 void Scene::generatePredefined()
 {
+  architecture->add(world->getDataManager()->getArchitecture(34)->mesh);
+  /*
   for(int i = 19; i <= 32; i++) architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
   architecture->add(world->getDataManager()->getArchitecture(33)->mesh, Ogre::Vector3(-380.0f, 0.0f, 0.0f));
 
@@ -291,6 +291,7 @@ void Scene::generatePredefined()
   {
     architecture->add(world->getDataManager()->getArchitecture(47)->mesh, Ogre::Vector3(-445.0f - 100.0f * i, 0.0f, 0.0f));
   }
+  */
 }
 
 void Scene::loadCharLevel(Ogre::String file)
