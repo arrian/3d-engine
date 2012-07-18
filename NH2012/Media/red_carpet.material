@@ -1,0 +1,36 @@
+
+// blender material: red_carpet
+material red_carpet 
+{
+    receive_shadows on
+    technique b2ogre_1342180154.619
+    {
+        pass b2ogre_1342180154.619
+        {
+            ambient 0.800000011920929 0.0 0.012660980224609375 1.0
+            diffuse 0.7733333702882135 0.0 0.012238947952937451 1.0
+            specular 0.6944444179534912 0.15265088359998913 0.14848009013304875 1.0 12.5
+            emissive 0.07680008525848514 0.0 0.0012154554327707956 1.0
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+            texture_unit b2ogre_1342180154.62
+            {
+                texture red_texture_carpet_tip.png
+                scale 0.27358248364103155 0.2923939037013242
+            }
+        }
+    }
+}
