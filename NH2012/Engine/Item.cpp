@@ -5,7 +5,7 @@
 
 Item::Item()
   : BasicComponent(),
-    visual("item.mesh"),
+    visual("crate.mesh"),
     physical(),
     node(0)
 {

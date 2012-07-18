@@ -41,6 +41,8 @@ public:
 
   void stop();
 
+  void setGravity(float gravity);
+
 private:
   World* world;
   Scene* scene;
@@ -52,5 +54,7 @@ private:
   VisualComponent visual;
 
   Inventory inventory;
+
+  bool addItem;
 };
 

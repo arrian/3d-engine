@@ -7,7 +7,7 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
   : NodeComponent(),
     physx::PxControllerBehaviorCallback(),
     controller(0),
-    speed(3),
+    speed(1),
     gravity(-9.81f),
     velocity(Ogre::Vector3::ZERO)
 {
@@ -99,7 +99,12 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
     accel.normalise();
     velocity += accel * topSpeed * evt.timeSinceLastFrame * 10.0f;
   }
-  else velocity -= velocity * evt.timeSinceLastFrame * 30.0f;
+  else 
+  {
+    Ogre::Vector3 reduce = velocity * evt.timeSinceLastFrame * 10.0f;
+    if(velocity.squaredLength() > reduce.squaredLength()) velocity -= reduce;//comparing with reduction length reduces jitter at low frame rates
+    else velocity = Ogre::Vector3::ZERO;
+  }
 
   Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
 
@@ -143,23 +148,26 @@ void HumanoidSkeletonComponent::setRightHand(bool state)
   moveRightHand = state;
 }
 
-
 void HumanoidSkeletonComponent::setRun(bool state)
 {
   run = state;
 }
+
 void HumanoidSkeletonComponent::setMoveRight(bool state)
 {
   moveRight = state;
 }
+
 void HumanoidSkeletonComponent::setMoveLeft(bool state)
 {
   moveLeft = state;
 }
+
 void HumanoidSkeletonComponent::setMoveBackward(bool state)
 {
   moveBack = state;
 }
+
 void HumanoidSkeletonComponent::setMoveForward(bool state)
 {
   moveForward = state;
@@ -209,5 +217,16 @@ void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hi
   }
 }
 
+void HumanoidSkeletonComponent::setGravity(float gravity)
+{
+  this->gravity = gravity;
+}
 
+Ogre::Vector3 HumanoidSkeletonComponent::getForwardPosition(Ogre::Real distance)
+{
+  Ogre::Vector3 position = node->getOrientation().zAxis();
+  position *= distance;
+  position = node->getPosition() - position;
+  return position;
+}
 

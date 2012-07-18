@@ -18,8 +18,7 @@ Scene::Scene(World* world, Ogre::String name, SceneType type)
     lights(),
     particles(),
     player(0),
-    active(false),
-    addItems(false)
+    active(false)
 {
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
@@ -117,7 +116,7 @@ physx::PxControllerManager* Scene::getControllerManager()
 void Scene::addPlayer(Player* player)
 {
   active = true;
-  player->setScene(this, Ogre::Vector3(0,100,0), Ogre::Vector3(800,50,600));
+  player->setScene(this, Ogre::Vector3(0,10,0), Ogre::Vector3(800,50,600));
   this->player = player;
 }
 
@@ -129,6 +128,7 @@ void Scene::addMonster(Ogre::Vector3 position)
   monsters.push_back(monster);
 }
 
+//TODO use references rather than pointers
 void Scene::addItem(Ogre::Vector3 position)
 {
   Item* item = this->getWorld()->createItem();
@@ -195,20 +195,6 @@ bool Scene::advancePhysics(Ogre::Real dt)
   if(accumulator < stepSize) return false;
   accumulator -= stepSize;
   physicsManager->simulate(stepSize);
-
-  //profiling box creation
-  if(addItems)
-  {
-    addItem(Ogre::Vector3(800,2,200));
-    addItem(Ogre::Vector3(800,2,200));
-    addItem(Ogre::Vector3(800,2,200));
-    addItem(Ogre::Vector3(800,2,200));
-    addItem(Ogre::Vector3(800,2,200));
-    addItem(Ogre::Vector3(800,2,200));
-    addItem(Ogre::Vector3(800,2,200));
-    addItem(Ogre::Vector3(800,2,200));
-    addItem(Ogre::Vector3(800,2,200));
-  }
 
   return true;
 }
@@ -282,7 +268,16 @@ void Scene::generateTown()
 
 void Scene::generatePredefined()
 {
-  architecture->add(world->getDataManager()->getArchitecture(34)->mesh);
+  for(int i = 106; i <= 123; i++)
+  {
+    architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
+
+  }
+
+  addLight(Ogre::Vector3(0,10,0),false,50);
+  addLight(Ogre::Vector3(0,10,-30),false,50);
+  addLight(Ogre::Vector3(10,10,-80),false,50);
+  //architecture->add(world->getDataManager()->getArchitecture(34)->mesh);
   /*
   for(int i = 19; i <= 32; i++) architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
   architecture->add(world->getDataManager()->getArchitecture(33)->mesh, Ogre::Vector3(-380.0f, 0.0f, 0.0f));

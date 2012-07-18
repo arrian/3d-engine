@@ -143,6 +143,11 @@ void Console::enter()
       if(target) world->movePlayer(world->getPlayer(), target);
       else error("no scene named '" + elements[1] + "'");
     }
+    else if(elements[0] == "player_gravity")
+    {
+      float gravity = boost::lexical_cast<float>(elements[1]);
+      world->getPlayer()->setGravity(gravity);
+    }
     else if(elements[0] == "unload")
     {
       if(world->destroyScene(elements[1])) display("scene unloaded");

@@ -36,12 +36,12 @@ Architecture::~Architecture(void)
   }
 }
 
-void Architecture::add(Ogre::String meshName, Ogre::Vector3 position, Ogre::Quaternion quaternion)
+void Architecture::add(Ogre::String meshName, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
   addStaticTrimesh(meshName, 0.2f, 0.7f, position, quaternion);
 }
 
-void Architecture::addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion)
+void Architecture::addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
   Ogre::Entity* entity = 0;
   physx::PxTriangleMesh* mesh = 0;
@@ -62,7 +62,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, Ogre::Real restitutio
   {
     std::cout << "creating " << meshName << std::endl;
     entity = scene->getSceneManager()->createEntity(meshName);
-    mesh = scene->getWorld()->createTriangleMesh(entity);
+    mesh = scene->getWorld()->createTriangleMeshV2(entity);
     statics.insert(std::pair<Ogre::String,StaticEntity>(meshName, StaticEntity(entity,mesh)));
   }
 
@@ -75,7 +75,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, Ogre::Real restitutio
   actors.push_back(actor);
   instanceNumber++;
 
-  geometry->addEntity(entity, position, quaternion);
+  geometry->addEntity(entity, position, quaternion, scale);
 }
 
 void Architecture::build()

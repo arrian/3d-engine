@@ -23,7 +23,7 @@ PhysicalComponent::~PhysicalComponent(void)
 void PhysicalComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   //if(!physical) throw NHException("Physical component missed frame rendering because it is not yet created.");
-
+  if(physical->isSleeping()) return;//no need to update the object if it has not moved
   physx::PxTransform transform = physical->getGlobalPose();
   node->setPosition(Ogre::Vector3(transform.p.x, transform.p.y, transform.p.z));
   node->setOrientation(Ogre::Quaternion(transform.q.w,transform.q.x,transform.q.y,transform.q.z));

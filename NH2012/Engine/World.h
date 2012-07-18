@@ -6,6 +6,7 @@
 #include <OISMouse.h>
 
 #include <OgreFrameListener.h>
+#include <OgreVector3.h>
 
 #include "PxPhysicsAPI.h"
 //#include "extensions/PxDefaultErrorCallback.h"
@@ -27,6 +28,47 @@ class Scene;
 class World : public Environment
 {
 public:
+
+  ////////////////////////////////////////////////////////////////
+  //Physx cooking stuff
+  class Params
+  {
+  public:
+    Ogre::Vector3 mScale;
+    std::map<Ogre::String, physx::PxMaterial*> mMaterialBindings;
+    bool mAddBackfaces;
+
+    Params() : mScale(Ogre::Vector3(1,1,1)), mAddBackfaces(false) {}
+    ~Params() {}
+
+    Params& scale(const Ogre::Vector3 &scale) { mScale = scale; return *this; }
+    Params& materials(std::map<Ogre::String, physx::PxMaterial*> &bindings) { mMaterialBindings = bindings; return *this; }
+    Params& backfaces(bool addBackfaces) { mAddBackfaces = addBackfaces; return *this; }
+  };
+
+  class AddedMaterials
+  {
+  public:
+    physx::PxMaterial **materials;
+    physx::PxU32  materialCount; 
+
+    AddedMaterials() : materials(nullptr) {}
+    ~AddedMaterials() { if (materials) delete[] materials; }
+  };
+
+  struct MeshInfo
+  {
+    std::vector<Ogre::Vector3> vertices;//vertex buffer
+    std::vector<int> indices;//index buffer
+    std::vector<Ogre::String> materials;//assigns a material to each triangle.
+  };
+
+  void getMeshInfo(Ogre::MeshPtr mesh, Params &params, MeshInfo &outInfo);
+  //void mergeVertices(MeshInfo &outInfo, float fMergeDist = 1e-3f);
+
+  //end of physx cooking stuff
+  ////////////////////////////////////////////////////////////////////////////////
+
   World(Ogre::Root* root);
   ~World(void);
 
@@ -55,6 +97,7 @@ public:
   Monster* createMonster();
   physx::PxConvexMesh* createConvexMesh(Ogre::Entity* e);
   physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
+  physx::PxTriangleMesh* createTriangleMeshV2(Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);
   void releaseItem(Item* item);
   void releaseMonster(Monster* monster);
 
@@ -78,6 +121,14 @@ private:
   Ogre::Root* root;
   SceneChangeListener* sceneChangeListener;
   
+
+
+  //World Items
+  Player* player;//std::vector<Player> players;
+  std::vector<Monster*> monsters;
+  std::vector<Item*> items;
+  std::vector<Scene*> scenes;
+
   //PhysX
   PhysicsErrorCallback errorCallback;
   physx::PxDefaultAllocator allocatorCallback;//for allocating memory to physics manager
@@ -85,11 +136,5 @@ private:
   physx::PxCooking* physicsCooking;
   physx::PxPhysics* physicsWorld;
   physx::PxMaterial* physicsMaterial;//default material
-
-  //World Items
-  Player* player;//std::vector<Player> players;
-  std::vector<Monster*> monsters;
-  std::vector<Item*> items;
-  std::vector<Scene*> scenes;
 };
 

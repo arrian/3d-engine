@@ -19,7 +19,7 @@ public:
 
   void patrol(Ogre::Vector3 from, Ogre::Vector3 to);
 
-  void wander();
+  void wander(Ogre::Vector3 around, Ogre::Real distance);
 
   void find();
 

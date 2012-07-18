@@ -55,8 +55,6 @@ public:
 
   int getNewInstanceNumber();
 
-  bool addItems;
-
 private:
   World* world;
   Ogre::SceneManager* sceneManager;

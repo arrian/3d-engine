@@ -184,10 +184,10 @@
     <None Include="..\Media\items.dat">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\Media\architecture.dat">
+    <None Include="..\Media\monsters.dat">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\Media\monsters.dat">
+    <None Include="..\Media\architecture.dat">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

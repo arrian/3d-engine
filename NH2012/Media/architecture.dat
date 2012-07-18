@@ -20,9 +20,12 @@
 31,Preset 13,r13.mesh
 32,Preset 14,r14.mesh
 
+
 [Miscellaneous]
 33,Connector,connector.mesh
 34,Test Room,room_test.mesh
+
+
 
 [Feudal]
 47,Hall,hall.mesh
@@ -45,6 +48,27 @@
 
 104,Hall Tall,hall_tall.mesh
 105,Hall Tall Entrance, hall_tall_entrance.mesh
+
+
+[Theatre Preset]
+106,Theatre 1,t1.mesh
+107,Theatre 2,t2.mesh
+108,Theatre 3,t3.mesh
+109,Theatre 4,t4.mesh
+110,Theatre 5,t5.mesh
+111,Theatre 6,t6.mesh
+112,Theatre 7,t7.mesh
+113,Theatre 8,t8.mesh
+114,Theatre 9,t9.mesh
+115,Theatre 10,t10.mesh
+116,Theatre 11,t11.mesh
+117,Theatre 12,t12.mesh
+118,Theatre 13,t13.mesh
+119,Theatre 14,t14.mesh
+120,Theatre 15,t15.mesh
+121,Theatre 16,t16.mesh
+122,Theatre 17,seating.mesh
+123,Theatre 18,theatre.mesh
 
 [Castle Hall]
 

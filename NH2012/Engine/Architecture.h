@@ -29,7 +29,7 @@ public:
   ~Architecture(void);
 
   /*! Adds a static mesh to the current dungeon architecture.*/
-  void add(Ogre::String meshName, Ogre::Vector3 position = Ogre::Vector3(0,0,0), Ogre::Quaternion quaternion = Ogre::Quaternion::IDENTITY);
+  void add(Ogre::String meshName, Ogre::Vector3 position = Ogre::Vector3(0,0,0), Ogre::Quaternion quaternion = Ogre::Quaternion::IDENTITY, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE);
 
   void build();
 private:
@@ -44,6 +44,6 @@ private:
 
   Ogre::StaticGeometry* geometry;
 
-  void addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion);
+  void addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE);
 };
 

@@ -165,56 +165,56 @@
 163,hard hat,hat.mesh
 
 [Gloves]
-164,leather gloves
-165,old gloves
-166,gauntlets of dexterity
-167,padded gloves
-168,gauntlets of fumbling
-169,riding gloves
-170,gauntlets of power
-171,fencing gloves
+164,leather gloves,gloves.mesh
+165,old gloves,gloves.mesh
+166,gauntlets of dexterity,gloves.mesh
+167,padded gloves,gloves.mesh
+168,gauntlets of fumbling,gloves.mesh
+169,riding gloves,gloves.mesh
+170,gauntlets of power,gloves.mesh
+171,fencing gloves,gloves.mesh
 
 [Shields]
-172,small shield
-173,orcish shield
-174,red-eyed shield
-175,Uruk-hai shield
-176,white-handed shield
-177,elven shield
-178,blue and green shield
-179,dwarvish roundshield
-180,large round shield
-181,large shield
-182,shield of reflection
-183,polished silver shield
+172,small shield,shield.mesh
+173,orcish shield,shield.mesh
+174,red-eyed shield,shield.mesh
+175,Uruk-hai shield,shield.mesh
+176,white-handed shield,shield.mesh
+177,elven shield,shield.mesh
+178,blue and green shield,shield.mesh
+179,dwarvish roundshield,shield.mesh
+180,large round shield,shield.mesh
+181,large shield,shield.mesh
+182,shield of reflection,shield.mesh
+183,polished silver shield,shield.mesh
 
 [Boots]
-184,low boots
-185,walking shoes
-186,elven boots
-187,mud boots
-188,kicking boots
-189,buckled boots
-190,fumble boots
-191,riding boots
-192,levitation boots
-193,snow boots
-194,jumping boots
-195,hiking boots
-196,speed boots
-197,combat boots
-198,water walking boots
-199,jungle boots
-200,high boots
-201,jackboots
-202,iron shoes
-203,hard shoes
+184,low boots,boots.mesh
+185,walking shoes,boots.mesh
+186,elven boots,boots.mesh
+187,mud boots,boots.mesh
+188,kicking boots,boots.mesh
+189,buckled boots,boots.mesh
+190,fumble boots,boots.mesh
+191,riding boots,boots.mesh
+192,levitation boots,boots.mesh
+193,snow boots,boots.mesh
+194,jumping boots,boots.mesh
+195,hiking boots,boots.mesh
+196,speed boots,boots.mesh
+197,combat boots,boots.mesh
+198,water walking boots,boots.mesh
+199,jungle boots,boots.mesh
+200,high boots,boots.mesh
+201,jackboots,boots.mesh
+202,iron shoes,boots.mesh
+203,hard shoes,boots.mesh
 
 [Food]
 204,meatball
 205,meat ring
 206,meat stick
-207,egg
+207,egg,egg.mesh
 208,tripe ration
 209,huge chunk of meat
 210,corpse
@@ -224,53 +224,53 @@
 212,eucalyptus leaf
 213,clove of garlic
 214,sprig of wolfsbane
-215,apple
-216,carrot
-217,pear
-218,banana
-219,orange
-220,melon
+215,apple,apple.mesh
+216,carrot.carrot.mesh
+217,pear,pear.mesh
+218,banana,banana.mesh
+219,orange,orange.mesh
+220,melon,melon.mesh
 221,slime mold
 
 [Human Food]
-222,fortune cookie
+222,fortune cookie,cookie.mesh
 223,candy bar
 224,cream pie
-225,lump of royal jelly
-226,pancake
+225,lump of royal jelly,jelly.mesh
+226,pancake,pancake.mesh
 227,C-ration
 228,K-ration
 229,cram ration
 230,food ration
 231,lembas wafer
-232,tin
+232,tin,tin.mesh
 
 [Containers]
-233,sack
-234,bag
-235,large box
-236,chest
-237,ice box
-238,bag of holding
-239,bag of tricks
-240,oilskin sack
+233,sack,sack.mesh
+234,bag,bag.mesh
+235,large box,box.mesh
+236,chest,chest.mesh
+237,ice box,box.mesh
+238,bag of holding,bag.mesh
+239,bag of tricks,bag.mesh
+240,oilskin sack,sack.mesh
 
 [Unlocking Tools]
-241,credit card
-242,lock pick
-243,skeleton key
-244,key
+241,credit card,credit_card.mesh
+242,lock pick,lock_pick.mesh
+243,skeleton key,key.mesh
+244,key,key.mesh
 
 [Light Sources]
-245,tallow candle
-246,candle
-247,wax candle
-248,brass lantern
-249,oil lamp
-250,lamp
-251,magic lamp
-252,Candelabrum of Invocation
-253,candelabrum
+245,tallow candle,candle.mesh
+246,candle,candle.mesh
+247,wax candle,candle.mesh
+248,brass lantern,lamp.mesh
+249,oil lamp,lamp.mesh
+250,lamp,lamp.mesh
+251,magic lamp,lamp.mesh
+252,Candelabrum of Invocation,candelabrum.mesh
+253,candelabrum,candelabrum.mesh
 
 [Instruments]
 254,tin whistle
@@ -296,11 +296,11 @@
 274,silver bell
 
 [Traps]
-275,beartrap
+275,beartrap,beartrap.mesh
 276,land mine
 
 [Tools]
-277,pick-axe
+277,pick-axe,pick.mesh
 278,grappling hook
 279,iron hook
 280,unicorn horn
@@ -364,7 +364,7 @@
 332,rock
 
 [Miscellaneous]
-333,gold piece
+333,gold piece,gold.mesh
 334,boulder
 335,statue
 336,heavy iron ball
@@ -372,3 +372,7 @@
 338,acid venom
 339,blinding venom
 
+#dynamic objects that the player can interact with but have no other effects
+[Dynamic]
+340,Crate,crate.mesh
+341,Barrel,barrel.mesh

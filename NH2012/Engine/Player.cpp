@@ -9,7 +9,8 @@ Player::Player(World* world)
     inventory(),
     camera(),
     skeleton(),
-    visual("actor.mesh")
+    visual("actor.mesh"),
+    addItem(false)
 {
 }
 
@@ -53,8 +54,11 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
 
 void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
+  //std::cout << "x:" << node->getPosition().x << " z:" <<  node->getPosition().z << " y:" <<  node->getPosition().y << std::endl;
   skeleton.frameRenderingQueued(evt);
   camera.frameRenderingQueued(evt);//for aspect ratio changes
+
+  if(addItem) scene->addItem(skeleton.getForwardPosition(3.0));//adding items if the key was pressed
 }
 
 void Player::injectKeyDown(const OIS::KeyEvent &evt)
@@ -65,7 +69,7 @@ void Player::injectKeyDown(const OIS::KeyEvent &evt)
   else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(true);
   else if (evt.key == world->controls.run) skeleton.setRun(true);
   else if (evt.key == world->controls.jump) skeleton.jump();
-  else if (evt.key == OIS::KC_1) scene->addItems = true;
+  else if (evt.key == OIS::KC_1) addItem = true;
 }
 
 void Player::injectKeyUp(const OIS::KeyEvent &evt)
@@ -75,7 +79,7 @@ void Player::injectKeyUp(const OIS::KeyEvent &evt)
   else if (evt.key == world->controls.moveLeft) skeleton.setMoveLeft(false);
   else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(false);
   else if (evt.key == world->controls.run) skeleton.setRun(false);
-  else if (evt.key == OIS::KC_1) scene->addItems = false;
+  else if (evt.key == OIS::KC_1) addItem = false;
 }
 
 void Player::injectMouseMove(const OIS::MouseEvent &evt)
@@ -119,5 +123,8 @@ void Player::setPosition(Ogre::Vector3 position)
   camera.setNode(scene, skeleton.getHead());
 }
 
-
+void Player::setGravity(float gravity)
+{
+  skeleton.setGravity(gravity);
+}
 
