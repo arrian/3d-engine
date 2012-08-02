@@ -14,11 +14,6 @@
 #include "Architecture.h"
 #include "Environment.h"
 
-#include "../Generator/Dungeon.h"
-#include "../Generator/Room.h"
-#include "../Generator/Entrance.h"
-#include "../Generator/Point.h"
-
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxControllerManager.h"
 
@@ -49,6 +44,8 @@ public:
   physx::PxControllerManager* getControllerManager();
   World* getWorld();
 
+  int getSceneID();
+
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   bool isActive();
@@ -76,7 +73,7 @@ private:
   int instanceNumber;
 
   void generateCave();
-  void generateDungeon();
+  //void generateDungeon();
   void generateTown();
   void generatePredefined();
 

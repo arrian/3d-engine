@@ -49,7 +49,7 @@ Scene::Scene(World* world, Ogre::String name, SceneType type)
   switch(type)
   {
     case PREDEFINED: generatePredefined(); break;
-    case DUNGEON: generateDungeon(); break;
+    //case DUNGEON: generateDungeon(); break;
     case FILE_CHAR: loadCharLevel(name); break;
     default: break;
   }
@@ -204,6 +204,7 @@ void Scene::generateCave()
 
 }
 
+/*
 void Scene::generateDungeon()
 {
   Ogre::Real SCALE(100.0f);
@@ -260,6 +261,7 @@ void Scene::generateDungeon()
 
   //dungeon.output();
 }
+*/
 
 void Scene::generateTown()
 {
@@ -332,6 +334,12 @@ void Scene::loadXmlLevel(Ogre::String file)
 World* Scene::getWorld()
 {
   return world;
+}
+
+int Scene::getSceneID()
+{
+  throw NHException("get scene id not implemented.");
+  return 0;
 }
 
 

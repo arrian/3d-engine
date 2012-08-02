@@ -26,6 +26,7 @@ material plaster1
             scene_blend_op add
             shading gouraud
             transparent_sorting on
+            tex_coord_set 0
             texture_unit b2ogre_1342180154.636
             {
                 texture plas0002b.jpg

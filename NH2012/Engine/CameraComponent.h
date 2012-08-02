@@ -18,6 +18,8 @@ public:
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
+  void rayQuery();
+
 private:
   Ogre::Camera* camera;
 

@@ -60,3 +60,19 @@ void CameraComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
     oldCameraHeight = viewport->getActualHeight();
   }
 }
+
+void CameraComponent::rayQuery()
+{
+  Ogre::Vector3 oOrigin = camera->getPosition();
+  Ogre::Vector3 oUnitDir = camera->getDirection();
+  physx::PxVec3 origin = physx::PxVec3(oOrigin.x, oOrigin.y, oOrigin.z);
+  physx::PxVec3 unitDir = physx::PxVec3(oUnitDir.x, oUnitDir.y, oUnitDir.z);
+  physx::PxReal distance = 10.0;
+  physx::PxSceneQueryFlags outputFlags = physx::PxSceneQueryFlags();
+  physx::PxRaycastHit hit;
+  if(scene->getPhysicsManager()->raycastSingle(origin, unitDir, distance, outputFlags, hit))
+  {
+    //got a ray hit
+    //(hit.shape->userData);
+  }
+}
