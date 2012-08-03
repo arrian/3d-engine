@@ -109,6 +109,7 @@ int World::getNumberScenes()
   return scenes.size();
 }
 
+/*WARNING: May be a null pointer.*/
 Ogre::Root* World::getRoot()
 {
   return root;

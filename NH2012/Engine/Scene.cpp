@@ -46,13 +46,15 @@ Scene::Scene(World* world, Ogre::String name, SceneType type)
   
   architecture = new Architecture(this);
 
+  load(name);//loading the scene file
+  
+  /*
   switch(type)
   {
     case PREDEFINED: generatePredefined(); break;
-    //case DUNGEON: generateDungeon(); break;
-    case FILE_CHAR: loadCharLevel(name); break;
+    case FILE_XML: loadXmlLevel(name);break;
     default: break;
-  }
+  }*/
 
   if(world->enableLights) sceneManager->setAmbientLight(Ogre::ColourValue(0.053f,0.05f,0.05f));
   else sceneManager->setAmbientLight(Ogre::ColourValue(1.0f,1.0f,1.0f));
@@ -199,86 +201,15 @@ bool Scene::advancePhysics(Ogre::Real dt)
   return true;
 }
 
-void Scene::generateCave()
-{
-
-}
-
 /*
-void Scene::generateDungeon()
-{
-  Ogre::Real SCALE(100.0f);
-  Ogre::String CORNER = world->getDataManager()->getArchitecture(75)->mesh;
-  Ogre::String CENTRE = world->getDataManager()->getArchitecture(71)->mesh;
-  Ogre::String EDGE = world->getDataManager()->getArchitecture(95)->mesh;
-  Ogre::String EDGE_ENTRANCE = world->getDataManager()->getArchitecture(99)->mesh;
-
-  Generator::Dungeon dungeon = Generator::Dungeon(30, 30, 15);
-  for(std::vector<Generator::Room*>::iterator it = dungeon.rooms.begin(); it < dungeon.rooms.end(); ++it)
-  {
-    Generator::Room* room = (*it);
-
-    for(int i = room->topLeft.x + 1; i < room->topRight.x; i++)
-    {
-      for(int j = room->topLeft.y + 1; j < room->bottomLeft.y; j++)
-      {
-        architecture->add(CENTRE, Ogre::Vector3(i * SCALE, 0, j * SCALE));
-      }
-    }
-
-    Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
-
-    Ogre::Real i = 0.0f;
-    for(std::vector<Generator::Point*>::iterator cornerIter = room->corners.begin(); cornerIter < room->corners.end(); ++cornerIter)
-    {
-      rotation.FromAngleAxis(Ogre::Degree(Ogre::Real(i)), Ogre::Vector3::UNIT_Y);
-      architecture->add(CORNER, Ogre::Vector3((*cornerIter)->x * SCALE, 0, (*cornerIter)->y * SCALE), rotation);
-      i += 90.0f;
-    }
-
-    for(int j = room->topLeft.x + 1; j < room->topRight.x; j++)
-    {
-      rotation.FromAngleAxis(Ogre::Degree(90), Ogre::Vector3::UNIT_Y);
-      if(room->isEntrance(Generator::Point(j,room->topLeft.y - 1))) architecture->add(EDGE_ENTRANCE, Ogre::Vector3(j * SCALE, 0, room->topLeft.y * SCALE), rotation);
-      else architecture->add(EDGE, Ogre::Vector3(j * SCALE, 0, room->topLeft.y * SCALE), rotation);
-
-      rotation.FromAngleAxis(Ogre::Degree(270), Ogre::Vector3::UNIT_Y);
-      if(room->isEntrance(Generator::Point(j,room->bottomLeft.y + 1))) architecture->add(EDGE_ENTRANCE, Ogre::Vector3(j * SCALE, 0, room->bottomLeft.y * SCALE), rotation);
-      architecture->add(EDGE, Ogre::Vector3(j * SCALE, 0, room->bottomLeft.y * SCALE), rotation);
-    }
-
-    for(int j = room->topLeft.y + 1; j < room->bottomLeft.y; j++)
-    {
-      rotation.FromAngleAxis(Ogre::Degree(180), Ogre::Vector3::UNIT_Y);
-      if(room->isEntrance(Generator::Point(room->topLeft.x - 1, j))) architecture->add(EDGE_ENTRANCE, Ogre::Vector3(room->topLeft.x * SCALE, 0, j * SCALE), rotation);
-      else architecture->add(EDGE, Ogre::Vector3(room->topLeft.x * SCALE, 0, j * SCALE), rotation);
-
-      rotation.FromAngleAxis(Ogre::Degree(0), Ogre::Vector3::UNIT_Y);
-      if(room->isEntrance(Generator::Point(room->topRight.x + 1, j))) architecture->add(EDGE_ENTRANCE, Ogre::Vector3(room->topRight.x * SCALE, 0, j * SCALE), rotation);
-      else architecture->add(EDGE, Ogre::Vector3(room->topRight.x * SCALE, 0, j * SCALE), rotation);
-    }
-  }
-
-  //dungeon.output();
-}
-*/
-
-void Scene::generateTown()
-{
-
-}
-
 void Scene::generatePredefined()
 {
-  for(int i = 106; i <= 123; i++)
-  {
-    architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
-
-  }
+  for(int i = 106; i <= 123; i++) architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
 
   addLight(Ogre::Vector3(0,10,0),false,50);
   addLight(Ogre::Vector3(0,10,-30),false,50);
   addLight(Ogre::Vector3(10,10,-80),false,50);
+  
   //architecture->add(world->getDataManager()->getArchitecture(34)->mesh);
   /*
   for(int i = 19; i <= 32; i++) architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
@@ -289,46 +220,23 @@ void Scene::generatePredefined()
     architecture->add(world->getDataManager()->getArchitecture(47)->mesh, Ogre::Vector3(-445.0f - 100.0f * i, 0.0f, 0.0f));
   }
   */
-}
+}*/
 
-void Scene::loadCharLevel(Ogre::String file)
+void Scene::load(std::string file)
 {
-  name = "test";
+   std::ifstream myfile(file);
+   rapidxml::xml_document<> doc;
 
-  std::string line;
-	std::ifstream infile;
-	infile.open(file);
-  unsigned int row = 0;
-  while(std::getline(infile, line))
-  {
-    for(unsigned int col = 0; col < line.length(); col++)
-    {
-      if(line[col] == '.') continue;
+   /* "Read file into vector<char>"  See linked thread above*/
+   std::vector<char> buffer((std::istreambuf_iterator<char>(myfile)), std::istreambuf_iterator<char>());
 
-      Ogre::Vector3 position(row * 100.0f, 0.0f, col * 100.0f);
-      if(line[col] == '!') 
-      {
-        architecture->add(world->getDataManager()->getArchitecture(71)->mesh, position);
-        addLight(Ogre::Vector3(row * 100.0f + 50.0f, 50.0f, col * 100.0f + 50.0f),true,4000.0f);
-      }
-      
-      Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
-      int remainder = ((int) line[col] - 47) % 4;//getting required rotation
-      rotation.FromAngleAxis(Ogre::Degree(remainder * 90.0f), Ogre::Vector3::UNIT_Y);
+   buffer.push_back('\0');
 
-      ArchitectureModel* model = world->getDataManager()->getArchitecture(((int)line[col]) - remainder);
-      if(model) architecture->add(model->mesh, position, rotation);
-    }
-    row++;
-  }
-	infile.close();
-}
+   std::cout << &buffer[0] << endl; /*test the buffer */
 
-void Scene::loadXmlLevel(Ogre::String file)
-{
+   doc.parse<0>(&buffer[0]); 
 
-
-
+   cout << "Name of my first node is: " << doc.first_node()->name() << "\n";  /*test the xml_document */
 }
 
 World* Scene::getWorld()

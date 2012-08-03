@@ -69,7 +69,7 @@ public:
   //end of physx cooking stuff
   ////////////////////////////////////////////////////////////////////////////////
 
-  World(Ogre::Root* root);
+  World(Ogre::Root* root = 0);
   ~World(void);
 
   void initialise(std::string iniFile);
@@ -121,8 +121,6 @@ private:
   Ogre::Root* root;
   SceneChangeListener* sceneChangeListener;
   
-
-
   //World Items
   Player* player;//std::vector<Player> players;
   std::vector<Monster*> monsters;

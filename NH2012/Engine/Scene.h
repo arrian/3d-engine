@@ -71,14 +71,9 @@ private:
   bool active;
 
   int instanceNumber;
-
-  void generateCave();
-  //void generateDungeon();
-  void generateTown();
-  void generatePredefined();
-
-  void loadCharLevel(Ogre::String file);
-  void loadXmlLevel(Ogre::String file);
+  
+  /*void generatePredefined();*/
+  void load(std::string String file);
 
   bool advancePhysics(Ogre::Real dt);
 };
