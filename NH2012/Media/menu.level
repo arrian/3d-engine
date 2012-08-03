@@ -1,9 +1,0 @@
-<level id="1" name="Menu" ambient_colour="1,1,1" fog_colour="1,1,1" fog_density="0" fog_start="0" fog_end="0">
-  <player portal_target="Menu 4" notes="the recommended player position. only used if not entering cell through portal"/>
-  <architecture id="1" ref_id="37" position="0,0,0" rotation="0,0,0" scale="1" notes="basic mesh object" />
-  <architecture id="2" ref_id="100" portal_target="Menu 4" position="0,100,0" notes="a player travel portal to the target level and object id" />
-  <light id="3" ref_id="101" position="50,50,50" shadows="false" range="3000" notes="a basic light" />
-  <portal id="4" position="0,0,0" />
-  <item id="5" ref_id="56" position="0,0,0" />
-  <monster id="6" ref_id="13" position="0,0,300" />
-</level>
