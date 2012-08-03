@@ -190,5 +190,11 @@
     <None Include="..\Media\architecture.dat">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\Media\sounds.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\Media\scenes.dat">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

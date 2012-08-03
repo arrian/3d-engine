@@ -19,7 +19,7 @@ Portal::~Portal(void)
 
 void Portal::loadTarget()
 {
-  target = scene->getWorld()->loadScene(scene->getWorld()->getDataManager()->getScene(targetID)->file, FILE_XML);
+  target = scene->getWorld()->loadScene(targetID);
 }
 
 Scene* Portal::getTarget()

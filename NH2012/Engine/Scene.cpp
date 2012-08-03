@@ -59,8 +59,8 @@ Scene::Scene(World* world, int id)
   }
   else
   {
-    name = sceneDesc.name;
-    load(sceneDesc.file);//loading the scene file
+    name = sceneDesc->name;
+    load(sceneDesc->file);//loading the scene file
   }
 
   if(world->enableLights) sceneManager->setAmbientLight(Ogre::ColourValue(0.053f,0.05f,0.05f));
@@ -205,25 +205,6 @@ bool Scene::advancePhysics(Ogre::Real dt)
   return true;
 }
 
-/*
-void Scene::generatePredefined()
-{
-  for(int i = 106; i <= 123; i++) architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
-
-  addLight(Ogre::Vector3(0,10,0),false,50);
-  addLight(Ogre::Vector3(0,10,-30),false,50);
-  addLight(Ogre::Vector3(10,10,-80),false,50);
-  
-  //architecture->add(world->getDataManager()->getArchitecture(34)->mesh);
-  for(int i = 19; i <= 32; i++) architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
-  architecture->add(world->getDataManager()->getArchitecture(33)->mesh, Ogre::Vector3(-380.0f, 0.0f, 0.0f));
-
-  for(int i = 0; i < 10; i++)
-  {
-    architecture->add(world->getDataManager()->getArchitecture(47)->mesh, Ogre::Vector3(-445.0f - 100.0f * i, 0.0f, 0.0f));
-  }
-}*/
-
 void Scene::load(std::string file)
 {
    std::ifstream streamfile(file);
@@ -233,11 +214,34 @@ void Scene::load(std::string file)
 
    buffer.push_back('\0');//terminating the buffer
 
-   std::cout << &buffer[0] << endl; /*test the buffer */
+   //std::cout << &buffer[0] << std::endl; /*test the buffer */
 
-   doc.parse<0>(&buffer[0]); 
+   doc.parse<0>(&buffer[0]);
 
-   cout << "Name of my first node is: " << doc.first_node()->name() << "\n";  /*test the xml_document */
+   //description attributes
+   /*
+   Ogre::Degree north;
+   Ogre::Real fogStart;
+   Ogre::Real fogEnd;
+   Ogre::Colour fogColour;
+   */
+   
+   rapidxml::xml_node<>* root = doc.first_node("scene");
+   //root->first_attribute("gravity")->value();
+   
+   rapidxml::xml_node<>* architectureNode = root->first_node("architecture");
+   
+   while(architectureNode != 0)
+   {
+     int id = boost::lexical_cast<int>(architectureNode->first_attribute("id")->value());
+     architecture->add(world->getDataManager()->getArchitecture(id)->mesh);
+     architectureNode = architectureNode->next_sibling("architecture");
+   }
+   
+   //temp lighting
+   addLight(Ogre::Vector3(0,10,0),false,50);
+   addLight(Ogre::Vector3(0,10,-30),false,50);
+   addLight(Ogre::Vector3(10,10,-80),false,50);
 }
 
 World* Scene::getWorld()

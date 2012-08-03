@@ -6,7 +6,6 @@
 #include <OgreEntity.h>
 #include <OgreParticleSystem.h>
 
-#include "SceneType.h"
 #include "World.h"
 #include "Player.h."
 #include "Monster.h"
@@ -60,7 +59,6 @@ private:
   physx::PxControllerManager* controllerManager;//may only need one manager in the world
 
   Ogre::String name;
-  SceneType type;
 
   Architecture* architecture;
   std::vector<Ogre::Light*> lights;
@@ -74,7 +72,7 @@ private:
   int instanceNumber;
   
   /*void generatePredefined();*/
-  void load(std::string String file);
+  void load(std::string file);
 
   bool advancePhysics(Ogre::Real dt);
   

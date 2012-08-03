@@ -69,11 +69,11 @@ void World::initialise(std::string iniFile)
 
   //creating initial scene
   //loadScene(defaultStartLevel, FILE_CHAR);
-  loadScene("test", PREDEFINED);
+  loadScene(0);
 
   //creating player and placing in initial scene
   player = new Player(this);
-  getScene("test")->addPlayer(player);
+  getScene(0)->addPlayer(player);
 
   physx::PxExtensionVisualDebugger::connect(physicsWorld->getPvdConnectionManager(), "127.0.0.1", 5425, 10000);
 }
@@ -98,6 +98,7 @@ Scene* World::getScene(Ogre::String name)
   return 0;
 }
 
+/*Warning: This index is different to the actual scene index. Need to refactor.*/
 Scene* World::getScene(unsigned int index)
 {
   if(index < scenes.size()) return scenes[index];
@@ -142,9 +143,9 @@ void World::getSceneNames(std::vector<Ogre::String> &names)
   }
 }
 
-Scene* World::loadScene(Ogre::String name, SceneType type)
+Scene* World::loadScene(int id)
 {
-  Scene* scene = new Scene(this, name, type);
+  Scene* scene = new Scene(this, id);
   scenes.push_back(scene);
   return scene;
 }

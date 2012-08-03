@@ -2,7 +2,7 @@
 
 #include <OgreFrameListener.h>
 
-Server::Server(boost::asio::io_service& io_service, unsigned short port)
+Server::Server(unsigned short port)
   : world(),//initialise server world
     io_service(),
     port(port),

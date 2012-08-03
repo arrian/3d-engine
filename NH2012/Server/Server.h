@@ -7,6 +7,8 @@
 #include <boost/array.hpp>
 #include <boost/bind.hpp>
 
+#include "../Engine/World.h"
+
 using boost::asio::ip::udp;
 
 /**

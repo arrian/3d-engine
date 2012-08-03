@@ -7,7 +7,6 @@
 #include <OISKeyboard.h>
 #include <OgreString.h>
 
-#include "SceneType.h"
 #include "World.h"
 #include "Gorilla.h"
 

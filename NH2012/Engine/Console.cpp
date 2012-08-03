@@ -143,6 +143,11 @@ void Console::enter()
       if(target) world->movePlayer(world->getPlayer(), target);
       else error("no scene named '" + elements[1] + "'");
     }
+    else if(elements[0] == "load")
+    {
+      if(world->loadScene(boost::lexical_cast<int>(elements[1]))) display("scene loaded");
+      else display("could not load the scene");
+    }
     else if(elements[0] == "player_gravity")
     {
       float gravity = boost::lexical_cast<float>(elements[1]);
@@ -187,16 +192,6 @@ void Console::enter()
 
       if(width == 0 || height == 0) error("bad screen dimensions");
       else window->setFullscreen((elements[0] == "fullscreen"), width, height);
-    }
-    else if(elements[0] == "load")
-    {
-      SceneType type = DUNGEON;
-      if(elements[2] == "dungeon") type = DUNGEON;
-      else if(elements[2] == "predefined") type = PREDEFINED;
-      else if(elements[2] == "file") type = FILE_CHAR;
-      
-      if(world->loadScene(elements[1], type)) display("scene loaded");
-      else display("could not load the scene");
     }
     else if(elements[0] == "data")
     {
@@ -300,7 +295,7 @@ void Console::help()
   display("data [item|monster|architecture] [id]", "displays the data associated with the id of the given type of entity");
   display("screenshot", "takes a screenshot and outputs to timestamped file");
   display("go [scene name]", "moves the player to the specified scene");
-  display("load [scene name] [dungeon|predefined|file]", "loads a scene into memory");
+  display("load [scene id]", "loads a scene into memory");
   display("unload [scene name]", "unloads a scene from memory");
   display("ambient [scene name] [r] [g] [b]", "sets the ambient light in the given scene");
   display("physics [scene name]", "shows physx physics stats for the given scene");

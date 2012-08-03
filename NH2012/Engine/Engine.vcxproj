@@ -76,6 +76,8 @@
     <None Include="..\Media\architecture.dat" />
     <None Include="..\Media\items.dat" />
     <None Include="..\Media\monsters.dat" />
+    <None Include="..\Media\scenes.dat" />
+    <None Include="..\Media\sounds.dat" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{73AA2BBC-22D7-44A1-9222-A1BD72F36105}</ProjectGuid>

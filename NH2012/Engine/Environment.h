@@ -95,7 +95,8 @@ public:
   /*! Stores the control mapping.*/
   Controls controls;
 
-  Ogre::String defaultStartLevel;
+
+  Ogre::String sceneDataFilename;
 
   /*! Architecture data filename.
       Default is architecture.dat

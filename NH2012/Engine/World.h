@@ -13,7 +13,6 @@
 #include "extensions/PxDefaultAllocator.h"
 #include "cooking/PxCooking.h"
 
-#include "SceneType.h"
 #include "Environment.h"
 #include "DataManager.h"
 #include "PhysicsErrorCallback.h"
@@ -85,13 +84,13 @@ public:
   void hookWindow(Ogre::RenderWindow* window);//convenience method for hooking the render window to the player
 
   /* Moves the player to the target scene.*/
-  void movePlayer(Player* player, Scene* target);
+  void movePlayer(Player* player, Scene* target); 
 
   int getNumberScenes();
   void getSceneNames(std::vector<Ogre::String> &names);
 
   /* Loads a scene. Returns the loaded scene.*/
-  Scene* loadScene(Ogre::String name, SceneType type);
+  Scene* loadScene(int id);
 
   Item* createItem();
   Monster* createMonster();
