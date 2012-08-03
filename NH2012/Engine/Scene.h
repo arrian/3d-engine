@@ -25,8 +25,7 @@ class Monster;
 class Scene
 {
 public:
-  Scene(World* world, Ogre::String name = Ogre::String("Default Dungeon"), 
-       SceneType type = PREDEFINED);
+  Scene(World* world, int id = 0);
   ~Scene(void);
 
   Ogre::String getName();
@@ -53,6 +52,8 @@ public:
   int getNewInstanceNumber();
 
 private:
+  int id;
+
   World* world;
   Ogre::SceneManager* sceneManager;
   physx::PxScene* physicsManager;
@@ -76,5 +77,8 @@ private:
   void load(std::string String file);
 
   bool advancePhysics(Ogre::Real dt);
+  
+  float accumulator;
+  float stepSize;
 };
 

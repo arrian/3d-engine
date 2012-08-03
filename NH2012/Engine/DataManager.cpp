@@ -8,10 +8,11 @@ DataManager::DataManager(void)
     items(ItemList()),
     itemGroups(ItemGroups()),
     monsters(MonsterList()),
-    monsterGroups(MonsterGroups())
+    monsterGroups(MonsterGroups()),
+    scenes(SceneList()),
+    sceneGroups(SceneGroups())
 {
 }
-
 
 DataManager::~DataManager(void)
 {
@@ -47,6 +48,7 @@ void DataManager::addData(Ogre::String file)
       if(type == ARCHITECTURE && !architectureGroups.count(group)) architectureGroups.insert(std::pair<Ogre::String, std::vector<ArchitectureModel*> >(group,std::vector<ArchitectureModel*>()));
       if(type == MONSTERS && !monsterGroups.count(group)) monsterGroups.insert(std::pair<Ogre::String, std::vector<MonsterModel*> >(group,std::vector<MonsterModel*>()));
       if(type == ITEMS && !itemGroups.count(group)) itemGroups.insert(std::pair<Ogre::String, std::vector<ItemModel*> >(group,std::vector<ItemModel*>()));
+      if(type == SCENES && !sceneGroups.count(group)) sceneGroups.insert(std::pair<Ogre::String, std::vector<SceneDesc*> >(group,std::vector<SceneDesc*>()));
       continue;
     }
 
@@ -77,6 +79,12 @@ void DataManager::addData(Ogre::String file)
       items.insert(std::pair<int, ItemModel>(id, model));
       itemGroups.find(group)->second.push_back(&items.find(id)->second);//ugly
     }
+    else if(type == SCENES)
+    {
+      SceneDesc desc(name, mesh);
+      scenes.insert(std::pair<int, SceneDesc>(id, desc));
+      sceneGroups.find(group)->second.push_back(&scenes.find(id)->second);
+    }
   }
 }
 
@@ -96,6 +104,12 @@ ArchitectureModel* DataManager::getArchitecture(int id)
 {
   if(architecture.count(id) == 0) return 0;
   return &((*(architecture.find(id))).second);
+}
+
+SceneDesc* DataManager::getScene(int id)
+{
+  if(scenes.count(id) == 0) return 0;
+  return &((*(scenes.find(id))).second);
 }
 
 

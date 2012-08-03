@@ -1,5 +1,5 @@
 #Scenes
-#Filename
+#ID,Name,Filename
 
-theatre.scene
-mansion.scene
+[Default]
+0,Theatre,theatre.scene

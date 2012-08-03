@@ -4,21 +4,24 @@
 #include "extensions/PxDefaultSimulationFilterShader.h"
 #include "extensions/PxSimpleFactory.h"
 
+//need to include this directory
+#include "../../RapidXml/rapidxml-1.13/rapidxml.hpp"
 
-Scene::Scene(World* world, Ogre::String name, SceneType type)
+Scene::Scene(World* world, int id)
   : world(world),
+    id(id),
     sceneManager(world->getRoot()->createSceneManager(Ogre::ST_INTERIOR)),
     physicsManager(0),
     controllerManager(0),
     instanceNumber(0),
-    name(name),
-    type(type),
     monsters(),
     items(),
     lights(),
     particles(),
     player(0),
-    active(false)
+    active(false),
+    accumulator(0.0f),
+    stepSize(1.0f / 60.0f)
 {
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
@@ -46,15 +49,19 @@ Scene::Scene(World* world, Ogre::String name, SceneType type)
   
   architecture = new Architecture(this);
 
-  load(name);//loading the scene file
+  SceneDesc* sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
   
-  /*
-  switch(type)
+  if(sceneDesc == 0) 
   {
-    case PREDEFINED: generatePredefined(); break;
-    case FILE_XML: loadXmlLevel(name);break;
-    default: break;
-  }*/
+    //prefer throwing an exception here
+    std::cout << "Could not load the scene with the id " << id << std::endl;
+    name = "Error Scene";
+  }
+  else
+  {
+    name = sceneDesc.name;
+    load(sceneDesc.file);//loading the scene file
+  }
 
   if(world->enableLights) sceneManager->setAmbientLight(Ogre::ColourValue(0.053f,0.05f,0.05f));
   else sceneManager->setAmbientLight(Ogre::ColourValue(1.0f,1.0f,1.0f));
@@ -175,9 +182,6 @@ int Scene::getNewInstanceNumber()
   return instanceNumber;
 }
 
-float accumulator = 0.0f;
-float stepSize = 1.0f / 60.0f;
-
 void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   if(!physicsManager) std::cout << "no physics found for this frame" << std::endl;
@@ -211,7 +215,6 @@ void Scene::generatePredefined()
   addLight(Ogre::Vector3(10,10,-80),false,50);
   
   //architecture->add(world->getDataManager()->getArchitecture(34)->mesh);
-  /*
   for(int i = 19; i <= 32; i++) architecture->add(world->getDataManager()->getArchitecture(i)->mesh);
   architecture->add(world->getDataManager()->getArchitecture(33)->mesh, Ogre::Vector3(-380.0f, 0.0f, 0.0f));
 
@@ -219,18 +222,16 @@ void Scene::generatePredefined()
   {
     architecture->add(world->getDataManager()->getArchitecture(47)->mesh, Ogre::Vector3(-445.0f - 100.0f * i, 0.0f, 0.0f));
   }
-  */
 }*/
 
 void Scene::load(std::string file)
 {
-   std::ifstream myfile(file);
+   std::ifstream streamfile(file);
    rapidxml::xml_document<> doc;
 
-   /* "Read file into vector<char>"  See linked thread above*/
-   std::vector<char> buffer((std::istreambuf_iterator<char>(myfile)), std::istreambuf_iterator<char>());
+   std::vector<char> buffer((std::istreambuf_iterator<char>(streamfile)), std::istreambuf_iterator<char>());
 
-   buffer.push_back('\0');
+   buffer.push_back('\0');//terminating the buffer
 
    std::cout << &buffer[0] << endl; /*test the buffer */
 
@@ -246,11 +247,7 @@ World* Scene::getWorld()
 
 int Scene::getSceneID()
 {
-  throw NHException("get scene id not implemented.");
-  return 0;
+  return id;
 }
-
-
-
 
 
