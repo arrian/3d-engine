@@ -207,41 +207,56 @@ bool Scene::advancePhysics(Ogre::Real dt)
 
 void Scene::load(std::string file)
 {
-   std::ifstream streamfile(file);
-   rapidxml::xml_document<> doc;
+  try
+  {
+    std::ifstream streamfile(file);
+    rapidxml::xml_document<> doc;
 
-   std::vector<char> buffer((std::istreambuf_iterator<char>(streamfile)), std::istreambuf_iterator<char>());
+    std::vector<char> buffer((std::istreambuf_iterator<char>(streamfile)), std::istreambuf_iterator<char>());
 
-   buffer.push_back('\0');//terminating the buffer
+    buffer.push_back('\0');//terminating the buffer
 
-   //std::cout << &buffer[0] << std::endl; /*test the buffer */
+    std::cout << &buffer[0] << std::endl; /*test the buffer */
 
-   doc.parse<0>(&buffer[0]);
+    doc.parse<0>(&buffer[0]);
 
-   //description attributes
-   /*
-   Ogre::Degree north;
-   Ogre::Real fogStart;
-   Ogre::Real fogEnd;
-   Ogre::Colour fogColour;
-   */
+    //description attributes
+    /*
+    Ogre::Degree north;
+    Ogre::Real fogStart;
+    Ogre::Real fogEnd;
+    Ogre::Colour fogColour;
+    */
    
-   rapidxml::xml_node<>* root = doc.first_node("scene");
-   //root->first_attribute("gravity")->value();
+    rapidxml::xml_node<>* root = doc.first_node("scene");
+    //root->first_attribute("gravity")->value();
    
-   rapidxml::xml_node<>* architectureNode = root->first_node("architecture");
+    rapidxml::xml_node<>* architectureNode = root->first_node("architecture");
+    while(architectureNode != 0)
+    {
+      int id = boost::lexical_cast<int>(architectureNode->first_attribute("id")->value());
+      architecture->add(world->getDataManager()->getArchitecture(id)->mesh);
+      architectureNode = architectureNode->next_sibling("architecture");
+    }
    
-   while(architectureNode != 0)
-   {
-     int id = boost::lexical_cast<int>(architectureNode->first_attribute("id")->value());
-     architecture->add(world->getDataManager()->getArchitecture(id)->mesh);
-     architectureNode = architectureNode->next_sibling("architecture");
-   }
-   
-   //temp lighting
-   addLight(Ogre::Vector3(0,10,0),false,50);
-   addLight(Ogre::Vector3(0,10,-30),false,50);
-   addLight(Ogre::Vector3(10,10,-80),false,50);
+    rapidxml::xml_node<>* lightNode = root->first_node("light");
+    while(lightNode != 0)
+    {
+      float x = boost::lexical_cast<float>(lightNode->first_attribute("px")->value());
+      float y = boost::lexical_cast<float>(lightNode->first_attribute("py")->value());
+      float z = boost::lexical_cast<float>(lightNode->first_attribute("pz")->value());
+      bool cast_shadows = boost::lexical_cast<bool>(lightNode->first_attribute("cast_shadows")->value());
+      float range = boost::lexical_cast<float>(lightNode->first_attribute("range")->value());
+      addLight(Ogre::Vector3(x,y,z),cast_shadows,range);
+      lightNode = lightNode->next_sibling("light");
+    }
+
+    //addParticles("Rain", Ogre::Vector3(0,20,-30), Ogre::Vector3(10,10,10), 3);//temp rain particles
+  }
+  catch (rapidxml::parse_error e)
+  {
+    std::cout << "Could not load the xml scene file at " << file << ". " << e.what() << std::endl;//change to print to error stream later
+  }
 }
 
 World* Scene::getWorld()
