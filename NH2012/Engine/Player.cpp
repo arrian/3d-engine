@@ -128,3 +128,9 @@ void Player::setGravity(float gravity)
   skeleton.setGravity(gravity);
 }
 
+void Player::setCollisionEnabled(bool enabled)
+{
+  skeleton.setCollisionEnabled(enabled);
+
+}
+

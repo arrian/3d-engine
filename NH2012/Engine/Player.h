@@ -42,6 +42,7 @@ public:
   void stop();
 
   void setGravity(float gravity);
+  void setCollisionEnabled(bool enabled);
 
 private:
   World* world;

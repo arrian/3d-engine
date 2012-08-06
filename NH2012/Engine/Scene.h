@@ -16,6 +16,9 @@
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxControllerManager.h"
 
+//need to include this directory
+#include "../../RapidXml/rapidxml-1.13/rapidxml.hpp"
+
 //forward declaring for circular dependency
 class World;
 class Player;
@@ -28,6 +31,8 @@ public:
   ~Scene(void);
 
   Ogre::String getName();
+  int getSceneID();
+  int getNewInstanceNumber();
 
   void addPlayer(Player* player);
   void addMonster(Ogre::Vector3 position);
@@ -36,29 +41,26 @@ public:
   void addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector3 scale, Ogre::Real speed);
 
   void removePlayer(Player* player);
-
+  
   Ogre::SceneManager* getSceneManager();
   physx::PxScene* getPhysicsManager();
   physx::PxControllerManager* getControllerManager();
   World* getWorld();
-
-  int getSceneID();
-
+  
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   bool isActive();
-
-  int getNewInstanceNumber();
-
+  
 private:
   int id;
-
+  Ogre::String name;
+  float north;
+  
+  
   World* world;
   Ogre::SceneManager* sceneManager;
   physx::PxScene* physicsManager;
   physx::PxControllerManager* controllerManager;//may only need one manager in the world
-
-  Ogre::String name;
 
   Architecture* architecture;
   std::vector<Ogre::Light*> lights;
@@ -67,15 +69,20 @@ private:
   std::vector<Item*> items;
   Player* player;
 
+  /*Defines if the scene should receive frame updates.*/
   bool active;
 
+  /*Tracks the identification numbers for the objects in the scene.*/
   int instanceNumber;
   
   /*void generatePredefined();*/
   void load(std::string file);
+  Ogre::Vector3 getXMLPosition(rapidxml::xml_node<>* node);
+  Ogre::Quaternion getXMLRotation(rapidxml::xml_node<>* node);
+  Ogre::ColourValue getXMLColour(rapidxml::xml_node<>* node);
+  
 
   bool advancePhysics(Ogre::Real dt);
-  
   float accumulator;
   float stepSize;
 };

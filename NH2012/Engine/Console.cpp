@@ -119,12 +119,12 @@ void Console::enter()
   else if(elements.size() == 1)
   {
     if(elements[0] == "help") help();
-    else if(elements[0] == "about") display("Copyright Arrian Purscene 2012\n");
+    else if(elements[0] == "about") display("Copyright Arrian Purcell 2012\n");
     else if(elements[0] == "clear") clear();
     else if(elements[0] == "stats") stats();
     else if(elements[0] == "freeze") world->freezeCollisionDebug = true;
     else if(elements[0] == "unfreeze") world->freezeCollisionDebug = false;
-    else if(elements[0] == "freecam") world->freeCameraDebug = !world->freeCameraDebug;
+    else if(elements[0] == "freecam") world->getPlayer()->setCollisionEnabled(false);//freeCameraDebug = !world->freeCameraDebug;
     else if(elements[0] == "hide") setVisible(false);
     else if(elements[0] == "refresh") hookWindow(window);
     else if(elements[0] == "screenshot")
@@ -175,7 +175,7 @@ void Console::enter()
           display("number of particle system actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_SYSTEM))));
           display("number of aggregates", boost::lexical_cast<std::string>(physics->getNbAggregates()));
           display("number of articulations", boost::lexical_cast<std::string>(physics->getNbArticulations()));
-          display("number of contraints", boost::lexical_cast<std::string>(physics->getNbConstraints()));
+          display("number of constraints", boost::lexical_cast<std::string>(physics->getNbConstraints()));
         }
         else error("no physics associated with this scene");
       }

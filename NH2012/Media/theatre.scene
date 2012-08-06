@@ -1,13 +1,13 @@
 <scene north="0" fog_start="100" fog_end="200" fog_colour="0.5,0.5,0.5">
-  <entry id="0" px="0" py="0" pz="0" rx="0" ry="0" rz="0" />
-  <entry id="1" px="0" py="0" pz="0" rx="0" ry="0" rz="0" />
-  <monster id="201" px="0" py="0" pz="0" rx="0" ry="0" rz="0" />
-  <item id="340" px="0" py="0" pz="0" rx="0" ry="0" rz="0" />
-  <connector to_scene_id="1" to_entry_id="0" px="0" py="0" pz="0" load_width="3" load_height="3" load_depth="3" load_px="0" load_py="0" load_pz="0" />
-  <light px="0" py="10" pz="0" range="50" cast_shadows="0" colour="1,1,1" type="point" />
-  <light px="0" py="10" pz="-30" range="50" cast_shadows="0" colour="1,1,1" type="point" />
-  <light px="10" py="10" pz="-80" range="50" cast_shadows="0" colour="1,1,1" type="point" />
-  <sound id="1" px="100" py="0" pz="0" range="10" />
+  <entry id="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" />
+  <entry id="1" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" />
+  <monster id="201" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" />
+  <item id="340" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" />
+  <connector to_scene_id="1" to_entry_id="0" tx="0" ty="0" tz="0" load_width="3" load_height="3" load_depth="3" load_tx="0" load_ty="0" load_tz="0" />
+  <light tx="0" ty="10" tz="0" range="50" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
+  <light tx="0" ty="10" tz="-30" range="50" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
+  <light tx="10" ty="10" tz="-80" range="50" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
+  <sound id="1" tx="100" ty="0" tz="0" range="10" />
   <architecture id="106" />
   <architecture id="107" />
   <architecture id="108" />

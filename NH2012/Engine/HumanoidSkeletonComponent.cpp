@@ -9,7 +9,8 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
     controller(0),
     speed(1),
     gravity(-9.81f),
-    velocity(Ogre::Vector3::ZERO)
+    velocity(Ogre::Vector3::ZERO),
+    collisionEnabled(true)
 {
 }
 
@@ -42,6 +43,8 @@ void HumanoidSkeletonComponent::hasNodeChange()
   //body = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
   //body->attachObject(entity);
 
+  //need to extract all constants
+
   physx::PxCapsuleControllerDesc desc;
   desc.material = scene->getWorld()->getDefaultPhysicsMaterial();
   desc.radius = 0.5f;
@@ -55,8 +58,6 @@ void HumanoidSkeletonComponent::hasNodeChange()
 
   //set character controller desc options here
   controller = scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
-
-  physx::PxControllerManager* m = scene->getControllerManager();
 
   if(!controller) throw NHException("Could not create character kinematic.");
 
@@ -115,17 +116,22 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
   }
   else if (velocity.squaredLength() < tooSmall * tooSmall) velocity = Ogre::Vector3::ZERO;
 
-  //std::cout << velocity << std::endl;
+  if(collisionEnabled)
+  {
+    velocity.y = oldY;
+    velocity.y += gravity * evt.timeSinceLastFrame;
 
-  velocity.y = oldY;
-  velocity.y += gravity * evt.timeSinceLastFrame;
-
-  physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * 10.0f, velocity.y * evt.timeSinceLastFrame * 10.0f, velocity.z * evt.timeSinceLastFrame * 10.0f), 0.001f, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
-  
-  if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;
-  
-  physx::PxExtendedVec3 cPosition = controller->getPosition();
-  node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position
+    physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * 10.0f, velocity.y * evt.timeSinceLastFrame * 10.0f, velocity.z * evt.timeSinceLastFrame * 10.0f), 0.001f, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
+    if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;
+    physx::PxExtendedVec3 cPosition = controller->getPosition();
+    node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position
+  }
+  else //just move the controller ignoring all collisions
+  {
+    controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(velocity.x * evt.timeSinceLastFrame * 10.0f, velocity.y * evt.timeSinceLastFrame * 10.0f, velocity.z * evt.timeSinceLastFrame * 10.0f));
+    physx::PxExtendedVec3 cPosition = controller->getPosition();
+    node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position
+  }
   
   /*if (world->freeCameraDebug) 
   {
@@ -220,6 +226,11 @@ void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hi
 void HumanoidSkeletonComponent::setGravity(float gravity)
 {
   this->gravity = gravity;
+}
+
+void HumanoidSkeletonComponent::setCollisionEnabled(bool enabled)
+{
+  collisionEnabled = enabled;
 }
 
 Ogre::Vector3 HumanoidSkeletonComponent::getForwardPosition(Ogre::Real distance)

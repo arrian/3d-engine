@@ -46,6 +46,7 @@ public:
 	void onObstacleHit(const physx::PxControllerObstacleHit& hit) {}
 
   void setGravity(float gravity);
+  void setCollisionEnabled(bool enabled);
 
   /** Gets a position in front of the skeleton that is the given distance from it. */
   Ogre::Vector3 getForwardPosition(Ogre::Real distance);
@@ -75,5 +76,6 @@ protected:
   void hasNodeChange();
 
   float gravity;
+  bool collisionEnabled;
 };
 

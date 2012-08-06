@@ -4,8 +4,7 @@
 #include "extensions/PxDefaultSimulationFilterShader.h"
 #include "extensions/PxSimpleFactory.h"
 
-//need to include this directory
-#include "../../RapidXml/rapidxml-1.13/rapidxml.hpp"
+
 
 Scene::Scene(World* world, int id)
   : world(world),
@@ -72,7 +71,6 @@ Scene::Scene(World* world, int id)
 
 Scene::~Scene(void)
 {
-
   if(architecture) delete architecture;
   architecture = 0;
 
@@ -214,26 +212,22 @@ void Scene::load(std::string file)
 
     std::vector<char> buffer((std::istreambuf_iterator<char>(streamfile)), std::istreambuf_iterator<char>());
 
-    buffer.push_back('\0');//terminating the buffer
+    buffer.push_back('\0');//null terminating the buffer
 
-    std::cout << &buffer[0] << std::endl; /*test the buffer */
+    //std::cout << &buffer[0] << std::endl; /*test the buffer */
 
     doc.parse<0>(&buffer[0]);
-
-    //description attributes
-    /*
-    Ogre::Degree north;
-    Ogre::Real fogStart;
-    Ogre::Real fogEnd;
-    Ogre::Colour fogColour;
-    */
-   
     rapidxml::xml_node<>* root = doc.first_node("scene");
-    //root->first_attribute("gravity")->value();
+    
+    //description attributes
+    north = boost::lexical_cast<float>(root->first_attribute("north")->value());
    
     rapidxml::xml_node<>* architectureNode = root->first_node("architecture");
     while(architectureNode != 0)
     {
+      float scale;
+      Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
+      
       int id = boost::lexical_cast<int>(architectureNode->first_attribute("id")->value());
       architecture->add(world->getDataManager()->getArchitecture(id)->mesh);
       architectureNode = architectureNode->next_sibling("architecture");
@@ -242,16 +236,23 @@ void Scene::load(std::string file)
     rapidxml::xml_node<>* lightNode = root->first_node("light");
     while(lightNode != 0)
     {
-      float x = boost::lexical_cast<float>(lightNode->first_attribute("px")->value());
-      float y = boost::lexical_cast<float>(lightNode->first_attribute("py")->value());
-      float z = boost::lexical_cast<float>(lightNode->first_attribute("pz")->value());
+      float x = boost::lexical_cast<float>(lightNode->first_attribute("tx")->value());
+      float y = boost::lexical_cast<float>(lightNode->first_attribute("ty")->value());
+      float z = boost::lexical_cast<float>(lightNode->first_attribute("tz")->value());
       bool cast_shadows = boost::lexical_cast<bool>(lightNode->first_attribute("cast_shadows")->value());
       float range = boost::lexical_cast<float>(lightNode->first_attribute("range")->value());
       addLight(Ogre::Vector3(x,y,z),cast_shadows,range);
       lightNode = lightNode->next_sibling("light");
     }
+    
+    rapidxml::xml_node<>* itemNode = root->first_node("item");
+    while(itemNode != 0)
+    {
+      
+      itemNode = itemNode->next_sibling("item");
+    }
 
-    //addParticles("Rain", Ogre::Vector3(0,20,-30), Ogre::Vector3(10,10,10), 3);//temp rain particles
+    //addParticles("Sun", Ogre::Vector3(0,10,-30), Ogre::Vector3(10,10,10), 3);//temp rain particles
   }
   catch (rapidxml::parse_error e)
   {
@@ -268,5 +269,66 @@ int Scene::getSceneID()
 {
   return id;
 }
+
+Ogre::Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node)
+{
+  float x = 0.0f;
+  float y = 0.0f;
+  float z = 0.0f;
+
+  rapidxml::xml_attribute<>* xPosition = node->first_attribute("tx");
+  rapidxml::xml_attribute<>* yPosition = node->first_attribute("ty");
+  rapidxml::xml_attribute<>* zPosition = node->first_attribute("tz");
+  
+  if(xPosition) x = boost::lexical_cast<float>(xPosition->value());
+  if(yPosition) y = boost::lexical_cast<float>(yPosition->value());
+  if(zPosition) z = boost::lexical_cast<float>(zPosition->value());
+  
+  return Ogre::Vector3(x,y,z);
+}
+  
+Ogre::Quaternion Scene::getXMLRotation(rapidxml::xml_node<>* node)
+{
+  Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
+  
+  float x = 0.0f;
+  float y = 0.0f;
+  float z = 0.0f;
+
+  rapidxml::xml_attribute<>* xRotation = node->first_attribute("rx");
+  rapidxml::xml_attribute<>* yRotation = node->first_attribute("ry");
+  rapidxml::xml_attribute<>* zRotation = node->first_attribute("rz");
+  
+  if(xRotation) x = boost::lexical_cast<float>(xRotation->value());
+  if(yRotation) y = boost::lexical_cast<float>(yRotation->value());
+  if(zRotation) z = boost::lexical_cast<float>(zRotation->value());
+  
+  rotation.FromAngleAxis(Ogre::Degree(x), Ogre::Vector3::UNIT_X);
+  rotation.FromAngleAxis(Ogre::Degree(y), Ogre::Vector3::UNIT_Y);
+  rotation.FromAngleAxis(Ogre::Degree(z), Ogre::Vector3::UNIT_Z);
+
+  return rotation;
+}
+
+Ogre::ColourValue Scene::getXMLColour(rapidxml::xml_node<>* node)
+{
+  float a = 1.0f;
+  float r = 0.0f;
+  float g = 0.0f;
+  float b = 0.0f;
+
+  rapidxml::xml_attribute<>* aColour = node->first_attribute("ca");
+  rapidxml::xml_attribute<>* rColour = node->first_attribute("cr");
+  rapidxml::xml_attribute<>* gColour = node->first_attribute("cg");
+  rapidxml::xml_attribute<>* bColour = node->first_attribute("cb");
+
+  if(aColour) a = boost::lexical_cast<float>(aColour->value());
+  if(rColour) r = boost::lexical_cast<float>(rColour->value());
+  if(gColour) g = boost::lexical_cast<float>(gColour->value());
+  if(bColour) b = boost::lexical_cast<float>(bColour->value());
+
+  return Ogre::ColourValue(r,g,b,a);
+}
+  
 
 
