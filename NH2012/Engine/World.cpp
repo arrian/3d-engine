@@ -721,16 +721,16 @@ physx::PxMaterial* World::getDefaultPhysicsMaterial()
   return physicsMaterial;
 }
 
-Item* World::createItem()
+Item* World::createItem(int id)
 {
-  Item* item = new Item();
+  Item* item = new Item(id);
   items.push_back(item);
   return item;
 }
 
-Monster* World::createMonster()
+Monster* World::createMonster(int id)
 {
-  Monster* monster = new Monster();
+  Monster* monster = new Monster(id);
   monsters.push_back(monster);
   return monster;
 }

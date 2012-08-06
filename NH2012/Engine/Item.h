@@ -13,7 +13,7 @@ class Scene;
 class Item : public BasicComponent
 {
 public:
-  Item();
+  Item(int id);
   virtual ~Item(void);
 
   friend bool operator==(const Item& x, const Item& y);
@@ -21,9 +21,12 @@ public:
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void setPosition(Ogre::Vector3 position);
+  void setRotation(Ogre::Quaternion rotation);
 
 protected:
+  int id;
   Ogre::Vector3 position;
+  Ogre::Quaternion rotation;
 
   Ogre::SceneNode* node;
 

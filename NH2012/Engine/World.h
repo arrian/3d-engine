@@ -92,8 +92,8 @@ public:
   /* Loads a scene. Returns the loaded scene.*/
   Scene* loadScene(int id);
 
-  Item* createItem();
-  Monster* createMonster();
+  Item* createItem(int id);
+  Monster* createMonster(int id);
   physx::PxConvexMesh* createConvexMesh(Ogre::Entity* e);
   physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
   physx::PxTriangleMesh* createTriangleMeshV2(Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);

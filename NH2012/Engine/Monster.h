@@ -17,7 +17,7 @@ class Scene;
 class Monster : public BasicComponent
 {
 public:
-  Monster();
+  Monster(int id);
   virtual ~Monster(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -30,6 +30,8 @@ public:
   friend bool operator==(const Monster& x, const Monster& y);
 
 protected:
+  int id;
+
   IntelligenceComponent intelligence;
   HumanoidSkeletonComponent skeleton;
   VisualComponent visual;

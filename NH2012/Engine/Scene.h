@@ -35,10 +35,10 @@ public:
   int getNewInstanceNumber();
 
   void addPlayer(Player* player);
-  void addMonster(Ogre::Vector3 position);
-  void addItem(Ogre::Vector3 position);
-  void addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range);
-  void addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector3 scale, Ogre::Real speed);
+  void addMonster(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
+  void addItem(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
+  void addLight(Ogre::Vector3 position = Ogre::Vector3::ZERO, bool castShadows = false, Ogre::Real range = 10, Ogre::ColourValue colour = Ogre::ColourValue());
+  void addParticles(Ogre::String name, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE, Ogre::Real speed = 1);
 
   void removePlayer(Player* player);
   
@@ -77,11 +77,11 @@ private:
   
   /*void generatePredefined();*/
   void load(std::string file);
-  Ogre::Vector3 getXMLPosition(rapidxml::xml_node<>* node);
+  Ogre::Vector3 getXMLPosition(rapidxml::xml_node<>* node, std::string first = "tx", std::string second = "ty", std::string third = "tz");
   Ogre::Quaternion getXMLRotation(rapidxml::xml_node<>* node);
   Ogre::ColourValue getXMLColour(rapidxml::xml_node<>* node);
+  Ogre::Vector3 getXMLScale(rapidxml::xml_node<>* node);
   
-
   bool advancePhysics(Ogre::Real dt);
   float accumulator;
   float stepSize;
