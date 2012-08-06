@@ -54,7 +54,7 @@ Scene::Scene(World* world, int id)
   {
     //prefer throwing an exception here
     std::cout << "Could not load the scene with the id " << id << std::endl;
-    name = "Error Scene";
+    name = "Error_Scene";
   }
   else
   {
@@ -127,9 +127,9 @@ void Scene::addPlayer(Player* player)
   this->player = player;
 }
 
-void Scene::addMonster(Ogre::Vector3 position)
+void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
-  Monster* monster = this->getWorld()->createMonster();
+  Monster* monster = this->getWorld()->createMonster(id);
   monster->setPosition(position);
   monster->setScene(this);
   monsters.push_back(monster);
@@ -138,7 +138,7 @@ void Scene::addMonster(Ogre::Vector3 position)
 //TODO use references rather than pointers
 void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
-  Item* item = this->getWorld()->createItem();
+  Item* item = this->getWorld()->createItem(id);
   item->setPosition(position);
   item->setScene(this);
   items.push_back(item);
@@ -243,9 +243,9 @@ void Scene::load(std::string file)
     rapidxml::xml_node<>* itemNode = root->first_node("item");
     while(itemNode != 0)
     {
-      
+      int id = boost::lexical_cast<int>(itemNode->first_attribute("id")->value());
+      addItem(id, getXMLPosition(itemNode));
       itemNode = itemNode->next_sibling("item");
-      addItem(getXMLPosition(lightNode));
     }
 
     //addParticles("Sun", Ogre::Vector3(0,10,-30), Ogre::Vector3(10,10,10), 3);//temp rain particles

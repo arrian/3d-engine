@@ -11,7 +11,6 @@
 #include "Monster.h"
 #include "Item.h"
 #include "Architecture.h"
-#include "Environment.h"
 
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxControllerManager.h"

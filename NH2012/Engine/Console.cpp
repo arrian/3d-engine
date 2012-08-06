@@ -266,8 +266,8 @@ void Console::enter()
         float y = boost::lexical_cast<float>(elements[4]);
         float z = boost::lexical_cast<float>(elements[5]);
         Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(x), Ogre::Real(y), Ogre::Real(z));
-        if(elements[2] == "item") target->addItem(position);
-        else if(elements[2] == "monster") target->addMonster(position);
+        if(elements[2] == "item") target->addItem(0, position);
+        else if(elements[2] == "monster") target->addMonster(0, position);
         else error("no object type '" + elements[2] + "' exists");
       }
       else error("no scene named '" + elements[1] + "'");

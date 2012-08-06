@@ -31,9 +31,9 @@
     <ClInclude Include="NHException.h" />
     <ClInclude Include="NodeComponent.h" />
     <ClInclude Include="PhysicalComponent.h" />
+    <ClInclude Include="PhysicalInterface.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Environment.h" />
     <ClInclude Include="Gorilla.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
@@ -58,9 +58,9 @@
     <ClCompile Include="NHException.cpp" />
     <ClCompile Include="NodeComponent.cpp" />
     <ClCompile Include="PhysicalComponent.cpp" />
+    <ClCompile Include="PhysicalInterface.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Gorilla.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />

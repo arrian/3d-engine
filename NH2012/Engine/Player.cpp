@@ -58,7 +58,7 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
   skeleton.frameRenderingQueued(evt);
   camera.frameRenderingQueued(evt);//for aspect ratio changes
 
-  if(addItem) scene->addItem(skeleton.getForwardPosition(3.0));//adding items if the key was pressed
+  if(addItem) scene->addItem(0, skeleton.getForwardPosition(3.0));//adding items if the key was pressed
 }
 
 void Player::injectKeyDown(const OIS::KeyEvent &evt)
