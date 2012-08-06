@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+//-------------------------------------------------------------------------------------
 Architecture::Architecture(Scene* scene)
   : scene(scene),
     instanceNumber(0),
@@ -12,6 +13,7 @@ Architecture::Architecture(Scene* scene)
 {
 }
 
+//-------------------------------------------------------------------------------------
 Architecture::~Architecture(void)
 {
   for(std::vector<physx::PxRigidStatic*>::iterator it = actors.begin(); it != actors.end(); ++it) 
@@ -36,11 +38,13 @@ Architecture::~Architecture(void)
   }
 }
 
+//-------------------------------------------------------------------------------------
 void Architecture::add(Ogre::String meshName, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
   addStaticTrimesh(meshName, 0.2f, 0.7f, position, quaternion);
 }
 
+//-------------------------------------------------------------------------------------
 void Architecture::addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
   Ogre::Entity* entity = 0;
@@ -78,8 +82,11 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, Ogre::Real restitutio
   geometry->addEntity(entity, position, quaternion, scale);
 }
 
+//-------------------------------------------------------------------------------------
 void Architecture::build()
 {
   geometry->build();
 }
+
+
 

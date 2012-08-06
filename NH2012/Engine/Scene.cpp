@@ -4,8 +4,7 @@
 #include "extensions/PxDefaultSimulationFilterShader.h"
 #include "extensions/PxSimpleFactory.h"
 
-
-
+//-------------------------------------------------------------------------------------
 Scene::Scene(World* world, int id)
   : world(world),
     id(id),
@@ -69,6 +68,7 @@ Scene::Scene(World* world, int id)
   architecture->build();
 }
 
+//-------------------------------------------------------------------------------------
 Scene::~Scene(void)
 {
   if(architecture) delete architecture;
@@ -95,31 +95,37 @@ Scene::~Scene(void)
   sceneManager = 0;
 }
 
+//-------------------------------------------------------------------------------------
 bool Scene::isActive()
 {
   return active;
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::String Scene::getName()
 {
   return name;
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::SceneManager* Scene::getSceneManager()
 {
   return sceneManager;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxScene* Scene::getPhysicsManager()
 {
   return physicsManager;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxControllerManager* Scene::getControllerManager()
 {
   return controllerManager;
 }
 
+//-------------------------------------------------------------------------------------
 void Scene::addPlayer(Player* player)
 {
   active = true;
@@ -127,6 +133,7 @@ void Scene::addPlayer(Player* player)
   this->player = player;
 }
 
+//-------------------------------------------------------------------------------------
 void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
   Monster* monster = this->getWorld()->createMonster(id);
@@ -135,6 +142,7 @@ void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation
   monsters.push_back(monster);
 }
 
+//-------------------------------------------------------------------------------------
 //TODO use references rather than pointers
 void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
@@ -144,6 +152,7 @@ void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
   items.push_back(item);
 }
 
+//-------------------------------------------------------------------------------------
 void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
 {
   Ogre::Light* light = sceneManager->createLight("light" + Ogre::StringConverter::toString(getNewInstanceNumber()));
@@ -154,6 +163,7 @@ void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range,
   light->setCastShadows(castShadows);
 }
 
+//-------------------------------------------------------------------------------------
 void Scene::addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector3 scale, Ogre::Real speed)
 {
   Ogre::ParticleSystem* particle = sceneManager->createParticleSystem(name);//"Rain");//, "Examples/Rain");
@@ -165,6 +175,7 @@ void Scene::addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector
   particles.push_back(particle);
 }
 
+//-------------------------------------------------------------------------------------
 void Scene::removePlayer(Player* player)
 {
   if(this->player == player) 
@@ -174,12 +185,14 @@ void Scene::removePlayer(Player* player)
   }
 }
 
+//-------------------------------------------------------------------------------------
 int Scene::getNewInstanceNumber()
 {
   instanceNumber++;
   return instanceNumber;
 }
 
+//-------------------------------------------------------------------------------------
 void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   if(!physicsManager) std::cout << "no physics found for this frame" << std::endl;
@@ -193,6 +206,7 @@ void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
   if(!world->freezeCollisionDebug) advancePhysics(evt.timeSinceLastFrame);
 }
 
+//-------------------------------------------------------------------------------------
 bool Scene::advancePhysics(Ogre::Real dt)
 {
   accumulator += dt;
@@ -203,6 +217,7 @@ bool Scene::advancePhysics(Ogre::Real dt)
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 void Scene::load(std::string file)
 {
   try
@@ -256,16 +271,19 @@ void Scene::load(std::string file)
   }
 }
 
+//-------------------------------------------------------------------------------------
 World* Scene::getWorld()
 {
   return world;
 }
 
+//-------------------------------------------------------------------------------------
 int Scene::getSceneID()
 {
   return id;
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third)
 {
   float x = 0.0f;
@@ -282,7 +300,8 @@ Ogre::Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node, std::string firs
 
   return Ogre::Vector3(x,y,z);
 }
-  
+
+//-------------------------------------------------------------------------------------
 Ogre::Quaternion Scene::getXMLRotation(rapidxml::xml_node<>* node)
 {
   Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
@@ -295,6 +314,7 @@ Ogre::Quaternion Scene::getXMLRotation(rapidxml::xml_node<>* node)
   return rotation;
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::ColourValue Scene::getXMLColour(rapidxml::xml_node<>* node)
 {
   float a = 1.0f;
@@ -306,6 +326,7 @@ Ogre::ColourValue Scene::getXMLColour(rapidxml::xml_node<>* node)
   return Ogre::ColourValue(components.x,components.y,components.z,a);
 }
   
+//-------------------------------------------------------------------------------------
 Ogre::Vector3 Scene::getXMLScale(rapidxml::xml_node<>* node)
 {
   return getXMLPosition(node, "sx", "sy", "sz");

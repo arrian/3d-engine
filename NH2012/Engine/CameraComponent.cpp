@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+//-------------------------------------------------------------------------------------
 CameraComponent::CameraComponent()
   : NodeComponent(),
     camera(0),
@@ -13,12 +14,13 @@ CameraComponent::CameraComponent()
 
 }
 
-
+//-------------------------------------------------------------------------------------
 CameraComponent::~CameraComponent(void)
 {
   this->scene->getSceneManager()->destroyCamera(camera);
 }
 
+//-------------------------------------------------------------------------------------
 void CameraComponent::hookWindow(Ogre::RenderWindow* window)
 {
   assert(window && camera);
@@ -29,12 +31,14 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
   assert(viewport);
 }
 
+//-------------------------------------------------------------------------------------
 void CameraComponent::unhookWindow()
 {
   viewport = 0;
   if(window) window->removeAllViewports();
 }
 
+//-------------------------------------------------------------------------------------
 void CameraComponent::hasNodeChange()
 {
   if(oldScene == scene) oldNode->detachObject(camera);
@@ -50,6 +54,7 @@ void CameraComponent::hasNodeChange()
   node->attachObject(camera);
 }
 
+//-------------------------------------------------------------------------------------
 void CameraComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   //Checking aspect ratio for resolution changes... find better way of doing this
@@ -61,6 +66,7 @@ void CameraComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
   }
 }
 
+//-------------------------------------------------------------------------------------
 void CameraComponent::rayQuery()
 {
   Ogre::Vector3 oOrigin = camera->getPosition();

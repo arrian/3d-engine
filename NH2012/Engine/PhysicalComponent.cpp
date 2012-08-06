@@ -4,6 +4,7 @@
 #include "OgreSceneNode.h"
 #include "Scene.h"
 
+//-------------------------------------------------------------------------------------
 PhysicalComponent::PhysicalComponent(Ogre::Real friction, Ogre::Real restitution, physx::PxMaterial* material)
   : NodeComponent(),
     friction(friction),
@@ -15,11 +16,12 @@ PhysicalComponent::PhysicalComponent(Ogre::Real friction, Ogre::Real restitution
   
 }
 
+//-------------------------------------------------------------------------------------
 PhysicalComponent::~PhysicalComponent(void)
 {
 }
 
-
+//-------------------------------------------------------------------------------------
 void PhysicalComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   //if(!physical) throw NHException("Physical component missed frame rendering because it is not yet created.");
@@ -29,6 +31,7 @@ void PhysicalComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
   node->setOrientation(Ogre::Quaternion(transform.q.w,transform.q.x,transform.q.y,transform.q.z));
 }
 
+//-------------------------------------------------------------------------------------
 void PhysicalComponent::hasNodeChange()
 {
   if(!material) material = scene->getWorld()->getDefaultPhysicsMaterial();
@@ -47,6 +50,7 @@ void PhysicalComponent::hasNodeChange()
   physx::PxRigidBodyExt::updateMassAndInertia(*physical, density);
 }
 
+//-------------------------------------------------------------------------------------
 void PhysicalComponent::mapPhysical(void* target)
 {
   physical->userData = target;

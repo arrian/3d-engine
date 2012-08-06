@@ -10,7 +10,7 @@
 #include "extensions/PxVisualDebuggerExt.h"
 #include "PxTkStream.h"
 
-
+//-------------------------------------------------------------------------------------
 World::World(Ogre::Root* root)
   : root(root),
     scenes(),
@@ -28,6 +28,7 @@ World::World(Ogre::Root* root)
 {
 }
 
+//-------------------------------------------------------------------------------------
 World::~World(void)
 {
   if(player) delete player;
@@ -49,6 +50,7 @@ World::~World(void)
   dataManager = 0;
 }
 
+//-------------------------------------------------------------------------------------
 void World::initialise(std::string iniFile)
 {
   //loading initialisation file
@@ -84,17 +86,20 @@ void World::initialise(std::string iniFile)
   physx::PxExtensionVisualDebugger::connect(physicsWorld->getPvdConnectionManager(), "127.0.0.1", 5425, 10000);
 }
 
+//-------------------------------------------------------------------------------------
 void World::hookWindow(Ogre::RenderWindow* window)
 {
   assert(player);
   player->hook(window);
 }
 
+//-------------------------------------------------------------------------------------
 Player* World::getPlayer()
 {
   return player;
 }
 
+//-------------------------------------------------------------------------------------
 Scene* World::getScene(Ogre::String name)
 {
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
@@ -104,6 +109,7 @@ Scene* World::getScene(Ogre::String name)
   return 0;
 }
 
+//-------------------------------------------------------------------------------------
 /*Warning: This index is different to the actual scene index. Need to refactor.*/
 Scene* World::getScene(unsigned int index)
 {
@@ -111,27 +117,32 @@ Scene* World::getScene(unsigned int index)
   return 0;
 }
 
+//-------------------------------------------------------------------------------------
 int World::getNumberScenes()
 {
   return scenes.size();
 }
 
+//-------------------------------------------------------------------------------------
 /*WARNING: May be a null pointer.*/
 Ogre::Root* World::getRoot()
 {
   return root;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxPhysics* World::getPhysics()
 {
   return physicsWorld;
 }
 
+//-------------------------------------------------------------------------------------
 const physx::PxTolerancesScale& World::getTolerancesScale()
 {
   return physicsWorld->getTolerancesScale();
 }
 
+//-------------------------------------------------------------------------------------
 void World::movePlayer(Player* player, Scene* target)
 {
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
@@ -141,6 +152,7 @@ void World::movePlayer(Player* player, Scene* target)
   target->addPlayer(player);
 }
 
+//-------------------------------------------------------------------------------------
 void World::getSceneNames(std::vector<Ogre::String> &names)
 {
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
@@ -149,6 +161,7 @@ void World::getSceneNames(std::vector<Ogre::String> &names)
   }
 }
 
+//-------------------------------------------------------------------------------------
 Scene* World::loadScene(int id)
 {
   Scene* scene = new Scene(this, id);
@@ -156,6 +169,7 @@ Scene* World::loadScene(int id)
   return scene;
 }
 
+//-------------------------------------------------------------------------------------
 bool World::destroyScene(Ogre::String name)
 {
   //is unsafe
@@ -174,6 +188,7 @@ bool World::destroyScene(Ogre::String name)
   return false;
 }
 
+//-------------------------------------------------------------------------------------
 bool World::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
@@ -183,41 +198,49 @@ bool World::frameRenderingQueued(const Ogre::FrameEvent& evt)
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 void World::injectKeyDown(const OIS::KeyEvent &arg)
 {
   player->injectKeyDown(arg);
 }
 
+//-------------------------------------------------------------------------------------
 void World::injectKeyUp(const OIS::KeyEvent &arg)
 {
   player->injectKeyUp(arg);
 }
 
+//-------------------------------------------------------------------------------------
 void World::injectMouseMove(const OIS::MouseEvent &arg)
 {
   player->injectMouseMove(arg);
 }
 
+//-------------------------------------------------------------------------------------
 void World::injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
   player->injectMouseDown(arg, id);
 }
 
+//-------------------------------------------------------------------------------------
 void World::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
   player->injectMouseUp(arg, id);
 }
 
+//-------------------------------------------------------------------------------------
 void World::setSceneChangeListener(SceneChangeListener* listener)
 {
   sceneChangeListener = listener;
 }
 
+//-------------------------------------------------------------------------------------
 SceneChangeListener* World::getSceneChangeListener()
 {
   return sceneChangeListener;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxConvexMesh* World::createConvexMesh(Ogre::Entity *e)
 {
   unsigned int mVertexCount = 0; 
@@ -338,6 +361,7 @@ physx::PxConvexMesh* World::createConvexMesh(Ogre::Entity *e)
   return convexMesh;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxTriangleMesh* World::createTriangleMesh(Ogre::Entity* e) 
 {
   std::cout << "Got triangle mesh cooking request." << std::endl;
@@ -461,6 +485,7 @@ physx::PxTriangleMesh* World::createTriangleMesh(Ogre::Entity* e)
   return triangleMesh;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxTriangleMesh* World::createTriangleMeshV2(Ogre::Entity* e, Params &params, AddedMaterials *out_addedMaterials)
 {
   Ogre::MeshPtr mesh = e->getMesh();//extracting mesh pointer from entity
@@ -547,6 +572,7 @@ physx::PxTriangleMesh* World::createTriangleMeshV2(Ogre::Entity* e, Params &para
   return triangleMesh;
 }
 
+//-------------------------------------------------------------------------------------
 void World::getMeshInfo(Ogre::MeshPtr mesh, Params &params, MeshInfo &outInfo)
 {
 	//First, we compute the total number of vertices and indices and init the buffers.
@@ -722,11 +748,13 @@ void World::getMeshInfo(Ogre::MeshPtr mesh, Params &params, MeshInfo &outInfo)
 	}
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxMaterial* World::getDefaultPhysicsMaterial()
 {
   return physicsMaterial;
 }
 
+//-------------------------------------------------------------------------------------
 Item* World::createItem(int id)
 {
   Item* item = new Item(id);
@@ -734,6 +762,7 @@ Item* World::createItem(int id)
   return item;
 }
 
+//-------------------------------------------------------------------------------------
 Monster* World::createMonster(int id)
 {
   Monster* monster = new Monster(id);
@@ -741,18 +770,21 @@ Monster* World::createMonster(int id)
   return monster;
 }
 
+//-------------------------------------------------------------------------------------
 void World::releaseItem(Item* item)
 {
   //!!! fix to delete from items list
   if(item) delete item;
 }
 
+//-------------------------------------------------------------------------------------
 void World::releaseMonster(Monster* monster)
 {
   //!!! fix to delete from monsters list
   if(monster) delete monster;
 }
 
+//-------------------------------------------------------------------------------------
 void World::parseIni(std::string filename)
 {
   std::cout << "Getting initialisation data..." << std::endl;
@@ -855,26 +887,31 @@ void World::parseIni(std::string filename)
   }
 }
 
+//-------------------------------------------------------------------------------------
 DataManager* World::getDataManager()
 {
   return dataManager;
 }
 
+//-------------------------------------------------------------------------------------
 Date World::getDate()
 {
   return Date();
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::String World::getDateString()
 {
   return serialiseDate(Date());
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::String World::getMoonPhase()
 {
   return serialiseMoonPhase(calculateMoonPhase(Date()));
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::String World::serialiseDate(Date date)
 {
   std::stringstream dateString;
@@ -882,35 +919,41 @@ Ogre::String World::serialiseDate(Date date)
   return (dateString.str());
 }
 
+//-------------------------------------------------------------------------------------
 bool World::isFriday13()
 {
   Date date = Date();
   return ((day(date) == "friday") && (date.day == 13));
 }
 
+//-------------------------------------------------------------------------------------
 bool World::isBirthday()
 {
   Date date = Date();
   return (date.month == 10 && date.day == 30);
 }
 
+//-------------------------------------------------------------------------------------
 bool World::isHalloween()
 {
   Date date = Date();
   return (date.month == 10 && date.day == 31);
 }
 
+//-------------------------------------------------------------------------------------
 bool World::isNewYears()
 {
   Date date = Date();
   return (date.month == 1 && date.day == 1);
 }
 
+//-------------------------------------------------------------------------------------
 bool World::isDebug()
 {
   return debug;
 }
 
+//-------------------------------------------------------------------------------------
 int World::calculateMoonPhase(Date date)
 {
   /*
@@ -943,6 +986,7 @@ int World::calculateMoonPhase(Date date)
   return b;
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::String World::serialiseMoonPhase(int moonPhase)
 {
   switch(moonPhase)
@@ -959,6 +1003,7 @@ Ogre::String World::serialiseMoonPhase(int moonPhase)
   }
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::String World::day(Date date)
 {
   static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
@@ -971,6 +1016,7 @@ Ogre::String World::day(Date date)
   return days[numerical - 1];
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::String World::month(Date date)
 {
   Ogre::String months[] = {"january","february","march","april","may","june","july","august","september","october","november","december"};

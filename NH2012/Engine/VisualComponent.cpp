@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+//-------------------------------------------------------------------------------------
 VisualComponent::VisualComponent(Ogre::String mesh)
   : NodeComponent(),
     entity(0),
@@ -9,16 +10,18 @@ VisualComponent::VisualComponent(Ogre::String mesh)
 {
 }
 
-
+//-------------------------------------------------------------------------------------
 VisualComponent::~VisualComponent(void)
 {
 }
 
+//-------------------------------------------------------------------------------------
 void VisualComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
 
 }
 
+//-------------------------------------------------------------------------------------
 void VisualComponent::hasNodeChange()
 {
   if(oldScene && entity) oldScene->getSceneManager()->destroyEntity(entity);

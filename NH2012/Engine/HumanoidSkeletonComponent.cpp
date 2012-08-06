@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "extensions/PxRigidBodyExt.h"
 
+//-------------------------------------------------------------------------------------
 HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
   : NodeComponent(),
     physx::PxControllerBehaviorCallback(),
@@ -14,11 +15,12 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
 {
 }
 
-
+//-------------------------------------------------------------------------------------
 HumanoidSkeletonComponent::~HumanoidSkeletonComponent(void)
 {
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::hasNodeChange()
 {
   if(oldScene)
@@ -69,6 +71,7 @@ void HumanoidSkeletonComponent::hasNodeChange()
   leftHand = node->createChildSceneNode();
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::stop()
 {
   moveForward = false;
@@ -81,6 +84,7 @@ void HumanoidSkeletonComponent::stop()
   velocity = Ogre::Vector3::ZERO;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   if(!node) return;
@@ -144,72 +148,86 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
   }*/
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setLeftHand(bool state)
 {
   moveLeftHand = state;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setRightHand(bool state)
 {
   moveRightHand = state;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setRun(bool state)
 {
   run = state;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setMoveRight(bool state)
 {
   moveRight = state;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setMoveLeft(bool state)
 {
   moveLeft = state;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setMoveBackward(bool state)
 {
   moveBack = state;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setMoveForward(bool state)
 {
   moveForward = state;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::headRelative(Ogre::Degree x, Ogre::Degree y)
 {
   node->yaw(x);
   head->pitch(y);
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::SceneNode* HumanoidSkeletonComponent::getHead()
 {
   return head;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::jump()
 {
   velocity.y = 2.5f;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxU32 HumanoidSkeletonComponent::getBehaviorFlags(const physx::PxShape& shape)
 {
   return 0;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxU32 HumanoidSkeletonComponent::getBehaviorFlags(const physx::PxController& controller)
 {
   return 0;
 }
 
+//-------------------------------------------------------------------------------------
 physx::PxU32 HumanoidSkeletonComponent::getBehaviorFlags(const physx::PxObstacle& obstacle)
 {
   return 0;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hit)
 {
   physx::PxRigidDynamic* dActor = hit.shape->getActor().isRigidDynamic();
@@ -223,16 +241,19 @@ void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hi
   }
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setGravity(float gravity)
 {
   this->gravity = gravity;
 }
 
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::setCollisionEnabled(bool enabled)
 {
   collisionEnabled = enabled;
 }
 
+//-------------------------------------------------------------------------------------
 Ogre::Vector3 HumanoidSkeletonComponent::getForwardPosition(Ogre::Real distance)
 {
   Ogre::Vector3 position = node->getOrientation().zAxis();

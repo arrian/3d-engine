@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+//-------------------------------------------------------------------------------------
 Console::Console(World* world, OIS::Keyboard* keyboard)
   : overlay(new Gorilla::Silverback),
     keyboard(keyboard),
@@ -18,10 +19,12 @@ Console::Console(World* world, OIS::Keyboard* keyboard)
   overlay->loadAtlas("dejavu");
 }
 
+//-------------------------------------------------------------------------------------
 Console::~Console(void)
 {
 }
 
+//-------------------------------------------------------------------------------------
 void Console::hookWindow(Ogre::RenderWindow* window)
 {
   assert(window);
@@ -36,22 +39,26 @@ void Console::hookWindow(Ogre::RenderWindow* window)
   setVisible(visibleTemp);
 }
 
+//-------------------------------------------------------------------------------------
 void Console::setVisible(bool visible)
 {
   if(layer) layer->setVisible(visible);
 }
 
+//-------------------------------------------------------------------------------------
 bool Console::isVisible()
 {
   if(layer) return layer->isVisible();
   return false;
 }
 
+//-------------------------------------------------------------------------------------
 void Console::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   if(!isVisible()) return;
 }
 
+//-------------------------------------------------------------------------------------
 void Console::injectKeyDown(const OIS::KeyEvent &arg)
 {
   if(!isVisible()) return;
@@ -62,6 +69,7 @@ void Console::injectKeyDown(const OIS::KeyEvent &arg)
   }
 }
 
+//-------------------------------------------------------------------------------------
 void Console::injectKeyUp(const OIS::KeyEvent &arg)
 {
   if(!isVisible()) return;
@@ -107,7 +115,7 @@ void Console::injectKeyUp(const OIS::KeyEvent &arg)
   update();
 }
 
-
+//-------------------------------------------------------------------------------------
 void Console::enter()
 {
   text += "\n> " + command;
@@ -279,6 +287,7 @@ void Console::enter()
   command = "";
 }
 
+//-------------------------------------------------------------------------------------
 void Console::help()
 {
   display("help", "shows this list");
@@ -302,23 +311,27 @@ void Console::help()
   display("player_pos [x] [y] [z]", "sets the player position");
 }
 
+//-------------------------------------------------------------------------------------
 void Console::clear()
 {
   text = "";
   command = "";
 }
 
+//-------------------------------------------------------------------------------------
 void Console::update()
 {
   if(view) view->text(text + "\n%3> " + command + "_");
 }
 
+//-------------------------------------------------------------------------------------
 void Console::backspace()
 {
   if(command.size() == 0) return;
   command = command.substr(0, command.size() - 1);
 }
 
+//-------------------------------------------------------------------------------------
 void Console::stats()
 {
   if(!window) 
@@ -343,26 +356,31 @@ void Console::stats()
   display("loaded scenes", list);
 }
 
+//-------------------------------------------------------------------------------------
 void Console::display(std::string comment)
 {
   text += "\n" + comment;
 }
 
+//-------------------------------------------------------------------------------------
 void Console::display(std::string highlight, std::string comment)
 {
   text += "\n%5" + highlight + "%r - " + comment;
 }
 
+//-------------------------------------------------------------------------------------
 void Console::error(std::string comment)
 {
   text += "\n%4error%r - " + comment;
 }
 
+//-------------------------------------------------------------------------------------
 void Console::noCommand(std::string command)
 {
   error("there is no command '" + command + "'");
 }
 
+//-------------------------------------------------------------------------------------
 void Console::split(const std::string &s, char delim, std::vector<std::string> &elems) 
 {
   std::stringstream ss(s);

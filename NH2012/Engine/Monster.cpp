@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+//-------------------------------------------------------------------------------------
 Monster::Monster(int id)
   : BasicComponent(),
     speed(200),
@@ -31,12 +32,14 @@ Monster::Monster(int id)
 
 }
 
+//-------------------------------------------------------------------------------------
 Monster::~Monster(void)
 {
 
   //scene->getSceneManager()->destroySceneNode(node);
 }
 
+//-------------------------------------------------------------------------------------
 void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   intelligence.frameRenderingQueued(evt);
@@ -61,11 +64,13 @@ void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
   }*/
 }
 
+//-------------------------------------------------------------------------------------
 bool operator==(const Monster& x, const Monster& y)
 {
   return false;//(x.name == y.name);
 }
 
+//-------------------------------------------------------------------------------------
 void Monster::hasSceneChange()
 {
   if(oldScene && node) oldScene->getSceneManager()->destroySceneNode(node);
@@ -77,11 +82,13 @@ void Monster::hasSceneChange()
   skeleton.setNode(scene, node);
 }
 
+//-------------------------------------------------------------------------------------
 void Monster::setPosition(Ogre::Vector3 position)
 {
   this->position = position;
 }
 
+//-------------------------------------------------------------------------------------
 void Monster::setTarget(Ogre::Vector3 target)
 {
   this->target = target;

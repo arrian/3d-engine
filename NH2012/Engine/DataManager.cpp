@@ -1,6 +1,6 @@
 #include "DataManager.h"
 
-
+//-------------------------------------------------------------------------------------
 DataManager::DataManager(void)
   : files(std::vector<Ogre::String>()),
     architecture(ArchitectureList()),
@@ -14,10 +14,12 @@ DataManager::DataManager(void)
 {
 }
 
+//-------------------------------------------------------------------------------------
 DataManager::~DataManager(void)
 {
 }
 
+//-------------------------------------------------------------------------------------
 void DataManager::addData(Ogre::String file)
 {
   std::string ARCHITECTURE = "#Architecture";
@@ -88,24 +90,28 @@ void DataManager::addData(Ogre::String file)
   }
 }
 
+//-------------------------------------------------------------------------------------
 ItemModel* DataManager::getItem(int id)
 {
   if(items.count(id) == 0) return 0;
   return &((*(items.find(id))).second);
 }
 
+//-------------------------------------------------------------------------------------
 MonsterModel* DataManager::getMonster(int id)
 {
   if(monsters.count(id) == 0) return 0;
   return &((*(monsters.find(id))).second);
 }
 
+//-------------------------------------------------------------------------------------
 ArchitectureModel* DataManager::getArchitecture(int id)
 {
   if(architecture.count(id) == 0) return 0;
   return &((*(architecture.find(id))).second);
 }
 
+//-------------------------------------------------------------------------------------
 SceneDesc* DataManager::getScene(int id)
 {
   if(scenes.count(id) == 0) return 0;
