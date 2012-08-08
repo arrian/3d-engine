@@ -23,7 +23,6 @@ World::World(Ogre::Root* root)
     physicsMaterial(0),
     allocatorCallback(),
     errorCallback(),
-    dataManager(new DataManager()),
     debug(false)
 {
 }
@@ -45,9 +44,6 @@ World::~World(void)
 
   physicsFoundation->release();
   physicsFoundation = 0;
-
-  if(dataManager) delete dataManager;
-  dataManager = 0;
 }
 
 //-------------------------------------------------------------------------------------
@@ -852,19 +848,19 @@ void World::parseIni(std::string filename)
 
     //Scenes
     sceneDataFilename = pt.get<std::string>("Scenes.Data");
-    dataManager->addData(sceneDataFilename);
+    dataManager.addData(sceneDataFilename);
 
     //Architecture
     architectureDataFilename = pt.get<std::string>("Architecture.Data");
-    dataManager->addData(architectureDataFilename);
+    dataManager.addData(architectureDataFilename);
 
     //Monsters
     monsterDataFilename = pt.get<std::string>("Monsters.Data");
-    dataManager->addData(monsterDataFilename);
+    dataManager.addData(monsterDataFilename);
 
     //Items
     itemDataFilename = pt.get<std::string>("Items.Data");
-    dataManager->addData(itemDataFilename);
+    dataManager.addData(itemDataFilename);
 
     //Debug
     debug = (pt.get<std::string>("Debug.DebugMode") == TRUE_STRING);
@@ -890,7 +886,7 @@ void World::parseIni(std::string filename)
 //-------------------------------------------------------------------------------------
 DataManager* World::getDataManager()
 {
-  return dataManager;
+  return &dataManager;
 }
 
 //-------------------------------------------------------------------------------------

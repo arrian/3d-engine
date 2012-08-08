@@ -11,6 +11,7 @@
 #include "Monster.h"
 #include "Item.h"
 #include "Architecture.h"
+#include "Portal.h"
 
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxControllerManager.h"
@@ -22,6 +23,7 @@
 class World;
 class Player;
 class Monster;
+class Portal;
 
 class Scene
 {
@@ -38,6 +40,7 @@ public:
   void addItem(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
   void addLight(Ogre::Vector3 position = Ogre::Vector3::ZERO, bool castShadows = false, Ogre::Real range = 10, Ogre::ColourValue colour = Ogre::ColourValue());
   void addParticles(Ogre::String name, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE, Ogre::Real speed = 1);
+  void addPortal(int id, int targetSceneId, int targetPortalId, Ogre::Vector3 position, Ogre::Vector3 lookAt);
 
   void removePlayer(Player* player);
   
@@ -54,7 +57,7 @@ private:
   int id;
   Ogre::String name;
   float north;
-  
+  Portal* defaultEntry;//portal to drop the player at by default. if null pointer then the player will be dropped at zero.
   
   World* world;
   Ogre::SceneManager* sceneManager;
@@ -66,6 +69,7 @@ private:
   std::vector<Ogre::ParticleSystem*> particles;
   std::vector<Monster*> monsters;
   std::vector<Item*> items;
+  std::vector<Portal*> portals;
   Player* player;
 
   /*Defines if the scene should receive frame updates.*/

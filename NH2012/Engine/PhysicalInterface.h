@@ -3,6 +3,10 @@
 #include <OgreQuaternion.h>
 #include <OgreVector3.h>
 
+/**
+ * A generic physical interface.
+ * Will be used for scripting and the console as a generic interface to anything that exists in the world.
+ */
 class PhysicalInterface
 {
 public:

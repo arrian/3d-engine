@@ -1,15 +1,13 @@
 #include "Portal.h"
 
 //-------------------------------------------------------------------------------------
-Portal::Portal(Scene* scene, int targetID, Ogre::Vector3 position, Ogre::Vector3 targetPosition)
-  : scene(scene),
-    targetID(targetID),
-    target(0),
-    door(0),
-    targetPosition(targetPosition),
-    focalPoint(position)
+Portal::Portal(int id, int targetSceneID, int targetPortalID, Ogre::Vector3 position, Ogre::Vector3 lookAt)
+  : id(id),
+    targetSceneID(targetSceneID),
+    targetPortalID(targetPortalID),
+    position(position),
+    lookAt(lookAt)
 {
-  isInternal = (scene->getSceneID() == targetID);
 }
 
 //-------------------------------------------------------------------------------------
@@ -18,25 +16,25 @@ Portal::~Portal(void)
 }
 
 //-------------------------------------------------------------------------------------
-void Portal::loadTarget()
+int Portal::getTargetScene()
 {
-  target = scene->getWorld()->loadScene(targetID);
+  return targetSceneID;
 }
 
 //-------------------------------------------------------------------------------------
-Scene* Portal::getTarget()
+int Portal::getTargetPortal()
 {
-  return target;
+  return targetPortalID;
 }
 
 //-------------------------------------------------------------------------------------
-void Portal::injectObserver(NodeComponent* component)
+Ogre::Vector3 Portal::getPosition()
 {
-
+  return position;
 }
 
 //-------------------------------------------------------------------------------------
-bool Portal::hasLoadedTarget()
+Ogre::Vector3 Portal::getLookAt()
 {
-  return (target != 0 || isInternal);
+  return lookAt;
 }

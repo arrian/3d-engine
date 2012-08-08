@@ -16,6 +16,8 @@ Scene::Scene(World* world, int id)
     items(),
     lights(),
     particles(),
+    portals(),
+    defaultEntry(0),
     player(0),
     active(false),
     accumulator(0.0f),
@@ -71,9 +73,11 @@ Scene::Scene(World* world, int id)
 //-------------------------------------------------------------------------------------
 Scene::~Scene(void)
 {
+  //Deleting architecture
   if(architecture) delete architecture;
   architecture = 0;
 
+  //Deleting all monsters
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
   {
     world->releaseMonster(*it);
@@ -81,6 +85,7 @@ Scene::~Scene(void)
     (*it) = 0;
   }
 
+  //Deleting all items
   for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it)
   {
     world->releaseItem(*it);
@@ -88,9 +93,18 @@ Scene::~Scene(void)
     (*it) = 0;
   }
 
+  //Deleting all portals
+  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
+  {
+    if(*it) delete (*it);
+    (*it) = 0;
+  }
+
+  //Releasing physics
   physicsManager->release();
   physicsManager = 0;
 
+  //Releasing scene manager
   world->getRoot()->destroySceneManager(sceneManager);
   sceneManager = 0;
 }
@@ -129,7 +143,19 @@ physx::PxControllerManager* Scene::getControllerManager()
 void Scene::addPlayer(Player* player)
 {
   active = true;
-  player->setScene(this, Ogre::Vector3(0,10,0), Ogre::Vector3(800,50,600));
+  Ogre::Vector3 position;
+  Ogre::Vector3 lookAt;
+  if(defaultEntry != 0)
+  {
+    position = defaultEntry->getPosition();
+    lookAt = defaultEntry->getLookAt();
+  }
+  else
+  {
+    position = Ogre::Vector3::ZERO;
+    lookAt = Ogre::Vector3::ZERO;
+  }
+  player->setScene(this, position, lookAt);
   this->player = player;
 }
 
@@ -173,6 +199,13 @@ void Scene::addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector
   particleNode->setScale(scale);
   particleNode->attachObject(particle);
   particles.push_back(particle);
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::addPortal(int id, int targetSceneId, int targetPortalId, Ogre::Vector3 position, Ogre::Vector3 lookAt)
+{
+  Portal* portal = new Portal(id, targetSceneId, targetPortalId, position, lookAt);
+  portals.push_back(portal);
 }
 
 //-------------------------------------------------------------------------------------
@@ -259,8 +292,19 @@ void Scene::load(std::string file)
     while(itemNode != 0)
     {
       int id = boost::lexical_cast<int>(itemNode->first_attribute("id")->value());
-      addItem(id, getXMLPosition(itemNode));
+      addItem(id, getXMLPosition(itemNode), getXMLRotation(itemNode));
       itemNode = itemNode->next_sibling("item");
+    }    
+    
+    rapidxml::xml_node<>* portalNode = root->first_node("portal");
+    while(portalNode != 0)
+    {
+      int id = boost::lexical_cast<int>(portalNode->first_attribute("id")->value());
+      int targetSceneID = boost::lexical_cast<int>(portalNode->first_attribute("target_scene_id")->value());
+      int targetPortalID = boost::lexical_cast<int>(portalNode->first_attribute("target_portal_id")->value());
+      addPortal(id, targetSceneID, targetPortalID, getXMLPosition(portalNode), getXMLPosition(portalNode, "ltx", "lty", "ltz"));
+      if(defaultEntry == 0 && portals.size() > 0) defaultEntry = portals[0];//creating a default entry point
+      portalNode = portalNode->next_sibling("portal");
     }
 
     //addParticles("Sun", Ogre::Vector3(0,10,-30), Ogre::Vector3(10,10,10), 3);//temp rain particles

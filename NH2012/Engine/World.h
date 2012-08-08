@@ -235,7 +235,7 @@ private:
 
   Ogre::Root* root;
   SceneChangeListener* sceneChangeListener;
-  DataManager* dataManager;
+  DataManager dataManager;
   
   //World Contents
   Player* player;//std::vector<Player> players;
