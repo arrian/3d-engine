@@ -50,11 +50,10 @@ Scene::Scene(World* world, int id)
   architecture = new Architecture(this);
 
   SceneDesc* sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
-  
+ 
   if(sceneDesc == 0) 
   {
-    //prefer throwing an exception here
-    std::cout << "Could not load the scene with the id " << id << std::endl;
+    throw NHException("Could not find the scene with the given id.");
     name = "Error_Scene";
   }
   else
@@ -140,15 +139,19 @@ physx::PxControllerManager* Scene::getControllerManager()
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addPlayer(Player* player)
+void Scene::addPlayer(Player* player, int portalID)
 {
   active = true;
   Ogre::Vector3 position;
   Ogre::Vector3 lookAt;
-  if(defaultEntry != 0)
+  if(defaultEntry != 0 && portalID == -1)
   {
     position = defaultEntry->getPosition();
     lookAt = defaultEntry->getLookAt();
+  }
+  else if(portalID >= 0)
+  {
+
   }
   else
   {
@@ -202,9 +205,8 @@ void Scene::addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addPortal(int id, int targetSceneId, int targetPortalId, Ogre::Vector3 position, Ogre::Vector3 lookAt)
+void Scene::addPortal(Portal* portal)
 {
-  Portal* portal = new Portal(id, targetSceneId, targetPortalId, position, lookAt);
   portals.push_back(portal);
 }
 
@@ -302,7 +304,7 @@ void Scene::load(std::string file)
       int id = boost::lexical_cast<int>(portalNode->first_attribute("id")->value());
       int targetSceneID = boost::lexical_cast<int>(portalNode->first_attribute("target_scene_id")->value());
       int targetPortalID = boost::lexical_cast<int>(portalNode->first_attribute("target_portal_id")->value());
-      addPortal(id, targetSceneID, targetPortalID, getXMLPosition(portalNode), getXMLPosition(portalNode, "ltx", "lty", "ltz"));
+      addPortal(new Portal(id, targetSceneID, targetPortalID, getXMLPosition(portalNode), getXMLVector(portalNode, "ltx", "lty", "ltz")));
       if(defaultEntry == 0 && portals.size() > 0) defaultEntry = portals[0];//creating a default entry point
       portalNode = portalNode->next_sibling("portal");
     }
@@ -311,7 +313,7 @@ void Scene::load(std::string file)
   }
   catch (rapidxml::parse_error e)
   {
-    std::cout << "Could not load the xml scene file at " << file << ". " << e.what() << std::endl;//change to print to error stream later
+    std::cout << "Could not load the xml scene file at " << file << ". " << e.what() << std::endl;
   }
 }
 
@@ -328,15 +330,15 @@ int Scene::getSceneID()
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third)
+Ogre::Vector3 Scene::getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third)
 {
   float x = 0.0f;
   float y = 0.0f;
   float z = 0.0f;
 
-  rapidxml::xml_attribute<>* xPosition = node->first_attribute("tx");
-  rapidxml::xml_attribute<>* yPosition = node->first_attribute("ty");
-  rapidxml::xml_attribute<>* zPosition = node->first_attribute("tz");
+  rapidxml::xml_attribute<>* xPosition = node->first_attribute(first.c_str());
+  rapidxml::xml_attribute<>* yPosition = node->first_attribute(second.c_str());
+  rapidxml::xml_attribute<>* zPosition = node->first_attribute(third.c_str());
 
   if(xPosition) x = boost::lexical_cast<float>(xPosition->value());
   if(yPosition) y = boost::lexical_cast<float>(yPosition->value());
@@ -349,7 +351,7 @@ Ogre::Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node, std::string firs
 Ogre::Quaternion Scene::getXMLRotation(rapidxml::xml_node<>* node)
 {
   Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
-  Ogre::Vector3 components = getXMLPosition(node, "rx", "ry", "rz");
+  Ogre::Vector3 components = getXMLVector(node, "rx", "ry", "rz");
   
   rotation.FromAngleAxis(Ogre::Degree(components.x), Ogre::Vector3::UNIT_X);
   rotation.FromAngleAxis(Ogre::Degree(components.y), Ogre::Vector3::UNIT_Y);
@@ -359,13 +361,13 @@ Ogre::Quaternion Scene::getXMLRotation(rapidxml::xml_node<>* node)
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::ColourValue Scene::getXMLColour(rapidxml::xml_node<>* node)
+Ogre::ColourValue Scene::getXMLColour(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third, std::string fourth)
 {
   float a = 1.0f;
-  rapidxml::xml_attribute<>* aColour = node->first_attribute("ca");  
+  rapidxml::xml_attribute<>* aColour = node->first_attribute(fourth.c_str());  
   if(aColour) a = boost::lexical_cast<float>(aColour->value());
 
-  Ogre::Vector3 components = getXMLPosition(node, "cr", "cg", "cb");
+  Ogre::Vector3 components = getXMLVector(node, first, second, third);
  
   return Ogre::ColourValue(components.x,components.y,components.z,a);
 }
@@ -373,6 +375,28 @@ Ogre::ColourValue Scene::getXMLColour(rapidxml::xml_node<>* node)
 //-------------------------------------------------------------------------------------
 Ogre::Vector3 Scene::getXMLScale(rapidxml::xml_node<>* node)
 {
-  return getXMLPosition(node, "sx", "sy", "sz");
+  return getXMLVector(node, "sx", "sy", "sz");
 }
+
+//-------------------------------------------------------------------------------------
+Ogre::Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node)
+{
+  return getXMLVector(node, "tx", "ty", "tz");
+}
+
+//-------------------------------------------------------------------------------------
+Portal* Scene::getPortal(int id)
+{
+  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
+  {
+    if((*it)->getID() == id) return (*it);
+  }
+
+  throw NHException("No portal was found with the given id in 'Scene::getPortal(int)'.");//temporarily throw exception
+  return 0;
+}
+
+
+
+
 

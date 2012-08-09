@@ -71,15 +71,18 @@ void World::initialise(std::string iniFile)
   physicsMaterial = physicsWorld->createMaterial(0.5f,0.5f,0.1f);
   if(!physicsMaterial) throw NHException("Default physics material could not be created.");
 
-  //creating initial scene
-  //loadScene(defaultStartLevel, FILE_CHAR);
-  loadScene(0);
-
-  //creating player and placing in initial scene
+  //creating default scene
+  Scene* scene = loadScene(0);
+  if(scene == 0) throw NHException("Default scene creation failed.");
+  
+  //creating player
   player = new Player(this);
-  getScene(0)->addPlayer(player);
+  scene->addPlayer(player);
 
+#ifdef _DEBUG
+  //Creating connection to the PhysX Visual Debugger
   physx::PxExtensionVisualDebugger::connect(physicsWorld->getPvdConnectionManager(), "127.0.0.1", 5425, 10000);
+#endif
 }
 
 //-------------------------------------------------------------------------------------
@@ -106,10 +109,12 @@ Scene* World::getScene(Ogre::String name)
 }
 
 //-------------------------------------------------------------------------------------
-/*Warning: This index is different to the actual scene index. Need to refactor.*/
-Scene* World::getScene(unsigned int index)
+Scene* World::getScene(int id)
 {
-  if(index < scenes.size()) return scenes[index];
+  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
+  {
+    if((*it)->getSceneID() == id) return (*it);
+  }
   return 0;
 }
 
@@ -141,10 +146,7 @@ const physx::PxTolerancesScale& World::getTolerancesScale()
 //-------------------------------------------------------------------------------------
 void World::movePlayer(Player* player, Scene* target)
 {
-  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
-  {
-    (*it)->removePlayer(player);
-  }
+  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) (*it)->removePlayer(player);
   target->addPlayer(player);
 }
 
@@ -160,9 +162,19 @@ void World::getSceneNames(std::vector<Ogre::String> &names)
 //-------------------------------------------------------------------------------------
 Scene* World::loadScene(int id)
 {
+  if(hasScene(id)) return getScene(id);//check that the scene has not been loaded already
   Scene* scene = new Scene(this, id);
   scenes.push_back(scene);
   return scene;
+}
+
+bool World::hasScene(int id)
+{
+  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it)
+  {
+    if((*it)->getSceneID() == id) return true;
+  }
+  return false;
 }
 
 //-------------------------------------------------------------------------------------

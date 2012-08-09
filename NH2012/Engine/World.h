@@ -168,7 +168,7 @@ public:
   DataManager* getDataManager();
   Player* getPlayer();
   Scene* getScene(Ogre::String name);
-  Scene* getScene(unsigned int index);
+  Scene* getScene(int id);
   Ogre::Root* getRoot();
   physx::PxPhysics* getPhysics();
   int getNumberScenes();
@@ -201,6 +201,9 @@ public:
   void injectMouseMove(const OIS::MouseEvent &arg);
   void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
   void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+
+  //Assertions
+  bool hasScene(int id);
 
 
   //Flags... maybe make private... but seems like overkill

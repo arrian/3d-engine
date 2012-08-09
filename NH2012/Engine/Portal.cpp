@@ -38,3 +38,11 @@ Ogre::Vector3 Portal::getLookAt()
 {
   return lookAt;
 }
+
+//-------------------------------------------------------------------------------------
+int Portal::getID()
+{
+  return id;
+}
+
+

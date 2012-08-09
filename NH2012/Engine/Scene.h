@@ -34,13 +34,14 @@ public:
   Ogre::String getName();
   int getSceneID();
   int getNewInstanceNumber();
+  Portal* getPortal(int id = -1);
 
-  void addPlayer(Player* player);
+  void addPlayer(Player* player, int portalID = -1);
   void addMonster(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
   void addItem(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
   void addLight(Ogre::Vector3 position = Ogre::Vector3::ZERO, bool castShadows = false, Ogre::Real range = 10, Ogre::ColourValue colour = Ogre::ColourValue());
   void addParticles(Ogre::String name, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE, Ogre::Real speed = 1);
-  void addPortal(int id, int targetSceneId, int targetPortalId, Ogre::Vector3 position, Ogre::Vector3 lookAt);
+  void addPortal(Portal* portal);
 
   void removePlayer(Player* player);
   
@@ -59,6 +60,8 @@ private:
   float north;
   Portal* defaultEntry;//portal to drop the player at by default. if null pointer then the player will be dropped at zero.
   
+  Ogre::ColourValue defaultAmbientColour;
+
   World* world;
   Ogre::SceneManager* sceneManager;
   physx::PxScene* physicsManager;
@@ -80,10 +83,11 @@ private:
   
   /*void generatePredefined();*/
   void load(std::string file);
-  Ogre::Vector3 getXMLPosition(rapidxml::xml_node<>* node, std::string first = "tx", std::string second = "ty", std::string third = "tz");
+  Ogre::Vector3 getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third);
   Ogre::Quaternion getXMLRotation(rapidxml::xml_node<>* node);
-  Ogre::ColourValue getXMLColour(rapidxml::xml_node<>* node);
+  Ogre::ColourValue getXMLColour(rapidxml::xml_node<>* node, std::string first = "cr", std::string second = "cg", std::string third = "cb", std::string fourth = "ca");
   Ogre::Vector3 getXMLScale(rapidxml::xml_node<>* node);
+  Ogre::Vector3 getXMLPosition(rapidxml::xml_node<>* node);
   
   bool advancePhysics(Ogre::Real dt);
   float accumulator;
