@@ -35,6 +35,7 @@ public:
   int getSceneID();
   int getNewInstanceNumber();
   Portal* getPortal(int id = -1);
+  Portal* getDefaultPortal();
 
   void addPlayer(Player* player, int portalID = -1);
   void addMonster(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);

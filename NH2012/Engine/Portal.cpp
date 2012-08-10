@@ -6,7 +6,8 @@ Portal::Portal(int id, int targetSceneID, int targetPortalID, Ogre::Vector3 posi
     targetSceneID(targetSceneID),
     targetPortalID(targetPortalID),
     position(position),
-    lookAt(lookAt)
+    lookAt(lookAt),
+    loadArea()
 {
 }
 
@@ -45,4 +46,8 @@ int Portal::getID()
   return id;
 }
 
-
+//-------------------------------------------------------------------------------------
+bool Portal::isLoadRequired(Ogre::Vector3 observerPosition)
+{
+  return loadArea.contains(observerPosition);
+}

@@ -21,7 +21,8 @@ Scene::Scene(World* world, int id)
     player(0),
     active(false),
     accumulator(0.0f),
-    stepSize(1.0f / 60.0f)
+    stepSize(1.0f / 60.0f),
+    defaultAmbientColour(0.8f,0.8f,0.8f)
 {
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
@@ -62,9 +63,8 @@ Scene::Scene(World* world, int id)
     load(sceneDesc->file);//loading the scene file
   }
 
-  if(world->enableLights) sceneManager->setAmbientLight(Ogre::ColourValue(0.053f,0.05f,0.05f));
-  else sceneManager->setAmbientLight(Ogre::ColourValue(1.0f,1.0f,1.0f));
-
+  sceneManager->setAmbientLight(defaultAmbientColour);
+  
   //building static geometry
   architecture->build();
 }
@@ -151,7 +151,9 @@ void Scene::addPlayer(Player* player, int portalID)
   }
   else if(portalID >= 0)
   {
-
+    Portal* portal = getPortal(portalID);
+    position = portal->getPosition();
+    lookAt = portal->getLookAt();
   }
   else
   {
@@ -230,13 +232,17 @@ int Scene::getNewInstanceNumber()
 //-------------------------------------------------------------------------------------
 void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-  if(!physicsManager) std::cout << "no physics found for this frame" << std::endl;
+  if(!physicsManager) throw NHException("No physics found. Scene::frameRenderingQueued()");
   
   physicsManager->fetchResults(true);
   if(player) player->frameRenderingQueued(evt);
 
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->frameRenderingQueued(evt);//iterate monsters
   for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) (*it)->frameRenderingQueued(evt);//iterate items
+  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it) 
+  {
+    if((*it)->isLoadRequired(player->getPosition())) world->loadScene((*it)->getID());
+  }
 
   if(!world->freezeCollisionDebug) advancePhysics(evt.timeSinceLastFrame);
 }
@@ -268,6 +274,9 @@ void Scene::load(std::string file)
 
     doc.parse<0>(&buffer[0]);
     rapidxml::xml_node<>* root = doc.first_node("scene");
+
+    defaultAmbientColour = getXMLColour(root, "ambient_r", "ambient_g", "ambient_b");
+
     
     //description attributes
     north = boost::lexical_cast<float>(root->first_attribute("north")->value());
@@ -396,7 +405,10 @@ Portal* Scene::getPortal(int id)
   return 0;
 }
 
-
-
+//-------------------------------------------------------------------------------------
+Portal* Scene::getDefaultPortal()
+{
+  return getPortal(0);//could make more intelligent
+}
 
 

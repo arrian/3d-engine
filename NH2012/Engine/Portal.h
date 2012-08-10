@@ -1,6 +1,7 @@
 #pragma once
 
 #include <OgreVector3.h>
+#include <OgreAxisAlignedBox.h>
 
 #include "World.h"
 #include "Scene.h"
@@ -20,12 +21,15 @@ public:
 
   Ogre::Vector3 getPosition();
   Ogre::Vector3 getLookAt();
+
+  bool isLoadRequired(Ogre::Vector3 observerPosition);
 private:
-  World* world;
   int id;
   int targetSceneID;//defines the ID of the target scene
   int targetPortalID;
   Ogre::Vector3 position;//defines the portal's target position in the target scene
   Ogre::Vector3 lookAt;
+
+  Ogre::AxisAlignedBox loadArea;
 };
 

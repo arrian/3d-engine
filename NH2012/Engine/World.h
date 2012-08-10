@@ -180,6 +180,7 @@ public:
   //Creation
   Item* createItem(int id);
   Monster* createMonster(int id);
+  //Mesh physics creation... extract to appropriate class
   physx::PxConvexMesh* createConvexMesh(Ogre::Entity* e);
   physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
   physx::PxTriangleMesh* createTriangleMeshV2(Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);
@@ -206,7 +207,7 @@ public:
   bool hasScene(int id);
 
 
-  //Flags... maybe make private... but seems like overkill
+  //Flags... extract to settings class
   bool debug;
   bool verbose;
   bool enablePhysics;

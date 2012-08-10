@@ -1,4 +1,4 @@
-<scene north="0" fog_start="100" fog_end="200" fog_colour="0.5,0.5,0.5">
+<scene north="0" fog_start="100" fog_end="200" fog_colour="0.5,0.5,0.5" ambient_r="1" ambient_g="1" ambient_b="1" >
   <monster id="201" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" />
   <item id="340" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" />
   <portal id="0" target_scene_id="1" target_portal_id="0" tx="0" ty="0" tz="0" ltx="0" lty="0" ltz="0" />
