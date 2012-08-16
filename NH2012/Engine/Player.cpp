@@ -7,11 +7,12 @@
 Player::Player(World* world) 
   : world(world),
     scene(0),
-    inventory(),
     camera(),
     skeleton(),
     visual("actor.mesh"),
-    addItem(false)
+    addItem(false),
+    placementDistance(3.0f),
+    lookResponsiveness(0.15f)
 {
 }
 
@@ -62,7 +63,7 @@ void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
   skeleton.frameRenderingQueued(evt);
   camera.frameRenderingQueued(evt);//for aspect ratio changes
 
-  if(addItem) scene->addItem(0, skeleton.getForwardPosition(3.0));//adding items if the key was pressed
+  if(addItem) scene->addItem(0, skeleton.getForwardPosition(placementDistance));//adding items if the key was pressed
 }
 
 //-------------------------------------------------------------------------------------
@@ -91,7 +92,7 @@ void Player::injectKeyUp(const OIS::KeyEvent &evt)
 //-------------------------------------------------------------------------------------
 void Player::injectMouseMove(const OIS::MouseEvent &evt)
 {
-  float lookResponsiveness = 0.15f;
+  float lookResponsiveness = lookResponsiveness;
   skeleton.headRelative(Ogre::Degree(-evt.state.X.rel * lookResponsiveness), Ogre::Degree(-evt.state.Y.rel * lookResponsiveness));
 }
 

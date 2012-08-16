@@ -30,6 +30,7 @@ private:
   Ogre::Vector3 position;//defines the portal's target position in the target scene
   Ogre::Vector3 lookAt;
 
-  Ogre::AxisAlignedBox loadArea;
+  Ogre::AxisAlignedBox loadArea;//area in which the target scene should be loaded
+  Ogre::AxisAlignedBox moveArea;//area in which the observer should be moved to the target scene
 };
 

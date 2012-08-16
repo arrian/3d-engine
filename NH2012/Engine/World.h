@@ -262,6 +262,10 @@ private:
   Ogre::String month(Date date);
   Ogre::String serialiseDate(Date date);
 
+  //Defaults
+  physx::PxReal defaultStaticFriction;
+  physx::PxReal defaultDynamicFriction;
+  physx::PxReal defaultRestitution;
 
 };
 

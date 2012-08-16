@@ -22,7 +22,8 @@ Scene::Scene(World* world, int id)
     active(false),
     accumulator(0.0f),
     stepSize(1.0f / 60.0f),
-    defaultAmbientColour(0.8f,0.8f,0.8f)
+    defaultAmbientColour(0.8f,0.8f,0.8f),
+    numberPhysicsCPUThreads(8)
 {
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
@@ -30,7 +31,7 @@ Scene::Scene(World* world, int id)
   physx::PxSceneDesc desc(world->getTolerancesScale());
   desc.gravity = physx::PxVec3(0.0f, world->gravity, 0.0f);
   
-  desc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(8);
+  desc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
   if(!desc.cpuDispatcher) throw NHException("Could not create scene CPU dispatcher.");
 
   desc.filterShader = &physx::PxDefaultSimulationFilterShader;

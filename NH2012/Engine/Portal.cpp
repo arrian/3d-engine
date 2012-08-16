@@ -7,7 +7,8 @@ Portal::Portal(int id, int targetSceneID, int targetPortalID, Ogre::Vector3 posi
     targetPortalID(targetPortalID),
     position(position),
     lookAt(lookAt),
-    loadArea()
+    loadArea(),
+    moveArea()
 {
 }
 

@@ -23,7 +23,10 @@ World::World(Ogre::Root* root)
     physicsMaterial(0),
     allocatorCallback(),
     errorCallback(),
-    debug(false)
+    debug(false),
+    defaultStaticFriction(0.3f),
+    defaultDynamicFriction(0.4f),
+    defaultRestitution(0.2f)
 {
 }
 
@@ -68,7 +71,7 @@ void World::initialise(std::string iniFile)
   if(!physicsCooking) throw NHException("Physics cooker could not be created.");
   //should release cooking during gameplay
 
-  physicsMaterial = physicsWorld->createMaterial(0.5f,0.5f,0.1f);
+  physicsMaterial = physicsWorld->createMaterial(defaultStaticFriction, defaultDynamicFriction, defaultRestitution);
   if(!physicsMaterial) throw NHException("Default physics material could not be created.");
 
   //creating default scene

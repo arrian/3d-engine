@@ -93,5 +93,7 @@ private:
   bool advancePhysics(Ogre::Real dt);
   float accumulator;
   float stepSize;
+
+  physx::PxU32 numberPhysicsCPUThreads;
 };
 

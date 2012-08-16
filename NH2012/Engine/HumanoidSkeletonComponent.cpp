@@ -8,10 +8,25 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
   : NodeComponent(),
     physx::PxControllerBehaviorCallback(),
     controller(0),
+    leftHandItem(0),
+    rightHandItem(0),
+    headItem(0),
+    leftHandOrigin(0,-0.5,0.5),//test value
+    rightHandOrigin(0,0.5,0.5),//test value
+    headOrigin(0,0,1.75),
     speed(1),
     gravity(-9.81f),
     velocity(Ogre::Vector3::ZERO),
-    collisionEnabled(true)
+    collisionEnabled(true),
+    radius(0.5f),
+    height(1.0f),
+    density(1.0f),
+    scaleCoeff(1.0f),
+    stepOffset(0.4f),
+    runScalar(1.3f),
+    moveScalar(10.0f),
+    jumpVelocity(2.5f),
+    minimumMoveDistance(0.001f)
 {
 }
 
@@ -49,15 +64,15 @@ void HumanoidSkeletonComponent::hasNodeChange()
 
   physx::PxCapsuleControllerDesc desc;
   desc.material = scene->getWorld()->getDefaultPhysicsMaterial();
-  desc.radius = 0.5f;
-  desc.height = 1.0f;
-  desc.density = 1.0f;
+  desc.radius = radius;
+  desc.height = height;
+  desc.density = density;
+  desc.scaleCoeff = scaleCoeff;
+  desc.stepOffset = stepOffset;
   desc.position = physx::PxExtendedVec3(node->getPosition().x, node->getPosition().y, node->getPosition().z);
-  desc.scaleCoeff = 1.0f;
   desc.behaviorCallback = this;
   desc.callback = this;
-  desc.stepOffset = 0.4f;
-
+ 
   //set character controller desc options here
   controller = scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
 
@@ -66,7 +81,7 @@ void HumanoidSkeletonComponent::hasNodeChange()
   stop();
 
   head = node->createChildSceneNode();
-  head->setPosition(Ogre::Vector3(0,1.0f,0));
+  head->setPosition(Ogre::Vector3(0,height,0));
   rightHand = node->createChildSceneNode();
   leftHand = node->createChildSceneNode();
 }
@@ -98,15 +113,15 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
   float oldY = velocity.y;
   velocity.y = 0;
 
-  Ogre::Real topSpeed = run ? speed * 1.3f : speed;
+  Ogre::Real topSpeed = run ? speed * runScalar : speed;
   if (accel.squaredLength() != 0)
   {
     accel.normalise();
-    velocity += accel * topSpeed * evt.timeSinceLastFrame * 10.0f;
+    velocity += accel * topSpeed * evt.timeSinceLastFrame * moveScalar;
   }
   else 
   {
-    Ogre::Vector3 reduce = velocity * evt.timeSinceLastFrame * 10.0f;
+    Ogre::Vector3 reduce = velocity * evt.timeSinceLastFrame * moveScalar;
     if(velocity.squaredLength() > reduce.squaredLength()) velocity -= reduce;//comparing with reduction length reduces jitter at low frame rates
     else velocity = Ogre::Vector3::ZERO;
   }
@@ -125,14 +140,14 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
     velocity.y = oldY;
     velocity.y += gravity * evt.timeSinceLastFrame;
 
-    physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * 10.0f, velocity.y * evt.timeSinceLastFrame * 10.0f, velocity.z * evt.timeSinceLastFrame * 10.0f), 0.001f, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
+    physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * moveScalar, velocity.y * evt.timeSinceLastFrame * moveScalar, velocity.z * evt.timeSinceLastFrame * moveScalar), minimumMoveDistance, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
     if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;
     physx::PxExtendedVec3 cPosition = controller->getPosition();
     node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position
   }
   else //just move the controller ignoring all collisions
   {
-    controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(velocity.x * evt.timeSinceLastFrame * 10.0f, velocity.y * evt.timeSinceLastFrame * 10.0f, velocity.z * evt.timeSinceLastFrame * 10.0f));
+    controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(velocity.x * evt.timeSinceLastFrame * moveScalar, velocity.y * evt.timeSinceLastFrame * moveScalar, velocity.z * evt.timeSinceLastFrame * moveScalar));
     physx::PxExtendedVec3 cPosition = controller->getPosition();
     node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position
   }
@@ -206,7 +221,7 @@ Ogre::SceneNode* HumanoidSkeletonComponent::getHead()
 //-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::jump()
 {
-  velocity.y = 2.5f;
+  velocity.y = jumpVelocity;
 }
 
 //-------------------------------------------------------------------------------------
@@ -236,7 +251,7 @@ void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hi
 		if(hit.dir.y == 0.0f)
 		{
 			physx::PxReal coeff = dActor->getMass() * hit.length;
-			physx::PxRigidBodyExt::addForceAtLocalPos(*dActor,hit.dir*coeff, physx::PxVec3(0,0,0), physx::PxForceMode::eIMPULSE);
+			physx::PxRigidBodyExt::addForceAtLocalPos(*dActor, hit.dir * coeff, physx::PxVec3(0,0,0), physx::PxForceMode::eIMPULSE);
 		}
   }
 }
