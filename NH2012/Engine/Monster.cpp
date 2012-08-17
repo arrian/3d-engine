@@ -7,7 +7,6 @@ Monster::Monster(int id)
   : BasicComponent(),
     speed(200),
     node(0),
-    inventory(),
     intelligence(),
     visual("actor.mesh"),
     skeleton()

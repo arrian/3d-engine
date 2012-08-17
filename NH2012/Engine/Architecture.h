@@ -44,6 +44,9 @@ private:
 
   Ogre::StaticGeometry* geometry;
 
-  void addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE);
+  void addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE);
+
+  float defaultFriction;
+  float defaultRestitution;
 };
 

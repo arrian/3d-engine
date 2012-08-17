@@ -39,11 +39,11 @@
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="VisualComponent.h" />
     <ClInclude Include="PhysicsErrorCallback.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneChangeListener.h" />
-    <ClInclude Include="SceneType.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +66,7 @@
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="VisualComponent.cpp" />
     <ClCompile Include="PhysicsErrorCallback.cpp" />
     <ClCompile Include="Player.cpp" />

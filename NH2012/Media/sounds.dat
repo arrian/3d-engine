@@ -1,6 +1,14 @@
 #Sounds
 #Id,Name,File
 
+[Samples]
 0,Buzz,buzz.wav
 1,Drip,drip.wav
 2,Switch,switch.wav
+
+[Ambience]
+3,Day,day.wav
+4,Night,night.wav
+
+[Music]
+5,Introduction,intro.wav

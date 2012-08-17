@@ -59,6 +59,18 @@ struct SceneDesc
   Ogre::String name;
 };
 
+struct SoundDesc
+{
+  SoundDesc(Ogre::String name, Ogre::String file)
+    : name(name),
+      file(file)
+  {
+  }
+
+  Ogre::String file;
+  Ogre::String name;
+};
+
 typedef std::map<int, ArchitectureModel > ArchitectureList;
 typedef std::map<Ogre::String, std::vector<ArchitectureModel*> > ArchitectureGroups;
 
@@ -70,6 +82,9 @@ typedef std::map<Ogre::String, std::vector<MonsterModel*> > MonsterGroups;
 
 typedef std::map<int, SceneDesc > SceneList;
 typedef std::map<Ogre::String, std::vector<SceneDesc*> > SceneGroups;
+
+typedef std::map<int, SoundDesc > SoundList;
+typedef std::map<Ogre::String, std::vector<SoundDesc*> > SoundGroups;
 
 /* Handles the loading of object mesh names from the data files.*/
 class DataManager
@@ -85,6 +100,7 @@ public:
   MonsterModel* getMonster(int id);
   ArchitectureModel* getArchitecture(int id);
   SceneDesc* getScene(int id);
+  SoundDesc* getSound(int id);
 private:
   std::vector<Ogre::String> files;
 
@@ -99,5 +115,15 @@ private:
 
   SceneList scenes;
   SceneGroups sceneGroups;
+
+  SoundList sounds;
+  SoundGroups soundGroups;
+
+  std::string SOUNDS_IDENTIFIER;
+  std::string ARCHITECTURE_IDENTIFIER;
+  std::string ITEMS_IDENTIFIER;
+  std::string MONSTERS_IDENTIFIER;
+  std::string SCENES_IDENTIFIER;
+  
 };
 

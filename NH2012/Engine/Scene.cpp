@@ -175,7 +175,6 @@ void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation
 }
 
 //-------------------------------------------------------------------------------------
-//TODO use references rather than pointers
 void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
   Item* item = this->getWorld()->createItem(id);

@@ -1,13 +1,22 @@
 #pragma once
 
+//Ogre
 #include <OgreVector3.h>
 #include <OgreSceneNode.h>
+
+//PhysX
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxCapsuleController.h"
-#include "NodeComponent.h"
 #include "characterkinematic/PxControllerBehavior.h"
 #include "characterkinematic/PxController.h"
 
+//Local
+#include "Item.h"
+#include "NodeComponent.h"
+
+/************************************************************************/
+/* A humanoid skeleton that can be attached to a node.                  */
+/************************************************************************/
 class HumanoidSkeletonComponent : public NodeComponent, public physx::PxControllerBehaviorCallback, public physx::PxUserControllerHitReport
 {
 public:
@@ -42,6 +51,10 @@ public:
   void headRelative(Ogre::Degree x, Ogre::Degree y);
   void leftHandRelative(Ogre::Degree x, Ogre::Degree y);
   void rightHandRelative(Ogre::Degree x, Ogre::Degree y);
+
+  //Assertions
+  bool isLeftHand();
+  bool isRightHand();
 
   //Callbacks
   void onShapeHit(const physx::PxControllerShapeHit& hit);
@@ -90,10 +103,11 @@ protected:
   float density;
   float scaleCoeff;
   float stepOffset;
+  float minimumMoveDistance;
 
+  //General Constants
   float runScalar;
   float moveScalar;
   float jumpVelocity;
-  float minimumMoveDistance;
 };
 

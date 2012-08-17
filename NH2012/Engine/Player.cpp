@@ -12,7 +12,8 @@ Player::Player(World* world)
     visual("actor.mesh"),
     addItem(false),
     placementDistance(3.0f),
-    lookResponsiveness(0.15f)
+    lookResponsiveness(0.15f),
+    handMoveScalar(0.1f)
 {
 }
 
@@ -57,6 +58,12 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
 }
 
 //-------------------------------------------------------------------------------------
+Scene* Player::getScene()
+{
+  return scene;
+}
+
+//-------------------------------------------------------------------------------------
 void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   //std::cout << "x:" << node->getPosition().x << " z:" <<  node->getPosition().z << " y:" <<  node->getPosition().y << std::endl;
@@ -92,8 +99,18 @@ void Player::injectKeyUp(const OIS::KeyEvent &evt)
 //-------------------------------------------------------------------------------------
 void Player::injectMouseMove(const OIS::MouseEvent &evt)
 {
-  float lookResponsiveness = lookResponsiveness;
-  skeleton.headRelative(Ogre::Degree(-evt.state.X.rel * lookResponsiveness), Ogre::Degree(-evt.state.Y.rel * lookResponsiveness));
+  float lookScalar = 1.0f;
+  if(skeleton.isLeftHand()) 
+  {
+    skeleton.leftHandRelative(Ogre::Degree(-evt.state.X.rel * lookResponsiveness), Ogre::Degree(-evt.state.Y.rel * lookResponsiveness));
+    lookScalar = handMoveScalar;
+  }
+  if(skeleton.isRightHand()) 
+  {
+    skeleton.rightHandRelative(Ogre::Degree(-evt.state.X.rel * lookResponsiveness), Ogre::Degree(-evt.state.Y.rel * lookResponsiveness));
+    lookScalar = handMoveScalar;
+  }
+  skeleton.headRelative(Ogre::Degree(-evt.state.X.rel * lookResponsiveness * lookScalar), Ogre::Degree(-evt.state.Y.rel * lookResponsiveness * lookScalar));
 }
 
 //-------------------------------------------------------------------------------------

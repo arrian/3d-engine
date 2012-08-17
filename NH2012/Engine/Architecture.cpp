@@ -9,7 +9,9 @@ Architecture::Architecture(Scene* scene)
     geometry(scene->getSceneManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getscenemanager have been constructed
     nodes(),
     actors(),
-    statics()
+    statics(),
+    defaultFriction(0.2f),
+    defaultRestitution(0.7f)
 {
 }
 
@@ -41,11 +43,11 @@ Architecture::~Architecture(void)
 //-------------------------------------------------------------------------------------
 void Architecture::add(Ogre::String meshName, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
-  addStaticTrimesh(meshName, 0.2f, 0.7f, position, quaternion);
+  addStaticTrimesh(meshName, defaultRestitution, defaultFriction, position, quaternion);
 }
 
 //-------------------------------------------------------------------------------------
-void Architecture::addStaticTrimesh(Ogre::String meshName, Ogre::Real restitution, const Ogre::Real friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
+void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
   Ogre::Entity* entity = 0;
   physx::PxTriangleMesh* mesh = 0;

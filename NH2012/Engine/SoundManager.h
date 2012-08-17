@@ -17,5 +17,8 @@ public:
   FMOD::System* system;
   std::vector<FMOD::Sound*> sounds;
   std::vector<FMOD::Channel*> channels;
+
+  FMOD::Sound* playSound(int id);
+  void playMusic(int id);
 };
 

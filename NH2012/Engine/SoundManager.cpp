@@ -9,7 +9,7 @@ SoundManager::SoundManager(void)
 
 }
 
-
+//-------------------------------------------------------------------------------------
 SoundManager::~SoundManager(void)
 {
   int result;
@@ -23,3 +23,6 @@ SoundManager::~SoundManager(void)
   system->close();
   system->release();
 }
+
+
+//-------------------------------------------------------------------------------------

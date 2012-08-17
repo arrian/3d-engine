@@ -18,6 +18,8 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
     gravity(-9.81f),
     velocity(Ogre::Vector3::ZERO),
     collisionEnabled(true),
+    moveLeftHand(false),
+    moveRightHand(false),
     radius(0.5f),
     height(1.0f),
     density(1.0f),
@@ -104,15 +106,20 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
 {
   if(!node) return;
 
+  //Calculating the acceleration vector
   Ogre::Vector3 accel = Ogre::Vector3::ZERO;
   if (moveForward) accel -= node->getOrientation().zAxis();//equivalent to camera->getDirection()
   if (moveBack) accel += node->getOrientation().zAxis();
   if (moveRight) accel += node->getOrientation().xAxis();//equivalent to camera->getRight()
   if (moveLeft) accel -= node->getOrientation().xAxis();
   
-  float oldY = velocity.y;
-  velocity.y = 0;
-
+  float oldY;
+  if(collisionEnabled)//ignore up/down directional movement from camera when collision enabled
+  {
+    oldY = velocity.y;
+    velocity.y = 0;
+  }
+  
   Ogre::Real topSpeed = run ? speed * runScalar : speed;
   if (accel.squaredLength() != 0)
   {
@@ -128,7 +135,7 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
 
   Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
 
-  if (velocity.squaredLength() > topSpeed * topSpeed)
+  if (velocity.squaredLength() > topSpeed * topSpeed)//don't go over the top speed
   {
     velocity.normalise();
     velocity *= topSpeed;
@@ -137,13 +144,13 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
 
   if(collisionEnabled)
   {
-    velocity.y = oldY;
-    velocity.y += gravity * evt.timeSinceLastFrame;
+    velocity.y = oldY;//restoring saved up/down speed
+    velocity.y += gravity * evt.timeSinceLastFrame;//only apply gravity when collision enabled
 
     physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * moveScalar, velocity.y * evt.timeSinceLastFrame * moveScalar, velocity.z * evt.timeSinceLastFrame * moveScalar), minimumMoveDistance, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
-    if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;
+    if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;//stop falling when collision at the base of the skeleton occurs
     physx::PxExtendedVec3 cPosition = controller->getPosition();
-    node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position
+    node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position from the physics world calculated position
   }
   else //just move the controller ignoring all collisions
   {
@@ -213,6 +220,18 @@ void HumanoidSkeletonComponent::headRelative(Ogre::Degree x, Ogre::Degree y)
 }
 
 //-------------------------------------------------------------------------------------
+void HumanoidSkeletonComponent::rightHandRelative(Ogre::Degree x, Ogre::Degree y)
+{
+
+}
+
+//-------------------------------------------------------------------------------------
+void HumanoidSkeletonComponent::leftHandRelative(Ogre::Degree x, Ogre::Degree y)
+{
+
+}
+
+//-------------------------------------------------------------------------------------
 Ogre::SceneNode* HumanoidSkeletonComponent::getHead()
 {
   return head;
@@ -275,5 +294,17 @@ Ogre::Vector3 HumanoidSkeletonComponent::getForwardPosition(Ogre::Real distance)
   position *= distance;
   position = node->getPosition() - position;
   return position;
+}
+
+//-------------------------------------------------------------------------------------
+bool HumanoidSkeletonComponent::isLeftHand()
+{
+  return moveLeftHand;
+}
+
+//-------------------------------------------------------------------------------------
+bool HumanoidSkeletonComponent::isRightHand()
+{
+  return moveRightHand;
 }
 

@@ -8,7 +8,6 @@
 #include "HumanoidSkeletonComponent.h"
 #include "IntelligenceComponent.h"
 #include "VisualComponent.h"
-#include "Inventory.h"
 #include "Attributes.h"
 #include "Bar.h"
 
@@ -73,8 +72,6 @@ protected:
   Ogre::Real magicResistance;
   Ogre::Real meleeResistance;
   */
-
-  Inventory inventory;
 
   void hasSceneChange();
 };

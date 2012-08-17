@@ -45,29 +45,7 @@ class Monster;
 class Item;
 class Scene;
 
-//Date Storage
-struct Date
-{
-  Date()
-  {
-    time_t t = time(0);
-    struct tm * now = localtime( & t );
-    year = now->tm_year + 1900;
-    month = now->tm_mon + 1;
-    day = now->tm_mday;
-  }
 
-  Date(int year, int month, int day)
-  {
-    this->year = year;
-    this->month = month;
-    this->day = day;
-  }
-
-  int year;
-  int month;
-  int day;
-};
 
 //Keyboard and Mouse Controls
 struct Controls
@@ -154,16 +132,6 @@ public:
   void parseIni(std::string filename);
   Scene* loadScene(int id);
 
-  //Dates
-  Date getDate();
-  Ogre::String getDateString();
-  Ogre::String getMoonPhase();
-  bool isFriday13();
-  bool isBirthday();
-  bool isHalloween();
-  bool isNewYears();
-  bool isDebug();
-
   //Getters
   DataManager* getDataManager();
   Player* getPlayer();
@@ -205,7 +173,7 @@ public:
 
   //Assertions
   bool hasScene(int id);
-
+  bool isDebug();
 
   //Flags... extract to settings class
   bool debug;
@@ -232,7 +200,7 @@ public:
   Ogre::String architectureDataFilename;
   Ogre::String monsterDataFilename;
   Ogre::String itemDataFilename;
-  Ogre::String levelDataFilename;
+  Ogre::String soundDataFilename;
   Controls controls;/*! Stores the control mapping.*/
 
 private:
@@ -254,13 +222,6 @@ private:
   physx::PxCooking* physicsCooking;
   physx::PxPhysics* physicsWorld;
   physx::PxMaterial* physicsMaterial;//default material
-
-  //Environment
-  Ogre::String serialiseMoonPhase(int moonPhase);
-  int calculateMoonPhase(Date date);
-  Ogre::String day(Date date);
-  Ogre::String month(Date date);
-  Ogre::String serialiseDate(Date date);
 
   //Defaults
   physx::PxReal defaultStaticFriction;

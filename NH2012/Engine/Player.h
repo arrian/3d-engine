@@ -36,6 +36,7 @@ public:
 
   //Getters
   Ogre::Vector3 getPosition();
+  Scene* getScene();//gets the scene the player is currently in
 
   //Injectors
   void injectKeyDown(const OIS::KeyEvent &evt);
@@ -58,5 +59,6 @@ private:
 
   float placementDistance;
   float lookResponsiveness;
+  float handMoveScalar;
 };
 
