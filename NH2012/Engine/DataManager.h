@@ -1,90 +1,94 @@
 #pragma once
 
-#include <OgreString.h>
+#include <map>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <fstream>
 
 #include <boost/algorithm/string.hpp>
 
 struct ArchitectureModel
 {
-  ArchitectureModel(Ogre::String name, Ogre::String mesh)
+  ArchitectureModel(std::string name, std::string mesh)
     : name(name),
       mesh(mesh)
   {
   }
 
-  Ogre::String mesh;
-  Ogre::String name;
+  std::string mesh;
+  std::string name;
 };
 
 struct ItemModel
 {
-  ItemModel(Ogre::String name, Ogre::String mesh)
+  ItemModel(std::string name, std::string mesh)
     : name(name),
       mesh(mesh)
   {
   }
 
-  Ogre::String mesh;
-  Ogre::String name;
+  std::string mesh;
+  std::string name;
 
   int value;
 };
 
 struct MonsterModel
 {
-  MonsterModel(Ogre::String name, Ogre::String mesh)
+  MonsterModel(std::string name, std::string mesh)
     : name(name),
     mesh(mesh)
   {
   }
 
-  Ogre::String mesh;
-  Ogre::String name;
+  std::string mesh;
+  std::string name;
 
-  Ogre::Real frequency;
-  Ogre::Real speed;
-  Ogre::Real size;
-  Ogre::Real weight;
+  float frequency;
+  float speed;
+  float size;
+  float weight;
 };
 
 struct SceneDesc
 {
-  SceneDesc(Ogre::String name, Ogre::String file)
+  SceneDesc(std::string name, std::string file)
     : name(name),
     file(file)
   {
   }
 
-  Ogre::String file;
-  Ogre::String name;
+  std::string file;
+  std::string name;
 };
 
 struct SoundDesc
 {
-  SoundDesc(Ogre::String name, Ogre::String file)
+  SoundDesc(std::string name, std::string file)
     : name(name),
       file(file)
   {
   }
 
-  Ogre::String file;
-  Ogre::String name;
+  std::string file;
+  std::string name;
 };
 
 typedef std::map<int, ArchitectureModel > ArchitectureList;
-typedef std::map<Ogre::String, std::vector<ArchitectureModel*> > ArchitectureGroups;
+typedef std::map<std::string, std::vector<ArchitectureModel*> > ArchitectureGroups;
 
 typedef std::map<int, ItemModel > ItemList;
-typedef std::map<Ogre::String, std::vector<ItemModel*> > ItemGroups;
+typedef std::map<std::string, std::vector<ItemModel*> > ItemGroups;
 
 typedef std::map<int, MonsterModel > MonsterList;
-typedef std::map<Ogre::String, std::vector<MonsterModel*> > MonsterGroups;
+typedef std::map<std::string, std::vector<MonsterModel*> > MonsterGroups;
 
 typedef std::map<int, SceneDesc > SceneList;
-typedef std::map<Ogre::String, std::vector<SceneDesc*> > SceneGroups;
+typedef std::map<std::string, std::vector<SceneDesc*> > SceneGroups;
 
 typedef std::map<int, SoundDesc > SoundList;
-typedef std::map<Ogre::String, std::vector<SoundDesc*> > SoundGroups;
+typedef std::map<std::string, std::vector<SoundDesc*> > SoundGroups;
 
 /* Handles the loading of object mesh names from the data files.*/
 class DataManager
@@ -94,15 +98,21 @@ public:
   ~DataManager(void);
 
   /* Analyses the given data file.*/
-  void addData(Ogre::String file);
+  void addData(std::string file);
 
   ItemModel* getItem(int id);
   MonsterModel* getMonster(int id);
   ArchitectureModel* getArchitecture(int id);
   SceneDesc* getScene(int id);
   SoundDesc* getSound(int id);
+
+  ArchitectureGroups* getArchitectureGroups();
+  ItemGroups* getItemGroups();
+  MonsterGroups* getMonsterGroups();
+  SceneGroups* getSceneGroups();
+  SoundGroups* getSoundGroups();
 private:
-  std::vector<Ogre::String> files;
+  std::vector<std::string> files;
 
   ArchitectureList architecture;
   ArchitectureGroups architectureGroups;

@@ -145,18 +145,18 @@ void Scene::addPlayer(Player* player, int portalID)
   active = true;
   Ogre::Vector3 position;
   Ogre::Vector3 lookAt;
-  if(defaultEntry != 0 && portalID == -1)
+  if(defaultEntry != 0 && portalID == -1)//use default portal
   {
     position = defaultEntry->getPosition();
     lookAt = defaultEntry->getLookAt();
   }
-  else if(portalID >= 0)
+  else if(portalID >= 0)//use specified portal
   {
     Portal* portal = getPortal(portalID);
     position = portal->getPosition();
     lookAt = portal->getLookAt();
   }
-  else
+  else//place the player at zero
   {
     position = Ogre::Vector3::ZERO;
     lookAt = Ogre::Vector3::ZERO;

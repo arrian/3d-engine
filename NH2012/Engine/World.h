@@ -14,6 +14,8 @@
 #include <boost/config.hpp>
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
+#include <boost/program_options/options_description.hpp>
+#include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
@@ -159,6 +161,7 @@ public:
   bool destroyScene(Ogre::String name);
 
   //Setters
+  void setRoot(Ogre::Root* root);
   void setSceneChangeListener(SceneChangeListener* listener);
   void setSceneManager(Ogre::SceneManager* sceneManager);
   void hookWindow(Ogre::RenderWindow* window);//convenience method for hooking the render window to the player
@@ -196,12 +199,8 @@ public:
   bool showCollisionDebug;
   bool showShadowDebug;
   float gravity;
-  Ogre::String sceneDataFilename;
-  Ogre::String architectureDataFilename;
-  Ogre::String monsterDataFilename;
-  Ogre::String itemDataFilename;
-  Ogre::String soundDataFilename;
-  Controls controls;/*! Stores the control mapping.*/
+  std::vector<std::string> dataFiles;//monsters,items,architecture,sounds,scenes etc.
+  Controls controls;//Control mappings
 
 private:
 

@@ -15,20 +15,21 @@
 //-------------------------------------------------------------------------------------
 World::World(Ogre::Root* root)
   : root(root),
+    items(),
     scenes(),
     monsters(),
-    items(),
+    dataFiles(),
     dataManager(),
-    allocatorCallback(),
     errorCallback(),
+    allocatorCallback(),
     player(0),
-    physicsFoundation(0),
     physicsWorld(0),
-    sceneChangeListener(0),
     physicsMaterial(0),
+    physicsFoundation(0),
+    sceneChangeListener(0),
+    defaultRestitution(0.2f),
     defaultStaticFriction(0.3f),
     defaultDynamicFriction(0.4f),
-    defaultRestitution(0.2f),
     debug(false)
 {
 }
@@ -58,12 +59,8 @@ void World::initialise(std::string iniFile)
   //loading initialisation file
   parseIni(iniFile);
 
-  //Adding Data to DataManager
-  dataManager.addData(sceneDataFilename);
-  dataManager.addData(itemDataFilename);
-  dataManager.addData(monsterDataFilename);
-  dataManager.addData(soundDataFilename);
-  dataManager.addData(architectureDataFilename);
+  //Adding datafiles collected from ini file to dataManager
+  for(std::vector<std::string>::iterator it = dataFiles.begin(); it < dataFiles.end(); ++it) dataManager.addData(*it);
 
   //creating physics
   physx::PxAllocatorCallback* allocator = &allocatorCallback;
@@ -874,11 +871,11 @@ void World::parseIni(std::string filename)
     enableSky = (pt.get<std::string>("Environment.Sky") == TRUE_STRING);
 
     //Data File Paths
-    sceneDataFilename = pt.get<std::string>("Scenes.Data");
-    architectureDataFilename = pt.get<std::string>("Architecture.Data");
-    monsterDataFilename = pt.get<std::string>("Monsters.Data");
-    itemDataFilename = pt.get<std::string>("Items.Data");
-    soundDataFilename = pt.get<std::string>("Sounds.Data");
+    dataFiles.push_back(pt.get<std::string>("Scenes.Data"));
+    dataFiles.push_back(pt.get<std::string>("Architecture.Data"));
+    dataFiles.push_back(pt.get<std::string>("Monsters.Data"));
+    dataFiles.push_back(pt.get<std::string>("Items.Data"));
+    dataFiles.push_back(pt.get<std::string>("Sounds.Data"));
 
     //Debug
     debug = (pt.get<std::string>("Debug.DebugMode") == TRUE_STRING);
@@ -912,5 +909,10 @@ bool World::isDebug()
   return debug;
 }
 
+//-------------------------------------------------------------------------------------
+void World::setRoot(Ogre::Root* root)
+{
+  this->root = root;
+}
 
 

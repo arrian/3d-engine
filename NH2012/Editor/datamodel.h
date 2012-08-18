@@ -1,15 +1,17 @@
 #ifndef DATAWRAPPER_H
 #define DATAWRAPPER_H
 
+
 #include <QAbstractItemModel>
 #include "dataitem.h"
+#include "../Engine/DataManager.h"
 
 class DataModel : public QAbstractItemModel
 {
   Q_OBJECT
 
  public:
-     DataModel(const QString &data, QObject *parent = 0);
+     DataModel(DataManager* dataManager, QObject *parent = 0);
      ~DataModel();
 
      QVariant data(const QModelIndex &index, int role) const;

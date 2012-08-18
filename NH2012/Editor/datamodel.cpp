@@ -2,15 +2,32 @@
 
 #include <QtGui>
 
-DataModel::DataModel(const QString &data, QObject *parent)
+
+DataModel::DataModel(DataManager* dataManager, QObject *parent)
   : QAbstractItemModel(parent)
 {
   QList<QVariant> rootData;
   rootData << "Data";
   rootItem = new DataItem(rootData);
 
-  QList<QVariant> columnData1;
-  columnData1 << "test" << "more";
+  /*
+  //Testing Qt trees
+  ItemGroups* itemGroups = dataManager->getItemGroups();
+  QList<QVariant> itemSection;
+  itemSection << "Items";
+  DataItem* itemNode = new DataItem(itemSection, rootItem);
+  rootItem->appendChild(itemNode);
+  for(std::map<std::string, std::vector<ItemModel*>>::iterator it = itemGroups->begin(); it != itemGroups->end(); ++it)
+  {
+    QList<QVariant> groupSection;
+    groupSection << "test";//(*it).first.c_str();
+    
+    rootItem->appendChild(new DataItem(groupSection, rootItem));
+  }
+  */
+
+  /*
+
   QList<QVariant> columnData2;
   columnData2 << "test2" << "more2";
   QList<QVariant> columnData3;
@@ -25,6 +42,8 @@ DataModel::DataModel(const QString &data, QObject *parent)
   rootItem->appendChild(new DataItem(columnData2,rootItem));
   rootItem->appendChild(new DataItem(columnData3,rootItem));
   rootItem->appendChild(new DataItem(columnData4,rootItem));
+
+  */
 }
 
 DataModel::~DataModel()

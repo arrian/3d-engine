@@ -2,7 +2,7 @@
 
 //-------------------------------------------------------------------------------------
 DataManager::DataManager(void)
-  : files(std::vector<Ogre::String>()),
+  : files(std::vector<std::string>()),
     architecture(ArchitectureList()),
     architectureGroups(ArchitectureGroups()),
     items(ItemList()),
@@ -27,7 +27,7 @@ DataManager::~DataManager(void)
 }
 
 //-------------------------------------------------------------------------------------
-void DataManager::addData(Ogre::String file)
+void DataManager::addData(std::string file)
 {
   files.push_back(file);
 
@@ -49,11 +49,11 @@ void DataManager::addData(Ogre::String file)
     else if(temp[0] == '[')//creating groups //assuming this line is the start of a new group
     {
       group = temp;
-      if(type == ARCHITECTURE_IDENTIFIER && !architectureGroups.count(group)) architectureGroups.insert(std::pair<Ogre::String, std::vector<ArchitectureModel*> >(group,std::vector<ArchitectureModel*>()));
-      if(type == MONSTERS_IDENTIFIER && !monsterGroups.count(group)) monsterGroups.insert(std::pair<Ogre::String, std::vector<MonsterModel*> >(group,std::vector<MonsterModel*>()));
-      if(type == ITEMS_IDENTIFIER && !itemGroups.count(group)) itemGroups.insert(std::pair<Ogre::String, std::vector<ItemModel*> >(group,std::vector<ItemModel*>()));
-      if(type == SCENES_IDENTIFIER && !sceneGroups.count(group)) sceneGroups.insert(std::pair<Ogre::String, std::vector<SceneDesc*> >(group,std::vector<SceneDesc*>()));
-      if(type == SOUNDS_IDENTIFIER && !soundGroups.count(group)) soundGroups.insert(std::pair<Ogre::String, std::vector<SoundDesc*> >(group,std::vector<SoundDesc*>()));
+      if(type == ARCHITECTURE_IDENTIFIER && !architectureGroups.count(group)) architectureGroups.insert(std::pair<std::string, std::vector<ArchitectureModel*> >(group,std::vector<ArchitectureModel*>()));
+      if(type == MONSTERS_IDENTIFIER && !monsterGroups.count(group)) monsterGroups.insert(std::pair<std::string, std::vector<MonsterModel*> >(group,std::vector<MonsterModel*>()));
+      if(type == ITEMS_IDENTIFIER && !itemGroups.count(group)) itemGroups.insert(std::pair<std::string, std::vector<ItemModel*> >(group,std::vector<ItemModel*>()));
+      if(type == SCENES_IDENTIFIER && !sceneGroups.count(group)) sceneGroups.insert(std::pair<std::string, std::vector<SceneDesc*> >(group,std::vector<SceneDesc*>()));
+      if(type == SOUNDS_IDENTIFIER && !soundGroups.count(group)) soundGroups.insert(std::pair<std::string, std::vector<SoundDesc*> >(group,std::vector<SoundDesc*>()));
       continue;
     }
 
@@ -62,8 +62,8 @@ void DataManager::addData(Ogre::String file)
 
     if(words.size() < 3) continue;
     int id = std::atoi(words[0].c_str());
-    Ogre::String name = words[1];
-    Ogre::String mesh = words[2];
+    std::string name = words[1];
+    std::string mesh = words[2];
     
     //TODO implement group pointers
     if(type == ARCHITECTURE_IDENTIFIER)
@@ -133,5 +133,36 @@ SoundDesc* DataManager::getSound(int id)
   if(sounds.count(id) == 0) return 0;
   return &((*(sounds.find(id))).second);
 }
+
+//-------------------------------------------------------------------------------------
+ArchitectureGroups* DataManager::getArchitectureGroups()
+{
+  return &architectureGroups;
+}
+
+//-------------------------------------------------------------------------------------
+ItemGroups* DataManager::getItemGroups()
+{
+  return &itemGroups;
+}
+
+//-------------------------------------------------------------------------------------
+MonsterGroups* DataManager::getMonsterGroups()
+{
+  return &monsterGroups;
+}
+
+//-------------------------------------------------------------------------------------
+SceneGroups* DataManager::getSceneGroups()
+{
+  return &sceneGroups;
+}
+
+//-------------------------------------------------------------------------------------
+SoundGroups* DataManager::getSoundGroups()
+{
+  return &soundGroups;
+}
+
 
 

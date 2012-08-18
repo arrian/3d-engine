@@ -21,7 +21,7 @@ private:
 
   Ui::EditorClass ui;
 
-  DataModel model;
+  DataModel* model;
 };
 
 #endif // EDITOR_H

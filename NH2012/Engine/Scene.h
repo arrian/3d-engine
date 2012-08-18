@@ -79,10 +79,8 @@ private:
   /*Defines if the scene should receive frame updates.*/
   bool active;
 
-  /*Tracks the identification numbers for the objects in the scene.*/
-  int instanceNumber;
+  int instanceNumber;//Tracks the identification numbers for the objects in the scene.
   
-  /*void generatePredefined();*/
   void load(std::string file);
   Ogre::Vector3 getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third);
   Ogre::Quaternion getXMLRotation(rapidxml::xml_node<>* node);

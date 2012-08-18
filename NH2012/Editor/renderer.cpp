@@ -1,7 +1,9 @@
 #include "renderer.h"
 
-void Renderer::init(World* world, std::string plugins_file)
+void Renderer::init(World* world)
 {
+  this->world = world;
+
   #ifdef _DEBUG
   std::string resources = "resources_d.cfg";
   std::string plugins = "plugins_d.cfg";
@@ -11,7 +13,6 @@ void Renderer::init(World* world, std::string plugins_file)
 #endif
 
   root = new Ogre::Root(plugins);
-
   
   Ogre::ConfigFile cf;
   cf.load(resources);
@@ -31,7 +32,6 @@ void Renderer::init(World* world, std::string plugins_file)
     }
   }
   
-
   if(root->restoreConfig()) 
   {
     Ogre::RenderSystemList::const_iterator renderers = root->getAvailableRenderers().begin();
@@ -47,16 +47,7 @@ void Renderer::init(World* world, std::string plugins_file)
     root->initialise(false);
 
     //Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);//Set default mipmap level (NB some APIs ignore this)
-    try
-    {
-      Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();//throws strange error
-    }
-    catch (Ogre::Exception e)
-    {
-    }
   }
-
-  world = new World(root);
 }
  
 void Renderer::initializeGL()
@@ -111,6 +102,11 @@ void Renderer::initializeGL()
   setAttribute(Qt::WA_PaintOnScreen, true);
   setAttribute(Qt::WA_NoBackground);
 
+  Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();/////////////////////test
+  
+  //Preparing World
+  world->setRoot(root);
+  world->initialise("C:\\Dev\\Nethack2012\\NH2012\\Media\\nh2012.ini");
   if(world) world->hookWindow(window);
 }
  

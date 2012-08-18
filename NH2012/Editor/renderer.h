@@ -27,7 +27,7 @@ class Renderer : public QGLWidget
     destroy();
   }
 
-  void init(World* world, std::string plugins);
+  void init(World* world);
  
  protected:
   virtual void initializeGL();
