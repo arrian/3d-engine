@@ -4,7 +4,7 @@
 #include "extensions/PxRigidBodyExt.h"
 
 //-------------------------------------------------------------------------------------
-HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
+HumanoidSkeletonComponent::HumanoidSkeletonComponent(void* userData)
   : NodeComponent(),
     physx::PxControllerBehaviorCallback(),
     controller(0),
@@ -21,14 +21,15 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
     moveLeftHand(false),
     moveRightHand(false),
     radius(0.5f),
-    height(1.0f),
+    height(1.75f),
     density(1.0f),
     scaleCoeff(1.0f),
     stepOffset(0.4f),
     runScalar(1.3f),
     moveScalar(10.0f),
     jumpVelocity(2.5f),
-    minimumMoveDistance(0.001f)
+    minimumMoveDistance(0.001f),
+    userData(userData)
 {
 }
 
@@ -74,6 +75,7 @@ void HumanoidSkeletonComponent::hasNodeChange()
   desc.position = physx::PxExtendedVec3(node->getPosition().x, node->getPosition().y, node->getPosition().z);
   desc.behaviorCallback = this;
   desc.callback = this;
+  desc.userData = userData;
  
   //set character controller desc options here
   controller = scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
@@ -267,7 +269,7 @@ void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hi
   physx::PxRigidDynamic* dActor = hit.shape->getActor().isRigidDynamic();
   if(dActor) 
   {
-		if(hit.dir.y == 0.0f)
+		if(hit.dir.y == 0.0f)//purpose of this value??
 		{
 			physx::PxReal coeff = dActor->getMass() * hit.length;
 			physx::PxRigidBodyExt::addForceAtLocalPos(*dActor, hit.dir * coeff, physx::PxVec3(0,0,0), physx::PxForceMode::eIMPULSE);

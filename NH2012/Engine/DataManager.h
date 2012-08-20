@@ -8,9 +8,9 @@
 
 #include <boost/algorithm/string.hpp>
 
-struct ArchitectureModel
+struct ArchitectureDesc
 {
-  ArchitectureModel(std::string name, std::string mesh)
+  ArchitectureDesc(std::string name, std::string mesh)
     : name(name),
       mesh(mesh)
   {
@@ -20,9 +20,9 @@ struct ArchitectureModel
   std::string name;
 };
 
-struct ItemModel
+struct ItemDesc
 {
-  ItemModel(std::string name, std::string mesh)
+  ItemDesc(std::string name, std::string mesh)
     : name(name),
       mesh(mesh)
   {
@@ -34,9 +34,9 @@ struct ItemModel
   int value;
 };
 
-struct MonsterModel
+struct MonsterDesc
 {
-  MonsterModel(std::string name, std::string mesh)
+  MonsterDesc(std::string name, std::string mesh)
     : name(name),
     mesh(mesh)
   {
@@ -75,14 +75,14 @@ struct SoundDesc
   std::string name;
 };
 
-typedef std::map<int, ArchitectureModel > ArchitectureList;
-typedef std::map<std::string, std::vector<ArchitectureModel*> > ArchitectureGroups;
+typedef std::map<int, ArchitectureDesc > ArchitectureList;
+typedef std::map<std::string, std::vector<ArchitectureDesc*> > ArchitectureGroups;
 
-typedef std::map<int, ItemModel > ItemList;
-typedef std::map<std::string, std::vector<ItemModel*> > ItemGroups;
+typedef std::map<int, ItemDesc > ItemList;
+typedef std::map<std::string, std::vector<ItemDesc*> > ItemGroups;
 
-typedef std::map<int, MonsterModel > MonsterList;
-typedef std::map<std::string, std::vector<MonsterModel*> > MonsterGroups;
+typedef std::map<int, MonsterDesc > MonsterList;
+typedef std::map<std::string, std::vector<MonsterDesc*> > MonsterGroups;
 
 typedef std::map<int, SceneDesc > SceneList;
 typedef std::map<std::string, std::vector<SceneDesc*> > SceneGroups;
@@ -100,9 +100,9 @@ public:
   /* Analyses the given data file.*/
   void addData(std::string file);
 
-  ItemModel* getItem(int id);
-  MonsterModel* getMonster(int id);
-  ArchitectureModel* getArchitecture(int id);
+  ItemDesc* getItem(int id);
+  MonsterDesc* getMonster(int id);
+  ArchitectureDesc* getArchitecture(int id);
   SceneDesc* getScene(int id);
   SoundDesc* getSound(int id);
 

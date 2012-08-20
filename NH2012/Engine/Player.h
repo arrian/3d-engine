@@ -10,6 +10,7 @@
 
 #include "Bar.h"
 #include "ComponentList.h"
+#include "PhysicalInterface.h"
 #include "HumanoidSkeletonComponent.h"
 #include "CameraComponent.h"
 #include "VisualComponent.h"
@@ -18,7 +19,7 @@
 class Scene;
 class World;
 
-class Player
+class Player : public PhysicalInterface
 {
 public:
   Player(World* world);
@@ -31,12 +32,17 @@ public:
   //Setters
   void setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt);
   void setPosition(Ogre::Vector3 position);
+  void setRotation(Ogre::Quaternion rotation);
   void setGravity(float gravity);
   void setCollisionEnabled(bool enabled);
+  
 
   //Getters
   Ogre::Vector3 getPosition();
+  Ogre::Quaternion getRotation();
   Scene* getScene();//gets the scene the player is currently in
+  int getID();
+  std::string getType();
 
   //Injectors
   void injectKeyDown(const OIS::KeyEvent &evt);
@@ -46,6 +52,8 @@ public:
   void injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
 
 private:
+  int id;
+
   World* world;
   Scene* scene;
 

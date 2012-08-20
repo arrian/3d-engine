@@ -26,11 +26,13 @@ material plaster1
             scene_blend_op add
             shading gouraud
             transparent_sorting on
-            tex_coord_set 0
             texture_unit b2ogre_1342180154.636
             {
                 texture plas0002b.jpg
+                tex_address_mode wrap
                 scale 0.333333412806212 0.333333412806212
+                tex_coord_set 0
+                colour_op replace
             }
         }
     }

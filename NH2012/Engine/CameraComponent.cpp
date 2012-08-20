@@ -9,7 +9,10 @@ CameraComponent::CameraComponent()
     window(0),
     viewport(0),
     oldCameraWidth(0),
-    oldCameraHeight(0)
+    oldCameraHeight(0),
+    nearClipDefault(0.4f),
+    farClipDefault(1000.0f),
+    rayCastDistance(10.0f)
 {
 
 }
@@ -48,7 +51,8 @@ void CameraComponent::hasNodeChange()
     camera = scene->getSceneManager()->createCamera("CameraComponent");
   }
 
-  camera->setNearClipDistance(0.01f);
+  camera->setNearClipDistance(nearClipDefault);//can see some triangle clipping but no z-fighting
+  camera->setFarClipDistance(farClipDefault);//might be able to make this larger if necessary
   //if(world->wireframeDebug) camera->setPolygonMode(Ogre::PM_WIREFRAME);
   
   node->attachObject(camera);
@@ -69,16 +73,20 @@ void CameraComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
 //-------------------------------------------------------------------------------------
 void CameraComponent::rayQuery()
 {
-  Ogre::Vector3 oOrigin = camera->getPosition();
-  Ogre::Vector3 oUnitDir = camera->getDirection();
+  Ogre::Vector3 oOrigin = camera->getDerivedPosition();
+  Ogre::Vector3 oUnitDir = camera->getDerivedDirection();
   physx::PxVec3 origin = physx::PxVec3(oOrigin.x, oOrigin.y, oOrigin.z);
   physx::PxVec3 unitDir = physx::PxVec3(oUnitDir.x, oUnitDir.y, oUnitDir.z);
-  physx::PxReal distance = 10.0;
   physx::PxSceneQueryFlags outputFlags = physx::PxSceneQueryFlags();
   physx::PxRaycastHit hit;
-  if(scene->getPhysicsManager()->raycastSingle(origin, unitDir, distance, outputFlags, hit))
+  if(scene->getPhysicsManager()->raycastSingle(origin, unitDir, rayCastDistance, outputFlags, hit))
   {
-    //got a ray hit
-    //(hit.shape->userData);
+    std::cout << "ray hit at a distance of " << hit.distance << " with user data " << hit.shape->userData << std::endl;
+    if(hit.shape->userData) 
+    {
+      PhysicalInterface* target = static_cast<PhysicalInterface*>(hit.shape->userData);//(PhysicalInterface*) hit.shape->userData;
+      std::cout << target->getType() << std::endl;
+    }
   }
 }
+

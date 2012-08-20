@@ -777,7 +777,7 @@ physx::PxMaterial* World::getDefaultPhysicsMaterial()
 //-------------------------------------------------------------------------------------
 Item* World::createItem(int id)
 {
-  Item* item = new Item(id);
+  Item* item = new Item(dataManager.getItem(id));
   items.push_back(item);
   return item;
 }

@@ -5,15 +5,17 @@
 
 //-------------------------------------------------------------------------------------
 Player::Player(World* world) 
-  : world(world),
+  : PhysicalInterface(),
+    world(world),
     scene(0),
     camera(),
-    skeleton(),
     visual("actor.mesh"),
     addItem(false),
     placementDistance(3.0f),
     lookResponsiveness(0.15f),
-    handMoveScalar(0.1f)
+    handMoveScalar(0.1f),
+    id(0),
+    skeleton(this)//safe??
 {
 }
 
@@ -67,10 +69,15 @@ Scene* Player::getScene()
 void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   //std::cout << "x:" << node->getPosition().x << " z:" <<  node->getPosition().z << " y:" <<  node->getPosition().y << std::endl;
+  camera.rayQuery();//testing ray queries
+
   skeleton.frameRenderingQueued(evt);
   camera.frameRenderingQueued(evt);//for aspect ratio changes
 
-  if(addItem) scene->addItem(0, skeleton.getForwardPosition(placementDistance));//adding items if the key was pressed
+  if(addItem) 
+  {
+    scene->addItem(340, skeleton.getForwardPosition(placementDistance));//adding crate if the key was pressed
+  }
 }
 
 //-------------------------------------------------------------------------------------
@@ -147,11 +154,23 @@ Ogre::Vector3 Player::getPosition()
 }
 
 //-------------------------------------------------------------------------------------
+Ogre::Quaternion Player::getRotation()
+{
+  return node->getOrientation();
+}
+
+//-------------------------------------------------------------------------------------
 void Player::setPosition(Ogre::Vector3 position)
 {
   node->setPosition(position);
-  skeleton.setNode(scene, node);
-  camera.setNode(scene, skeleton.getHead());
+  skeleton.setNode(scene, node);//do i need to do this?
+  camera.setNode(scene, skeleton.getHead());//do i need to do this?
+}
+
+//-------------------------------------------------------------------------------------
+void Player::setRotation(Ogre::Quaternion rotation)
+{
+  node->setOrientation(rotation);
 }
 
 //-------------------------------------------------------------------------------------
@@ -167,3 +186,14 @@ void Player::setCollisionEnabled(bool enabled)
 
 }
 
+//-------------------------------------------------------------------------------------
+int Player::getID()
+{
+  return id;
+}
+
+//-------------------------------------------------------------------------------------
+std::string Player::getType()
+{
+  return "player";
+}

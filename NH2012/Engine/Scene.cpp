@@ -29,7 +29,7 @@ Scene::Scene(World* world, int id)
 
   //scene physics
   physx::PxSceneDesc desc(world->getTolerancesScale());
-  desc.gravity = physx::PxVec3(0.0f, world->gravity, 0.0f);
+  desc.gravity = physx::PxVec3(0.0f, world->gravity, 4.0f);
   
   desc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
   if(!desc.cpuDispatcher) throw NHException("Could not create scene CPU dispatcher.");
@@ -195,13 +195,12 @@ void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range,
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addParticles(Ogre::String name, Ogre::Vector3 position, Ogre::Vector3 scale, Ogre::Real speed)
+void Scene::addParticles(Ogre::String name, Ogre::String templateName, Ogre::Vector3 position, Ogre::Real speed)
 {
-  Ogre::ParticleSystem* particle = sceneManager->createParticleSystem(name);//"Rain");//, "Examples/Rain");
+  Ogre::ParticleSystem* particle = sceneManager->createParticleSystem(name, templateName);//"Rain");//, "Examples/Rain");
   particle->fastForward(speed);
   Ogre::SceneNode* particleNode = sceneManager->getRootSceneNode()->createChildSceneNode("particle" + Ogre::StringConverter::toString(getNewInstanceNumber()));
   particleNode->setPosition(position);
-  particleNode->setScale(scale);
   particleNode->attachObject(particle);
   particles.push_back(particle);
 }
@@ -235,14 +234,18 @@ void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
   if(!physicsManager) throw NHException("No physics found. Scene::frameRenderingQueued()");
   
   physicsManager->fetchResults(true);
-  if(player) player->frameRenderingQueued(evt);
-
+  
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->frameRenderingQueued(evt);//iterate monsters
   for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) (*it)->frameRenderingQueued(evt);//iterate items
+  
+  if(player) player->frameRenderingQueued(evt);
+  
   for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it) 
   {
     if((*it)->isLoadRequired(player->getPosition())) world->loadScene((*it)->getID());
   }
+
+
 
   if(!world->freezeCollisionDebug) advancePhysics(evt.timeSinceLastFrame);
 }
@@ -281,6 +284,7 @@ void Scene::load(std::string file)
     //description attributes
     north = boost::lexical_cast<float>(root->first_attribute("north")->value());
    
+    //Architecture
     rapidxml::xml_node<>* architectureNode = root->first_node("architecture");
     while(architectureNode != 0)
     {
@@ -289,6 +293,7 @@ void Scene::load(std::string file)
       architectureNode = architectureNode->next_sibling("architecture");
     }
    
+    //Lights
     rapidxml::xml_node<>* lightNode = root->first_node("light");
     while(lightNode != 0)
     {
@@ -299,6 +304,7 @@ void Scene::load(std::string file)
       lightNode = lightNode->next_sibling("light");
     }
     
+    //Items
     rapidxml::xml_node<>* itemNode = root->first_node("item");
     while(itemNode != 0)
     {
@@ -307,6 +313,7 @@ void Scene::load(std::string file)
       itemNode = itemNode->next_sibling("item");
     }    
     
+    //Portals
     rapidxml::xml_node<>* portalNode = root->first_node("portal");
     while(portalNode != 0)
     {
@@ -318,7 +325,15 @@ void Scene::load(std::string file)
       portalNode = portalNode->next_sibling("portal");
     }
 
-    //addParticles("Sun", Ogre::Vector3(0,10,-30), Ogre::Vector3(10,10,10), 3);//temp rain particles
+    //Particles
+    rapidxml::xml_node<>* particleNode = root->first_node("particle");
+    while(particleNode != 0)
+    {
+      addParticles(particleNode->first_attribute("name")->value(), particleNode->first_attribute("template_name")->value(),getXMLPosition(particleNode));
+      particleNode = particleNode->next_sibling("particle");
+    }
+
+
   }
   catch (rapidxml::parse_error e)
   {

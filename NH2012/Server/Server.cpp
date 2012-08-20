@@ -16,8 +16,8 @@ Server::~Server(void)
 
 void Server::run()
 {
-  std::cout << "Starting server on port " << port << ;
-  socket.async_receive_from(boost::asio::buffer(data,max_length), endpoint, boost::bind(&Server::receive, this, boost::asio::placeholders::error, boost::asio:::placeholders::bytes_transferred));
+  std::cout << "Starting server on port " << port << std::endl;
+  socket.async_receive_from(boost::asio::buffer(data,max_length), endpoint, boost::bind(&Server::receive, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
   io_service.run();
   
   //need to iterate the world here/ on a thread

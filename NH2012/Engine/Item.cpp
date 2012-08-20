@@ -3,15 +3,17 @@
 #include "Scene.h"
 
 //-------------------------------------------------------------------------------------
-Item::Item(int id)
+Item::Item(ItemDesc* desc)
   : BasicComponent(),
-    visual("crate.mesh"),
+    PhysicalInterface(),
+    visual(desc->mesh),
     physical(),
-    node(0)
+    node(0),
+    name(desc->name),
+    id(0)
 {
   setPosition(Ogre::Vector3::ZERO);
   setRotation(Ogre::Quaternion::IDENTITY);
-  //physicsBody->setShape(node, physicsShape, 0.2f, 0.95f, 1000.0f, position);
 }
 
 //-------------------------------------------------------------------------------------
@@ -58,5 +60,30 @@ void Item::setRotation(Ogre::Quaternion rotation)
   this->rotation = rotation;
   if(node) node->setOrientation(rotation);
 }
+
+//-------------------------------------------------------------------------------------
+Ogre::Vector3 Item::getPosition()
+{
+  return position;
+}
+
+//-------------------------------------------------------------------------------------
+Ogre::Quaternion Item::getRotation()
+{
+  return rotation;
+}
+
+//-------------------------------------------------------------------------------------
+int Item::getID()
+{
+  return id;
+}
+
+//-------------------------------------------------------------------------------------
+std::string Item::getType()
+{
+  return name;
+}
+
 
 

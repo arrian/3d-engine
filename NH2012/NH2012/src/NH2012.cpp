@@ -32,8 +32,8 @@ bool NH2012::go(void)
   resources = "resources_d.cfg";
   plugins = "plugins_d.cfg";
 #else
-  mResourcesCfg = "resources.cfg";
-  mPluginsCfg = "plugins.cfg";
+  resources = "resources.cfg";
+  plugins = "plugins.cfg";
 #endif
 
   root = new Ogre::Root(plugins);

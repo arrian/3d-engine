@@ -4,7 +4,8 @@
 
 //-------------------------------------------------------------------------------------
 Architecture::Architecture(Scene* scene)
-  : scene(scene),
+  : PhysicalInterface(),
+    scene(scene),
     instanceNumber(0),
     geometry(scene->getSceneManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getscenemanager have been constructed
     nodes(),
@@ -75,6 +76,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   /*Construct PhysX triangle mesh here.*/
   physx::PxRigidStatic* actor = scene->getWorld()->getPhysics()->createRigidStatic(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physx::PxQuat(quaternion.x,quaternion.y,quaternion.z,quaternion.w)));
   actor->createShape(physx::PxTriangleMeshGeometry(mesh), *scene->getWorld()->getDefaultPhysicsMaterial());
+  actor->userData = this;
 
   scene->getPhysicsManager()->addActor(*actor);
 
@@ -90,5 +92,40 @@ void Architecture::build()
   geometry->build();
 }
 
+//-------------------------------------------------------------------------------------
+void Architecture::setPosition(Ogre::Vector3 position)
+{
+  throw NHException("Can not move static architecture.");
+}
+
+//-------------------------------------------------------------------------------------
+void Architecture::setRotation(Ogre::Quaternion rotation)
+{
+  throw NHException("Can not rotate static architecture.");
+}
+
+//-------------------------------------------------------------------------------------
+Ogre::Vector3 Architecture::getPosition()
+{
+  throw NHException("Architecture position query has not been implemented.");
+}
+
+//-------------------------------------------------------------------------------------
+Ogre::Quaternion Architecture::getRotation()
+{
+  throw NHException("Architecture rotation query has not been implemented.");
+}
+
+//-------------------------------------------------------------------------------------
+int Architecture::getID()
+{
+  return 0;
+}
+
+//-------------------------------------------------------------------------------------
+std::string Architecture::getType()
+{
+  return "architecture";
+}
 
 

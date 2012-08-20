@@ -20,7 +20,7 @@
 class HumanoidSkeletonComponent : public NodeComponent, public physx::PxControllerBehaviorCallback, public physx::PxUserControllerHitReport
 {
 public:
-  HumanoidSkeletonComponent(void);
+  HumanoidSkeletonComponent(void* userData = 0);
   ~HumanoidSkeletonComponent(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -62,6 +62,8 @@ public:
 	void onObstacleHit(const physx::PxControllerObstacleHit& hit) {}
 
 protected:
+  void* userData;
+
   //PhysX Physical Body
   physx::PxController* controller;
 

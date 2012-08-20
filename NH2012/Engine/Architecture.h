@@ -5,6 +5,8 @@
 #include <OgreString.h>
 #include <OgreVector3.h>
 
+#include "PhysicalInterface.h"
+
 #include "PxPhysicsAPI.h"
 
 class Scene;
@@ -21,7 +23,7 @@ struct StaticEntity
   }
 };
 
-class Architecture
+class Architecture : public PhysicalInterface
 {
 public:
   Architecture(Scene* scene);
@@ -32,6 +34,14 @@ public:
   void add(Ogre::String meshName, Ogre::Vector3 position = Ogre::Vector3(0,0,0), Ogre::Quaternion quaternion = Ogre::Quaternion::IDENTITY, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE);
 
   void build();
+
+  //Some of these methods implemented from PhysicalInterface may not be implemented in the future. Maybe reduce the set of methods in PhysicalInterface
+  void setPosition(Ogre::Vector3 position);
+  void setRotation(Ogre::Quaternion rotation);
+  Ogre::Vector3 getPosition();
+  Ogre::Quaternion getRotation();
+  int getID();
+  std::string getType();
 private:
   Scene* scene;
   

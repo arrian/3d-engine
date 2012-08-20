@@ -53,7 +53,9 @@ void PhysicalComponent::hasNodeChange()
 //-------------------------------------------------------------------------------------
 void PhysicalComponent::mapPhysical(void* target)
 {
+  assert(physical && shape);
   physical->userData = target;
+  shape->userData = target;
 }
 
 

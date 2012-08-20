@@ -32,5 +32,9 @@ private:
   //Ogre::SceneNode* cameraNode;
 
   void hasNodeChange();
+
+  float nearClipDefault;
+  float farClipDefault;
+  float rayCastDistance;
 };
 

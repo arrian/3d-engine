@@ -372,7 +372,15 @@
 338,acid venom
 339,blinding venom
 
-#dynamic objects that the player can interact with but have no other effects
-[Dynamic]
+[Debug]
 340,Crate,crate.mesh
 341,Barrel,barrel.mesh
+342,Lightbulb,lightbulb.mesh
+343,Orange Debug Entity,item.mesh
+344,Trigger Symbol,trigger.mesh
+345,Sound Symbol,sound.mesh
+346,Error Symbol,default.mesh
+347,TV,tv.mesh
+348,Basic Tuxedo Person,person_tux.mesh
+
+
