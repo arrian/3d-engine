@@ -57,9 +57,6 @@
     <ClInclude Include="Console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Attributes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IntelligenceComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -115,6 +112,15 @@
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Flock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlockBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -194,22 +200,14 @@
     <ClCompile Include="Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Media\items.dat">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Media\monsters.dat">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Media\architecture.dat">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Media\sounds.dat">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Media\scenes.dat">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ClCompile Include="SoundComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Flock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlockBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,7 +5,9 @@
 //-------------------------------------------------------------------------------------
 Monster::Monster(int id)
   : BasicComponent(),
-    speed(200),
+    PhysicalInterface(id, "Monster"),
+    speed(200.0f),
+    height(1.75f),
     node(0),
     intelligence(),
     visual("actor.mesh"),
@@ -14,19 +16,11 @@ Monster::Monster(int id)
   setPosition(Ogre::Vector3::ZERO);
   setTarget(Ogre::Vector3::ZERO);
 
+  skeleton.mapPhysical((PhysicalInterface*) this);
   /*
   health = Bar(Ogre::Real(difficulty * difficulty));
   magic = Bar(Ogre::Real(difficulty * difficulty));
   level = Bar(Ogre::Real(difficulty));
-
-  //generating name
-  if(difficulty < 5) name = "jackal";
-  else if(difficulty < 10) name = "troll";
-  else if(difficulty < 20) name = "minotaur";
-  else if(difficulty < 30) name = "arch-lich";
-  else if(difficulty < 40) name = "Wizard of Yendor";
-  else if(difficulty < 50) name = "Baalzebub";
-  else if(difficulty < 60) name = "Demogorgon";
   */
 
 }
@@ -66,6 +60,7 @@ void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
 //-------------------------------------------------------------------------------------
 bool operator==(const Monster& x, const Monster& y)
 {
+  throw NHException("Monsters comparison operator not implemented.");
   return false;//(x.name == y.name);
 }
 

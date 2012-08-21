@@ -1,13 +1,13 @@
 #pragma once
 
-#include <OgreMath.h>
+
 
 class Bar
 {
 public:
   Bar(void);
-  Bar(Ogre::Real maxValue);
-  Bar(Ogre::Real maxValue, Ogre::Real currentValue);
+  Bar(float maxValue);
+  Bar(float maxValue, float currentValue);
   ~Bar(void);
 
   /*! Returns true if the bar is empty.*/
@@ -17,22 +17,22 @@ public:
   bool isFull();
 
   /*! Gets the fraction of the bar that is full.*/
-  Ogre::Real getFraction();
+  float getFraction();
 
-  Ogre::Real getMax();
-  Ogre::Real getCurrent();
+  float getMax();
+  float getCurrent();
 
-  void setCurrent(Ogre::Real current);
-  void setMax(Ogre::Real max);
+  void setCurrent(float current);
+  void setMax(float max);
 
   void setFull();
   void setEmpty();
 
 private:
   /*! Maximum value of the bar.*/
-  Ogre::Real max;
+  float max;
 
   /*! Current value of the bar.*/
-  Ogre::Real current;
+  float current;
 };
 

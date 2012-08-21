@@ -3,19 +3,19 @@
 //-------------------------------------------------------------------------------------
 Bar::Bar()
 {
-  this->max = 0;
+  this->max = 0.0f;
   current = max;
 }
 
 //-------------------------------------------------------------------------------------
-Bar::Bar(Ogre::Real max)
+Bar::Bar(float max)
 {
   this->max = max;
   current = max;
 }
 
 //-------------------------------------------------------------------------------------
-Bar::Bar(Ogre::Real max, Ogre::Real current)
+Bar::Bar(float max, float current)
 {
   this->max = max;
   this->current = current;
@@ -29,7 +29,7 @@ Bar::~Bar(void)
 //-------------------------------------------------------------------------------------
 bool Bar::isEmpty()
 {
-  return (current <= 0);
+  return (current <= 0.0f);
 }
 
 //-------------------------------------------------------------------------------------
@@ -39,31 +39,31 @@ bool Bar::isFull()
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Real Bar::getFraction()
+float Bar::getFraction()
 {
   return (current/max);
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Real Bar::getCurrent()
+float Bar::getCurrent()
 {
   return current;
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Real Bar::getMax()
+float Bar::getMax()
 {
   return max;
 }
 
 //-------------------------------------------------------------------------------------
-void Bar::setMax(Ogre::Real max)
+void Bar::setMax(float max)
 {
   this->max = max;
 }
 
 //-------------------------------------------------------------------------------------
-void Bar::setCurrent(Ogre::Real current)
+void Bar::setCurrent(float current)
 {
   this->current = current;
 }
@@ -71,7 +71,7 @@ void Bar::setCurrent(Ogre::Real current)
 //-------------------------------------------------------------------------------------
 void Bar::setEmpty()
 {
-  current = 0;
+  current = 0.0f;
 }
 
 //-------------------------------------------------------------------------------------

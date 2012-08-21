@@ -37,9 +37,11 @@
 
 //Local
 #include "DataManager.h"
+#include "SoundManager.h"
 #include "PhysicsErrorCallback.h"
 #include "SceneChangeListener.h"
 #include "NHException.h"
+
 
 //Forward Declarations
 class Player;
@@ -79,7 +81,10 @@ struct Controls
   OIS::KeyCode console;
 };
 
-//Entire Game World
+/************************************************************************/
+/* Contains the entire game world. Multiple scenes can be loaded at once*/
+/* (lazy loading between scenes will be implemented in the future)      */
+/************************************************************************/
 class World
 {
 public:
@@ -207,6 +212,7 @@ private:
   Ogre::Root* root;
   SceneChangeListener* sceneChangeListener;
   DataManager dataManager;
+  SoundManager soundManager;
   
   //World Contents
   Player* player;//std::vector<Player> players;

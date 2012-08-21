@@ -5,8 +5,6 @@
 NH2012::NH2012(void)
 : root(0),
   window(0),
-  resources(Ogre::StringUtil::BLANK),
-  plugins(Ogre::StringUtil::BLANK),
   cursorWasVisible(false),
   shutDown(false),
   inputManager(0),
@@ -28,6 +26,9 @@ NH2012::~NH2012(void)
 //-------------------------------------------------------------------------------------
 bool NH2012::go(void)
 {
+  std::string resources;
+  std::string plugins;
+
 #ifdef _DEBUG
   resources = "resources_d.cfg";
   plugins = "plugins_d.cfg";
@@ -64,8 +65,8 @@ bool NH2012::go(void)
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
     HWND hwnd;
     window->getCustomAttribute("WINDOW", (void*)&hwnd);
-    LONG iconID   = (LONG)LoadIcon( GetModuleHandle(0), MAKEINTRESOURCE(IDI_APPICON) );
-    SetClassLong( hwnd, GCL_HICON, iconID );
+    LONG iconID = (LONG)LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(IDI_APPICON));
+    SetClassLong(hwnd, GCL_HICON, iconID);
 #endif
   }
   else return false;
@@ -121,32 +122,36 @@ bool NH2012::keyPressed( const OIS::KeyEvent &arg )
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 bool NH2012::keyReleased( const OIS::KeyEvent &arg )
 {
   game->injectKeyUp(arg);
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 bool NH2012::mouseMoved( const OIS::MouseEvent &arg )
 {
   game->injectMouseMove(arg);
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 bool NH2012::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
   game->injectMouseDown(arg, id);
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 bool NH2012::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
   game->injectMouseUp(arg, id);
   return true;
 }
 
-//Adjust mouse clipping area
-void NH2012::windowResized(Ogre::RenderWindow* rw)
+//-------------------------------------------------------------------------------------
+void NH2012::windowResized(Ogre::RenderWindow* rw)//Adjust mouse clipping area
 {
   unsigned int width, height, depth;
   int left, top;
@@ -157,8 +162,8 @@ void NH2012::windowResized(Ogre::RenderWindow* rw)
   ms.height = height;
 }
 
-//Unattach OIS before window shutdown (very important under Linux)
-void NH2012::windowClosed(Ogre::RenderWindow* rw)
+//-------------------------------------------------------------------------------------
+void NH2012::windowClosed(Ogre::RenderWindow* rw)//Unattach OIS before window shutdown (very important under Linux)
 {
   if(rw == window)
   {
@@ -173,8 +178,7 @@ void NH2012::windowClosed(Ogre::RenderWindow* rw)
   }
 }
 
-
-
+//-------------------------------------------------------------------------------------
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"

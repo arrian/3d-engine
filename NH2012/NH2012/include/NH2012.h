@@ -1,10 +1,4 @@
-/*
------------------------------------------------------------------------------
-Filename:    NH2012.h
------------------------------------------------------------------------------
-*/
-#ifndef __NH2012_h_
-#define __NH2012_h_
+#pragma once
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "../res/resource.h"
@@ -35,10 +29,7 @@ protected:
     Game* game;
 
     Ogre::Root *root;
-    //Ogre::SceneManager* sceneManager;
     Ogre::RenderWindow* window;
-    Ogre::String resources;
-    Ogre::String plugins;
 
     bool cursorWasVisible;
     bool shutDown;
@@ -65,4 +56,3 @@ protected:
     virtual void windowClosed(Ogre::RenderWindow* rw);
 };
 
-#endif // #ifndef __NH2012_h_

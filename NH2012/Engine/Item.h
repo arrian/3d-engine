@@ -2,8 +2,6 @@
 
 #include <OgreString.h>
 
-
-#include "Attributes.h"
 #include "PhysicalInterface.h"
 #include "VisualComponent.h"
 #include "PhysicalComponent.h"
@@ -29,33 +27,13 @@ public:
   Ogre::Vector3 getPosition();
   Ogre::Quaternion getRotation();
 
-  int getID();
-  std::string getType();
-
 protected:
-  int id;
+  Ogre::SceneNode* node;
   Ogre::Vector3 position;
   Ogre::Quaternion rotation;
 
-  Ogre::SceneNode* node;
-
-  /*! Gold value of the item.*/
-  int value;
-
-  /*! Item name.*/
-  std::string name;
-
-  /*! eg. book,weapon etc.
-      Maps directly to the items.dat file
-  */
-  ItemAttribute::Type type;
-  
-  /*! Item's 'special abilities'.*/
-  std::vector<GeneralAttribute::Intrinsics> intrinsics;
-
   void hasSceneChange();
 
-private:
   VisualComponent visual;
   PhysicalComponent physical;
 };

@@ -14,7 +14,6 @@
 #include "HumanoidSkeletonComponent.h"
 #include "CameraComponent.h"
 #include "VisualComponent.h"
-#include "Attributes.h"
 
 class Scene;
 class World;
@@ -41,8 +40,6 @@ public:
   Ogre::Vector3 getPosition();
   Ogre::Quaternion getRotation();
   Scene* getScene();//gets the scene the player is currently in
-  int getID();
-  std::string getType();
 
   //Injectors
   void injectKeyDown(const OIS::KeyEvent &evt);
@@ -52,8 +49,6 @@ public:
   void injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
 
 private:
-  int id;
-
   World* world;
   Scene* scene;
 

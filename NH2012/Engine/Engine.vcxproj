@@ -22,10 +22,11 @@
     <ClInclude Include="BasicComponent.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="ComponentList.h" />
+    <ClInclude Include="Flock.h" />
+    <ClInclude Include="FlockBody.h" />
     <ClInclude Include="HumanoidSkeletonComponent.h" />
     <ClInclude Include="IntelligenceComponent.h" />
     <ClInclude Include="Architecture.h" />
-    <ClInclude Include="Attributes.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="NHException.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="SoundComponent.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="VisualComponent.h" />
@@ -50,6 +52,8 @@
     <ClCompile Include="BasicComponent.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="ComponentList.cpp" />
+    <ClCompile Include="Flock.cpp" />
+    <ClCompile Include="FlockBody.cpp" />
     <ClCompile Include="HumanoidSkeletonComponent.cpp" />
     <ClCompile Include="IntelligenceComponent.cpp" />
     <ClCompile Include="Architecture.cpp" />
@@ -65,6 +69,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="VisualComponent.cpp" />
@@ -72,13 +77,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneChangeListener.cpp" />
     <ClCompile Include="World.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Media\architecture.dat" />
-    <None Include="..\Media\items.dat" />
-    <None Include="..\Media\monsters.dat" />
-    <None Include="..\Media\scenes.dat" />
-    <None Include="..\Media\sounds.dat" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{73AA2BBC-22D7-44A1-9222-A1BD72F36105}</ProjectGuid>

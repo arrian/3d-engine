@@ -20,6 +20,7 @@ World::World(Ogre::Root* root)
     monsters(),
     dataFiles(),
     dataManager(),
+    soundManager(),
     errorCallback(),
     allocatorCallback(),
     player(0),

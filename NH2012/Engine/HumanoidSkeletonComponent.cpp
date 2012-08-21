@@ -4,7 +4,7 @@
 #include "extensions/PxRigidBodyExt.h"
 
 //-------------------------------------------------------------------------------------
-HumanoidSkeletonComponent::HumanoidSkeletonComponent(void* userData)
+HumanoidSkeletonComponent::HumanoidSkeletonComponent()
   : NodeComponent(),
     physx::PxControllerBehaviorCallback(),
     controller(0),
@@ -29,7 +29,7 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void* userData)
     moveScalar(10.0f),
     jumpVelocity(2.5f),
     minimumMoveDistance(0.001f),
-    userData(userData)
+    userData(0)
 {
 }
 
@@ -152,13 +152,13 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
     physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * moveScalar, velocity.y * evt.timeSinceLastFrame * moveScalar, velocity.z * evt.timeSinceLastFrame * moveScalar), minimumMoveDistance, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
     if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;//stop falling when collision at the base of the skeleton occurs
     physx::PxExtendedVec3 cPosition = controller->getPosition();
-    node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position from the physics world calculated position
+    node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position from the physics world calculated position
   }
   else //just move the controller ignoring all collisions
   {
     controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(velocity.x * evt.timeSinceLastFrame * moveScalar, velocity.y * evt.timeSinceLastFrame * moveScalar, velocity.z * evt.timeSinceLastFrame * moveScalar));
     physx::PxExtendedVec3 cPosition = controller->getPosition();
-    node->setPosition(cPosition.x, cPosition.y, cPosition.z);//updating the body's visual position
+    node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position
   }
   
   /*if (world->freeCameraDebug) 
@@ -310,3 +310,8 @@ bool HumanoidSkeletonComponent::isRightHand()
   return moveRightHand;
 }
 
+//-------------------------------------------------------------------------------------
+void HumanoidSkeletonComponent::mapPhysical(void* userData)
+{
+  this->userData = userData;
+}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <OgreSceneNode.h>
 #include "BasicComponent.h"
 
 class Scene;

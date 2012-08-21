@@ -20,10 +20,12 @@
 class HumanoidSkeletonComponent : public NodeComponent, public physx::PxControllerBehaviorCallback, public physx::PxUserControllerHitReport
 {
 public:
-  HumanoidSkeletonComponent(void* userData = 0);
+  HumanoidSkeletonComponent(void);
   ~HumanoidSkeletonComponent(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+  void mapPhysical(void* userData);
 
   //Getters
   Ogre::SceneNode* getHead();

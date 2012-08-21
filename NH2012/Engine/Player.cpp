@@ -5,7 +5,7 @@
 
 //-------------------------------------------------------------------------------------
 Player::Player(World* world) 
-  : PhysicalInterface(),
+  : PhysicalInterface(0,"Local", "Player"),
     world(world),
     scene(0),
     camera(),
@@ -14,9 +14,9 @@ Player::Player(World* world)
     placementDistance(3.0f),
     lookResponsiveness(0.15f),
     handMoveScalar(0.1f),
-    id(0),
-    skeleton(this)//safe??
+    skeleton()
 {
+  skeleton.mapPhysical((PhysicalInterface*) this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -29,6 +29,8 @@ Player::~Player(void)
 //-------------------------------------------------------------------------------------
 void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt)
 {
+  assert(scene);
+
   //pulling down
   if(this->scene)
   {
@@ -186,14 +188,4 @@ void Player::setCollisionEnabled(bool enabled)
 
 }
 
-//-------------------------------------------------------------------------------------
-int Player::getID()
-{
-  return id;
-}
 
-//-------------------------------------------------------------------------------------
-std::string Player::getType()
-{
-  return "player";
-}

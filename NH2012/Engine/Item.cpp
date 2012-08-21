@@ -5,12 +5,10 @@
 //-------------------------------------------------------------------------------------
 Item::Item(ItemDesc* desc)
   : BasicComponent(),
-    PhysicalInterface(),
+    PhysicalInterface(id, desc->name, "Item"),
     visual(desc->mesh),
     physical(),
-    node(0),
-    name(desc->name),
-    id(0)
+    node(0)
 {
   setPosition(Ogre::Vector3::ZERO);
   setRotation(Ogre::Quaternion::IDENTITY);
@@ -25,7 +23,7 @@ void Item::hasSceneChange()
   node->setOrientation(rotation);
   visual.setNode(scene, node);
   physical.setNode(scene, node);
-  physical.mapPhysical(this);
+  physical.mapPhysical((PhysicalInterface*) this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -38,7 +36,7 @@ Item::~Item(void)
 //-------------------------------------------------------------------------------------
 bool operator==(const Item& x, const Item& y)
 {
-  return x.name == y.name && x.type == y.type && x.value == y.value;
+  return x.name == y.name;
 }
 
 //-------------------------------------------------------------------------------------
@@ -73,17 +71,7 @@ Ogre::Quaternion Item::getRotation()
   return rotation;
 }
 
-//-------------------------------------------------------------------------------------
-int Item::getID()
-{
-  return id;
-}
 
-//-------------------------------------------------------------------------------------
-std::string Item::getType()
-{
-  return name;
-}
 
 
 

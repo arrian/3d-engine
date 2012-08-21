@@ -227,7 +227,22 @@
     <ClCompile Include="src\Singleplayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Media\architecture.dat">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\Media\items.dat">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\Media\monsters.dat">
+      <FileType>Document</FileType>
+    </None>
     <None Include="..\Media\nh2012.ini" />
+    <None Include="..\Media\scenes.dat">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\Media\sounds.dat">
+      <FileType>Document</FileType>
+    </None>
     <None Include="res\NH2012.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -10,16 +10,16 @@
 class PhysicalInterface
 {
 public:
-  PhysicalInterface(void);
+  PhysicalInterface(int id, std::string name, std::string type);
   virtual ~PhysicalInterface(void);
 
-  virtual Ogre::Vector3 getPosition() = 0;
-  virtual Ogre::Quaternion getRotation() = 0;
+  int getID();
+  std::string getName();
+  std::string getType();
 
-  virtual void setPosition(Ogre::Vector3 position) = 0;
-  virtual void setRotation(Ogre::Quaternion rotation) = 0;
-
-  virtual int getID() = 0;
-  virtual std::string getType() = 0;//mainly for debug purposes
+protected:
+  int id;
+  std::string name;
+  std::string type;
 };
 

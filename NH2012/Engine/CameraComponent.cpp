@@ -82,10 +82,10 @@ void CameraComponent::rayQuery()
   if(scene->getPhysicsManager()->raycastSingle(origin, unitDir, rayCastDistance, outputFlags, hit))
   {
     std::cout << "ray hit at a distance of " << hit.distance << " with user data " << hit.shape->userData << std::endl;
-    if(hit.shape->userData) 
+    if(hit.shape->userData)
     {
-      PhysicalInterface* target = static_cast<PhysicalInterface*>(hit.shape->userData);//(PhysicalInterface*) hit.shape->userData;
-      std::cout << target->getType() << std::endl;
+      PhysicalInterface* target = reinterpret_cast<PhysicalInterface*>(hit.shape->userData);//Quite an unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
+      std::cout << target->getType() << ":" << target->getName << ":" << target->getID() << std::endl;
     }
   }
 }
