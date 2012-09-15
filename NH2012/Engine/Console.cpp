@@ -135,6 +135,13 @@ void Console::enter()
     else if(elements[0] == "freecam") world->getPlayer()->setCollisionEnabled(false);//freeCameraDebug = !world->freeCameraDebug;
     else if(elements[0] == "hide") setVisible(false);
     else if(elements[0] == "refresh") hookWindow(window);
+    else if(elements[0] == "player_pos") 
+    {
+      Ogre::Vector3 position = world->getPlayer()->getPosition();
+      display("x", boost::lexical_cast<std::string>(position.x));
+      display("y", boost::lexical_cast<std::string>(position.y));
+      display("z", boost::lexical_cast<std::string>(position.z));
+    }
     else if(elements[0] == "screenshot")
     {
       setVisible(false);
@@ -308,6 +315,7 @@ void Console::help()
   display("unload [scene name]", "unloads a scene from memory");
   display("ambient [scene name] [r] [g] [b]", "sets the ambient light in the given scene");
   display("physics [scene name]", "shows physx physics stats for the given scene");
+  display("player_pos", "gets the player position");
   display("player_pos [x] [y] [z]", "sets the player position");
 }
 

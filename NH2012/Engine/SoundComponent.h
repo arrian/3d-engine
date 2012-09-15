@@ -4,19 +4,27 @@
 #include "fmod.h"
 
 #include "NodeComponent.h"
+#include "SoundManager.h"
+#include "NHException.h"
+
+class SoundManager;
 
 /************************************************************************/
-/* Sound Emitter Component. Must be added to the sound manager to play. */
+/* Sound Emitter Component.                                             */
 /************************************************************************/
 class SoundComponent : public NodeComponent
 {
 public:
-  SoundComponent(void);
+  SoundComponent(SoundManager* manager);
   virtual ~SoundComponent(void);
 
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+  void play();
+  void playLoop();
 protected:
-  //all these settings will be used by the sound manager when this component is added
+  SoundManager* manager;
+
   FMOD::Channel* channel;
   FMOD::Sound* sound;
   bool loop;

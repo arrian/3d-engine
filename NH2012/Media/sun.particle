@@ -11,12 +11,12 @@ particle_system Space/Sun
     emitter Ellipsoid
     {
         angle           30
-        emission_rate   30
+        emission_rate   5
         time_to_live_min 2
         time_to_live_max 5
         direction       0 1 0
         velocity       0.001
-        colour 0.15 0.1 0.0
+        colour 0.8 0.8 0.8
         width           5
         height          5
         depth           5

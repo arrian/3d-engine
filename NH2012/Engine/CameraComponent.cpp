@@ -73,6 +73,8 @@ void CameraComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
 //-------------------------------------------------------------------------------------
 void CameraComponent::rayQuery()
 {
+  throw NHException("the physx character controller is doing something funky with the userData field so I'll have to think of a different way to map the physical shapes to the associated objects");
+
   Ogre::Vector3 oOrigin = camera->getDerivedPosition();
   Ogre::Vector3 oUnitDir = camera->getDerivedDirection();
   physx::PxVec3 origin = physx::PxVec3(oOrigin.x, oOrigin.y, oOrigin.z);
@@ -84,8 +86,9 @@ void CameraComponent::rayQuery()
     std::cout << "ray hit at a distance of " << hit.distance << " with user data " << hit.shape->userData << std::endl;
     if(hit.shape->userData)
     {
-      PhysicalInterface* target = reinterpret_cast<PhysicalInterface*>(hit.shape->userData);//Quite an unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
-      std::cout << target->getType() << ":" << target->getName << ":" << target->getID() << std::endl;
+      PhysicalInterface* target = static_cast<PhysicalInterface*>(hit.shape->userData);//Unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
+      std::cout << target->getType() << ":" << target->getName() << ":" << target->getID() << std::endl;
+      
     }
   }
 }

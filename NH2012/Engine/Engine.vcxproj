@@ -20,10 +20,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicComponent.h" />
+    <ClInclude Include="Boids\Boid.h" />
+    <ClInclude Include="Boids\NamedObject.h" />
+    <ClInclude Include="Boids\Obstacle.h" />
+    <ClInclude Include="Boids\SimObject.h" />
+    <ClInclude Include="Boids\Vector.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="ComponentList.h" />
+    <ClInclude Include="Essential.h" />
     <ClInclude Include="Flock.h" />
-    <ClInclude Include="FlockBody.h" />
     <ClInclude Include="HumanoidSkeletonComponent.h" />
     <ClInclude Include="IntelligenceComponent.h" />
     <ClInclude Include="Architecture.h" />
@@ -41,7 +46,7 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="SoundComponent.h" />
     <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="TimeManager.h" />
     <ClInclude Include="VisualComponent.h" />
     <ClInclude Include="PhysicsErrorCallback.h" />
     <ClInclude Include="Player.h" />
@@ -50,10 +55,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicComponent.cpp" />
+    <ClCompile Include="Boids\Boid.cpp" />
+    <ClCompile Include="Boids\NamedObject.cpp" />
+    <ClCompile Include="Boids\Obstacle.cpp" />
+    <ClCompile Include="Boids\Vector.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="ComponentList.cpp" />
     <ClCompile Include="Flock.cpp" />
-    <ClCompile Include="FlockBody.cpp" />
     <ClCompile Include="HumanoidSkeletonComponent.cpp" />
     <ClCompile Include="IntelligenceComponent.cpp" />
     <ClCompile Include="Architecture.cpp" />
@@ -71,7 +79,7 @@
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="VisualComponent.cpp" />
     <ClCompile Include="PhysicsErrorCallback.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -130,7 +138,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;C:\Dev\PhysX\Samples\PxToolkit\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Dev\Nethack2012\NH2012\Engine;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;C:\Dev\PhysX\Samples\PxToolkit\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

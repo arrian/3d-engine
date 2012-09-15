@@ -23,7 +23,8 @@ Scene::Scene(World* world, int id)
     accumulator(0.0f),
     stepSize(1.0f / 60.0f),
     defaultAmbientColour(0.8f,0.8f,0.8f),
-    numberPhysicsCPUThreads(8)
+    numberPhysicsCPUThreads(8),
+    flockTest(40)
 {
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
@@ -99,6 +100,7 @@ Scene::~Scene(void)
     if(*it) delete (*it);
     (*it) = 0;
   }
+
 
   //Releasing physics
   physicsManager->release();
@@ -245,7 +247,7 @@ void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if((*it)->isLoadRequired(player->getPosition())) world->loadScene((*it)->getID());
   }
 
-
+  flockTest.update(evt.timeSinceLastFrame);
 
   if(!world->freezeCollisionDebug) advancePhysics(evt.timeSinceLastFrame);
 }

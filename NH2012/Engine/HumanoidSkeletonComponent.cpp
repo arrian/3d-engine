@@ -75,7 +75,6 @@ void HumanoidSkeletonComponent::hasNodeChange()
   desc.position = physx::PxExtendedVec3(node->getPosition().x, node->getPosition().y, node->getPosition().z);
   desc.behaviorCallback = this;
   desc.callback = this;
-  desc.userData = userData;
  
   //set character controller desc options here
   controller = scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
@@ -88,6 +87,8 @@ void HumanoidSkeletonComponent::hasNodeChange()
   head->setPosition(Ogre::Vector3(0,height,0));
   rightHand = node->createChildSceneNode();
   leftHand = node->createChildSceneNode();
+
+  
 }
 
 //-------------------------------------------------------------------------------------

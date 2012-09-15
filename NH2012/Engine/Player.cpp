@@ -16,7 +16,7 @@ Player::Player(World* world)
     handMoveScalar(0.1f),
     skeleton()
 {
-  skeleton.mapPhysical((PhysicalInterface*) this);
+  
 }
 
 //-------------------------------------------------------------------------------------
@@ -50,9 +50,13 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   node->setPosition(position);
   //node->attachObject(entity);
 
+  skeleton.mapPhysical((PhysicalInterface*) this);//needs to be before skeleton.setNode()
+
   visual.setNode(scene, node);
   skeleton.setNode(scene, node);
   camera.setNode(scene, skeleton.getHead());
+
+  
   
   //if(window) hook(window);//if the player has a render window then connect camera to new scene
 
@@ -71,7 +75,8 @@ Scene* Player::getScene()
 void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   //std::cout << "x:" << node->getPosition().x << " z:" <<  node->getPosition().z << " y:" <<  node->getPosition().y << std::endl;
-  camera.rayQuery();//testing ray queries
+
+  //implement later//camera.rayQuery();//testing ray queries
 
   skeleton.frameRenderingQueued(evt);
   camera.frameRenderingQueued(evt);//for aspect ratio changes

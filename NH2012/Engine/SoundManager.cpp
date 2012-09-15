@@ -6,17 +6,12 @@ SoundManager::SoundManager(void)
     sounds3D(),
     channels(),
     system(0),
-    music(0)
+    music(0),
+    musicChannel(0)
 {
-  if(FMOD::System_Create(&system) != FMOD_OK)
-  {
-    std::cout << "Could not create the sound manager." << std::endl;
-  }
+  if(FMOD::System_Create(&system) != FMOD_OK) std::cout << "Could not create the sound manager." << std::endl;
 
-  if(system->init(100, FMOD_INIT_NORMAL, 0) != FMOD_OK)
-  {
-    std::cout << "Could not initialise the sound manager." << std::endl;
-  }
+  if(system->init(100, FMOD_INIT_NORMAL, 0) != FMOD_OK) std::cout << "Could not initialise the sound manager." << std::endl;
  
 
   //Testing sound
@@ -57,21 +52,26 @@ SoundManager::~SoundManager(void)
 
 
 //-------------------------------------------------------------------------------------
-void SoundManager::playSound(int id)
+void SoundManager::playSound(FMOD::Sound* sound, FMOD::Channel* channel)
 {
-
+  system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
 }
 
 //-------------------------------------------------------------------------------------
 void SoundManager::playMusic(int id)
 {
-
+  throw NHException("playMusic in SoundManager not yet implemented.");
+  if(music != 0) music->release();
+  music = 0;
+  //get the song path from the id and create a sound
+  system->playSound(FMOD_CHANNEL_FREE, music, false, &musicChannel);
 }
 
 //-------------------------------------------------------------------------------------
 void SoundManager::addSoundEmitter(SoundComponent* component)
 {
   sounds3D.push_back(component);
+  std::cout << "Note: addSoundEmitter in SoundManager does not yet take all the component arguments for sound creation. Needs to be fully implemented." << std::endl;
   //initialise the sound here
 }
 

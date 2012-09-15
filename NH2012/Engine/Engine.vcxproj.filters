@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{a295972a-f40e-4790-ae47-18ba6a479875}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Boids">
+      <UniqueIdentifier>{7f9e2e9b-74a3-4747-b5e0-ccbf20d30542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Boids">
+      <UniqueIdentifier>{d961ff5c-e8f7-4b21-b36a-39db9525fa12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Architecture.h">
@@ -71,9 +77,6 @@
     </ClInclude>
     <ClInclude Include="BasicComponent.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Bar.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NodeComponent.h">
       <Filter>Header Files\Components</Filter>
@@ -111,17 +114,35 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SoundComponent.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\Boid.h">
+      <Filter>Header Files\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\NamedObject.h">
+      <Filter>Header Files\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\Obstacle.h">
+      <Filter>Header Files\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\SimObject.h">
+      <Filter>Header Files\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\Vector.h">
+      <Filter>Header Files\Boids</Filter>
     </ClInclude>
     <ClInclude Include="Flock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlockBody.h">
+    <ClInclude Include="Essential.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -153,9 +174,6 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BasicComponent.cpp">
@@ -197,17 +215,29 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SoundComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Flock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FlockBody.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Bar.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Boids\Vector.cpp">
+      <Filter>Source Files\Boids</Filter>
+    </ClCompile>
+    <ClCompile Include="Boids\Boid.cpp">
+      <Filter>Source Files\Boids</Filter>
+    </ClCompile>
+    <ClCompile Include="Boids\NamedObject.cpp">
+      <Filter>Source Files\Boids</Filter>
+    </ClCompile>
+    <ClCompile Include="Boids\Obstacle.cpp">
+      <Filter>Source Files\Boids</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

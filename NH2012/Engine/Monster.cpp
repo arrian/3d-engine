@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------------------------
 Monster::Monster(int id)
   : BasicComponent(),
-    PhysicalInterface(id, "Monster"),
+    PhysicalInterface(id, "NameError", "Monster"),
     speed(200.0f),
     height(1.75f),
     node(0),

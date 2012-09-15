@@ -1,21 +1,22 @@
 #pragma once
 
 #include <vector>
-#include <Ogre.h>
-#include "FlockBody.h"
+#include <iostream>
+
+#include "Boids/Boid.h"
+#include "Boids/Obstacle.h"
+#include "Boids/Vector.h"
 
 class Flock
 {
 public:
-  Flock(Ogre::SceneManager* manager);
-  ~Flock(void);
+  Flock(int numBoids);
+  virtual ~Flock(void);
 
-  void frameRenderingQueued(Ogre::FrameEvent& evt);
-  bool addBody(FlockBody *body);
-  std::vector<FlockBody*> getBodiesInRadius(FlockBody* body, float radius);
+  void update(double elapsedSeconds);
 
-private:
-  Ogre::SceneNode* node;
-  std::vector<FlockBody*> flock;
+protected:
+  std::vector<Boids::Boid*> boids;
+
 };
 

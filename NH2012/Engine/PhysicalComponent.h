@@ -24,5 +24,8 @@ protected:
 
   physx::PxRigidDynamic* physical;
   physx::PxShape* shape;
+
+  float tempCollisionCubeSides;
+  float tempCollisionDensity;
 };
 

@@ -11,7 +11,9 @@ PhysicalComponent::PhysicalComponent(Ogre::Real friction, Ogre::Real restitution
     restitution(restitution),
     material(material),
     physical(0),
-    shape(0)
+    shape(0),
+    tempCollisionCubeSides(0.5f),
+    tempCollisionDensity(0.0005f)
 {
   
 }
@@ -37,8 +39,8 @@ void PhysicalComponent::hasNodeChange()
   if(!material) material = scene->getWorld()->getDefaultPhysicsMaterial();
   if(physical) physical->release();//also releases shape
 
-  float density = 0.0005f;
-  float side = 0.5f;
+  float density = tempCollisionDensity;
+  float side = tempCollisionCubeSides;
 
   Ogre::Vector3 oPosition = node->getPosition();
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);

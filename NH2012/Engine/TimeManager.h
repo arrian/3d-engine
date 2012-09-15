@@ -10,7 +10,7 @@
 #include <boost/lexical_cast.hpp>
 
 //Ogre
-#include <OgreString.h>
+#include <Ogre.h>
 
 //Date Storage
 struct Date

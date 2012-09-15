@@ -13,6 +13,8 @@
 #include "Architecture.h"
 #include "Portal.h"
 
+#include "Flock.h"
+
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxControllerManager.h"
 
@@ -24,6 +26,7 @@ class World;
 class Player;
 class Monster;
 class Portal;
+class Flock;
 
 class Scene
 {
@@ -93,5 +96,7 @@ private:
   float stepSize;
 
   physx::PxU32 numberPhysicsCPUThreads;
+
+  Flock flockTest;
 };
 

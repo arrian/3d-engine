@@ -1,44 +1,29 @@
 #include "Flock.h"
 
 
-Flock::Flock(Ogre::SceneManager* manager)
-  : flock()
+Flock::Flock(int numBoids)
+  : boids()
 {
-  node = manager->getRootSceneNode()->createChildSceneNode();
-
-  //flock testing
-  for(int i = 0; i < 10; i++)
+  for(int i = 0; i < numBoids; i++)
   {
-    addBody(new FlockBody(node->createChildSceneNode(), this));
+    boids.push_back(new Boids::Boid(Boids::Vector(0,0,0),Boids::Vector(0,0,0),Boids::Vector(1,1,1)));
   }
 }
 
 
 Flock::~Flock(void)
 {
-}
-
-void Flock::frameRenderingQueued(Ogre::FrameEvent& evt)
-{
-  for(std::vector<FlockBody*>::iterator iter = flock.begin(); iter < flock.end(); ++iter)
+  for(std::vector<Boids::Boid*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
   {
-
+    if(*iter) delete (*iter);
   }
 }
 
-bool Flock::addBody(FlockBody *body)
+void Flock::update(double elapsedSeconds)
 {
-  flock.push_back(body);
-}
-
-std::vector<FlockBody*> Flock::getBodiesInRadius(FlockBody* body, float radius)
-{
-  std::vector<FlockBody*> collection = std::vector<FlockBody*>();
-  for(std::vector<FlockBody*>::iterator iter = flock.begin(); iter < flock.end(); ++iter)
+  for(std::vector<Boids::Boid*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
   {
-    if((*iter)->getPosition().distance(body->getPosition()) < radius) collection.push_back((*iter));
+    (*iter)->update(elapsedSeconds);
+    std::cout << "boid: " << (*iter)->getPosition() << std::endl;
   }
-
-  return collection;
 }
-

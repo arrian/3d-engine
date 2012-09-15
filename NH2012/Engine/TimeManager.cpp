@@ -1,4 +1,4 @@
-#include "Time.h"
+#include "TimeManager.h"
 
 
 Time::Time(void)
@@ -64,14 +64,13 @@ bool Time::isNewYears()
   return (date.month == 1 && date.day == 1);
 }
 
+
 //-------------------------------------------------------------------------------------
 int Time::calculateMoonPhase(Date date)
 {
-  /*
-  Calculates the moon phase (0-7).
-  0 => new moon.
-  4 => full moon.
-  */
+  //Calculates the moon phase (0-7).
+  //0 => new moon.
+  //4 => full moon.
 
   int c;
   int e;
@@ -87,12 +86,12 @@ int Time::calculateMoonPhase(Date date)
   ++date.month;
   c = boost::lexical_cast<int>(365.25 * date.year);
   e = boost::lexical_cast<int>(30.6 * date.month);
-  jd = c + e + date.day - 694039.09;/* jd is total days elapsed */
-  jd /= 29.53;/* divide by the moon cycle (29.53 days) */
-  b = boost::lexical_cast<int>(jd);/* int(jd) -> b, take integer part of jd */
-  jd -= b;/* subtract integer part to leave fractional part of original jd */
-  b = boost::lexical_cast<int>(jd * 8 + 0.5);/* scale fraction from 0-8 and round by adding 0.5 */
-  b = b & 7;/* 0 and 8 are the same so turn 8 into 0 */
+  jd = c + e + date.day - 694039.09;//jd is total days elapsed
+  jd /= 29.53;//divide by the moon cycle (29.53 days)
+  b = boost::lexical_cast<int>(jd);//int(jd) -> b, take integer part of jd
+  jd -= b;//subtract integer part to leave fractional part of original jd
+  b = boost::lexical_cast<int>(jd * 8 + 0.5);//scale fraction from 0-8 and round by adding 0.5
+  b = b & 7;// 0 and 8 are the same so turn 8 into 0
   
   return b;
 }
@@ -135,3 +134,4 @@ Ogre::String Time::month(Date date)
   if(date.month < 0 || date.month > 11) return "error";
   return months[date.month - 1];
 }
+
