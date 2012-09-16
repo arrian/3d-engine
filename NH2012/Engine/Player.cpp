@@ -7,7 +7,7 @@
 Player::Player(World* world) 
   : PhysicalInterface(0,"Local", "Player"),
     world(world),
-    scene(0),
+    scene(NULL),
     camera(),
     visual("actor.mesh"),
     addItem(false),
@@ -23,7 +23,7 @@ Player::Player(World* world)
 Player::~Player(void)
 {
   if(node) scene->getSceneManager()->destroySceneNode(node);
-  node = 0;
+  node = NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
     skeleton.removeNode();
     
     if(node) this->scene->getSceneManager()->destroySceneNode(node);
-    node = 0;
+    node = NULL;
   }
 
   //setting up

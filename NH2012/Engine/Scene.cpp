@@ -9,15 +9,15 @@ Scene::Scene(World* world, int id)
   : world(world),
     id(id),
     sceneManager(world->getRoot()->createSceneManager(Ogre::ST_INTERIOR)),
-    controllerManager(0),
-    physicsManager(0),
+    controllerManager(NULL),
+    physicsManager(NULL),
     instanceNumber(0),
-    defaultEntry(0),
-    player(0),
+    defaultEntry(NULL),
+    player(NULL),
     defaultAmbientColour(0.5f,0.5f,0.5f),
     numberPhysicsCPUThreads(8),
-    stepSize(1.0f / 60.0f),
-    accumulator(0.0f),
+    stepSize(1.0 / 60.0),
+    accumulator(0.0),
     active(false),
     flockTest(40),
     particles(),
@@ -68,14 +68,14 @@ Scene::~Scene(void)
 {
   //Deleting architecture
   if(architecture) delete architecture;
-  architecture = 0;
+  architecture = NULL;
 
   //Deleting all monsters
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
   {
     world->releaseMonster(*it);
     if(*it) delete (*it);
-    (*it) = 0;
+    (*it) = NULL;
   }
 
   //Deleting all items
@@ -83,23 +83,23 @@ Scene::~Scene(void)
   {
     world->releaseItem(*it);
     if(*it) delete (*it);
-    (*it) = 0;
+    (*it) = NULL;
   }
 
   //Deleting all portals
   for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
   {
     if(*it) delete (*it);
-    (*it) = 0;
+    (*it) = NULL;
   }
 
   //Releasing physics
   physicsManager->release();
-  physicsManager = 0;
+  physicsManager = NULL;
 
   //Releasing scene manager
   world->getRoot()->destroySceneManager(sceneManager);
-  sceneManager = 0;
+  sceneManager = NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ void Scene::addPlayer(Player* player, int portalID)
   active = true;
   Ogre::Vector3 position;
   Ogre::Vector3 lookAt;
-  if(defaultEntry != 0 && portalID == DEFAULT_PORTAL)//use default portal
+  if(defaultEntry != NULL && portalID == DEFAULT_PORTAL)//use default portal
   {
     position = defaultEntry->getPosition();
     lookAt = defaultEntry->getLookAt();
@@ -209,7 +209,7 @@ void Scene::removePlayer(Player* player)
 {
   if(this->player == player) 
   {
-    this->player = 0;
+    this->player = NULL;
     active = false;//when more than one player, will need to check all players before deactivating scene
   }
 }
@@ -244,12 +244,12 @@ void Scene::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-bool Scene::advancePhysics(Ogre::Real dt)
+bool Scene::advancePhysics(double elapsedSeconds)
 {
-  accumulator += dt;
+  accumulator += elapsedSeconds;
   if(accumulator < stepSize) return false;
   accumulator -= stepSize;
-  physicsManager->simulate(stepSize);
+  physicsManager->simulate((float) stepSize);
 
   return true;
 }
@@ -279,7 +279,7 @@ void Scene::load(std::string file)
    
     //Architecture
     rapidxml::xml_node<>* architectureNode = root->first_node("architecture");
-    while(architectureNode != 0)
+    while(architectureNode != NULL)
     {
       int id = boost::lexical_cast<int>(architectureNode->first_attribute("id")->value());
       architecture->add(world->getDataManager()->getArchitecture(id).mesh, getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
@@ -288,7 +288,7 @@ void Scene::load(std::string file)
    
     //Lights
     rapidxml::xml_node<>* lightNode = root->first_node("light");
-    while(lightNode != 0)
+    while(lightNode != NULL)
     {
       bool cast_shadows = boost::lexical_cast<bool>(lightNode->first_attribute("cast_shadows")->value());
       float range = boost::lexical_cast<float>(lightNode->first_attribute("range")->value());
@@ -299,7 +299,7 @@ void Scene::load(std::string file)
     
     //Items
     rapidxml::xml_node<>* itemNode = root->first_node("item");
-    while(itemNode != 0)
+    while(itemNode != NULL)
     {
       int id = boost::lexical_cast<int>(itemNode->first_attribute("id")->value());
       addItem(id, getXMLPosition(itemNode), getXMLRotation(itemNode));
@@ -308,25 +308,23 @@ void Scene::load(std::string file)
     
     //Portals
     rapidxml::xml_node<>* portalNode = root->first_node("portal");
-    while(portalNode != 0)
+    while(portalNode != NULL)
     {
       int id = boost::lexical_cast<int>(portalNode->first_attribute("id")->value());
       int targetSceneID = boost::lexical_cast<int>(portalNode->first_attribute("target_scene_id")->value());
       int targetPortalID = boost::lexical_cast<int>(portalNode->first_attribute("target_portal_id")->value());
       addPortal(new Portal(id, targetSceneID, targetPortalID, getXMLPosition(portalNode), getXMLVector(portalNode, "ltx", "lty", "ltz")));
-      if(defaultEntry == 0 && portals.size() > 0) defaultEntry = portals[0];//creating a default entry point
+      if(defaultEntry == NULL && portals.size() > 0) defaultEntry = portals[0];//creating a default entry point
       portalNode = portalNode->next_sibling("portal");
     }
 
     //Particles
     rapidxml::xml_node<>* particleNode = root->first_node("particle");
-    while(particleNode != 0)
+    while(particleNode != NULL)
     {
       addParticles(particleNode->first_attribute("name")->value(), particleNode->first_attribute("template_name")->value(),getXMLPosition(particleNode));
       particleNode = particleNode->next_sibling("particle");
     }
-
-
   }
   catch (rapidxml::parse_error e)
   {
@@ -410,7 +408,7 @@ Portal* Scene::getPortal(int id)
   }
 
   throw NHException("No portal was found with the given id in 'Scene::getPortal(int)'.");//temporarily throw exception
-  return 0;
+  return NULL;
 }
 
 //-------------------------------------------------------------------------------------

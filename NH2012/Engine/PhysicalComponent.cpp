@@ -10,8 +10,8 @@ PhysicalComponent::PhysicalComponent(Ogre::Real friction, Ogre::Real restitution
     friction(friction),
     restitution(restitution),
     material(material),
-    physical(0),
-    shape(0),
+    physical(NULL),
+    shape(NULL),
     tempCollisionCubeSides(0.5f),
     tempCollisionDensity(0.0005f)
 {

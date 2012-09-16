@@ -8,7 +8,7 @@ Monster::Monster(int id)
     PhysicalInterface(id, "NameError", "Monster"),
     speed(200.0f),
     height(1.75f),
-    node(0),
+    node(NULL),
     intelligence(),
     visual("actor.mesh"),
     skeleton()

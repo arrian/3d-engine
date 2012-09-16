@@ -2,8 +2,8 @@
 
 //-------------------------------------------------------------------------------------
 BasicComponent::BasicComponent(void)
-  : scene(0),
-    oldScene(0)
+  : scene(NULL),
+    oldScene(NULL)
 {
 }
 

@@ -3,14 +3,14 @@
 
 //-------------------------------------------------------------------------------------
 NH2012::NH2012(void)
-: root(0),
-  window(0),
+: root(NULL),
+  window(NULL),
   cursorWasVisible(false),
   shutDown(false),
-  inputManager(0),
-  mouse(0),
-  keyboard(0),
-  game(0)
+  inputManager(NULL),
+  mouse(NULL),
+  keyboard(NULL),
+  game(NULL)
 {
 }
 
@@ -173,7 +173,7 @@ void NH2012::windowClosed(Ogre::RenderWindow* rw)//Unattach OIS before window sh
       inputManager->destroyInputObject(keyboard);
 
       OIS::InputManager::destroyInputSystem(inputManager);
-      inputManager = 0;
+      inputManager = NULL;
     }
   }
 }

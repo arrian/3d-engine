@@ -8,7 +8,7 @@ Item::Item(ItemDesc desc)
     PhysicalInterface(0, desc.name, "Item"),
     visual(desc.mesh),
     physical(),
-    node(0)
+    node(NULL)
 {
   setPosition(Ogre::Vector3::ZERO);
   setRotation(Ogre::Quaternion::IDENTITY);
@@ -30,7 +30,7 @@ void Item::hasSceneChange()
 Item::~Item(void)
 {
   if(scene && node) scene->getSceneManager()->destroySceneNode(node);
-  node = 0;
+  node = NULL;
 }
 
 //-------------------------------------------------------------------------------------

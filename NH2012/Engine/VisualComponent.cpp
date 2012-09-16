@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------------------------
 VisualComponent::VisualComponent(Ogre::String mesh)
   : NodeComponent(),
-    entity(0),
+    entity(NULL),
     mesh(mesh)
 {
 }
@@ -25,7 +25,7 @@ void VisualComponent::update(double elapsedSeconds)
 void VisualComponent::hasNodeChange()
 {
   if(oldScene && entity) oldScene->getSceneManager()->destroyEntity(entity);
-  entity = 0;
+  entity = NULL;
 
   entity = scene->getSceneManager()->createEntity(mesh);
   node->attachObject(entity);

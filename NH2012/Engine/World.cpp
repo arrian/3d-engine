@@ -23,11 +23,11 @@ World::World(Ogre::Root* root)
     soundManager(),
     errorCallback(),
     allocatorCallback(),
-    player(0),
-    physicsWorld(0),
-    physicsMaterial(0),
-    physicsFoundation(0),
-    sceneChangeListener(0),
+    player(NULL),
+    physicsWorld(NULL),
+    physicsMaterial(NULL),
+    physicsFoundation(NULL),
+    sceneChangeListener(NULL),
     defaultRestitution(0.2f),
     defaultStaticFriction(0.3f),
     defaultDynamicFriction(0.4f),
@@ -39,19 +39,19 @@ World::World(Ogre::Root* root)
 World::~World(void)
 {
   if(player) delete player;
-  player = 0;
+  player = NULL;
 
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
     if(*it) delete (*it);
-    (*it) = 0;
+    (*it) = NULL;
   }
 
   physicsWorld->release();
-  physicsWorld = 0;
+  physicsWorld = NULL;
 
   physicsFoundation->release();
-  physicsFoundation = 0;
+  physicsFoundation = NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ void World::initialise(std::string iniFile)
 
   //creating default scene
   Scene* scene = loadScene(0);
-  if(scene == 0) throw NHException("Default scene creation failed.");
+  if(scene == NULL) throw NHException("Default scene creation failed.");
   
   //creating player
   player = new Player(this);
@@ -116,7 +116,7 @@ Scene* World::getScene(Ogre::String name)
   {
     if((*it)->getName() == name) return (*it);
   }
-  return 0;
+  return NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ Scene* World::getScene(int id)
   {
     if((*it)->getSceneID() == id) return (*it);
   }
-  return 0;
+  return NULL;
 }
 
 //-------------------------------------------------------------------------------------

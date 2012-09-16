@@ -9,10 +9,10 @@ Console::Console(World* world, OIS::Keyboard* keyboard)
     isShift(false),
     isControl(false),
     world(world),
-    window(0),
-    screen(0),
-    layer(0),
-    view(0),
+    window(NULL),
+    screen(NULL),
+    layer(NULL),
+    view(NULL),
     text(""),
     command("")
 {

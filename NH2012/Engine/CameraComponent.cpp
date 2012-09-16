@@ -5,9 +5,9 @@
 //-------------------------------------------------------------------------------------
 CameraComponent::CameraComponent()
   : NodeComponent(),
-    camera(0),
-    window(0),
-    viewport(0),
+    camera(NULL),
+    window(NULL),
+    viewport(NULL),
     oldCameraWidth(0),
     oldCameraHeight(0),
     nearClipDefault(0.4f),
@@ -37,7 +37,7 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
 //-------------------------------------------------------------------------------------
 void CameraComponent::unhookWindow()
 {
-  viewport = 0;
+  viewport = NULL;
   if(window) window->removeAllViewports();
 }
 

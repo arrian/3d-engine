@@ -4,7 +4,7 @@
 
 //-------------------------------------------------------------------------------------
 NodeComponent::NodeComponent(void)
-  : node(0)
+  : node(NULL)
 {
 }
 
@@ -16,7 +16,7 @@ NodeComponent::~NodeComponent(void)
 //-------------------------------------------------------------------------------------
 void NodeComponent::setNode(Scene* scene, Ogre::SceneNode* node)
 {
-  setScene(scene);//only set scene if it is different to the current scene
+  setScene(scene);
 
   oldNode = this->node;
   this->node = node;
@@ -27,7 +27,7 @@ void NodeComponent::setNode(Scene* scene, Ogre::SceneNode* node)
 //-------------------------------------------------------------------------------------
 void NodeComponent::removeNode()
 {
-  setNode(0, 0);
+  setNode(NULL, NULL);
 }
 
 //-------------------------------------------------------------------------------------

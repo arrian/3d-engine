@@ -5,9 +5,9 @@ SoundManager::SoundManager(void)
   : sounds2D(),
     sounds3D(),
     channels(),
-    system(0),
-    music(0),
-    musicChannel(0)
+    system(NULL),
+    music(NULL),
+    musicChannel(NULL)
 {
   if(FMOD::System_Create(&system) != FMOD_OK) std::cout << "Could not create the sound manager." << std::endl;
 
@@ -61,8 +61,8 @@ void SoundManager::playSound(FMOD::Sound* sound, FMOD::Channel* channel)
 void SoundManager::playMusic(int id)
 {
   throw NHException("playMusic in SoundManager not yet implemented.");
-  if(music != 0) music->release();
-  music = 0;
+  if(music != NULL) music->release();
+  music = NULL;
   //get the song path from the id and create a sound
   system->playSound(FMOD_CHANNEL_FREE, music, false, &musicChannel);
 }
