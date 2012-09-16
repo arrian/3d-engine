@@ -53,7 +53,7 @@ Scene::Scene(World* world, int id)
   architecture = new Architecture(this);
 
   SceneDesc sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
- 
+  
   name = sceneDesc.name;
   load(sceneDesc.file);//loading the scene file
 

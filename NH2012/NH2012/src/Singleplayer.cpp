@@ -25,8 +25,15 @@ Singleplayer::~Singleplayer(void)
 
 void Singleplayer::update(double elapsedSeconds)
 {
-  console.update(elapsedSeconds);
-  world.update(elapsedSeconds);
+  try
+  {
+    console.update(elapsedSeconds);
+    world.update(elapsedSeconds);
+  }
+  catch (NHException e)//temporarily catching update errors
+  {
+    std::cout << e.what() << std::endl;
+  }
 }
 
 void Singleplayer::injectKeyDown(const OIS::KeyEvent &arg)
@@ -39,11 +46,19 @@ void Singleplayer::injectKeyDown(const OIS::KeyEvent &arg)
 
 void Singleplayer::injectKeyUp(const OIS::KeyEvent &arg)
 {
-  if(arg.key == world.controls.console) console.setVisible(!console.isVisible());
-  console.injectKeyUp(arg);
-  if(console.isVisible()) return;//ignore other key notifications while console visible
+  try
+  {
+    if(arg.key == world.controls.console) console.setVisible(!console.isVisible());
+    console.injectKeyUp(arg);
+    if(console.isVisible()) return;//ignore other key notifications while console visible
 
-  world.injectKeyUp(arg);
+    world.injectKeyUp(arg);
+
+  }
+  catch (NHException e)//temporarily catching key up errors
+  {
+    std::cout << e.what() << std::endl;
+  }
 }
 
 void Singleplayer::injectMouseMove(const OIS::MouseEvent &arg)

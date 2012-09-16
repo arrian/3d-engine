@@ -27,7 +27,6 @@ public:
   bool isVisible();//returns the visibility of the console
   void setVisible(bool visible);//sets the visibility of the console
   void update(double elapsedSeconds);
-  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
   void injectKeyDown(const OIS::KeyEvent &arg);//key pressed
   void injectKeyUp(const OIS::KeyEvent &arg);//key released
 
@@ -48,14 +47,36 @@ private:
   Gorilla::MarkupText* view;//Console display text.
   std::string text;//Console internal text.
   std::string command;//Current console command.
+  std::vector<std::string> history;//The command execution history.
 
   void enter();//Submit the command for processing.
   void backspace();//Backspace pressed.
-  void help();//Display help.
-  void clear();//Clear the console.
-  void stats();//Display game statistics.
   void update();//Updates the console display.
   void noCommand(std::string command);//Displays the no command error.
   void split(const std::string &s, char delim, std::vector<std::string> &elems);//Tokenises a string by the given delimiter.
+
+
+  //Set of executable commands
+  void setPhysicsFrozen(bool isFrozen);
+  void setFreeCamera(bool isFree);
+  void setPlayerPosition(std::string x, std::string y, std::string z);
+  void setPlayerScene(std::string sceneName);
+  void setPlayerGravity(std::string gravity);
+  void setFullscreen(bool isFullscreen, std::string width, std::string height);
+  void setAmbientLight(std::string r, std::string g, std::string b, std::string a);
+  void showPlayerPosition();
+  void showPhysicsInfo();
+  void showSceneInfo();
+  void showWorldInfo();
+  void showGameInfo();
+  void showHelp();
+  void showAbout();
+  void showData(std::string type, std::string id);
+  void add(std::string type, std::string id, std::string x, std::string y, std::string z);
+  void loadScene(std::string sceneId);
+  void unloadScene(std::string sceneName);
+  void screenshot();
+  void clear();//Clear the console.
+
 };
 

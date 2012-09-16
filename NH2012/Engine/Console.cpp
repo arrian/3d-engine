@@ -14,7 +14,8 @@ Console::Console(World* world, OIS::Keyboard* keyboard)
     layer(NULL),
     view(NULL),
     text(""),
-    command("")
+    command(""),
+    history()
 {
   overlay->loadAtlas("dejavu");
 }
@@ -118,6 +119,7 @@ void Console::injectKeyUp(const OIS::KeyEvent &arg)
 //-------------------------------------------------------------------------------------
 void Console::enter()
 {
+  history.push_back(command);
   text += "\n> " + command;
 
   std::vector<std::string> elements;
@@ -126,230 +128,53 @@ void Console::enter()
   if(elements.size() == 0) {}
   else if(elements.size() == 1)
   {
-    if(elements[0] == "help") help();
-    else if(elements[0] == "about") display("Copyright Arrian Purcell 2012\n");
+    if(elements[0] == "help") showHelp();
+    else if(elements[0] == "about") showAbout();
     else if(elements[0] == "clear") clear();
-    else if(elements[0] == "stats") stats();
-    else if(elements[0] == "freeze") world->freezeCollisionDebug = true;
-    else if(elements[0] == "unfreeze") world->freezeCollisionDebug = false;
-    else if(elements[0] == "freecam") world->getPlayer()->setCollisionEnabled(false);//freeCameraDebug = !world->freeCameraDebug;
-    else if(elements[0] == "hide") setVisible(false);
     else if(elements[0] == "refresh") hookWindow(window);
-    else if(elements[0] == "player_pos") 
-    {
-      Ogre::Vector3 position = world->getPlayer()->getPosition();
-      display("x", boost::lexical_cast<std::string>(position.x));
-      display("y", boost::lexical_cast<std::string>(position.y));
-      display("z", boost::lexical_cast<std::string>(position.z));
-    }
-    else if(elements[0] == "screenshot")
-    {
-      setVisible(false);
-      display("Screenshot saved to '" + window->writeContentsToTimestampedFile("screenshot", ".jpg") + "'.");
-      setVisible(true);
-    }
+    else if(elements[0] == "screenshot") screenshot();
+    else if(elements[0] == "show_game_info") showGameInfo();
+    else if(elements[0] == "set_physics_frozen") setPhysicsFrozen(true);
+    else if(elements[0] == "set_physics_unfrozen") setPhysicsFrozen(false);
+    else if(elements[0] == "set_free_camera") setFreeCamera(true);
+    else if(elements[0] == "set_console_hidden") setVisible(false);
+    else if(elements[0] == "show_player_position") showPlayerPosition();
+    else if(elements[0] == "show_physics_info") showPhysicsInfo();
     else noCommand(command);
   }
   else if(elements.size() == 2)
   {
-    if(elements[0] == "go")//moves the player to the specified scene
-    {
-      Scene* target = world->getScene(elements[1]);
-      if(target) world->movePlayer(world->getPlayer(), target);
-      else error("no scene named '" + elements[1] + "'");
-    }
-    else if(elements[0] == "load")
-    {
-      if(world->loadScene(boost::lexical_cast<int>(elements[1]))) display("scene loaded");
-      else display("could not load the scene");
-    }
-    else if(elements[0] == "player_gravity")
-    {
-      float gravity = boost::lexical_cast<float>(elements[1]);
-      world->getPlayer()->setGravity(gravity);
-    }
-    else if(elements[0] == "unload")
-    {
-      if(world->destroyScene(elements[1])) display("scene unloaded");
-      else error("could not unload the scene");
-    }
-    else if(elements[0] == "physics")
-    {
-      Scene* target = world->getScene(elements[1]);
-      if(target) 
-      {
-        physx::PxScene* physics = target->getPhysicsManager();
-        if(physics)
-        {
-          display("gravity", boost::lexical_cast<std::string>(physics->getGravity().magnitude()));
-          display("current timestamp", boost::lexical_cast<std::string>(physics->getTimestamp()));
-          display("number of rigid static actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_STATIC))));
-          display("number of rigid dynamic actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_DYNAMIC))));
-          display("number of cloth actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eCLOTH))));
-          display("number of particle fluid actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_FLUID))));
-          display("number of particle system actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_SYSTEM))));
-          display("number of aggregates", boost::lexical_cast<std::string>(physics->getNbAggregates()));
-          display("number of articulations", boost::lexical_cast<std::string>(physics->getNbArticulations()));
-          display("number of constraints", boost::lexical_cast<std::string>(physics->getNbConstraints()));
-        }
-        else error("no physics associated with this scene");
-      }
-      else error("no scene named '" + elements[1] + "'");
-    }
+    if(elements[0] == "set_player_scene") setPlayerScene(elements[1]);
+    else if(elements[0] == "load_scene") loadScene(elements[1]);
+    else if(elements[0] == "set_player_gravity") setPlayerGravity(elements[1]);
+    else if(elements[0] == "unload_scene") unloadScene(elements[1]);
     else noCommand(command);
   }
   else if(elements.size() == 3)
   {
-    if(elements[0] == "fullscreen" || elements[0] == "window") 
-    {
-      int width = boost::lexical_cast<int>(elements[1]);
-      int height = boost::lexical_cast<int>(elements[2]);
-
-      if(width == 0 || height == 0) error("bad screen dimensions");
-      else window->setFullscreen((elements[0] == "fullscreen"), width, height);
-    }
-    else if(elements[0] == "data")
-    {
-      int id = boost::lexical_cast<int>(elements[2]);
-      if(elements[1] == "architecture")
-      {
-        ArchitectureDesc desc = world->getDataManager()->getArchitecture(id);
-        display("name", desc.name);
-        display("mesh", desc.mesh);
-      }
-      else if(elements[1] == "item")
-      {
-        ItemDesc desc = world->getDataManager()->getItem(id);
-        display("name", desc.name);
-        display("mesh", desc.mesh);
-      }
-      else if(elements[1] == "monster")
-      {
-        MonsterDesc desc = world->getDataManager()->getMonster(id);
-        display("name", desc.name);
-        display("mesh", desc.mesh);
-      }
-    }
+    if(elements[0] == "set_fullscreen") setFullscreen(true, elements[1], elements[2]);
+    if(elements[0] == "set_windowed") setFullscreen(false, elements[1], elements[2]);
+    else if(elements[0] == "show_data") showData(elements[1], elements[2]);
     else noCommand(command);
   }
   else if(elements.size() == 4)
   {
-    if(elements[0] == "player_pos")
-    {
-      float x = boost::lexical_cast<float>(elements[1]);
-      float y = boost::lexical_cast<float>(elements[2]);
-      float z = boost::lexical_cast<float>(elements[3]);
-      Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(x), Ogre::Real(y), Ogre::Real(z));
-      world->getPlayer()->setPosition(position);
-    }
+    if(elements[0] == "set_player_position") setPlayerPosition(elements[1], elements[2], elements[3]);
     else noCommand(command);
   }
   else if(elements.size() == 5)
   {
-    if(elements[0] == "ambient")
-    {
-      float r = boost::lexical_cast<float>(elements[2]);
-      float g = boost::lexical_cast<float>(elements[3]);
-      float b = boost::lexical_cast<float>(elements[4]);
-      
-      Scene* target = world->getScene(elements[1]);
-      if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(r, g, b));
-      else error("no scene named '" + elements[1] + "'");
-    }
+    if(elements[0] == "set_ambient_light") setAmbientLight(elements[1], elements[2], elements[3], elements[4]);
     else noCommand(command);
   }
   else if(elements.size() == 6)
   {
-    if(elements[0] == "add")
-    {
-      Scene* target = world->getScene(elements[1]);
-      if(target)
-      {
-        float x = boost::lexical_cast<float>(elements[3]);
-        float y = boost::lexical_cast<float>(elements[4]);
-        float z = boost::lexical_cast<float>(elements[5]);
-        Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(x), Ogre::Real(y), Ogre::Real(z));
-        if(elements[2] == "item") target->addItem(0, position);
-        else if(elements[2] == "monster") target->addMonster(0, position);
-        else error("no object type '" + elements[2] + "' exists");
-      }
-      else error("no scene named '" + elements[1] + "'");
-    }
+    if(elements[0] == "add") add(elements[1], elements[2], elements[3], elements[4], elements[5]);
     else noCommand(command);
   }
   else noCommand(command);
   
   command = "";
-}
-
-//-------------------------------------------------------------------------------------
-void Console::help()
-{
-  display("help", "shows this list");
-  display("stats", "shows a list of statistics and a list of loaded scenes");
-  display("clear", "clears the console");
-  display("freeze", "freezes physics");
-  display("unfreeze", "unfreezes physics");
-  display("freecam", "frees the camera");
-  display("hide", "hides the console");
-  display("refresh", "temp method to rehook console to viewport");
-  display("fullscreen [width] [height]", "sets the window to fullscreen mode");
-  display("window [width] [height]", "sets the window to windowed mode");
-  display("add [scene name] [item|monster] [x] [y] [z]", "adds the given type of entity to the named scene at the given coordinates");
-  display("data [item|monster|architecture] [id]", "displays the data associated with the id of the given type of entity");
-  display("screenshot", "takes a screenshot and outputs to timestamped file");
-  display("go [scene name]", "moves the player to the specified scene");
-  display("load [scene id]", "loads a scene into memory");
-  display("unload [scene name]", "unloads a scene from memory");
-  display("ambient [scene name] [r] [g] [b]", "sets the ambient light in the given scene");
-  display("physics [scene name]", "shows physx physics stats for the given scene");
-  display("player_pos", "gets the player position");
-  display("player_pos [x] [y] [z]", "sets the player position");
-}
-
-//-------------------------------------------------------------------------------------
-void Console::clear()
-{
-  text = "";
-  command = "";
-}
-
-//-------------------------------------------------------------------------------------
-void Console::update()
-{
-  if(view) view->text(text + "\n%3> " + command + "_");
-}
-
-//-------------------------------------------------------------------------------------
-void Console::backspace()
-{
-  if(command.size() == 0) return;
-  command = command.substr(0, command.size() - 1);
-}
-
-//-------------------------------------------------------------------------------------
-void Console::stats()
-{
-  if(!window) 
-  {
-    error("no render window");
-    return;
-  }
-
-  display("average fps", Ogre::StringConverter::toString(int(window->getAverageFPS())));
-  display("best fps", Ogre::StringConverter::toString(window->getBestFPS()));
-  display("batches", Ogre::StringConverter::toString(window->getBatchCount()));
-  display("colour depth", Ogre::StringConverter::toString(window->getColourDepth()));
-  display("number of viewports", Ogre::StringConverter::toString(window->getNumViewports()));
-  display("triangle count", Ogre::StringConverter::toString(window->getTriangleCount()));
-  display("window size", Ogre::StringConverter::toString(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
-  display("number of loaded scenes", Ogre::StringConverter::toString(world->getNumberScenes()));
-
-  std::vector<Ogre::String> names;
-  world->getSceneNames(names);
-  Ogre::String list = "";
-  for(std::vector<std::string>::iterator it = names.begin(); it < names.end(); ++it) list += (*it) + " ";
-  display("loaded scenes", list);
 }
 
 //-------------------------------------------------------------------------------------
@@ -382,6 +207,240 @@ void Console::split(const std::string &s, char delim, std::vector<std::string> &
   std::stringstream ss(s);
   std::string item;
   while(std::getline(ss, item, delim)) elems.push_back(item);
+}
+
+//-------------------------------------------------------------------------------------
+void Console::update()
+{
+  if(view) view->text(text + "\n%3> " + command + "_");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::backspace()
+{
+  if(command.size() == 0) return;
+  command = command.substr(0, command.size() - 1);
+}
+
+//-------------------------------------------------------------------------------------
+void Console::clear()
+{
+  text = "";
+  command = "";
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showGameInfo()
+{
+  if(!window) 
+  {
+    error("no render window");
+    return;
+  }
+
+  display("average fps", Ogre::StringConverter::toString(int(window->getAverageFPS())));
+  display("best fps", Ogre::StringConverter::toString(window->getBestFPS()));
+  display("batches", Ogre::StringConverter::toString(window->getBatchCount()));
+  display("colour depth", Ogre::StringConverter::toString(window->getColourDepth()));
+  display("number of viewports", Ogre::StringConverter::toString(window->getNumViewports()));
+  display("triangle count", Ogre::StringConverter::toString(window->getTriangleCount()));
+  display("window size", Ogre::StringConverter::toString(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
+  display("number of loaded scenes", Ogre::StringConverter::toString(world->getNumberScenes()));
+
+  std::vector<Ogre::String> names;
+  world->getSceneNames(names);
+  Ogre::String list = "";
+  for(std::vector<std::string>::iterator it = names.begin(); it < names.end(); ++it) list += (*it) + " ";
+  display("loaded scenes", list);
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showHelp()
+{
+  display("help", "shows this list");
+  display("clear", "clears the console");
+  display("refresh", "temp method to rehook console to viewport");
+  display("screenshot", "takes a screenshot and outputs to timestamped file");
+  display("set_physics_frozen", "freezes physics");
+  display("set_physics_unfrozen", "unfreezes physics");
+  display("set_free_camera", "frees the camera");
+  display("set_console_hidden", "hides the console");
+  display("set_fullscreen [width] [height]", "sets the window to fullscreen mode");
+  display("set_windowed [width] [height]", "sets the window to windowed mode");
+  display("set_player_scene [scene name]", "moves the player to the specified scene");
+  display("set_ambient_light [r] [g] [b]", "sets the ambient light in the given scene");
+  display("set_player_position [x] [y] [z]", "sets the player position");
+  display("show_data [item|monster|architecture] [id]", "displays the data associated with the id of the given type of entity");
+  display("show_physics_info", "shows physx physics stats for the current scene");
+  display("show_player_position", "gets the player position");
+  display("show_game_info", "shows a list of statistics and a list of loaded scenes");
+  display("add [item|monster] [data id] [x] [y] [z]", "adds the given type of entity to the current scene at the given coordinates");
+  display("load_scene [scene id]", "loads a scene into memory");
+  display("unload_scene [scene name]", "unloads a scene from memory");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setPhysicsFrozen(bool isFrozen)
+{
+  world->freezeCollisionDebug = isFrozen;
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setFreeCamera(bool isFree)
+{
+  world->getPlayer()->setCollisionEnabled(!isFree);//freeCameraDebug = !world->freeCameraDebug;
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setPlayerPosition(std::string x, std::string y, std::string z)
+{
+  Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(x)), Ogre::Real(boost::lexical_cast<float>(y)), Ogre::Real(boost::lexical_cast<float>(z)));
+  world->getPlayer()->setPosition(position);
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setPlayerScene(std::string sceneName)
+{
+  Scene* target = world->getScene(sceneName);
+  if(target) world->movePlayer(world->getPlayer(), target);
+  else error("no scene loaded named '" + sceneName + "'");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setPlayerGravity(std::string gravity)
+{
+  world->getPlayer()->setGravity(boost::lexical_cast<float>(gravity));
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setFullscreen(bool isFullscreen, std::string width, std::string height)
+{
+  int widthNum = boost::lexical_cast<int>(width);
+  int heightNum = boost::lexical_cast<int>(height);
+
+  if(widthNum <= 0 || heightNum <= 0) error("bad screen dimensions");
+  else window->setFullscreen(isFullscreen, widthNum, heightNum);
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setAmbientLight(std::string r, std::string g, std::string b, std::string a)
+{
+  Scene* target = world->getPlayer()->getScene();
+  if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(boost::lexical_cast<float>(r), boost::lexical_cast<float>(g), boost::lexical_cast<float>(b), boost::lexical_cast<float>(a)));
+  else error("player needs to be located within a scene to be able to change the ambient light");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showPlayerPosition()
+{
+  Ogre::Vector3 position = world->getPlayer()->getPosition();
+  display("x", boost::lexical_cast<std::string>(position.x));
+  display("y", boost::lexical_cast<std::string>(position.y));
+  display("z", boost::lexical_cast<std::string>(position.z));
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showPhysicsInfo()
+{
+  Scene* target = world->getPlayer()->getScene();
+  if(target) 
+  {
+    physx::PxScene* physics = target->getPhysicsManager();
+    if(physics)
+    {
+      display("gravity", boost::lexical_cast<std::string>(physics->getGravity().magnitude()));
+      display("current timestamp", boost::lexical_cast<std::string>(physics->getTimestamp()));
+      display("number of rigid static actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_STATIC))));
+      display("number of rigid dynamic actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_DYNAMIC))));
+      display("number of cloth actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eCLOTH))));
+      display("number of particle fluid actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_FLUID))));
+      display("number of particle system actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::ePARTICLE_SYSTEM))));
+      display("number of aggregates", boost::lexical_cast<std::string>(physics->getNbAggregates()));
+      display("number of articulations", boost::lexical_cast<std::string>(physics->getNbArticulations()));
+      display("number of constraints", boost::lexical_cast<std::string>(physics->getNbConstraints()));
+    }
+    else error("no physics associated with this scene");
+  }
+  else error("player needs to be located within a scene to be able to query the physics");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showSceneInfo()
+{
+
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showWorldInfo()
+{
+  
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showData(std::string type, std::string id)
+{
+  int idNumber = boost::lexical_cast<int>(id);
+  if(type == "architecture")
+  {
+    ArchitectureDesc desc = world->getDataManager()->getArchitecture(idNumber);
+    display("name", desc.name);
+    display("mesh", desc.mesh);
+  }
+  else if(type == "item")
+  {
+    ItemDesc desc = world->getDataManager()->getItem(idNumber);
+    display("name", desc.name);
+    display("mesh", desc.mesh);
+  }
+  else if(type == "monster")
+  {
+    MonsterDesc desc = world->getDataManager()->getMonster(idNumber);
+    display("name", desc.name);
+    display("mesh", desc.mesh);
+  }
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showAbout()
+{
+  display("Copyright Arrian Purcell 2012\n");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::add(std::string type, std::string id, std::string x, std::string y, std::string z)
+{
+  Scene* target = world->getPlayer()->getScene();
+  if(target)
+  {
+    Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(x)), Ogre::Real(boost::lexical_cast<float>(y)), Ogre::Real(boost::lexical_cast<float>(z)));
+    int idNum = boost::lexical_cast<int>(id);
+    if(type == "item") target->addItem(idNum, position);
+    else if(type == "monster") target->addMonster(idNum, position);
+    else error("object type '" + type + "' not implemented");
+  }
+  else error("player needs to be located within a scene to add an item to it");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::loadScene(std::string sceneId)
+{
+  if(world->loadScene(boost::lexical_cast<int>(sceneId))) display("scene loaded");
+  else display("could not load the scene");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::unloadScene(std::string sceneName)
+{
+  if(world->destroyScene(sceneName)) display("scene unloaded");
+  else error("could not unload the scene");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::screenshot()
+{
+  setVisible(false);
+  display("Screenshot saved to '" + window->writeContentsToTimestampedFile("screenshot", ".jpg") + "'.");
+  setVisible(true);
 }
 
 
