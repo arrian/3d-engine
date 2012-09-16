@@ -94,9 +94,9 @@ private:
   Ogre::Vector3 getXMLScale(rapidxml::xml_node<>* node);
   Ogre::Vector3 getXMLPosition(rapidxml::xml_node<>* node);
   
-  bool advancePhysics(Ogre::Real dt);
-  float accumulator;
-  float stepSize;
+  bool advancePhysics(double elapsedSeconds);
+  double accumulator;
+  double stepSize;
 
   physx::PxU32 numberPhysicsCPUThreads;
 
