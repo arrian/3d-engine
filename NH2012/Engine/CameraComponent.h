@@ -16,7 +16,8 @@ public:
   void hookWindow(Ogre::RenderWindow* window);
   void unhookWindow();
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void rayQuery();
 

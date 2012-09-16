@@ -34,7 +34,7 @@ void IntelligenceComponent::hasNodeChange()
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void IntelligenceComponent::update(double elapsedSeconds)
 {
 
 }

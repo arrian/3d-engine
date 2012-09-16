@@ -17,7 +17,7 @@ public:
   Singleplayer(Ogre::Root* root, Ogre::RenderWindow* window, OIS::Keyboard* keyboard);
   ~Singleplayer(void);
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
   void setSceneManager(Ogre::SceneManager* scene);
 
   void injectKeyDown(const OIS::KeyEvent &arg);

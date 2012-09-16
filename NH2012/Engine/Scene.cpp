@@ -222,16 +222,16 @@ int Scene::getNewInstanceNumber()
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void Scene::update(double elapsedSeconds)
 {
   if(!physicsManager) throw NHException("No physics found. Scene::frameRenderingQueued()");
   
   physicsManager->fetchResults(true);
   
-  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->frameRenderingQueued(evt);//iterate monsters
-  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) (*it)->frameRenderingQueued(evt);//iterate items
+  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->update(elapsedSeconds);//iterate monsters
+  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) (*it)->update(elapsedSeconds);//iterate items
   
-  if(player) player->frameRenderingQueued(evt);
+  if(player) player->update(elapsedSeconds);
   
   for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it) 
   {
@@ -240,7 +240,7 @@ void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
   //flockTest.update(0.5);//evt.timeSinceLastFrame);
 
-  if(!world->freezeCollisionDebug) advancePhysics(evt.timeSinceLastFrame);
+  if(!world->freezeCollisionDebug) advancePhysics(elapsedSeconds);
 }
 
 //-------------------------------------------------------------------------------------

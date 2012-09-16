@@ -11,7 +11,7 @@ SoundComponent::~SoundComponent(void)
 {
 }
 
-void SoundComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void SoundComponent::update(double elapsedSeconds)
 {
   if(channel && node)
   {

@@ -33,7 +33,8 @@ public:
   
   Ogre::Vector3 getNextPosition();
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
 protected:
   std::queue<Ogre::Vector3> points;

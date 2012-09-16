@@ -10,7 +10,8 @@ public:
   PhysicalComponent(Ogre::Real friction = 0.7f, Ogre::Real restitution = 0.5f, physx::PxMaterial* material = 0);
   ~PhysicalComponent(void);
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   /* Provides a 1:1 mapping between the physical representation and the given object.*/
   void mapPhysical(void* target);

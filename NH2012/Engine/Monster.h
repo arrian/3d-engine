@@ -18,7 +18,8 @@ public:
   Monster(int id);
   virtual ~Monster(void);
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void setPosition(Ogre::Vector3 position);
   void setTarget(Ogre::Vector3 target);//Sets the monsters target position.

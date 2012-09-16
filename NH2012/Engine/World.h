@@ -133,7 +133,8 @@ public:
   World(Ogre::Root* root = 0);
   ~World(void);
 
-  bool frameRenderingQueued(const Ogre::FrameEvent& evt);//perform all world calculations
+  bool update(double elapsedSeconds);
+  //bool frameRenderingQueued(const Ogre::FrameEvent& evt);//perform all world calculations
 
   //Initialisation
   void initialise(std::string iniFile);

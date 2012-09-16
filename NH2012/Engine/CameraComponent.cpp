@@ -59,7 +59,7 @@ void CameraComponent::hasNodeChange()
 }
 
 //-------------------------------------------------------------------------------------
-void CameraComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void CameraComponent::update(double elapsedSeconds)
 {
   //Checking aspect ratio for resolution changes... find better way of doing this
   if(viewport->getActualWidth() != oldCameraWidth || viewport->getActualHeight() != oldCameraHeight)

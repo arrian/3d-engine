@@ -14,7 +14,9 @@ public:
 
   void push_back(NodeComponent* component);
   void setNode(Scene* scene, Ogre::SceneNode* node);
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
 private:
   std::vector<NodeComponent*> components;

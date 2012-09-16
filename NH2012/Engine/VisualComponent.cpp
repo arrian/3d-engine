@@ -16,7 +16,7 @@ VisualComponent::~VisualComponent(void)
 }
 
 //-------------------------------------------------------------------------------------
-void VisualComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void VisualComponent::update(double elapsedSeconds)
 {
 
 }

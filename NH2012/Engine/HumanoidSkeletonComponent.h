@@ -23,7 +23,8 @@ public:
   HumanoidSkeletonComponent(void);
   ~HumanoidSkeletonComponent(void);
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void mapPhysical(void* userData);
 

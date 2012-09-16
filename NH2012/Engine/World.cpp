@@ -181,6 +181,7 @@ Scene* World::loadScene(int id)
   return scene;
 }
 
+//-------------------------------------------------------------------------------------
 bool World::hasScene(int id)
 {
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it)
@@ -210,11 +211,11 @@ bool World::destroyScene(Ogre::String name)
 }
 
 //-------------------------------------------------------------------------------------
-bool World::frameRenderingQueued(const Ogre::FrameEvent& evt)
+bool World::update(double elapsedSeconds)
 {
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
-    if((*it)->isActive()) (*it)->frameRenderingQueued(evt);//only send frame events to the active scenes
+    if((*it)->isActive()) (*it)->update(elapsedSeconds);//only send frame events to the active scenes
   }
   return true;
 }

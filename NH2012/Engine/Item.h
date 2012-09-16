@@ -19,7 +19,8 @@ public:
 
   friend bool operator==(const Item& x, const Item& y);
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void setPosition(Ogre::Vector3 position);
   void setRotation(Ogre::Quaternion rotation);

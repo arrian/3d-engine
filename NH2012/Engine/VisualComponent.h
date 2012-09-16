@@ -11,7 +11,8 @@ public:
   VisualComponent(Ogre::String mesh);
   ~VisualComponent(void);
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
 protected:
   void hasNodeChange();

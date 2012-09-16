@@ -14,7 +14,7 @@ public:
   Game(Ogre::RenderWindow* renderWindow);
   virtual ~Game(void);
 
-  virtual void frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
+  virtual void update(double elapsedSeconds) = 0;
 
   virtual void injectKeyDown(const OIS::KeyEvent &arg) = 0;
   virtual void injectKeyUp(const OIS::KeyEvent &arg) = 0;

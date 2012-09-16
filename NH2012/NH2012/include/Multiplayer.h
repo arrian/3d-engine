@@ -19,7 +19,7 @@ public:
   Multiplayer(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* renderWindow);
   ~Multiplayer(void);
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
 
   void injectKeyDown(const OIS::KeyEvent &arg);
   void injectKeyUp(const OIS::KeyEvent &arg);

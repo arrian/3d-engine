@@ -40,9 +40,9 @@ bool operator==(const Item& x, const Item& y)
 }
 
 //-------------------------------------------------------------------------------------
-void Item::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void Item::update(double elapsedSeconds)
 {
-  physical.frameRenderingQueued(evt);
+  physical.update(elapsedSeconds);
 }
 
 //-------------------------------------------------------------------------------------

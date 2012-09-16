@@ -26,7 +26,8 @@ public:
   void hookWindow(Ogre::RenderWindow* window);//hooks the console to a render window
   bool isVisible();//returns the visibility of the console
   void setVisible(bool visible);//sets the visibility of the console
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
   void injectKeyDown(const OIS::KeyEvent &arg);//key pressed
   void injectKeyUp(const OIS::KeyEvent &arg);//key released
 

@@ -105,7 +105,7 @@ void HumanoidSkeletonComponent::stop()
 }
 
 //-------------------------------------------------------------------------------------
-void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void HumanoidSkeletonComponent::update(double elapsedSeconds)
 {
   if(!node) return;
 
@@ -127,11 +127,11 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
   if (accel.squaredLength() != 0)
   {
     accel.normalise();
-    velocity += accel * topSpeed * evt.timeSinceLastFrame * moveScalar;
+    velocity += accel * topSpeed * elapsedSeconds * moveScalar;
   }
   else 
   {
-    Ogre::Vector3 reduce = velocity * evt.timeSinceLastFrame * moveScalar;
+    Ogre::Vector3 reduce = velocity * elapsedSeconds * moveScalar;
     if(velocity.squaredLength() > reduce.squaredLength()) velocity -= reduce;//comparing with reduction length reduces jitter at low frame rates
     else velocity = Ogre::Vector3::ZERO;
   }
@@ -148,16 +148,16 @@ void HumanoidSkeletonComponent::frameRenderingQueued(const Ogre::FrameEvent& evt
   if(collisionEnabled)
   {
     velocity.y = oldY;//restoring saved up/down speed
-    velocity.y += gravity * evt.timeSinceLastFrame;//only apply gravity when collision enabled
+    velocity.y += gravity * elapsedSeconds;//only apply gravity when collision enabled
 
-    physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * evt.timeSinceLastFrame * moveScalar, velocity.y * evt.timeSinceLastFrame * moveScalar, velocity.z * evt.timeSinceLastFrame * moveScalar), minimumMoveDistance, evt.timeSinceLastFrame, physx::PxControllerFilters());//moving character controller
+    physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * elapsedSeconds * moveScalar, velocity.y * elapsedSeconds * moveScalar, velocity.z * elapsedSeconds * moveScalar), minimumMoveDistance, elapsedSeconds, physx::PxControllerFilters());//moving character controller
     if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;//stop falling when collision at the base of the skeleton occurs
     physx::PxExtendedVec3 cPosition = controller->getPosition();
     node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position from the physics world calculated position
   }
   else //just move the controller ignoring all collisions
   {
-    controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(velocity.x * evt.timeSinceLastFrame * moveScalar, velocity.y * evt.timeSinceLastFrame * moveScalar, velocity.z * evt.timeSinceLastFrame * moveScalar));
+    controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(velocity.x * elapsedSeconds * moveScalar, velocity.y * elapsedSeconds * moveScalar, velocity.z * elapsedSeconds * moveScalar));
     physx::PxExtendedVec3 cPosition = controller->getPosition();
     node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position
   }

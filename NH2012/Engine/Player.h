@@ -24,7 +24,8 @@ public:
   Player(World* world);
   ~Player(void);
 
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
   void hook(Ogre::RenderWindow* window);/*! Hooks the player camera to a render window.*/
   void stop();
 

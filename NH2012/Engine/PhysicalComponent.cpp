@@ -24,7 +24,7 @@ PhysicalComponent::~PhysicalComponent(void)
 }
 
 //-------------------------------------------------------------------------------------
-void PhysicalComponent::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void PhysicalComponent::update(double elapsedSeconds)
 {
   //if(!physical) throw NHException("Physical component missed frame rendering because it is not yet created.");
   if(physical->isSleeping()) return;//no need to update the object if it has not moved

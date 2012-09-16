@@ -31,7 +31,7 @@ void Multiplayer::listen(const std::string& host, unsigned short port)
 /**
  * Gets the current world state and sends the current player state
  */
-void Multiplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void Multiplayer::update(double elapsedSeconds)
 {
 }
 

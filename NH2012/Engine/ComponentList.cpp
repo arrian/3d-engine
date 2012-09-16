@@ -27,9 +27,9 @@ void ComponentList::setNode(Scene* scene, Ogre::SceneNode* node)
 }
 
 //-------------------------------------------------------------------------------------
-void ComponentList::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void ComponentList::update(double elapsedSeconds)
 {
-  for(std::vector<NodeComponent*>::iterator iter = components.begin(); iter < components.end(); ++iter) (*iter)->frameRenderingQueued(evt);
+  for(std::vector<NodeComponent*>::iterator iter = components.begin(); iter < components.end(); ++iter) (*iter)->update(elapsedSeconds);
 }
 
 

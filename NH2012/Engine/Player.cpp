@@ -72,14 +72,14 @@ Scene* Player::getScene()
 }
 
 //-------------------------------------------------------------------------------------
-void Player::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void Player::update(double elapsedSeconds)
 {
   //std::cout << "x:" << node->getPosition().x << " z:" <<  node->getPosition().z << " y:" <<  node->getPosition().y << std::endl;
 
   //implement later//camera.rayQuery();//testing ray queries
 
-  skeleton.frameRenderingQueued(evt);
-  camera.frameRenderingQueued(evt);//for aspect ratio changes
+  skeleton.update(elapsedSeconds);
+  camera.update(elapsedSeconds);//for aspect ratio changes
 
   if(addItem) 
   {

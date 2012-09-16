@@ -56,7 +56,8 @@ public:
   physx::PxControllerManager* getControllerManager();
   World* getWorld();
   
-  void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void update(double elapsedSeconds);
+  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   bool isActive();
   

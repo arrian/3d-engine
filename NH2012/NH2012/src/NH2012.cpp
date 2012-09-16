@@ -108,7 +108,7 @@ bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
   keyboard->capture();
   mouse->capture();
 
-  game->frameRenderingQueued(evt);
+  game->update(evt.timeSinceLastFrame);
 
   return true;
 }

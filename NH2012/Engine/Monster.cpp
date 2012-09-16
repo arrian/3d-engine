@@ -33,10 +33,10 @@ Monster::~Monster(void)
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void Monster::update(double elapsedSeconds)
 {
-  intelligence.frameRenderingQueued(evt);
-  skeleton.frameRenderingQueued(evt);
+  intelligence.update(elapsedSeconds);
+  skeleton.update(elapsedSeconds);
   //if(health.getCurrent() <= 0) awareness = MonsterAttribute::DEAD;
 
   //moving

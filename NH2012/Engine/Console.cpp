@@ -53,9 +53,9 @@ bool Console::isVisible()
 }
 
 //-------------------------------------------------------------------------------------
-void Console::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void Console::update(double elapsedSeconds)
 {
-  if(!isVisible()) return;
+  //if(!isVisible()) return;
 }
 
 //-------------------------------------------------------------------------------------

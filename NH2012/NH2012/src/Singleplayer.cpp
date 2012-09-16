@@ -23,10 +23,10 @@ Singleplayer::~Singleplayer(void)
 {
 }
 
-void Singleplayer::frameRenderingQueued(const Ogre::FrameEvent& evt)
+void Singleplayer::update(double elapsedSeconds)
 {
-  console.frameRenderingQueued(evt);
-  world.frameRenderingQueued(evt);
+  console.update(elapsedSeconds);
+  world.update(elapsedSeconds);
 }
 
 void Singleplayer::injectKeyDown(const OIS::KeyEvent &arg)
