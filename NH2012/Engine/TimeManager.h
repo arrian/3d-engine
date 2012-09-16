@@ -12,6 +12,49 @@
 //Ogre
 #include <Ogre.h>
 
+//Local
+#include "NHException.h"
+
+
+enum MoonPhase
+{
+  NEW,
+  WAXING_CRESCENT,
+  FIRST_QUARTER,
+  WAXING_GIBBOUS,
+  FULL,
+  WANING_GIBBOUS,
+  THIRD_QUARTER,
+  WANING_CRESCENT
+};
+
+enum Day
+{
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
+  SUNDAY
+};
+
+enum Month
+{
+  JANUARY,
+  FEBRUARY,
+  MARCH,
+  APRIL,
+  MAY,
+  JUNE,
+  JULY,
+  AUGUST,
+  SEPTEMBER,
+  OCTOBER,
+  NOVEMBER,
+  DECEMBER
+};
+
 //Date Storage
 struct Date
 {
@@ -36,25 +79,32 @@ struct Date
   int day;
 };
 
-class Time
+
+
+class TimeManager
 {
 public:
-  Time(void);
-  virtual ~Time(void);
+  TimeManager(void);
+  virtual ~TimeManager(void);
 
   Date getDate();
-  Ogre::String getDateString();
-  Ogre::String getMoonPhase();
+  std::string getDateString();
+  std::string getMoonPhase();
   bool isFriday13();
-  bool isBirthday();
+  bool isBirthday();//currently set to 30th October
   bool isHalloween();
   bool isNewYears();
 
 private:
-  Ogre::String serialiseMoonPhase(int moonPhase);
-  int calculateMoonPhase(Date date);
-  Ogre::String day(Date date);
-  Ogre::String month(Date date);
-  Ogre::String serialiseDate(Date date);
+  //Serialisers
+  std::string serialiseDate(Date date);
+  std::string serialiseMoonPhase(MoonPhase moonPhase);
+  std::string serialiseDay(Day day);
+  std::string serialiseMonth(Month month);
+
+  //Getters
+  MoonPhase getMoonPhase(Date date);
+  Day getDay(Date date);
+  Month getMonth(Date date);
 };
 

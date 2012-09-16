@@ -1,35 +1,35 @@
 #include "TimeManager.h"
 
 
-Time::Time(void)
+TimeManager::TimeManager(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-Time::~Time(void)
+TimeManager::~TimeManager(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-Date Time::getDate()
+Date TimeManager::getDate()
 {
   return Date();
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::String Time::getDateString()
+std::string TimeManager::getDateString()
 {
   return serialiseDate(Date());
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::String Time::getMoonPhase()
+std::string TimeManager::getMoonPhase()
 {
-  return serialiseMoonPhase(calculateMoonPhase(Date()));
+  return serialiseMoonPhase(getMoonPhase(Date()));
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::String Time::serialiseDate(Date date)
+std::string TimeManager::serialiseDate(Date date)
 {
   std::stringstream dateString;
   dateString << date.day << "/" << date.month << "/" << date.year;
@@ -37,36 +37,36 @@ Ogre::String Time::serialiseDate(Date date)
 }
 
 //-------------------------------------------------------------------------------------
-bool Time::isFriday13()
+bool TimeManager::isFriday13()
 {
   Date date = Date();
-  return ((day(date) == "friday") && (date.day == 13));
+  return ((getDay(date) == FRIDAY) && (date.day == 13));
 }
 
 //-------------------------------------------------------------------------------------
-bool Time::isBirthday()
+bool TimeManager::isBirthday()
 {
   Date date = Date();
-  return (date.month == 10 && date.day == 30);
+  return (getMonth(date) == OCTOBER && date.day == 30);
 }
 
 //-------------------------------------------------------------------------------------
-bool Time::isHalloween()
+bool TimeManager::isHalloween()
 {
   Date date = Date();
-  return (date.month == 10 && date.day == 31);
+  return (getMonth(date) == OCTOBER && date.day == 31);
 }
 
 //-------------------------------------------------------------------------------------
-bool Time::isNewYears()
+bool TimeManager::isNewYears()
 {
   Date date = Date();
-  return (date.month == 1 && date.day == 1);
+  return (getMonth(date) == JANUARY && date.day == 1);
 }
 
 
 //-------------------------------------------------------------------------------------
-int Time::calculateMoonPhase(Date date)
+MoonPhase TimeManager::getMoonPhase(Date date)
 {
   //Calculates the moon phase (0-7).
   //0 => new moon.
@@ -93,45 +93,86 @@ int Time::calculateMoonPhase(Date date)
   b = boost::lexical_cast<int>(jd * 8 + 0.5);//scale fraction from 0-8 and round by adding 0.5
   b = b & 7;// 0 and 8 are the same so turn 8 into 0
   
-  return b;
+  MoonPhase phase[] = {NEW, WAXING_CRESCENT, FIRST_QUARTER, WAXING_GIBBOUS, FULL, WANING_GIBBOUS, THIRD_QUARTER, WANING_CRESCENT};
+
+  if(b < 0) throw NHException("Get requested for unknown moon phase.");
+  return phase[b];
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::String Time::serialiseMoonPhase(int moonPhase)
-{
-  switch(moonPhase)
-  {
-    case 0: return "new moon";
-    case 1: return "waxing crescent moon";
-    case 2: return "first quarter moon";
-    case 3: return "waxing gibbous moon";
-    case 4: return "full moon";
-    case 5: return "waning gibbous moon";
-    case 6: return "third quarter moon";
-    case 7: return "waning crescent moon";
-    default: return "new moon";
-  }
-}
-
-//-------------------------------------------------------------------------------------
-Ogre::String Time::day(Date date)
+Day TimeManager::getDay(Date date)
 {
   static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
   date.year -= date.month < 3;
   int numerical = (date.year + date.year / 4 - date.year / 100 + date.year / 400 + t[date.month - 1] + date.day) % 7;
 
-  Ogre::String days[] = {"monday","tuesday","wednesday","thursday","friday","saturday","sunday"};
+  Day days[] = {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
 
-  if(numerical > 6 || numerical < 0) return "error";
+  if(numerical > 6 || numerical <= 0) throw NHException("Get requested for unknown day of the week.");
   return days[numerical - 1];
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::String Time::month(Date date)
+Month TimeManager::getMonth(Date date)
 {
-  Ogre::String months[] = {"january","february","march","april","may","june","july","august","september","october","november","december"};
+  Month months[] = {JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER};
 
-  if(date.month < 0 || date.month > 11) return "error";
+  if(date.month <= 0 || date.month > 11) throw NHException("Get requested for unknown month.");
   return months[date.month - 1];
 }
+
+//-------------------------------------------------------------------------------------
+std::string TimeManager::serialiseMoonPhase(MoonPhase moonPhase)
+{
+  switch(moonPhase)
+  {
+    case NEW:             return "new moon";
+    case WAXING_CRESCENT: return "waxing crescent moon";
+    case FIRST_QUARTER:   return "first quarter moon";
+    case WAXING_GIBBOUS:  return "waxing gibbous moon";
+    case FULL:            return "full moon";
+    case WANING_GIBBOUS:  return "waning gibbous moon";
+    case THIRD_QUARTER:   return "third quarter moon";
+    case WANING_CRESCENT: return "waning crescent moon";
+    default:              throw NHException("Serialise requested for unknown moon phase.");
+  }
+}
+
+//-------------------------------------------------------------------------------------
+std::string TimeManager::serialiseDay(Day day)
+{
+  switch(day)
+  {
+    case MONDAY:    return "monday";
+    case TUESDAY:   return "tuesday";
+    case WEDNESDAY: return "wednesday";
+    case THURSDAY:  return "thursday";
+    case FRIDAY:    return "friday";
+    case SATURDAY:  return "saturday";
+    case SUNDAY:    return "sunday";
+    default:        throw NHException("Serialise requested for unknown day of the week.");
+  }
+}
+
+//-------------------------------------------------------------------------------------
+std::string TimeManager::serialiseMonth(Month month)
+{
+  switch(month)
+  {
+    case JANUARY:   return "january";
+    case FEBRUARY:  return "february";
+    case MARCH:     return "march";
+    case APRIL:     return "april";
+    case MAY:       return "may";
+    case JUNE:      return "june";
+    case JULY:      return "july";
+    case AUGUST:    return "august";
+    case SEPTEMBER: return "september";
+    case OCTOBER:   return "october";
+    case NOVEMBER:  return "november";
+    case DECEMBER:  return "december";
+    default:        throw NHException("Serialise requested for unknown day of the week.");
+  }
+}
+
 

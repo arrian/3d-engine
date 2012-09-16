@@ -52,18 +52,10 @@ Scene::Scene(World* world, int id)
   
   architecture = new Architecture(this);
 
-  SceneDesc* sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
+  SceneDesc sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
  
-  if(sceneDesc == 0) 
-  {
-    throw NHException("Could not find the scene with the given id.");
-    name = "Error_Scene";
-  }
-  else
-  {
-    name = sceneDesc->name;
-    load(sceneDesc->file);//loading the scene file
-  }
+  name = sceneDesc.name;
+  load(sceneDesc.file);//loading the scene file
 
   sceneManager->setAmbientLight(defaultAmbientColour);
   
@@ -100,7 +92,6 @@ Scene::~Scene(void)
     if(*it) delete (*it);
     (*it) = 0;
   }
-
 
   //Releasing physics
   physicsManager->release();
@@ -291,7 +282,7 @@ void Scene::load(std::string file)
     while(architectureNode != 0)
     {
       int id = boost::lexical_cast<int>(architectureNode->first_attribute("id")->value());
-      architecture->add(world->getDataManager()->getArchitecture(id)->mesh, getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
+      architecture->add(world->getDataManager()->getArchitecture(id).mesh, getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
       architectureNode = architectureNode->next_sibling("architecture");
     }
    

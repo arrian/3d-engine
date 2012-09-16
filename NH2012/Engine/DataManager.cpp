@@ -4,20 +4,10 @@
 DataManager::DataManager(void)
   : files(std::vector<std::string>()),
     architecture(ArchitectureList()),
-    architectureGroups(ArchitectureGroups()),
     items(ItemList()),
-    itemGroups(ItemGroups()),
     monsters(MonsterList()),
-    monsterGroups(MonsterGroups()),
     scenes(SceneList()),
-    sceneGroups(SceneGroups()),
-    sounds(SoundList()),
-    soundGroups(SoundGroups()),
-    ARCHITECTURE_IDENTIFIER("#Architecture"),
-    MONSTERS_IDENTIFIER("#Monsters"),
-    ITEMS_IDENTIFIER("#Items"),
-    SCENES_IDENTIFIER("#Scenes"),
-    SOUNDS_IDENTIFIER("#Sounds")
+    sounds(SoundList())
 {
 }
 
@@ -29,7 +19,11 @@ DataManager::~DataManager(void)
 //-------------------------------------------------------------------------------------
 void DataManager::addData(std::string file)
 {
-  files.push_back(file);
+  for(std::vector<std::string>::iterator iter = files.begin(); iter < files.end(); ++iter)
+  {
+    if(file == *iter) throw NHException("Attempting to load the same data file twice.");
+  }
+  files.push_back(file);//record loading this file
 
   std::ifstream ifs(file);
   std::string temp;
@@ -46,14 +40,9 @@ void DataManager::addData(std::string file)
       if(type == "") type = temp;
       continue;
     }
-    else if(temp[0] == '[')//creating groups //assuming this line is the start of a new group
+    else if(temp[0] == '[')//assuming this line is the start of a new group
     {
       group = temp;
-      if(type == ARCHITECTURE_IDENTIFIER && !architectureGroups.count(group)) architectureGroups.insert(std::pair<std::string, std::vector<ArchitectureDesc*> >(group,std::vector<ArchitectureDesc*>()));
-      if(type == MONSTERS_IDENTIFIER && !monsterGroups.count(group)) monsterGroups.insert(std::pair<std::string, std::vector<MonsterDesc*> >(group,std::vector<MonsterDesc*>()));
-      if(type == ITEMS_IDENTIFIER && !itemGroups.count(group)) itemGroups.insert(std::pair<std::string, std::vector<ItemDesc*> >(group,std::vector<ItemDesc*>()));
-      if(type == SCENES_IDENTIFIER && !sceneGroups.count(group)) sceneGroups.insert(std::pair<std::string, std::vector<SceneDesc*> >(group,std::vector<SceneDesc*>()));
-      if(type == SOUNDS_IDENTIFIER && !soundGroups.count(group)) soundGroups.insert(std::pair<std::string, std::vector<SoundDesc*> >(group,std::vector<SoundDesc*>()));
       continue;
     }
 
@@ -65,104 +54,49 @@ void DataManager::addData(std::string file)
     std::string name = words[1];
     std::string mesh = words[2];
     
-    //TODO implement group pointers
-    if(type == ARCHITECTURE_IDENTIFIER)
-    {
-      ArchitectureDesc desc(name, mesh);
-      architecture.insert(std::pair<int, ArchitectureDesc>(id, desc));
-      architectureGroups.find(group)->second.push_back(&architecture.find(id)->second);
-    }
-    else if(type == MONSTERS_IDENTIFIER)
-    {
-      MonsterDesc desc(name, mesh);
-      monsters.insert(std::pair<int, MonsterDesc>(id, desc));
-      monsterGroups.find(group)->second.push_back(&monsters.find(id)->second);
-    }
-    else if(type == ITEMS_IDENTIFIER)
-    {
-      ItemDesc desc(name, mesh);
-      items.insert(std::pair<int, ItemDesc>(id, desc));
-      itemGroups.find(group)->second.push_back(&items.find(id)->second);
-    }
-    else if(type == SCENES_IDENTIFIER)
-    {
-      SceneDesc desc(name, mesh);
-      scenes.insert(std::pair<int, SceneDesc>(id, desc));
-      sceneGroups.find(group)->second.push_back(&scenes.find(id)->second);
-    }
-    else if(type == SOUNDS_IDENTIFIER)
-    {
-      SoundDesc desc(name, mesh);
-      sounds.insert(std::pair<int, SoundDesc>(id, desc));
-      soundGroups.find(group)->second.push_back(&sounds.find(id)->second);
-    }
+    if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(std::pair<int, ArchitectureDesc>(id, ArchitectureDesc(name, mesh)));
+    else if(type == MONSTERS_IDENTIFIER) monsters.insert(std::pair<int, MonsterDesc>(id, MonsterDesc(name, mesh)));
+    else if(type == ITEMS_IDENTIFIER) items.insert(std::pair<int, ItemDesc>(id, ItemDesc(name, mesh)));
+    else if(type == SCENES_IDENTIFIER) scenes.insert(std::pair<int, SceneDesc>(id, SceneDesc(name, mesh)));
+    else if(type == SOUNDS_IDENTIFIER) sounds.insert(std::pair<int, SoundDesc>(id, SoundDesc(name, mesh)));
   }
 }
 
 //-------------------------------------------------------------------------------------
-ItemDesc* DataManager::getItem(int id)
+ItemDesc DataManager::getItem(int id)
 {
-  if(items.count(id) == 0) return 0;
-  return &((*(items.find(id))).second);
+  if(items.count(id) == 0) throw NHException("Could not find an item with the given id.");
+  return ((*(items.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
-MonsterDesc* DataManager::getMonster(int id)
+MonsterDesc DataManager::getMonster(int id)
 {
-  if(monsters.count(id) == 0) return 0;
-  return &((*(monsters.find(id))).second);
+  if(monsters.count(id) == 0) throw NHException("Could not find a monster with the given id.");
+  return ((*(monsters.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
-ArchitectureDesc* DataManager::getArchitecture(int id)
+ArchitectureDesc DataManager::getArchitecture(int id)
 {
-  if(architecture.count(id) == 0) return 0;
-  return &((*(architecture.find(id))).second);
+  if(architecture.count(id) == 0) throw NHException("Could not find architecture with the given id.");
+  return ((*(architecture.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
-SceneDesc* DataManager::getScene(int id)
+SceneDesc DataManager::getScene(int id)
 {
-  if(scenes.count(id) == 0) return 0;
-  return &((*(scenes.find(id))).second);
+  if(scenes.count(id) == 0) throw NHException("Could not find a scene with the given id.");
+  return ((*(scenes.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
-SoundDesc* DataManager::getSound(int id)
+SoundDesc DataManager::getSound(int id)
 {
-  if(sounds.count(id) == 0) return 0;
-  return &((*(sounds.find(id))).second);
+  if(sounds.count(id) == 0) throw NHException("Could not find a sound with the given id.");
+  return ((*(sounds.find(id))).second);
 }
 
-//-------------------------------------------------------------------------------------
-ArchitectureGroups* DataManager::getArchitectureGroups()
-{
-  return &architectureGroups;
-}
-
-//-------------------------------------------------------------------------------------
-ItemGroups* DataManager::getItemGroups()
-{
-  return &itemGroups;
-}
-
-//-------------------------------------------------------------------------------------
-MonsterGroups* DataManager::getMonsterGroups()
-{
-  return &monsterGroups;
-}
-
-//-------------------------------------------------------------------------------------
-SceneGroups* DataManager::getSceneGroups()
-{
-  return &sceneGroups;
-}
-
-//-------------------------------------------------------------------------------------
-SoundGroups* DataManager::getSoundGroups()
-{
-  return &soundGroups;
-}
 
 
 

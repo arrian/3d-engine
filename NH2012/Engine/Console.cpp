@@ -213,33 +213,21 @@ void Console::enter()
       int id = boost::lexical_cast<int>(elements[2]);
       if(elements[1] == "architecture")
       {
-        ArchitectureDesc* desc = world->getDataManager()->getArchitecture(id);
-        if(desc) 
-        {
-          display("name", desc->name);
-          display("mesh", desc->mesh);
-        }
-        else error("no architecture item has that id");
+        ArchitectureDesc desc = world->getDataManager()->getArchitecture(id);
+        display("name", desc.name);
+        display("mesh", desc.mesh);
       }
       else if(elements[1] == "item")
       {
-        ItemDesc* desc = world->getDataManager()->getItem(id);
-        if(desc) 
-        {
-          display("name", desc->name);
-          display("mesh", desc->mesh);
-        }
-        else error("no item has that id");
+        ItemDesc desc = world->getDataManager()->getItem(id);
+        display("name", desc.name);
+        display("mesh", desc.mesh);
       }
       else if(elements[1] == "monster")
       {
-        MonsterDesc* desc = world->getDataManager()->getMonster(id);
-        if(desc) 
-        {
-          display("name", desc->name);
-          display("mesh", desc->mesh);
-        }
-        else error("no monster has that id");
+        MonsterDesc desc = world->getDataManager()->getMonster(id);
+        display("name", desc.name);
+        display("mesh", desc.mesh);
       }
     }
     else noCommand(command);

@@ -3,10 +3,10 @@
 #include "Scene.h"
 
 //-------------------------------------------------------------------------------------
-Item::Item(ItemDesc* desc)
+Item::Item(ItemDesc desc)
   : BasicComponent(),
-    PhysicalInterface(0, desc->name, "Item"),
-    visual(desc->mesh),
+    PhysicalInterface(0, desc.name, "Item"),
+    visual(desc.mesh),
     physical(),
     node(0)
 {

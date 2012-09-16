@@ -14,7 +14,7 @@ class Item : public BasicComponent, public PhysicalInterface
 {
 public:
   //Item(int id);
-  Item(ItemDesc* description);
+  Item(ItemDesc description);
   virtual ~Item(void);
 
   friend bool operator==(const Item& x, const Item& y);
