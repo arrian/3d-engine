@@ -14,101 +14,47 @@
 //TODO Cursor movement, cursor blinking and text selection
 //TODO Make console scrollable and ensure console doesn't overflow viewport (vertical and horizontal)
 
-/*!
+/**
  * In-game command console.
- **/
+ */
 class Console
 {
 public:
   Console(World* world, OIS::Keyboard* keyboard);
   ~Console(void);
 
-  /* Hooks this console to a render window.*/
-  void hookWindow(Ogre::RenderWindow* window);
-
-  /* Returns the visibility of the console.*/
-  bool isVisible();
-
-  /* Sets console visibility.*/
-  void setVisible(bool visible);
-
-  /* Frame rendering is queued.*/
+  void hookWindow(Ogre::RenderWindow* window);//hooks the console to a render window
+  bool isVisible();//returns the visibility of the console
+  void setVisible(bool visible);//sets the visibility of the console
   void frameRenderingQueued(const Ogre::FrameEvent& evt);
+  void injectKeyDown(const OIS::KeyEvent &arg);//key pressed
+  void injectKeyUp(const OIS::KeyEvent &arg);//key released
 
-  /* Key pressed.*/
-  void injectKeyDown(const OIS::KeyEvent &arg);
-
-  /* Key released.*/
-  void injectKeyUp(const OIS::KeyEvent &arg);
-
-  /* Displays a simple line of text.*/
-  void display(std::string comment);
-
-  /* Displays a highlighted section of text followed by normal text.*/
-  void display(std::string highlight, std::string comment);
-
-  /* Displays an error on the console.*/
-  void error(std::string comment);
+  void display(std::string comment);//displays a line of text
+  void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
+  void error(std::string comment);//displays an error on the console
 
 private:
-  /* True if shift is pressed.*/
-  bool isShift;
+  bool isShift;//True if shift is pressed.
+  bool isControl;//True if control is pressed.
+  Ogre::Root* root;//Game root.
+  Ogre::RenderWindow* window;//Game render window.
+  OIS::Keyboard* keyboard;//Keyboard manager.
+  World* world;//Game world.
+  Gorilla::Silverback* overlay;//Console renderer.
+  Gorilla::Screen* screen;//Console screen.
+  Gorilla::Layer* layer;//Console layer.
+  Gorilla::MarkupText* view;//Console display text.
+  std::string text;//Console internal text.
+  std::string command;//Current console command.
 
-  /* True if control is pressed.*/
-  bool isControl;
-
-  /* Game root.*/
-  Ogre::Root* root;
-
-  /* Game render window.*/
-  Ogre::RenderWindow* window;
-
-  /* Keyboard manager.*/
-  OIS::Keyboard* keyboard;
-
-  /* Game world.*/
-  World* world;
-
-  /* Console renderer.*/
-  Gorilla::Silverback* overlay;
-
-  /* Console screen.*/
-  Gorilla::Screen* screen;
-  
-  /* Console layer.*/
-  Gorilla::Layer* layer;
-
-  /* Console display text.*/
-  Gorilla::MarkupText* view;
-
-  /* Console internal text.*/
-  std::string text;
-
-  /* Current console command.*/
-  std::string command;
-
-  /* Submit the command for processing.*/
-  void enter();
-
-  /* Backspace pressed.*/
-  void backspace();
-
-  /* Display help.*/
-  void help();
-  
-  /* Clear the console.*/
-  void clear();
-  
-  /* Display game statistics.*/
-  void stats();
-
-  /* Updates the console display.*/
-  void update();
-
-  /* Displays the no command error.*/
-  void noCommand(std::string command);
-
-  /* Tokenises a string by the given delimiter.*/
-  void split(const std::string &s, char delim, std::vector<std::string> &elems);
+  void enter();//Submit the command for processing.
+  void backspace();//Backspace pressed.
+  void help();//Display help.
+  void clear();//Clear the console.
+  void stats();//Display game statistics.
+  void update();//Updates the console display.
+  void noCommand(std::string command);//Displays the no command error.
+  void split(const std::string &s, char delim, std::vector<std::string> &elems);//Tokenises a string by the given delimiter.
 };
 
