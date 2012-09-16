@@ -92,7 +92,7 @@ void World::initialise(std::string iniFile)
 
 #ifdef _DEBUG
   //Creating connection to the PhysX Visual Debugger
-  physx::PxExtensionVisualDebugger::connect(physicsWorld->getPvdConnectionManager(), "127.0.0.1", 5425, 10000);
+  physx::PxExtensionVisualDebugger::connect(physicsWorld->getPvdConnectionManager(), physXVisualDebuggerIP.c_str(), physXVisualDebuggerPort, physXVisualDebuggerTimeoutMilliseconds);
 #endif
 }
 
@@ -887,6 +887,9 @@ void World::parseIni(std::string filename)
     showCollisionDebug = (pt.get<std::string>("Debug.ShowCollisionsDebug") == TRUE_STRING);
     showShadowDebug = (pt.get<std::string>("Debug.ShowShadowDebug") == TRUE_STRING);
 
+    physXVisualDebuggerIP = pt.get<std::string>("Debug.PhysXVisualDebuggerIP");
+    physXVisualDebuggerPort = pt.get<int>("Debug.PhysXVisualDebuggerPort");
+    physXVisualDebuggerTimeoutMilliseconds = pt.get<int>("Debug.PhysXVisualDebuggerTimeoutMilliseconds");
   }
   catch(boost::property_tree::ini_parser::ini_parser_error e)
   {

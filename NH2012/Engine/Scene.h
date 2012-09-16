@@ -21,6 +21,8 @@
 //need to include this directory
 #include "../../RapidXml/rapidxml-1.13/rapidxml.hpp"
 
+#define DEFAULT_PORTAL -1
+
 //forward declaring for circular dependency
 class World;
 class Player;
@@ -37,10 +39,10 @@ public:
   Ogre::String getName();
   int getSceneID();
   int getNewInstanceNumber();
-  Portal* getPortal(int id = -1);
+  Portal* getPortal(int id = DEFAULT_PORTAL);
   Portal* getDefaultPortal();
 
-  void addPlayer(Player* player, int portalID = -1);
+  void addPlayer(Player* player, int portalID = DEFAULT_PORTAL);
   void addMonster(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
   void addItem(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
   void addLight(Ogre::Vector3 position = Ogre::Vector3::ZERO, bool castShadows = false, Ogre::Real range = 10, Ogre::ColourValue colour = Ogre::ColourValue());

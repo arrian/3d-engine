@@ -142,7 +142,7 @@
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="TimeManager.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -237,7 +237,7 @@
       <Filter>Source Files\Boids</Filter>
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
-      <Filter>Source Files\Utility</Filter>
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

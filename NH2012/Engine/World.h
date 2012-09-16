@@ -19,6 +19,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+#include <boost/asio/ip/address.hpp>
 
 //OIS
 #include <OISKeyboard.h>
@@ -232,6 +233,10 @@ private:
   physx::PxReal defaultStaticFriction;
   physx::PxReal defaultDynamicFriction;
   physx::PxReal defaultRestitution;
+
+  std::string physXVisualDebuggerIP;
+  int physXVisualDebuggerPort;
+  int physXVisualDebuggerTimeoutMilliseconds;
 
 };
 

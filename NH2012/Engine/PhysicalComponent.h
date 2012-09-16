@@ -16,6 +16,8 @@ public:
   void mapPhysical(void* target);
 
 protected:
+  void loadPhysical();//loads a simplified collision mesh
+
   void hasNodeChange();
 
   Ogre::Real friction;

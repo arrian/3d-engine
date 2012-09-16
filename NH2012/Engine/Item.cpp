@@ -23,7 +23,7 @@ void Item::hasSceneChange()
   node->setOrientation(rotation);
   visual.setNode(scene, node);
   physical.setNode(scene, node);
-  physical.mapPhysical((PhysicalInterface*) this);
+  physical.mapPhysical((PhysicalInterface*) this);//ensure physical entity points to this item
 }
 
 //-------------------------------------------------------------------------------------

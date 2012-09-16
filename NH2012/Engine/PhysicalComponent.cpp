@@ -39,17 +39,7 @@ void PhysicalComponent::hasNodeChange()
   if(!material) material = scene->getWorld()->getDefaultPhysicsMaterial();
   if(physical) physical->release();//also releases shape
 
-  float density = tempCollisionDensity;
-  float side = tempCollisionCubeSides;
-
-  Ogre::Vector3 oPosition = node->getPosition();
-  physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
-  physical = scene->getWorld()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
-  shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);
-  physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
-  scene->getPhysicsManager()->addActor(*physical);
-
-  physx::PxRigidBodyExt::updateMassAndInertia(*physical, density);
+  loadPhysical();
 }
 
 //-------------------------------------------------------------------------------------
@@ -58,6 +48,24 @@ void PhysicalComponent::mapPhysical(void* target)
   assert(physical && shape);
   physical->userData = target;
   shape->userData = target;
+}
+
+//-------------------------------------------------------------------------------------
+void PhysicalComponent::loadPhysical()
+{
+  float density = tempCollisionDensity;
+  float side = tempCollisionCubeSides;
+
+  Ogre::Vector3 oPosition = node->getPosition();
+  physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
+
+  physical = scene->getWorld()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
+  shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);//temporary simplified collision mesh
+
+  physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
+  scene->getPhysicsManager()->addActor(*physical);
+
+  physx::PxRigidBodyExt::updateMassAndInertia(*physical, density);
 }
 
 

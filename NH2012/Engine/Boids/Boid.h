@@ -101,7 +101,7 @@ protected:
   // adds the truncated value to the accumulator. The value returned is the
   // magnitude of the accumulator after the addition. 
 
-  virtual float getProbeLength(void);
+  virtual double getProbeLength(void);
   // Returns how far in front of boid to probe for obstacles. By default,
   // the probe length scales linearly from 10 times bodylength to 50 times
   // bodylength as the boid accelerates from 0 m/s to maxVelocity.
@@ -248,18 +248,18 @@ Boid::visibleToSelf(Boid *b)
   return(AngleBetween(velocity, vectorToObject) <= 1.0471967);  // pi/3 radians is our FOV
 }
 
-inline float
+inline double
 Boid::getProbeLength(void)
 {
 
-  float maxScale = 5.0f;
+  double maxScale = 5.0;
 
   // When we're at maxVelocity, scalefactor = maxScale.
   // When our velocity is 0, scalefactor = 1.
   // Linearly scale in between.
-  float scaleFactor = ((maxScale-1.0f)/maxVelocity) * Magnitude(velocity) + 1.0f;
+  double scaleFactor = ((maxScale-1.0)/maxVelocity) * Magnitude(velocity) + 1.0;
 
-  return 10.0f*bodyLength*scaleFactor;
+  return 10.0*bodyLength*scaleFactor;
 
 }
 

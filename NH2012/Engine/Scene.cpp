@@ -9,22 +9,22 @@ Scene::Scene(World* world, int id)
   : world(world),
     id(id),
     sceneManager(world->getRoot()->createSceneManager(Ogre::ST_INTERIOR)),
-    physicsManager(0),
     controllerManager(0),
+    physicsManager(0),
     instanceNumber(0),
-    monsters(),
-    items(),
-    lights(),
-    particles(),
-    portals(),
     defaultEntry(0),
     player(0),
-    active(false),
-    accumulator(0.0f),
-    stepSize(1.0f / 60.0f),
-    defaultAmbientColour(0.8f,0.8f,0.8f),
+    defaultAmbientColour(0.5f,0.5f,0.5f),
     numberPhysicsCPUThreads(8),
-    flockTest(40)
+    stepSize(1.0f / 60.0f),
+    accumulator(0.0f),
+    active(false),
+    flockTest(40),
+    particles(),
+    monsters(),
+    portals(),
+    lights(),
+    items()
 {
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
@@ -147,7 +147,7 @@ void Scene::addPlayer(Player* player, int portalID)
   active = true;
   Ogre::Vector3 position;
   Ogre::Vector3 lookAt;
-  if(defaultEntry != 0 && portalID == -1)//use default portal
+  if(defaultEntry != 0 && portalID == DEFAULT_PORTAL)//use default portal
   {
     position = defaultEntry->getPosition();
     lookAt = defaultEntry->getLookAt();
@@ -247,7 +247,7 @@ void Scene::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if((*it)->isLoadRequired(player->getPosition())) world->loadScene((*it)->getID());
   }
 
-  flockTest.update(evt.timeSinceLastFrame);
+  //flockTest.update(0.5);//evt.timeSinceLastFrame);
 
   if(!world->freezeCollisionDebug) advancePhysics(evt.timeSinceLastFrame);
 }

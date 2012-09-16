@@ -284,8 +284,8 @@ Boid::maintainingCruisingDistance(void) {
 
     Vector separationVector = closestNeighbor->getPosition() - position;
 
-     float separateFactor = 0.09;
-     float approachFactor = 0.05;
+     float separateFactor = 0.09f;
+     float approachFactor = 0.05f;
 
     if (separationVector.y < cruiseDistance) {
       speedAdjustmentVector.y -= separateFactor;
@@ -465,7 +465,7 @@ Boid::Boid(Vector bPosition, Vector bVelocity, Vector bDimensions) {
   boidCount++;
   boidNumber = boidCount;
   //cerr << "\nConstructing boid " << boidNumber << endl;
-  sprintf(bName, "boid%d", boidCount);
+  //sprintf(bName, "boid%d", boidCount);
   boidList.add(*this, bName);
 
   // Allocate a new visibility matrix dynamically each time a boid is
