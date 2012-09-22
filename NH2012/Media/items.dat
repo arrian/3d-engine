@@ -373,8 +373,8 @@
 339,blinding venom
 
 [Debug]
-340,Crate,crate.mesh
-341,Barrel,barrel.mesh
+340,Barrel,barrel.mesh
+341,Crate 2,crate2.mesh
 342,Lightbulb,lightbulb.mesh
 343,Orange Debug Entity,item.mesh
 344,Trigger Symbol,trigger.mesh
@@ -383,4 +383,5 @@
 347,TV,tv.mesh
 348,Basic Tuxedo Person,person_tux.mesh
 349,Test Maya Box,test_maya_box.mesh
+350,Crate,crate.mesh
 

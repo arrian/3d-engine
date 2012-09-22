@@ -97,6 +97,10 @@ SoundDesc DataManager::getSound(int id)
   return ((*(sounds.find(id))).second);
 }
 
-
+//-------------------------------------------------------------------------------------
+std::vector<std::string> DataManager::getLoadedDataFiles()
+{
+  return files;
+}
 
 

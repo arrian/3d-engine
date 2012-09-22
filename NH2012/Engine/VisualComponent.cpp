@@ -8,6 +8,7 @@ VisualComponent::VisualComponent(Ogre::String mesh)
     entity(NULL),
     mesh(mesh)
 {
+  
 }
 
 //-------------------------------------------------------------------------------------

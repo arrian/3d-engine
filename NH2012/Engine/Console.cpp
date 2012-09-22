@@ -15,7 +15,8 @@ Console::Console(World* world, OIS::Keyboard* keyboard)
     view(NULL),
     text(""),
     command(""),
-    history()
+    history(),
+    historyIndex(0)
 {
   overlay->loadAtlas("dejavu");
 }
@@ -82,6 +83,8 @@ void Console::injectKeyUp(const OIS::KeyEvent &arg)
     else if(arg.key == OIS::KC_RETURN) enter();
     else if(arg.key == OIS::KC_LSHIFT || arg.key == OIS::KC_RSHIFT) isShift = false;
     else if(arg.key == OIS::KC_LCONTROL || arg.key == OIS::KC_RCONTROL) isControl = false;
+    else if(arg.key == OIS::KC_UP) up();
+    else if(arg.key == OIS::KC_DOWN) down();
     else if(isShift) 
     {
       if(arg.key == OIS::KC_0) command += ')';
@@ -119,6 +122,7 @@ void Console::injectKeyUp(const OIS::KeyEvent &arg)
 //-------------------------------------------------------------------------------------
 void Console::enter()
 {
+  historyIndex = 0;
   history.push_back(command);
   text += "\n> " + command;
 
@@ -140,6 +144,9 @@ void Console::enter()
     else if(elements[0] == "set_console_hidden") setVisible(false);
     else if(elements[0] == "show_player_position") showPlayerPosition();
     else if(elements[0] == "show_physics_info") showPhysicsInfo();
+    else if(elements[0] == "show_data_files") showDataFiles();
+    else if(elements[0] == "show_scene_info") showSceneInfo();
+    else if(elements[0] == "show_world_info") showWorldInfo();
     else noCommand(command);
   }
   else if(elements.size() == 2)
@@ -222,6 +229,23 @@ void Console::backspace()
   command = command.substr(0, command.size() - 1);
 }
 
+
+//-------------------------------------------------------------------------------------
+void Console::up()
+{
+  if(historyIndex < history.size()) historyIndex++;
+  if(historyIndex > 0) command = history[history.size() - historyIndex];
+  else command = "";
+}
+
+//-------------------------------------------------------------------------------------
+void Console::down()
+{
+  if(historyIndex > 0) historyIndex--;
+  if(historyIndex > 0) command = history[history.size() - historyIndex];
+  else command = "";
+}
+
 //-------------------------------------------------------------------------------------
 void Console::clear()
 {
@@ -232,12 +256,6 @@ void Console::clear()
 //-------------------------------------------------------------------------------------
 void Console::showGameInfo()
 {
-  if(!window) 
-  {
-    error("no render window");
-    return;
-  }
-
   display("average fps", Ogre::StringConverter::toString(int(window->getAverageFPS())));
   display("best fps", Ogre::StringConverter::toString(window->getBestFPS()));
   display("batches", Ogre::StringConverter::toString(window->getBatchCount()));
@@ -271,9 +289,12 @@ void Console::showHelp()
   display("set_ambient_light [r] [g] [b]", "sets the ambient light in the given scene");
   display("set_player_position [x] [y] [z]", "sets the player position");
   display("show_data [item|monster|architecture] [id]", "displays the data associated with the id of the given type of entity");
+  display("show_data_files", "lists the loaded data files");
   display("show_physics_info", "shows physx physics stats for the current scene");
   display("show_player_position", "gets the player position");
   display("show_game_info", "shows a list of statistics and a list of loaded scenes");
+  display("show_scene_info","shows scene statistics");
+  display("show_world_info", "shows world statistics");
   display("add [item|monster] [data id] [x] [y] [z]", "adds the given type of entity to the current scene at the given coordinates");
   display("load_scene [scene id]", "loads a scene into memory");
   display("unload_scene [scene name]", "unloads a scene from memory");
@@ -367,7 +388,8 @@ void Console::showPhysicsInfo()
 //-------------------------------------------------------------------------------------
 void Console::showSceneInfo()
 {
-
+  display("name", world->getPlayer()->getScene()->getName());
+  display("ogre internal name", world->getPlayer()->getScene()->getSceneManager()->getName());
 }
 
 //-------------------------------------------------------------------------------------
@@ -379,25 +401,40 @@ void Console::showWorldInfo()
 //-------------------------------------------------------------------------------------
 void Console::showData(std::string type, std::string id)
 {
-  int idNumber = boost::lexical_cast<int>(id);
-  if(type == "architecture")
+  try
   {
-    ArchitectureDesc desc = world->getDataManager()->getArchitecture(idNumber);
-    display("name", desc.name);
-    display("mesh", desc.mesh);
+    int idNumber = boost::lexical_cast<int>(id);
+    if(type == "architecture")
+    {
+      ArchitectureDesc desc = world->getDataManager()->getArchitecture(idNumber);
+      display("name", desc.name);
+      display("mesh", desc.mesh);
+    }
+    else if(type == "item")
+    {
+      ItemDesc desc = world->getDataManager()->getItem(idNumber);
+      display("name", desc.name);
+      display("mesh", desc.mesh);
+    }
+    else if(type == "monster")
+    {
+      MonsterDesc desc = world->getDataManager()->getMonster(idNumber);
+      display("name", desc.name);
+      display("mesh", desc.mesh);
+    }
   }
-  else if(type == "item")
+  catch(NHException e)
   {
-    ItemDesc desc = world->getDataManager()->getItem(idNumber);
-    display("name", desc.name);
-    display("mesh", desc.mesh);
+    error(e.what());
   }
-  else if(type == "monster")
-  {
-    MonsterDesc desc = world->getDataManager()->getMonster(idNumber);
-    display("name", desc.name);
-    display("mesh", desc.mesh);
-  }
+}
+
+//-------------------------------------------------------------------------------------
+void Console::showDataFiles()
+{
+  std::vector<std::string> files = world->getDataManager()->getLoadedDataFiles();
+
+  for(std::vector<std::string>::iterator iter = files.begin(); iter < files.end(); ++iter) display(*iter);
 }
 
 //-------------------------------------------------------------------------------------
@@ -409,30 +446,51 @@ void Console::showAbout()
 //-------------------------------------------------------------------------------------
 void Console::add(std::string type, std::string id, std::string x, std::string y, std::string z)
 {
-  Scene* target = world->getPlayer()->getScene();
-  if(target)
+  try
   {
-    Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(x)), Ogre::Real(boost::lexical_cast<float>(y)), Ogre::Real(boost::lexical_cast<float>(z)));
-    int idNum = boost::lexical_cast<int>(id);
-    if(type == "item") target->addItem(idNum, position);
-    else if(type == "monster") target->addMonster(idNum, position);
-    else error("object type '" + type + "' not implemented");
+    Scene* target = world->getPlayer()->getScene();
+    if(target)
+    {
+      Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(x)), Ogre::Real(boost::lexical_cast<float>(y)), Ogre::Real(boost::lexical_cast<float>(z)));
+      int idNum = boost::lexical_cast<int>(id);
+      if(type == "item") target->addItem(idNum, position);
+      else if(type == "monster") target->addMonster(idNum, position);
+      else error("object type '" + type + "' not implemented");
+    }
+    else error("player needs to be located within a scene to add an item to it");
   }
-  else error("player needs to be located within a scene to add an item to it");
+  catch(NHException e)
+  {
+    error(e.what());
+  }
 }
 
 //-------------------------------------------------------------------------------------
 void Console::loadScene(std::string sceneId)
 {
-  if(world->loadScene(boost::lexical_cast<int>(sceneId))) display("scene loaded");
-  else display("could not load the scene");
+  try
+  {
+    if(world->loadScene(boost::lexical_cast<int>(sceneId))) display("scene loaded");
+    else display("could not load the scene");
+  }
+  catch(NHException e)
+  {
+    error(e.what());
+  }
 }
 
 //-------------------------------------------------------------------------------------
 void Console::unloadScene(std::string sceneName)
 {
-  if(world->destroyScene(sceneName)) display("scene unloaded");
-  else error("could not unload the scene");
+  try
+  {
+    if(world->destroyScene(sceneName)) display("scene unloaded");
+    else error("could not unload the scene");
+  }
+  catch(NHException e)
+  {
+    error(e.what());
+  }
 }
 
 //-------------------------------------------------------------------------------------

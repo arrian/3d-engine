@@ -10,7 +10,6 @@
 #include "World.h"
 #include "Gorilla.h"
 
-//TODO Get previous commands when up/down arrow pressed
 //TODO Cursor movement, cursor blinking and text selection
 //TODO Make console scrollable and ensure console doesn't overflow viewport (vertical and horizontal)
 
@@ -48,13 +47,15 @@ private:
   std::string text;//Console internal text.
   std::string command;//Current console command.
   std::vector<std::string> history;//The command execution history.
+  int historyIndex;
 
   void enter();//Submit the command for processing.
   void backspace();//Backspace pressed.
   void update();//Updates the console display.
   void noCommand(std::string command);//Displays the no command error.
   void split(const std::string &s, char delim, std::vector<std::string> &elems);//Tokenises a string by the given delimiter.
-
+  void up();//up pressed
+  void down();//down pressed
 
   //Set of executable commands
   void setPhysicsFrozen(bool isFrozen);
@@ -72,6 +73,7 @@ private:
   void showHelp();
   void showAbout();
   void showData(std::string type, std::string id);
+  void showDataFiles();
   void add(std::string type, std::string id, std::string x, std::string y, std::string z);
   void loadScene(std::string sceneId);
   void unloadScene(std::string sceneName);

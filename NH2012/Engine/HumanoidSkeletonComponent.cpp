@@ -13,7 +13,7 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent()
     headItem(NULL),
     leftHandOrigin(0,-0.5,0.5),//test value
     rightHandOrigin(0,0.5,0.5),//test value
-    headOrigin(0,0,1.75),
+    headOrigin(0,1.4,0),
     speed(1),
     gravity(-9.81f),
     velocity(Ogre::Vector3::ZERO),
@@ -23,13 +23,15 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent()
     radius(0.5f),
     height(1.75f),
     density(1.0f),
-    scaleCoeff(1.0f),
+    scaleCoeff(0.999f),
     stepOffset(0.4f),
     runScalar(1.3f),
     moveScalar(10.0f),
     jumpVelocity(2.5f),
     minimumMoveDistance(0.001f),
-    userData(NULL)
+    userData(NULL),
+    onGround(false),
+    crouch(false)
 {
 }
 
@@ -63,8 +65,6 @@ void HumanoidSkeletonComponent::hasNodeChange()
   //body = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
   //body->attachObject(entity);
 
-  //need to extract all constants
-
   physx::PxCapsuleControllerDesc desc;
   desc.material = scene->getWorld()->getDefaultPhysicsMaterial();
   desc.radius = radius;
@@ -76,15 +76,15 @@ void HumanoidSkeletonComponent::hasNodeChange()
   desc.behaviorCallback = this;
   desc.callback = this;
  
-  //set character controller desc options here
-  controller = scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
+  //creating the controller//make sure casting to correct controller type
+  controller = (physx::PxCapsuleController*) scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
 
   if(!controller) throw NHException("Could not create character kinematic.");
 
   stop();
 
   head = node->createChildSceneNode();
-  head->setPosition(Ogre::Vector3(0,height,0));
+  head->setPosition(headOrigin);
   rightHand = node->createChildSceneNode();
   leftHand = node->createChildSceneNode();
 
@@ -151,7 +151,11 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
     velocity.y += gravity * (float) elapsedSeconds;//only apply gravity when collision enabled
 
     physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * (float) elapsedSeconds * moveScalar, velocity.y * (float) elapsedSeconds * moveScalar, velocity.z * (float) elapsedSeconds * moveScalar), minimumMoveDistance, (float) elapsedSeconds, physx::PxControllerFilters());//moving character controller
-    if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) velocity.y = 0.0f;//stop falling when collision at the base of the skeleton occurs
+    if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0)
+    {
+      onGround = true;
+      velocity.y = 0.0f;//stop falling when collision at the base of the skeleton occurs
+    }
     physx::PxExtendedVec3 cPosition = controller->getPosition();
     node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position from the physics world calculated position
   }
@@ -243,7 +247,11 @@ Ogre::SceneNode* HumanoidSkeletonComponent::getHead()
 //-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::jump()
 {
-  velocity.y = jumpVelocity;
+  if(onGround) 
+  {
+    velocity.y = jumpVelocity;
+    onGround = false;
+  }
 }
 
 //-------------------------------------------------------------------------------------
@@ -316,3 +324,40 @@ void HumanoidSkeletonComponent::mapPhysical(void* userData)
 {
   this->userData = userData;
 }
+
+//-------------------------------------------------------------------------------------
+void HumanoidSkeletonComponent::setCrouch(bool crouch)
+{
+  if(crouch)
+  {
+    controller->setHeight(height/2);
+    this->crouch = true;
+  }
+  else//stand
+  {
+    //scene->getPhysicsManager()->overlapAny(controller->getActor()->)
+    controller->setHeight(height);//need to check that there is no geometry above using overlapAny
+    std::cout << "warning: not checking for overlaps when swapping from crouching to standing." << std::endl;
+    this->crouch = false;
+  }
+}
+
+//-------------------------------------------------------------------------------------
+bool HumanoidSkeletonComponent::isCrouched()
+{
+  return crouch;
+}
+
+//-------------------------------------------------------------------------------------
+bool HumanoidSkeletonComponent::isRunning()
+{
+  return run;
+}
+
+//-------------------------------------------------------------------------------------
+bool HumanoidSkeletonComponent::isJumping()
+{
+  return !onGround;
+}
+
+

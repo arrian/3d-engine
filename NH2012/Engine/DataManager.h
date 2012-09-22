@@ -114,6 +114,8 @@ public:
   SoundDesc getSound(int id);
   ItemDesc getItem(int id);
 
+  std::vector<std::string> getLoadedDataFiles();
+
 private:
   std::vector<std::string> files;
 

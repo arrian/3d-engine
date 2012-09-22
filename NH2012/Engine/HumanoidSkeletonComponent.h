@@ -24,7 +24,6 @@ public:
   ~HumanoidSkeletonComponent(void);
 
   void update(double elapsedSeconds);
-  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void mapPhysical(void* userData);
 
@@ -47,6 +46,7 @@ public:
   void setRightHand(bool state);
   void setGravity(float gravity);
   void setCollisionEnabled(bool enabled);
+  void setCrouch(bool crouch);
 
   //Movement
   void stop();
@@ -58,6 +58,9 @@ public:
   //Assertions
   bool isLeftHand();
   bool isRightHand();
+  bool isCrouched();
+  bool isRunning();
+  bool isJumping();
 
   //Callbacks
   void onShapeHit(const physx::PxControllerShapeHit& hit);
@@ -68,7 +71,7 @@ protected:
   void* userData;
 
   //PhysX Physical Body
-  physx::PxController* controller;
+  physx::PxCapsuleController* controller;
 
   //Limb Target Nodes
   Ogre::SceneNode* head;
@@ -93,6 +96,8 @@ protected:
   bool moveLeft;
   bool moveRight;
   bool run;
+  bool onGround;
+  bool crouch;
 
   void hasNodeChange();
 
