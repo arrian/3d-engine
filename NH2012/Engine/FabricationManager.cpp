@@ -5,9 +5,9 @@
 #include "PxTkStream.h"
 
 FabricationManager::FabricationManager()
-  : material(0),
-    cooking(0),
-    physics(0)
+  : material(NULL),
+    cooking(NULL),
+    physics(NULL)
 {
 }
 

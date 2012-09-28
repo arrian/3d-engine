@@ -33,3 +33,10 @@ void VisualComponent::hasNodeChange()
 
   node->setVisible(true);
 }
+
+//-------------------------------------------------------------------------------------
+Ogre::Entity* VisualComponent::getEntity()
+{
+
+  return entity;
+}

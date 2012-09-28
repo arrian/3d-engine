@@ -30,7 +30,7 @@ Scene::Scene(World* world, int id)
 
   //scene physics
   physx::PxSceneDesc desc(world->getTolerancesScale());
-  desc.gravity = physx::PxVec3(0.0f, world->gravity, 4.0f);
+  desc.gravity = physx::PxVec3(0.0f, world->gravity, 0.0f);
   
   desc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
   if(!desc.cpuDispatcher) throw NHException("Could not create scene CPU dispatcher.");

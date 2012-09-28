@@ -14,6 +14,8 @@ public:
   void update(double elapsedSeconds);
   //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
+  Ogre::Entity* getEntity();
+
 protected:
   void hasNodeChange();
 

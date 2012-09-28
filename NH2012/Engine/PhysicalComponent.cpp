@@ -15,6 +15,7 @@ PhysicalComponent::PhysicalComponent(Ogre::Real friction, Ogre::Real restitution
     tempCollisionCubeSides(0.5f),
     tempCollisionDensity(0.0005f)
 {
+ 
 }
 
 //-------------------------------------------------------------------------------------
@@ -60,7 +61,6 @@ void PhysicalComponent::loadPhysical()
 
   physical = scene->getWorld()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
   shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);//temporary simplified collision mesh
-
   physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
   scene->getPhysicsManager()->addActor(*physical);
 

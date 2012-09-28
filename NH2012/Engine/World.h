@@ -87,7 +87,7 @@ struct Controls
 class World
 {
 public:
-  World(Ogre::Root* root = 0);
+  World(Ogre::Root* root = NULL);
   ~World(void);
 
   bool update(double elapsedSeconds);
