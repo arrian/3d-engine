@@ -28,6 +28,7 @@
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="ComponentList.h" />
     <ClInclude Include="Essential.h" />
+    <ClInclude Include="FabricationManager.h" />
     <ClInclude Include="Flock.h" />
     <ClInclude Include="HumanoidSkeletonComponent.h" />
     <ClInclude Include="IntelligenceComponent.h" />
@@ -61,6 +62,7 @@
     <ClCompile Include="Boids\Vector.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="ComponentList.cpp" />
+    <ClCompile Include="FabricationManager.cpp" />
     <ClCompile Include="Flock.cpp" />
     <ClCompile Include="HumanoidSkeletonComponent.cpp" />
     <ClCompile Include="IntelligenceComponent.cpp" />

@@ -69,7 +69,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   {
     std::cout << "creating " << meshName << std::endl;
     entity = scene->getSceneManager()->createEntity(meshName);
-    mesh = scene->getWorld()->createTriangleMeshV2(entity);
+    mesh = scene->getWorld()->getFabricationManager()->createTriangleMeshV2(entity);
     statics.insert(std::pair<Ogre::String,StaticEntity>(meshName, StaticEntity(entity,mesh)));
   }
 

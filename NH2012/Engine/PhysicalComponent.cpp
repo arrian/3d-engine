@@ -15,7 +15,6 @@ PhysicalComponent::PhysicalComponent(Ogre::Real friction, Ogre::Real restitution
     tempCollisionCubeSides(0.5f),
     tempCollisionDensity(0.0005f)
 {
-  
 }
 
 //-------------------------------------------------------------------------------------

@@ -39,18 +39,16 @@
 //Local
 #include "DataManager.h"
 #include "SoundManager.h"
+#include "FabricationManager.h"
 #include "PhysicsErrorCallback.h"
 #include "SceneChangeListener.h"
 #include "NHException.h"
-
 
 //Forward Declarations
 class Player;
 class Monster;
 class Item;
 class Scene;
-
-
 
 //Keyboard and Mouse Controls
 struct Controls
@@ -89,52 +87,10 @@ struct Controls
 class World
 {
 public:
-
-  ////////////////////////////////////////////////////////////////
-  //PhysX Cooking
-  class Params
-  {
-  public:
-    Ogre::Vector3 mScale;
-    std::map<Ogre::String, physx::PxMaterial*> mMaterialBindings;
-    bool mAddBackfaces;
-
-    Params() : mScale(Ogre::Vector3(1,1,1)), mAddBackfaces(false) {}
-    ~Params() {}
-
-    Params& scale(const Ogre::Vector3 &scale) { mScale = scale; return *this; }
-    Params& materials(std::map<Ogre::String, physx::PxMaterial*> &bindings) { mMaterialBindings = bindings; return *this; }
-    Params& backfaces(bool addBackfaces) { mAddBackfaces = addBackfaces; return *this; }
-  };
-
-  class AddedMaterials
-  {
-  public:
-    physx::PxMaterial **materials;
-    physx::PxU32  materialCount; 
-
-    AddedMaterials() : materials(nullptr) {}
-    ~AddedMaterials() { if (materials) delete[] materials; }
-  };
-
-  struct MeshInfo
-  {
-    std::vector<Ogre::Vector3> vertices;//vertex buffer
-    std::vector<int> indices;//index buffer
-    std::vector<Ogre::String> materials;//assigns a material to each triangle.
-  };
-
-  void getMeshInfo(Ogre::MeshPtr mesh, Params &params, MeshInfo &outInfo);
-  //void mergeVertices(MeshInfo &outInfo, float fMergeDist = 1e-3f);
-
-  //End PhysX Cooking
-  ////////////////////////////////////////////////////////////////////////////////
-
   World(Ogre::Root* root = 0);
   ~World(void);
 
   bool update(double elapsedSeconds);
-  //bool frameRenderingQueued(const Ogre::FrameEvent& evt);//perform all world calculations
 
   //Initialisation
   void initialise(std::string iniFile);
@@ -143,6 +99,7 @@ public:
 
   //Getters
   DataManager* getDataManager();
+  FabricationManager* getFabricationManager();
   Player* getPlayer();
   Scene* getScene(Ogre::String name);
   Scene* getScene(int id);
@@ -157,10 +114,6 @@ public:
   //Creation
   Item* createItem(int id);
   Monster* createMonster(int id);
-  //Mesh physics creation... extract to appropriate class
-  physx::PxConvexMesh* createConvexMesh(Ogre::Entity* e);
-  physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
-  physx::PxTriangleMesh* createTriangleMeshV2(Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);
 
   //Removal
   void releaseItem(Item* item);
@@ -215,6 +168,7 @@ private:
   SceneChangeListener* sceneChangeListener;
   DataManager dataManager;
   SoundManager soundManager;
+  FabricationManager fabricationManager;
   
   //World Contents
   Player* player;//std::vector<Player> players;
