@@ -71,7 +71,7 @@ public:
   FabricationManager();
   virtual ~FabricationManager(void);
 
-  physx::PxConvexMesh* createConvexMesh(Ogre::Entity* e);
+  physx::PxConvexMesh* createConvexMesh(const Ogre::MeshPtr& mesh);//Ogre::Entity* e);
   physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
   physx::PxTriangleMesh* createTriangleMeshV2(Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);
 

@@ -75,4 +75,13 @@ void SoundManager::addSoundEmitter(SoundComponent* component)
   //initialise the sound here
 }
 
+//-------------------------------------------------------------------------------------
+void SoundManager::setMuteAll(bool mute)
+{
+  musicChannel->setMute(mute);
 
+  for(std::vector<FMOD::Channel*>::iterator iter = channels.begin(); iter < channels.end(); ++iter)
+  {
+    (*iter)->setMute(mute);
+  }
+}

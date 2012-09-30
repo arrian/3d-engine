@@ -41,7 +41,7 @@ class SimObject;
 #ifndef __SIMOBJECT_H
 #define __SIMOBJECT_H
 
-#include "./Boids/Vector.h"
+#include "./Vector.h"
 
 namespace Boids
 {

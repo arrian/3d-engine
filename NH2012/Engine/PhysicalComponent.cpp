@@ -3,6 +3,7 @@
 #include "extensions/PxExtensionsAPI.h"
 #include "OgreSceneNode.h"
 #include "Scene.h"
+#include "World.h"
 
 //-------------------------------------------------------------------------------------
 PhysicalComponent::PhysicalComponent(Ogre::Real friction, Ogre::Real restitution, physx::PxMaterial* material)

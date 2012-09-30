@@ -6,13 +6,6 @@
 #include <OgreEntity.h>
 #include <OgreParticleSystem.h>
 
-#include "World.h"
-#include "Player.h."
-#include "Monster.h"
-#include "Item.h"
-#include "Architecture.h"
-#include "Portal.h"
-
 #include "Flock.h"
 
 #include "PxPhysicsAPI.h"
@@ -29,6 +22,9 @@ class Player;
 class Monster;
 class Portal;
 class Flock;
+class BoidExtension;
+class Item;
+class Architecture;
 
 class Scene
 {
@@ -57,7 +53,6 @@ public:
   World* getWorld();
   
   void update(double elapsedSeconds);
-  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   bool isActive();
   
@@ -101,5 +96,6 @@ private:
   physx::PxU32 numberPhysicsCPUThreads;
 
   Flock flockTest;
+  double totalElapsed;
 };
 

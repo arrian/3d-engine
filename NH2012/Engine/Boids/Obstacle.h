@@ -27,7 +27,7 @@
 #define _OBSTACLE_H
 
 #include <ostream>
-#include "./Boids/Vector.h"
+#include "./Vector.h"
 
 namespace Boids
 {

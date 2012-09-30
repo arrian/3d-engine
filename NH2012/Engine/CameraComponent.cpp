@@ -1,6 +1,8 @@
 #include "CameraComponent.h"
 
 #include "Scene.h"
+#include "NHException.h"
+#include "PhysicalInterface.h"
 
 //-------------------------------------------------------------------------------------
 CameraComponent::CameraComponent()

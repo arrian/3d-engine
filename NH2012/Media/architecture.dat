@@ -20,13 +20,10 @@
 31,Preset 13,r13.mesh
 32,Preset 14,r14.mesh
 
-
 [Miscellaneous]
 33,Connector,connector.mesh
 34,Test Room,room_test.mesh
 35,Max Theatre Test,theatre2.mesh
-
-
 
 [Feudal]
 47,Hall,hall.mesh
@@ -50,7 +47,6 @@
 104,Hall Tall,hall_tall.mesh
 105,Hall Tall Entrance, hall_tall_entrance.mesh
 
-
 [Theatre Preset]
 106,Theatre 1,t1.mesh
 107,Theatre 2,t2.mesh
@@ -71,52 +67,4 @@
 122,Theatre 17,seating.mesh
 123,Theatre 18,theatre.mesh
 
-[Castle Hall]
-
-[Castle Room]
-
-[Cave Hall]
-
-[Cave Room]
-
-[Prison]
-
-[Shop]
-
-[Trees]
-
-[Bushes]
-
-[Grass]
-
-[Rocks]
-
-[Lobby]
-
-[Astral]
-
-[Hive]
-
-[Throne Room]
-
-[Zoo]
-
-[Temple]
-
-[Anthole]
-
-[Barracks]
-
-[Graveyard]
-
-[Leprechaun Hall]
-
-[Vlad]
-
-[Medusa]
-
-[Sokoban]
-
-[Vault]
-
-
+124,Theatre Detail,theatre_detail.mesh

@@ -35,8 +35,8 @@
 #define __BOID_H
 
 #include <limits.h>
-#include "./Boids/NamedObject.h"
-#include "./Boids/Obstacle.h"
+#include "./NamedObject.h"
+#include "./Obstacle.h"
 
 namespace Boids
 {

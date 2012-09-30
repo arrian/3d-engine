@@ -1,5 +1,6 @@
 #include "HumanoidSkeletonComponent.h"
 
+#include "World.h"
 #include "Scene.h"
 #include "extensions/PxRigidBodyExt.h"
 

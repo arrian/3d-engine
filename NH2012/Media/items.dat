@@ -14,7 +14,7 @@
 10,imitation amulet of Yendor,amulet.mesh
 11,Amulet of Yendor,amulet.mesh
 
-[Daggers] 	 
+[Daggers]
 12,orcish dagger,dagger.mesh
 13,dagger,dagger.mesh
 14,silver dagger,dagger.mesh
@@ -384,4 +384,23 @@
 348,Basic Tuxedo Person,person_tux.mesh
 349,Test Maya Box,test_maya_box.mesh
 350,Crate,crate.mesh
+351,Apple,apple.mesh
+352,Orange,orange.mesh
+353,Watermelon Whole,watermelon.mesh
+354,Watermelon Half,watermelon2.mesh
+355,Earth,earth.mesh
+356,Moon,moon.mesh
+357,Mars,mars.mesh
+358,Plate,plate.mesh
+358,Book Thin Tall,book1.mesh
+360,Book Thin Normal,book2.mesh
+361,Book Thin Short,book3.mesh
+362,Book Medium Tall,book4.mesh
+363,Book Medium Normal,book5.mesh
+364,Book Medium Short,book6.mesh
+365,Book Thick Tall,book7.mesh
+366,Book Thick Normal,book8.mesh
+367,Book Thick Short,book9.mesh
+
+
 

@@ -17,7 +17,7 @@ FabricationManager::~FabricationManager(void)
 }
 
 //-------------------------------------------------------------------------------------
-physx::PxConvexMesh* FabricationManager::createConvexMesh(Ogre::Entity *e)
+physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& mesh)//Ogre::Entity *e)
 {
   unsigned int mVertexCount = 0; 
   unsigned int mIndexCount  = 0; 
@@ -32,14 +32,14 @@ physx::PxConvexMesh* FabricationManager::createConvexMesh(Ogre::Entity *e)
   size_t shared_offset = 0; 
   size_t next_offset = 0; 
   size_t index_offset = 0; 
-  for (unsigned short i = 0; i < e->getMesh()->getNumSubMeshes(); ++i) 
+  for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i) 
   { 
-    Ogre::SubMesh* submesh = e->getMesh()->getSubMesh(i); 
+    Ogre::SubMesh* submesh = mesh->getSubMesh(i); 
     if(submesh->useSharedVertices) 
     { 
       if(!added_shared) 
       { 
-        mVertexCount += e->getMesh()->sharedVertexData->vertexCount; 
+        mVertexCount += mesh->sharedVertexData->vertexCount; 
         added_shared = true;
       } 
     } 
@@ -58,10 +58,10 @@ physx::PxConvexMesh* FabricationManager::createConvexMesh(Ogre::Entity *e)
 
   added_shared = false; 
 
-  for (unsigned short i = 0; i < e->getMesh()->getNumSubMeshes();i++) 
+  for (unsigned short i = 0; i < mesh->getNumSubMeshes();i++) 
   {
-    Ogre::SubMesh* submesh = e->getMesh()->getSubMesh(i); 
-    Ogre::VertexData* vertex_data=submesh->useSharedVertices ? e->getMesh()->sharedVertexData:submesh->vertexData; 
+    Ogre::SubMesh* submesh = mesh->getSubMesh(i); 
+    Ogre::VertexData* vertex_data=submesh->useSharedVertices ? mesh->sharedVertexData:submesh->vertexData; 
 
     if((!submesh->useSharedVertices)||(submesh->useSharedVertices && !added_shared)) 
     { 

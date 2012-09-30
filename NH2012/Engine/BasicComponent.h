@@ -11,7 +11,6 @@ public:
   virtual ~BasicComponent(void);
 
   virtual void update(double elapsedSeconds) = 0;
-  //virtual void frameRenderingQueued(const Ogre::FrameEvent& evt) = 0;
     
   void setScene(Scene* scene);
 

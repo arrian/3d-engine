@@ -144,8 +144,11 @@
     <ClInclude Include="TimeManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="FabricationManager.h">
+    <ClInclude Include="BoidExtension.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FabricationManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -242,8 +245,11 @@
     <ClCompile Include="TimeManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="FabricationManager.cpp">
+    <ClCompile Include="BoidExtension.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FabricationManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -14,7 +14,8 @@ Player::Player(World* world)
     placementDistance(3.0f),
     lookResponsiveness(0.15f),
     handMoveScalar(0.1f),
-    skeleton()
+    skeleton(),
+    itemGenerationID(353)
 {
   
 }
@@ -83,7 +84,7 @@ void Player::update(double elapsedSeconds)
 
   if(addItem) 
   {
-    scene->addItem(340, skeleton.getForwardPosition(placementDistance));//adding crate if the key was pressed
+    scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
 }
 
@@ -193,4 +194,9 @@ void Player::setCollisionEnabled(bool enabled)
 
 }
 
+//-------------------------------------------------------------------------------------
+void Player::setItemGenerationID(int itemGenerationID)
+{
+  this->itemGenerationID = itemGenerationID;
+}
 

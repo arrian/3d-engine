@@ -1,6 +1,9 @@
 #include "Console.h"
 
 #include "Scene.h"
+#include "Player.h"
+#include "World.h"
+
 
 //-------------------------------------------------------------------------------------
 Console::Console(World* world, OIS::Keyboard* keyboard)
@@ -155,6 +158,7 @@ void Console::enter()
     else if(elements[0] == "load_scene") loadScene(elements[1]);
     else if(elements[0] == "set_player_gravity") setPlayerGravity(elements[1]);
     else if(elements[0] == "unload_scene") unloadScene(elements[1]);
+    else if(elements[0] == "set_player_item_generation_id") setPlayerItemID(elements[1]);
     else noCommand(command);
   }
   else if(elements.size() == 3)
@@ -288,6 +292,7 @@ void Console::showHelp()
   display("set_player_scene [scene name]", "moves the player to the specified scene");
   display("set_ambient_light [r] [g] [b]", "sets the ambient light in the given scene");
   display("set_player_position [x] [y] [z]", "sets the player position");
+  display("set_player_item_generation_id [id]", "sets the id of the item to generate");
   display("show_data [item|monster|architecture] [id]", "displays the data associated with the id of the given type of entity");
   display("show_data_files", "lists the loaded data files");
   display("show_physics_info", "shows physx physics stats for the current scene");
@@ -349,6 +354,12 @@ void Console::setAmbientLight(std::string r, std::string g, std::string b, std::
   Scene* target = world->getPlayer()->getScene();
   if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(boost::lexical_cast<float>(r), boost::lexical_cast<float>(g), boost::lexical_cast<float>(b), boost::lexical_cast<float>(a)));
   else error("player needs to be located within a scene to be able to change the ambient light");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setPlayerItemID(std::string id)
+{
+  world->getPlayer()->setItemGenerationID(boost::lexical_cast<int>(id));
 }
 
 //-------------------------------------------------------------------------------------
@@ -500,6 +511,5 @@ void Console::screenshot()
   display("Screenshot saved to '" + window->writeContentsToTimestampedFile("screenshot", ".jpg") + "'.");
   setVisible(true);
 }
-
 
 

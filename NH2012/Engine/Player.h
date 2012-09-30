@@ -25,7 +25,6 @@ public:
   ~Player(void);
 
   void update(double elapsedSeconds);
-  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
   void hook(Ogre::RenderWindow* window);/*! Hooks the player camera to a render window.*/
   void stop();
 
@@ -35,8 +34,8 @@ public:
   void setRotation(Ogre::Quaternion rotation);
   void setGravity(float gravity);
   void setCollisionEnabled(bool enabled);
+  void setItemGenerationID(int id);
   
-
   //Getters
   Ogre::Vector3 getPosition();
   Ogre::Quaternion getRotation();
@@ -64,5 +63,7 @@ private:
   float placementDistance;
   float lookResponsiveness;
   float handMoveScalar;
+
+  int itemGenerationID;//for debug item generation
 };
 

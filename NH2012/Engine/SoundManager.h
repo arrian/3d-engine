@@ -23,6 +23,8 @@ public:
   void playSound(FMOD::Sound* sound, FMOD::Channel* channel);//play a 2d sound
   void playMusic(int id);//can only play one music track at a time
 
+  void setMuteAll(bool mute);
+
 private:
   FMOD::System* system;
   FMOD::Sound* music;

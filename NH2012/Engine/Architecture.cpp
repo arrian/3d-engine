@@ -1,6 +1,9 @@
 #include "Architecture.h"
 
 #include "Scene.h"
+#include "World.h"
+
+#include "OgreStaticGeometry.h"
 
 //-------------------------------------------------------------------------------------
 Architecture::Architecture(Scene* scene)
@@ -67,10 +70,11 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   //creating entity if not already created
   if(!entity || !mesh)
   {
-    std::cout << "creating " << meshName << std::endl;
+    std::cout << "Creating " << meshName << "... ";
     entity = scene->getSceneManager()->createEntity(meshName);
     mesh = scene->getWorld()->getFabricationManager()->createTriangleMeshV2(entity);
     statics.insert(std::pair<Ogre::String,StaticEntity>(meshName, StaticEntity(entity,mesh)));
+    std::cout << "done." << std::endl;
   }
 
   /*Construct PhysX triangle mesh here.*/

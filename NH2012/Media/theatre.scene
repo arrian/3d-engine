@@ -2,11 +2,11 @@
   <monster id="201" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" />
   <item id="340" tx="2" ty="1" tz="0" rx="0" ry="0" rz="0" />
   <portal id="0" target_scene_id="1" target_portal_id="0" tx="0" ty="2" tz="0" ltx="0" lty="0" ltz="0" />
-  <light tx="0" ty="1" tz="0" range="10" cast_shadows="0" ca="1" cr="1" cg="1" cb="1" type="point" />
+  <light tx="0" ty="1" tz="0" range="10" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <light tx="0" ty="1" tz="-30" range="50" cast_shadows="0" ca="1" cr="1" cg="1" cb="1" type="point" />
   <light tx="0" ty="10" tz="-70" range="70" cast_shadows="0" ca="1" cr="1" cg="1" cb="1" type="point" />
-  <light tx="10" ty="1" tz="-1" range="10" cast_shadows="0" ca="1" cr="1" cg="1" cb="1" type="point" />
-  <light tx="-10" ty="1" tz="-1" range="10" cast_shadows="0" ca="1" cr="1" cg="1" cb="1" type="point" />
+  <light tx="10" ty="1" tz="-1" range="10" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
+  <light tx="-10" ty="1" tz="-1" range="10" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <sound id="1" tx="100" ty="0" tz="0" range="10" />
   <particle name="Sun" template_name="Space/Sun" tx="0" ty="10" tz="-70" speed="1" />
   <architecture id="106" />

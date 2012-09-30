@@ -65,6 +65,7 @@ private:
   void setPlayerGravity(std::string gravity);
   void setFullscreen(bool isFullscreen, std::string width, std::string height);
   void setAmbientLight(std::string r, std::string g, std::string b, std::string a);
+  void setPlayerItemID(std::string id);
   void showPlayerPosition();
   void showPhysicsInfo();
   void showSceneInfo();

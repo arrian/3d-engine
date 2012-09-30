@@ -4,6 +4,14 @@
 #include "extensions/PxDefaultSimulationFilterShader.h"
 #include "extensions/PxSimpleFactory.h"
 
+#include "World.h"
+#include "Player.h."
+#include "Monster.h"
+#include "Item.h"
+#include "Architecture.h"
+#include "Portal.h"
+#include "Flock.h"
+
 //-------------------------------------------------------------------------------------
 Scene::Scene(World* world, int id)
   : world(world),
@@ -15,11 +23,12 @@ Scene::Scene(World* world, int id)
     defaultEntry(NULL),
     player(NULL),
     defaultAmbientColour(0.5f,0.5f,0.5f),
-    numberPhysicsCPUThreads(8),
+    numberPhysicsCPUThreads(4),
     stepSize(1.0 / 60.0),
     accumulator(0.0),
     active(false),
-    flockTest(40),
+    flockTest(100),
+    totalElapsed(0.0),
     particles(),
     monsters(),
     portals(),
@@ -44,7 +53,14 @@ Scene::Scene(World* world, int id)
   controllerManager = PxCreateControllerManager(world->getPhysics()->getFoundation());
   if(!controllerManager) throw NHException("Could not create scene controller manager.");
 
-  if(world->enableShadows) sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+  if(world->enableShadows) 
+  {
+    std::cout << "Shadows enabled." << std::endl;
+    sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
+    sceneManager->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5));
+    sceneManager->setShadowTextureSize(1024);
+    sceneManager->setShadowTextureCount(1);
+  }
 
   sceneManager->setDisplaySceneNodes(world->isDebug());
   sceneManager->setShowDebugShadows(world->isDebug());
@@ -61,6 +77,8 @@ Scene::Scene(World* world, int id)
   
   //building static geometry
   architecture->build();
+
+  flockTest.setScene(this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -182,7 +200,7 @@ void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range,
   Ogre::Light* light = sceneManager->createLight("light" + Ogre::StringConverter::toString(getNewInstanceNumber()));
   lights.push_back(light);
   light->setPosition(position);
-  light->setAttenuation(range, 1.0f, 0.0014f, 0.000007f);
+  light->setAttenuation(range, 1.0f, 0.35f, 0.44f);
   light->setDiffuseColour(colour);
   light->setCastShadows(castShadows);
 }
@@ -238,7 +256,8 @@ void Scene::update(double elapsedSeconds)
     if((*it)->isLoadRequired(player->getPosition())) world->loadScene((*it)->getID());
   }
 
-  //flockTest.update(0.5);//evt.timeSinceLastFrame);
+  totalElapsed += elapsedSeconds;
+  flockTest.update(totalElapsed);//evt.timeSinceLastFrame);
 
   if(!world->freezeCollisionDebug) advancePhysics(elapsedSeconds);
 }

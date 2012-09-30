@@ -38,9 +38,6 @@ protected:
 
   void hasSceneChange();
 
-  //VisualComponent visual;
-  //PhysicalComponent physical;
-
   void loadPhysical();//loads a simplified collision mesh
   void mapPhysical(void* target);
 
@@ -49,7 +46,6 @@ protected:
   physx::PxMaterial* material;
   physx::PxRigidDynamic* physical;
   physx::PxShape* shape;
-  float tempCollisionCubeSides;
   float tempCollisionDensity;
 };
 
