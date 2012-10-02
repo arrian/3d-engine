@@ -1,0 +1,151 @@
+material Material#103
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588 0.588 0.588 1
+			diffuse 0.588 0.588 0.588 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture plas0002b.jpg
+			}
+		}
+
+	}
+
+}
+
+
+
+material Material#79
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588 0.588 0.588 1
+			diffuse 0.588 0.588 0.588 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture 0047_wood.jpg
+			}
+		}
+
+	}
+
+}
+
+
+
+material Material#103
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588 0.588 0.588 1
+			diffuse 0.588 0.588 0.588 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture plas0002b.jpg
+			}
+		}
+
+	}
+
+}
+
+
+
+material Material#79
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588 0.588 0.588 1
+			diffuse 0.588 0.588 0.588 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture 0047_wood.jpg
+			}
+		}
+
+	}
+
+}
+
+
+
+material Material#79
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588 0.588 0.588 1
+			diffuse 0.588 0.588 0.588 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture 0047_wood.jpg
+			}
+		}
+
+	}
+
+}
+
+
+
+material red_carpet
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.12549 0 0 1
+			diffuse 0.0823529 0 0 1
+			specular 0.0347222 0.00763254 0.007424 1 79
+
+			texture_unit
+			{
+				texture red_texture_carpet_tip.png
+			}
+		}
+
+	}
+
+}
+
+
+
+material red_carpet
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.12549 0 0 1
+			diffuse 0.0823529 0 0 1
+			specular 0.0347222 0.00763254 0.007424 1 79
+
+			texture_unit
+			{
+				texture red_texture_carpet_tip.png
+			}
+		}
+
+	}
+
+}
