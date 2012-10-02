@@ -2,6 +2,7 @@
 
 void Renderer::init(World* world)
 {
+  hasMouseClick = false;
   this->world = world;
 
   #ifdef _DEBUG
@@ -113,13 +114,17 @@ void Renderer::initializeGL()
 void Renderer::paintGL()
 {
   assert(window);
+  world->update(0.01);//change to variable frame time
   root->renderOneFrame();
+  update();
 }
  
 void Renderer::resizeGL(int width, int height)
 {
   assert(window);
+  window->resize(width, height);
   window->windowMovedOrResized();
+  paintGL();
 }
  
 Ogre::RenderSystem* Renderer::chooseRenderer(Ogre::RenderSystemList *renderers)
@@ -127,5 +132,23 @@ Ogre::RenderSystem* Renderer::chooseRenderer(Ogre::RenderSystemList *renderers)
   // It would probably be wise to do something more friendly 
   // that just use the first available renderer
   return *renderers->begin();
+}
+
+void Renderer::mousePressEvent(QMouseEvent* e)
+{
+  // store click position
+  lastMousePoint = e->pos();
+  // set the flag meaning "click begin"
+  hasMouseClick = true;
+}
+
+void Renderer::mouseReleaseEvent(QMouseEvent* e)
+{
+  // check if cursor not moved since click beginning
+  if ((hasMouseClick) && (e->pos() == lastMousePoint))
+  {
+    // do something: for example emit Click signal
+    emit mouseClickEvent;
+  }
 }
 

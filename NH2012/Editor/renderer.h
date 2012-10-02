@@ -7,12 +7,17 @@
 
 #include <OgreException.h>
 #include "../../Engine/World.h"
+
+#include <QWidget>
+#include <QMouseEvent>
  
 class Renderer : public QGLWidget
 {
-  //Q_OBJECT;
- 
- public:
+  Q_OBJECT
+signals:
+  void mouseClickEvent();
+
+public:
   Renderer(QWidget *parent = 0)
     : QGLWidget(parent),
       window(NULL),
@@ -29,10 +34,13 @@ class Renderer : public QGLWidget
 
   void init(World* world);
  
- protected:
+protected:
   virtual void initializeGL();
   virtual void resizeGL(int , int );
   virtual void paintGL();
+
+  void mouseReleaseEvent(QMouseEvent* e);
+  void mousePressEvent(QMouseEvent* e);	
  
   virtual Ogre::RenderSystem* chooseRenderer(Ogre::RenderSystemList* rsl);
  
@@ -40,6 +48,10 @@ class Renderer : public QGLWidget
 
   Ogre::Root *root;
   Ogre::RenderWindow *window;
+
+private:
+  QPoint lastMousePoint;	
+  bool hasMouseClick;
 };
 
 #endif // RENDERER_H
