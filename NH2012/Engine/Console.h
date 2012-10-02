@@ -88,7 +88,6 @@ private:
   Gorilla::Screen* screen;//Console screen.
   Gorilla::Layer* layer;//Console layer.
   Gorilla::MarkupText* view;//Console display text.
-  //std::string text;//Console internal text.
   std::vector<std::string> lines;
   int displayLines;//number of lines to display at a time
   int displayOffset;
@@ -106,7 +105,6 @@ private:
   double cursorAccumulator;
   OIS::KeyCode previousKey;
 
-
   void enter();//Submit the command for processing.
   void backspace();//Backspace pressed.
   void update();//Updates the console display.
@@ -118,38 +116,35 @@ private:
   void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
   void error(std::string comment);//displays an error on the console
 
-
   //Set of executable commands
-  void clear                      (Options);
-  void refresh                    (Options);
-  void about                      (Options);
-  void help                       (Options);
-  void screenshot                 (Options);
-  void setPhysicsEnabled          (Options);
-  void setCameraFree              (Options);
-  void setConsoleVisible          (Options);
-  void setFullscreen              (Options);
-  void setWindowed                (Options);
-  void setPlayerScene             (Options);
-  void setSceneAmbientLight       (Options);
-  void setPlayerPosition          (Options);
-  void setPlayerItemGenerationID  (Options);
-  void getItemData                (Options);
-  void getMonsterData             (Options);
-  void getArchitectureData        (Options);
-  void getSoundData               (Options);
-  void getSceneData               (Options);
-  void getDataFiles               (Options);
-  void getPhysicsInfo             (Options);
-  void getGameInfo                (Options);
-  void getSceneInfo               (Options);
-  void getWorldInfo               (Options);
-  void getPlayerPosition          (Options);
-  void addItem                    (Options);
-  void addMonster                 (Options);
-  void addSound                   (Options);
-  void setSceneLoaded             (Options);
-
-  
+  void clear                     (Options);
+  void refresh                   (Options);
+  void about                     (Options);
+  void help                      (Options);
+  void screenshot                (Options);
+  void setPhysicsEnabled         (Options);
+  void setCameraFree             (Options);
+  void setConsoleVisible         (Options);
+  void setFullscreen             (Options);
+  void setWindowed               (Options);
+  void setPlayerScene            (Options);
+  void setSceneAmbientLight      (Options);
+  void setPlayerPosition         (Options);
+  void setPlayerItemGenerationID (Options);
+  void getItemData               (Options);
+  void getMonsterData            (Options);
+  void getArchitectureData       (Options);
+  void getSoundData              (Options);
+  void getSceneData              (Options);
+  void getDataFiles              (Options);
+  void getPhysicsInfo            (Options);
+  void getGameInfo               (Options);
+  void getSceneInfo              (Options);
+  void getWorldInfo              (Options);
+  void getPlayerPosition         (Options);
+  void addItem                   (Options);
+  void addMonster                (Options);
+  void addSound                  (Options);
+  void setSceneLoaded            (Options);
 };
 

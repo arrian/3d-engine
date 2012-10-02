@@ -8,15 +8,12 @@
 //-------------------------------------------------------------------------------------
 Console::Console()//World* world, OIS::Keyboard* keyboard)
   : overlay(new Gorilla::Silverback),
-    //keyboard(keyboard),
     isShift(false),
     isControl(false),
-    //world(world),
     window(NULL),
     screen(NULL),
     layer(NULL),
     view(NULL),
-    //text(""),
     command(""),
     history(),
     lines(),
