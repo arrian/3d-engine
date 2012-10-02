@@ -3,14 +3,16 @@
 
 Singleplayer::Singleplayer(Ogre::Root* root, Ogre::RenderWindow* renderWindow, OIS::Keyboard* keyboard) 
   : Game(renderWindow),
-    world(root),
-    console(&world, keyboard)
+    world(root)//,
+    //console(&world, keyboard)
 {
   try
   {
     world.initialise("C:\\Dev\\Nethack2012\\NH2012\\Media\\nh2012.ini");
+    Console::getInstance().print("Initialised.");
     world.hookWindow(renderWindow);
-    console.hookWindow(renderWindow);
+    Console::getInstance().setRequired(&world, keyboard);
+    Console::getInstance().hookWindow(renderWindow);
     world.setSceneChangeListener(this);//listens for a scene change. used for reconnecting the console to the render window.
   }
   catch (NHException e)
@@ -27,7 +29,8 @@ void Singleplayer::update(double elapsedSeconds)
 {
   try
   {
-    console.update(elapsedSeconds);
+    Console::getInstance().update(elapsedSeconds);
+    //console.update(elapsedSeconds);
     world.update(elapsedSeconds);
   }
   catch (NHException e)//temporarily catching update errors
@@ -38,8 +41,9 @@ void Singleplayer::update(double elapsedSeconds)
 
 void Singleplayer::injectKeyDown(const OIS::KeyEvent &arg)
 {
-  console.injectKeyDown(arg);
-  if(console.isVisible()) return;//ignore other key notifications while console visible
+  Console::getInstance().injectKeyDown(arg);
+  //console.injectKeyDown(arg);
+  if(Console::getInstance().isVisible()) return;//ignore other key notifications while console visible
 
   world.injectKeyDown(arg);
 }
@@ -48,9 +52,9 @@ void Singleplayer::injectKeyUp(const OIS::KeyEvent &arg)
 {
   try
   {
-    if(arg.key == world.controls.console) console.setVisible(!console.isVisible());
-    console.injectKeyUp(arg);
-    if(console.isVisible()) return;//ignore other key notifications while console visible
+    if(arg.key == world.controls.console) Console::getInstance().setVisible(!Console::getInstance().isVisible());
+    Console::getInstance().injectKeyUp(arg);
+    if(Console::getInstance().isVisible()) return;//ignore other key notifications while console visible
 
     world.injectKeyUp(arg);
 
@@ -78,12 +82,12 @@ void Singleplayer::injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID 
 
 void Singleplayer::notify(Ogre::String comment)
 {
-  console.display(comment);
+  Console::getInstance().print(comment);
 }
 
 void Singleplayer::sceneChanged()
 {
-  console.hookWindow(renderWindow);//reconnect the console to the scene
+  Console::getInstance().hookWindow(renderWindow);//reconnect the console to the scene
 }
 
 

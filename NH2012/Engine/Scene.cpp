@@ -200,8 +200,9 @@ void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range,
   Ogre::Light* light = sceneManager->createLight("light" + Ogre::StringConverter::toString(getNewInstanceNumber()));
   lights.push_back(light);
   light->setPosition(position);
-  light->setAttenuation(range, 1.0f, 0.35f, 0.44f);
+  light->setAttenuation(range, 1.0f, 1.0 / (range * 10.0), 1.0 / (range * 100.0));
   light->setDiffuseColour(colour);
+  light->setSpecularColour(Ogre::ColourValue::White);
   light->setCastShadows(castShadows);
 }
 

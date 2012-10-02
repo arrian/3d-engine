@@ -76,11 +76,17 @@ void HumanoidSkeletonComponent::hasNodeChange()
   desc.position = physx::PxExtendedVec3(node->getPosition().x, node->getPosition().y, node->getPosition().z);
   desc.behaviorCallback = this;
   desc.callback = this;
+  desc.userData = userData;
  
   //creating the controller//make sure casting to correct controller type
   controller = (physx::PxCapsuleController*) scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
 
   if(!controller) throw NHException("Could not create character kinematic.");
+
+  std::cout << "Actor address: " << ((void*) controller->getActor()) << std::endl;
+  std::cout << "Actor user data: " << controller->getActor()->userData << std::endl;
+  std::cout << "Controller user data: " << controller->getUserData() << std::endl;
+  std::cout << "Controller address: " << ((void*) controller) << std::endl;
 
   stop();
 

@@ -13,29 +13,77 @@
 //TODO Cursor movement, cursor blinking and text selection
 //TODO Make console scrollable and ensure console doesn't overflow viewport (vertical and horizontal)
 
+
+typedef std::vector<std::string> Options;//shorter vector string typedef
+
 /**
- * In-game command console.
+* Defines a command that can be run.
+*/
+template<typename Owner>
+class Command
+{
+public:
+  Command(std::string name, std::string help, void (Owner::*Run) (Options), Owner* owner)
+    : name(name),
+      help(help),
+      Run(Run),
+      owner(owner)
+  {
+  }
+
+  ~Command() {}
+
+  std::string name;//command name
+  std::string help;//help information about the command
+
+  /**
+   * Runs the command on the given owner.
+   */
+  void run(Options options)
+  {
+    if(Run != 0)
+    {
+      (owner->*Run)(options);
+    }
+  }
+private:
+  void (Owner::*Run) (Options);//function pointer to the command that needs to be run
+  Owner* owner;//the owner of the bound run method
+};
+
+/**
+ * In-game command console singleton.
  */
 class Console
 {
 public:
-  Console(World* world, OIS::Keyboard* keyboard);
-  ~Console(void);
+  static Console& getInstance()
+  {
+      static Console instance;
+      return instance;
+  }
 
+  void setRequired(World* world, OIS::Keyboard* keyboard);//need this to do most things
   void hookWindow(Ogre::RenderWindow* window);//hooks the console to a render window
   bool isVisible();//returns the visibility of the console
   void setVisible(bool visible);//sets the visibility of the console
   void update(double elapsedSeconds);
-  void injectKeyDown(const OIS::KeyEvent &arg);//key pressed
-  void injectKeyUp(const OIS::KeyEvent &arg);//key released
+  void injectKeyDown(const OIS::KeyEvent &arg);//key down
+  void injectKeyUp(const OIS::KeyEvent &arg);//key up
+  void injectKey(const OIS::KeyEvent &arg, bool isDown);//key down or up
+  void keyPressed(const OIS::KeyEvent &arg);
 
-  void display(std::string comment);//displays a line of text
-  void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
-  void error(std::string comment);//displays an error on the console
-
+  void print(std::string comment);
+  
 private:
+  Console();//World* world, OIS::Keyboard* keyboard);
+  ~Console(void);
+  Console(Console const&);              // Don't Implement
+  void operator=(Console const&); // Don't implement
+
   bool isShift;//True if shift is pressed.
   bool isControl;//True if control is pressed.
+  bool showCursor;
   Ogre::Root* root;//Game root.
   Ogre::RenderWindow* window;//Game render window.
   OIS::Keyboard* keyboard;//Keyboard manager.
@@ -48,6 +96,17 @@ private:
   std::string command;//Current console command.
   std::vector<std::string> history;//The command execution history.
   int historyIndex;
+  std::vector<Command<Console>*> commands;//list of all possible commands
+
+  bool keyIsDown;
+  bool hasDoneFirstHold;//has only done the initial key press and no repeats
+  double firstKeyPressHoldWait;//how long to wait after the first key press to repeat the key
+  double consecutiveKeyPressHoldWait;//how long to wait before a key press is repeated
+  double holdAccumulator;
+  double cursorFlashRate;
+  double cursorAccumulator;
+  OIS::KeyCode previousKey;
+
 
   void enter();//Submit the command for processing.
   void backspace();//Backspace pressed.
@@ -56,30 +115,42 @@ private:
   void split(const std::string &s, char delim, std::vector<std::string> &elems);//Tokenises a string by the given delimiter.
   void up();//up pressed
   void down();//down pressed
+  void display(std::string comment);//displays a line of text
+  void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
+  void error(std::string comment);//displays an error on the console
+
 
   //Set of executable commands
-  void setPhysicsFrozen(bool isFrozen);
-  void setFreeCamera(bool isFree);
-  void setPlayerPosition(std::string x, std::string y, std::string z);
-  void setPlayerScene(std::string sceneName);
-  void setPlayerGravity(std::string gravity);
-  void setFullscreen(bool isFullscreen, std::string width, std::string height);
-  void setAmbientLight(std::string r, std::string g, std::string b, std::string a);
-  void setPlayerItemID(std::string id);
-  void showPlayerPosition();
-  void showPhysicsInfo();
-  void showSceneInfo();
-  void showWorldInfo();
-  void showGameInfo();
-  void showHelp();
-  void showAbout();
-  void showData(std::string type, std::string id);
-  void showDataFiles();
-  void add(std::string type, std::string id, std::string x, std::string y, std::string z);
-  void loadScene(std::string sceneId);
-  void unloadScene(std::string sceneName);
-  void screenshot();
-  void clear();//Clear the console.
+  void clear                      (Options);
+  void refresh                    (Options);
+  void about                      (Options);
+  void help                       (Options);
+  void screenshot                 (Options);
+  void setPhysicsEnabled          (Options);
+  void setCameraFree              (Options);
+  void setConsoleVisible          (Options);
+  void setFullscreen              (Options);
+  void setWindowed                (Options);
+  void setPlayerScene             (Options);
+  void setSceneAmbientLight       (Options);
+  void setPlayerPosition          (Options);
+  void setPlayerItemGenerationID  (Options);
+  void getItemData                (Options);
+  void getMonsterData             (Options);
+  void getArchitectureData        (Options);
+  void getSoundData               (Options);
+  void getSceneData               (Options);
+  void getDataFiles               (Options);
+  void getPhysicsInfo             (Options);
+  void getGameInfo                (Options);
+  void getSceneInfo               (Options);
+  void getWorldInfo               (Options);
+  void getPlayerPosition          (Options);
+  void addItem                    (Options);
+  void addMonster                 (Options);
+  void addSound                   (Options);
+  void setSceneLoaded             (Options);
 
+  
 };
 

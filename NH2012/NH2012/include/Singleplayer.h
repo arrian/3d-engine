@@ -32,6 +32,6 @@ public:
 
 private:
   World world;
-  Console console;
+  //Console console;
 };
 

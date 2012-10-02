@@ -3,8 +3,8 @@
 #include "NHException.h"
 
 //-------------------------------------------------------------------------------------
-PhysicalInterface::PhysicalInterface(int id, std::string name, std::string type)
-  : id(id),
+PhysicalInterface::PhysicalInterface(std::string name, std::string type)
+  : instanceID(-1),
     name(name),
     type(type)
 {
@@ -16,9 +16,15 @@ PhysicalInterface::~PhysicalInterface(void)
 }
 
 //-------------------------------------------------------------------------------------
-int PhysicalInterface::getID()
+int PhysicalInterface::getInstanceID()
 {
-  return id;
+  return instanceID;
+}
+
+//-------------------------------------------------------------------------------------
+void PhysicalInterface::setInstanceID(int instanceID)
+{
+  this->instanceID = instanceID;
 }
 
 //-------------------------------------------------------------------------------------

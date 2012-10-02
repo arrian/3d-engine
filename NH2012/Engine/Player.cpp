@@ -5,7 +5,7 @@
 
 //-------------------------------------------------------------------------------------
 Player::Player(World* world) 
-  : PhysicalInterface(0,"Local", "Player"),
+  : PhysicalInterface("Local", "Player"),
     world(world),
     scene(NULL),
     camera(),
@@ -77,14 +77,14 @@ void Player::update(double elapsedSeconds)
 {
   //std::cout << "x:" << node->getPosition().x << " z:" <<  node->getPosition().z << " y:" <<  node->getPosition().y << std::endl;
 
-  //implement later//camera.rayQuery();//testing ray queries
+  camera.rayQuery();//testing ray queries
 
   skeleton.update(elapsedSeconds);
   camera.update(elapsedSeconds);//for aspect ratio changes
 
   if(addItem) 
   {
-    scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
+    for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
 }
 

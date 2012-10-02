@@ -43,6 +43,8 @@ bool NH2012::go(void)
   cf.load(resources);
   Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
+  
+
   Ogre::String secName, typeName, archName;
   while (seci.hasMoreElements())
   {
@@ -56,6 +58,9 @@ bool NH2012::go(void)
       Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
     }
   }
+
+  //Console::getInstance().print("Loaded plugins and resources.");
+
 
   if(root->restoreConfig() || root->showConfigDialog())
   {
@@ -94,6 +99,7 @@ bool NH2012::go(void)
 
   windowResized(window);//Set initial mouse clipping size
   Ogre::WindowEventUtilities::addWindowEventListener(window, this);//Register as a Window listener
+
 
   root->addFrameListener(this);
   root->startRendering();

@@ -75,7 +75,7 @@ void CameraComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void CameraComponent::rayQuery()
 {
-  throw NHException("the physx character controller is doing something funky with the userData field so I'll have to think of a different way to map the physical shapes to the associated objects");
+  //ray seems wrong when facing in the negative direction
 
   Ogre::Vector3 oOrigin = camera->getDerivedPosition();
   Ogre::Vector3 oUnitDir = camera->getDerivedDirection();
@@ -88,8 +88,9 @@ void CameraComponent::rayQuery()
     std::cout << "ray hit at a distance of " << hit.distance << " with user data " << hit.shape->userData << std::endl;
     if(hit.shape->userData)
     {
+      if(hit.shape->userData == (void*) 0x43435453 || hit.shape->userData == (void*) 0x5354435b || hit.shape->userData == (void*) 0x53544343) return;//the default physx character controller insists on using the userData field for its own purposes putting the value 'CCTS' in.
       PhysicalInterface* target = static_cast<PhysicalInterface*>(hit.shape->userData);//Unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
-      std::cout << target->getType() << ":" << target->getName() << ":" << target->getID() << std::endl;
+      std::cout << target->getType() << ":" << target->getName() << ":" << target->getInstanceID() << std::endl;
       
     }
   }

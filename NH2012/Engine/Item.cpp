@@ -9,7 +9,7 @@
 //-------------------------------------------------------------------------------------
 Item::Item(ItemDesc desc)
   : BasicComponent(),
-    PhysicalInterface(0, desc.name, "Item"),
+    PhysicalInterface(desc.name, "Item"),
     mesh(desc.mesh),
     entity(NULL),
     node(NULL),

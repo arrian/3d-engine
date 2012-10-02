@@ -10,15 +10,17 @@
 class PhysicalInterface
 {
 public:
-  PhysicalInterface(int id, std::string name, std::string type);
+  PhysicalInterface(std::string name, std::string type);
   virtual ~PhysicalInterface(void);
 
-  int getID();
+  int getInstanceID();
   std::string getName();
   std::string getType();
 
+  void setInstanceID(int instanceID);
+
 protected:
-  int id;
+  int instanceID;
   std::string name;
   std::string type;
 };
