@@ -16,9 +16,12 @@ Console::Console()//World* world, OIS::Keyboard* keyboard)
     screen(NULL),
     layer(NULL),
     view(NULL),
-    text(""),
+    //text(""),
     command(""),
     history(),
+    lines(),
+    displayLines(27),
+    displayOffset(0),
     historyIndex(0),
     firstKeyPressHoldWait(1.0),
     consecutiveKeyPressHoldWait(0.1),
@@ -181,8 +184,7 @@ void Console::keyPressed(const OIS::KeyEvent &arg)
     else if(arg.key == OIS::KC_GRAVE) return;
     else if(arg.key == OIS::KC_BACK) backspace();
     else if(arg.key == OIS::KC_RETURN) enter();
-    else if(arg.key == OIS::KC_UP) up();
-    else if(arg.key == OIS::KC_DOWN) down();
+    
     else if(arg.key == OIS::KC_LSHIFT || arg.key == OIS::KC_RSHIFT || arg.key == OIS::KC_LCONTROL || arg.key == OIS::KC_RCONTROL) {}//ignore... handled elsewhere
     else if(isShift) 
     {
@@ -206,9 +208,13 @@ void Console::keyPressed(const OIS::KeyEvent &arg)
       else if(arg.key == OIS::KC_MINUS) command += '_';
       else if(arg.key == OIS::KC_EQUALS) command += '+';
       else if(arg.key == OIS::KC_BACKSLASH) command += '|';
+      else if(arg.key == OIS::KC_UP) displayOffset++;//show previous text
+      else if(arg.key == OIS::KC_DOWN) displayOffset--;//show more recent text
 
       else command += keyboard->getAsString(arg.key);
     }
+    else if(arg.key == OIS::KC_UP) up();
+    else if(arg.key == OIS::KC_DOWN) down();
     else 
     {
       std::string input = keyboard->getAsString(arg.key);
@@ -227,7 +233,7 @@ void Console::enter()
 {
   historyIndex = 0;
   history.push_back(command);
-  text += "\n> " + command;
+  lines.push_back("> " + command);
 
   Options elements;
   split(command, ' ', elements);
@@ -317,19 +323,22 @@ void Console::print(std::string comment)
 //-------------------------------------------------------------------------------------
 void Console::display(std::string comment)
 {
-  text += "\n" + comment;
+  lines.push_back(comment);
+  //text += "\n" + comment;
 }
 
 //-------------------------------------------------------------------------------------
 void Console::display(std::string highlight, std::string comment)
 {
-  text += "\n%5" + highlight + "%r - " + comment;
+  lines.push_back("%5" + highlight + "%r - " + comment);
+  //text += "\n%5" + highlight + "%r - " + comment;
 }
 
 //-------------------------------------------------------------------------------------
 void Console::error(std::string comment)
 {
-  text += "\n%4error%r - " + comment;
+  lines.push_back("%4error%r - " + comment);
+  //text += "\n%4error%r - " + comment;
 }
 
 //-------------------------------------------------------------------------------------
@@ -349,7 +358,24 @@ void Console::split(const std::string &s, char delim, std::vector<std::string> &
 //-------------------------------------------------------------------------------------
 void Console::update()
 {
-  std::string viewText = text + "\n%3> " + command;
+  std::string viewText = "";
+  std::vector<std::string>::iterator iter;
+  std::vector<std::string>::iterator end = lines.end();
+  if(displayOffset < 0) displayOffset = 0;//keep offset above the minimum
+  if(displayOffset + displayLines > lines.size()) displayOffset = lines.size() - displayLines;//keep offset below the top
+  if(lines.size() < displayLines) iter = lines.begin();//fewer lines than the maximum allowable display lines
+  else 
+  {
+    iter = lines.end() - (displayLines + displayOffset);
+    end = iter + displayLines;
+  }
+  for(; iter < end; ++iter)
+  {
+    viewText += "\n " + *iter;
+  }
+
+  if(end == lines.end()) viewText += "\n%3> " + command;
+    
   if(showCursor) viewText = viewText + "|";
   if(view) view->text(viewText);
 }
@@ -365,6 +391,7 @@ void Console::backspace()
 //-------------------------------------------------------------------------------------
 void Console::up()
 {
+  displayOffset = 0;
   if(historyIndex < history.size()) historyIndex++;
   if(historyIndex > 0) command = history[history.size() - historyIndex];
   else command = "";
@@ -373,6 +400,7 @@ void Console::up()
 //-------------------------------------------------------------------------------------
 void Console::down()
 {
+  displayOffset = 0;
   if(historyIndex > 0) historyIndex--;
   if(historyIndex > 0) command = history[history.size() - historyIndex];
   else command = "";
@@ -381,7 +409,10 @@ void Console::down()
 //-------------------------------------------------------------------------------------
 void Console::clear(Options argv)
 {
-  text = "";
+  displayOffset = 0;
+  lines.empty();
+  //for(int i = 0; i < displayLines; i++) display("");//fill visible area with spaces
+  //text = "";
   command = "";
 }
 
@@ -630,9 +661,11 @@ void Console::addItem(Options argv)
     Scene* target = world->getPlayer()->getScene();
     if(target)
     {
+      int numberToAdd = 1;
+      if(argv.size() > 5) numberToAdd = boost::lexical_cast<int>(argv[5]);
       Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), Ogre::Real(boost::lexical_cast<float>(argv[3])), Ogre::Real(boost::lexical_cast<float>(argv[4])));
       int idNum = boost::lexical_cast<int>(argv[1]);
-      target->addItem(idNum, position);
+      for(int i = 0; i < numberToAdd; i++) target->addItem(idNum, position);
     }
     else error("player needs to be located within a scene to add an item to it");
   }

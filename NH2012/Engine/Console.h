@@ -10,10 +10,6 @@
 #include "World.h"
 #include "Gorilla.h"
 
-//TODO Cursor movement, cursor blinking and text selection
-//TODO Make console scrollable and ensure console doesn't overflow viewport (vertical and horizontal)
-
-
 typedef std::vector<std::string> Options;//shorter vector string typedef
 
 /**
@@ -92,7 +88,10 @@ private:
   Gorilla::Screen* screen;//Console screen.
   Gorilla::Layer* layer;//Console layer.
   Gorilla::MarkupText* view;//Console display text.
-  std::string text;//Console internal text.
+  //std::string text;//Console internal text.
+  std::vector<std::string> lines;
+  int displayLines;//number of lines to display at a time
+  int displayOffset;
   std::string command;//Current console command.
   std::vector<std::string> history;//The command execution history.
   int historyIndex;
