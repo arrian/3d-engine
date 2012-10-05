@@ -4,8 +4,10 @@
 #include "NHException.h"
 #include "PhysicalInterface.h"
 
+#include "OgreCompositorManager.h"
+
 //-------------------------------------------------------------------------------------
-CameraComponent::CameraComponent()
+CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom, bool enableMotionBlur)
   : NodeComponent(),
     camera(NULL),
     window(NULL),
@@ -13,8 +15,12 @@ CameraComponent::CameraComponent()
     oldCameraWidth(0),
     oldCameraHeight(0),
     nearClipDefault(0.4f),
-    farClipDefault(1000.0f),
-    rayCastDistance(10.0f)
+    farClipDefault(400.0f),//recommended to keep ratio of far to near at or below 1000:1
+    rayCastDistance(10.0f),
+    ssao(NULL),
+    enableSSAO(enableSSAO),
+    enableBloom(enableBloom),
+    enableMotionBlur(enableMotionBlur)
 {
 
 }
@@ -22,6 +28,7 @@ CameraComponent::CameraComponent()
 //-------------------------------------------------------------------------------------
 CameraComponent::~CameraComponent(void)
 {
+  if(ssao) delete ssao;
   this->scene->getSceneManager()->destroyCamera(camera);
 }
 
@@ -34,6 +41,27 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
   viewport = window->addViewport(camera);
   viewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
   assert(viewport);
+
+  if(ssao)//remove previously created ssao
+  {
+    delete ssao;
+    ssao = NULL;
+  }
+
+  if(enableMotionBlur)//not working??
+  {
+    Ogre::CompositorManager::getSingleton().addCompositor(viewport, "Ogre/Compositor/MotionBlur");
+    Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Ogre/Compositor/MotionBlur", true);
+  }
+
+  if(enableBloom)
+  {
+    Ogre::CompositorManager::getSingleton().addCompositor(viewport, "Bloom");
+    Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Bloom", true);
+  }
+
+
+  if(enableSSAO) ssao = new PFXSSAO(window, camera);//enables screen space ambient occlusion
 }
 
 //-------------------------------------------------------------------------------------

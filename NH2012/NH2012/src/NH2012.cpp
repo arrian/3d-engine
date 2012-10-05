@@ -59,9 +59,6 @@ bool NH2012::go(void)
     }
   }
 
-  //Console::getInstance().print("Loaded plugins and resources.");
-
-
   if(root->restoreConfig() || root->showConfigDialog())
   {
     window = root->initialise(true, "NH2012");
@@ -78,6 +75,7 @@ bool NH2012::go(void)
 
   //Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);//Set default mipmap level (NB some APIs ignore this)//causes errors with d3d11
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+  ::Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(::Ogre::TFO_ANISOTROPIC);
 
   OIS::ParamList parameters;
   size_t windowHnd = 0;
@@ -99,7 +97,6 @@ bool NH2012::go(void)
 
   windowResized(window);//Set initial mouse clipping size
   Ogre::WindowEventUtilities::addWindowEventListener(window, this);//Register as a Window listener
-
 
   root->addFrameListener(this);
   root->startRendering();

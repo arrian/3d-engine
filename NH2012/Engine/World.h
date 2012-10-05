@@ -146,6 +146,8 @@ public:
   bool enableAudio;
   bool enableHDR;
   bool enableBloom;
+  bool enableSSAO;
+  bool enableMotionBlur;
   bool enableShadows;
   bool enableLights;
   bool enableParticles;
@@ -159,6 +161,7 @@ public:
   bool showCollisionDebug;
   bool showShadowDebug;
   float gravity;
+  int defaultScene;
   std::vector<std::string> dataFiles;//monsters,items,architecture,sounds,scenes etc.
   Controls controls;//Control mappings
 

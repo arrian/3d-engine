@@ -26,7 +26,7 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent()
     density(1.0f),
     scaleCoeff(0.999f),
     stepOffset(0.4f),
-    runScalar(1.3f),
+    runScalar(1.8f),
     moveScalar(10.0f),
     jumpVelocity(2.5f),
     minimumMoveDistance(0.001f),

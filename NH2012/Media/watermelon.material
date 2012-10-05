@@ -1,4 +1,5 @@
-material watermelon
+import diffuse_template from "diffuse.material"
+material watermelon : diffuse_template
 {
 	technique
 	{

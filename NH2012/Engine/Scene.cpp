@@ -16,13 +16,13 @@
 Scene::Scene(World* world, int id)
   : world(world),
     id(id),
-    sceneManager(world->getRoot()->createSceneManager(Ogre::ST_INTERIOR)),
+    sceneManager(world->getRoot()->createSceneManager(Ogre::ST_GENERIC)),
     controllerManager(NULL),
     physicsManager(NULL),
     instanceNumber(0),
     defaultEntry(NULL),
     player(NULL),
-    defaultAmbientColour(0.5f,0.5f,0.5f),
+    defaultAmbientColour(0.1f,0.1f,0.1f),
     numberPhysicsCPUThreads(4),
     stepSize(1.0 / 60.0),
     accumulator(0.0),
@@ -55,14 +55,12 @@ Scene::Scene(World* world, int id)
 
   if(world->enableShadows) 
   {
-    std::cout << "Shadows enabled." << std::endl;
-    sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
+    sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
     sceneManager->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5));
     sceneManager->setShadowTextureSize(1024);
-    sceneManager->setShadowTextureCount(1);
+    sceneManager->setShadowTextureCount(5);
   }
 
-  sceneManager->setDisplaySceneNodes(world->isDebug());
   sceneManager->setShowDebugShadows(world->isDebug());
   sceneManager->showBoundingBoxes(world->isDebug());
   
@@ -74,6 +72,16 @@ Scene::Scene(World* world, int id)
   load(sceneDesc.file);//loading the scene file
 
   sceneManager->setAmbientLight(defaultAmbientColour);
+
+  Ogre::Light* light = sceneManager->createLight();
+  light->setType(Ogre::Light::LT_SPOTLIGHT);
+  light->setPosition(0,1,0);
+  light->setDirection(0,-1,0);
+  light->setSpotlightInnerAngle(Ogre::Degree(25));
+  light->setSpotlightOuterAngle(Ogre::Degree(45));
+  light->setAttenuation(30,0,0,0);
+  light->setDiffuseColour(Ogre::ColourValue::White);
+  light->setCastShadows(true);
   
   //building static geometry
   architecture->build();
@@ -200,10 +208,15 @@ void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range,
   Ogre::Light* light = sceneManager->createLight("light" + Ogre::StringConverter::toString(getNewInstanceNumber()));
   lights.push_back(light);
   light->setPosition(position);
-  light->setAttenuation(range, 1.0f, 1.0 / (range * 10.0), 1.0 / (range * 100.0));
+  light->setAttenuation(range, 0.95f, 0.05f, 0);
   light->setDiffuseColour(colour);
   light->setSpecularColour(Ogre::ColourValue::White);
   light->setCastShadows(castShadows);
+
+  //Same clipping as the camera set up
+  light->setShadowNearClipDistance(0.4f);
+  light->setShadowFarClipDistance(400.0f);
+  light->setShadowFarDistance(400.0f);
 }
 
 //-------------------------------------------------------------------------------------
@@ -258,7 +271,7 @@ void Scene::update(double elapsedSeconds)
   }
 
   totalElapsed += elapsedSeconds;
-  flockTest.update(totalElapsed);//evt.timeSinceLastFrame);
+  //flockTest.update(totalElapsed);//evt.timeSinceLastFrame);
 
   if(!world->freezeCollisionDebug) advancePhysics(elapsedSeconds);
 }

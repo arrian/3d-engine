@@ -17,6 +17,7 @@ Architecture::Architecture(Scene* scene)
     defaultFriction(0.2f),
     defaultRestitution(0.7f)
 {
+  //geometry->setCastShadows(true);//produces no shadows at all?
 }
 
 //-------------------------------------------------------------------------------------

@@ -7,7 +7,8 @@
 FabricationManager::FabricationManager()
   : material(NULL),
     cooking(NULL),
-    physics(NULL)
+    physics(NULL),
+    convexHistory()
 {
 }
 
@@ -19,6 +20,9 @@ FabricationManager::~FabricationManager(void)
 //-------------------------------------------------------------------------------------
 physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& mesh)//Ogre::Entity *e)
 {
+  if(convexHistory.count(mesh->getName()) > 0) return convexHistory.find(mesh->getName())->second;//if the required convex mesh has already been created then return a pointer to it
+
+
   unsigned int mVertexCount = 0; 
   unsigned int mIndexCount  = 0; 
   //size_t vertex_count; 
@@ -125,6 +129,8 @@ physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& m
   PxToolkit::MemoryOutputStream buf;
   bool status = cooking->cookConvexMesh(convexDesc, buf);
   physx::PxConvexMesh* convexMesh = physics->createConvexMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));
+
+  convexHistory.insert(std::pair<std::string, physx::PxConvexMesh*>(mesh->getName(), convexMesh));//record that a convex mesh has been cooked for the given mesh
 
   delete []vertices;
   delete []indices;

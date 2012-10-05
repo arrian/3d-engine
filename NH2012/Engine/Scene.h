@@ -97,5 +97,6 @@ private:
 
   Flock flockTest;
   double totalElapsed;
+
 };
 

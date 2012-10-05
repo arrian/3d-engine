@@ -8,6 +8,7 @@
 #include <sstream>
 #include <exception>
 #include <fstream>
+#include <map>
 
 //Ogre
 #include <OgreVector3.h>
@@ -82,5 +83,7 @@ private:
   physx::PxMaterial* material;//default material
   physx::PxCooking* cooking;
   physx::PxPhysics* physics;
+
+  std::map<std::string, physx::PxConvexMesh*> convexHistory;
 };
 

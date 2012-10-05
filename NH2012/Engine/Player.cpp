@@ -8,7 +8,7 @@ Player::Player(World* world)
   : PhysicalInterface("Local", "Player"),
     world(world),
     scene(NULL),
-    camera(),
+    camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
     visual("actor.mesh"),
     addItem(false),
     placementDistance(3.0f),

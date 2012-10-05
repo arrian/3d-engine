@@ -10,7 +10,7 @@
 
 #include "Game.h"
 
-#include "../../Client/Client.h"
+#include "Client.h"
  
 class Multiplayer :
   public Game

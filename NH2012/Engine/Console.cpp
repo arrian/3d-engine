@@ -54,6 +54,7 @@ Console::Console()//World* world, OIS::Keyboard* keyboard)
   commands.push_back(new Command<Console>("getSceneData", "gets the scene associated with the given id", &Console::getSceneData, this));
   commands.push_back(new Command<Console>("getDataFiles", "gets a list of the active data files", &Console::getDataFiles, this));
   commands.push_back(new Command<Console>("getPhysicsInfo", "gets the current state of the physics", &Console::getPhysicsInfo, this));
+  commands.push_back(new Command<Console>("getPlayerPosition", "gets the player position", &Console::getPlayerPosition, this));
   commands.push_back(new Command<Console>("getGameInfo", "gets the current state of the game", &Console::getGameInfo, this));
   commands.push_back(new Command<Console>("getSceneInfo", "gets the current state of the scene", &Console::getSceneInfo, this));
   commands.push_back(new Command<Console>("getWorldInfo", "gets the current state of the world", &Console::getWorldInfo, this));
@@ -103,6 +104,8 @@ bool Console::isVisible()
 //-------------------------------------------------------------------------------------
 void Console::update(double elapsedSeconds)
 {
+  if(!isVisible()) return;
+
   cursorAccumulator += elapsedSeconds;
 
   if(cursorAccumulator >= cursorFlashRate) 
@@ -138,8 +141,6 @@ void Console::update(double elapsedSeconds)
     holdAccumulator = 0.0;
     hasDoneFirstHold = false;
   }
-
-  //if(!isVisible()) return;
 }
 
 //-------------------------------------------------------------------------------------
@@ -244,70 +245,19 @@ void Console::enter()
         (*iter)->run(elements);//run the required command
         command = "";
       }
-      catch(NHException e)
+      catch(NHException e)//a local error occurred that shouldn't influence the game
       {
         error(e.what());
+      }
+      catch(boost::bad_lexical_cast e)//could not interpret the arguments given
+      {
+        error("bad arguments given");
       }
       return;
     }
   }
   noCommand(command);
   command = "";
-  /*
-  if(elements.size() == 0) {}
-  else if(elements.size() == 1)
-  {
-    if(elements[0] == "help") showHelp();
-    else if(elements[0] == "about") showAbout();
-    else if(elements[0] == "clear") clear();
-    else if(elements[0] == "refresh") hookWindow(window);
-    else if(elements[0] == "screenshot") screenshot();
-    else if(elements[0] == "show_game_info") showGameInfo();
-    else if(elements[0] == "set_physics_frozen") setPhysicsFrozen(true);
-    else if(elements[0] == "set_physics_unfrozen") setPhysicsFrozen(false);
-    else if(elements[0] == "set_free_camera") setFreeCamera(true);
-    else if(elements[0] == "set_console_hidden") setVisible(false);
-    else if(elements[0] == "show_player_position") showPlayerPosition();
-    else if(elements[0] == "show_physics_info") showPhysicsInfo();
-    else if(elements[0] == "show_data_files") showDataFiles();
-    else if(elements[0] == "show_scene_info") showSceneInfo();
-    else if(elements[0] == "show_world_info") showWorldInfo();
-    else noCommand(command);
-  }
-  else if(elements.size() == 2)
-  {
-    if(elements[0] == "set_player_scene") setPlayerScene(elements[1]);
-    else if(elements[0] == "load_scene") loadScene(elements[1]);
-    else if(elements[0] == "set_player_gravity") setPlayerGravity(elements[1]);
-    else if(elements[0] == "unload_scene") unloadScene(elements[1]);
-    else if(elements[0] == "set_player_item_generation_id") setPlayerItemID(elements[1]);
-    else noCommand(command);
-  }
-  else if(elements.size() == 3)
-  {
-    if(elements[0] == "set_fullscreen") setFullscreen(true, elements[1], elements[2]);
-    if(elements[0] == "set_windowed") setFullscreen(false, elements[1], elements[2]);
-    else if(elements[0] == "show_data") showData(elements[1], elements[2]);
-    else noCommand(command);
-  }
-  else if(elements.size() == 4)
-  {
-    if(elements[0] == "set_player_position") setPlayerPosition(elements[1], elements[2], elements[3]);
-    else noCommand(command);
-  }
-  else if(elements.size() == 5)
-  {
-    if(elements[0] == "set_ambient_light") setAmbientLight(elements[1], elements[2], elements[3], elements[4]);
-    else noCommand(command);
-  }
-  else if(elements.size() == 6)
-  {
-    if(elements[0] == "add") add(elements[1], elements[2], elements[3], elements[4], elements[5]);
-    else noCommand(command);
-  }
-  else noCommand(command);
-  
-  command = "";*/
 }
 
 //-------------------------------------------------------------------------------------
@@ -321,21 +271,18 @@ void Console::print(std::string comment)
 void Console::display(std::string comment)
 {
   lines.push_back(comment);
-  //text += "\n" + comment;
 }
 
 //-------------------------------------------------------------------------------------
 void Console::display(std::string highlight, std::string comment)
 {
   lines.push_back("%5" + highlight + "%r - " + comment);
-  //text += "\n%5" + highlight + "%r - " + comment;
 }
 
 //-------------------------------------------------------------------------------------
 void Console::error(std::string comment)
 {
   lines.push_back("%4error%r - " + comment);
-  //text += "\n%4error%r - " + comment;
 }
 
 //-------------------------------------------------------------------------------------
@@ -408,8 +355,6 @@ void Console::clear(Options argv)
 {
   displayOffset = 0;
   lines.empty();
-  //for(int i = 0; i < displayLines; i++) display("");//fill visible area with spaces
-  //text = "";
   command = "";
 }
 
@@ -445,7 +390,7 @@ void Console::help(Options argv)
 void Console::screenshot(Options argv)
 {
   setVisible(false);
-  display("Screenshot saved to '" + window->writeContentsToTimestampedFile("screenshot", ".jpg") + "'.");
+  display("Screenshot saved to '" + window->writeContentsToTimestampedFile("screenshot", ".png") + "'.");
   setVisible(true);
 }
 
@@ -653,42 +598,28 @@ void Console::getPlayerPosition(Options argv)
 //-------------------------------------------------------------------------------------
 void Console::addItem(Options argv)
 {
-  try
+  Scene* target = world->getPlayer()->getScene();
+  if(target)
   {
-    Scene* target = world->getPlayer()->getScene();
-    if(target)
-    {
-      int numberToAdd = 1;
-      if(argv.size() > 5) numberToAdd = boost::lexical_cast<int>(argv[5]);
-      Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), Ogre::Real(boost::lexical_cast<float>(argv[3])), Ogre::Real(boost::lexical_cast<float>(argv[4])));
-      int idNum = boost::lexical_cast<int>(argv[1]);
-      for(int i = 0; i < numberToAdd; i++) target->addItem(idNum, position);
-    }
-    else error("player needs to be located within a scene to add an item to it");
+    int numberToAdd = 1;
+    if(argv.size() > 5) numberToAdd = boost::lexical_cast<int>(argv[5]);
+    Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), Ogre::Real(boost::lexical_cast<float>(argv[3])), Ogre::Real(boost::lexical_cast<float>(argv[4])));
+    int idNum = boost::lexical_cast<int>(argv[1]);
+    for(int i = 0; i < numberToAdd; i++) target->addItem(idNum, position);
   }
-  catch(NHException e)
-  {
-    error(e.what());
-  }
+  else error("player needs to be located within a scene to add an item to it");
 }
 //-------------------------------------------------------------------------------------
 void Console::addMonster(Options argv)
 {
-  try
+  Scene* target = world->getPlayer()->getScene();
+  if(target)
   {
-    Scene* target = world->getPlayer()->getScene();
-    if(target)
-    {
-      Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), Ogre::Real(boost::lexical_cast<float>(argv[3])), Ogre::Real(boost::lexical_cast<float>(argv[4])));
-      int idNum = boost::lexical_cast<int>(argv[1]);
-      target->addMonster(idNum, position);
-    }
-    else error("player needs to be located within a scene to add a monster to it");
+    Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), Ogre::Real(boost::lexical_cast<float>(argv[3])), Ogre::Real(boost::lexical_cast<float>(argv[4])));
+    int idNum = boost::lexical_cast<int>(argv[1]);
+    target->addMonster(idNum, position);
   }
-  catch(NHException e)
-  {
-    error(e.what());
-  }
+  else error("player needs to be located within a scene to add a monster to it");
 }
 //-------------------------------------------------------------------------------------
 void Console::addSound(Options argv)
@@ -732,3 +663,5 @@ void Console::setRequired(World* world, OIS::Keyboard* keyboard)
   this->world = world;
   this->keyboard = keyboard;
 }
+
+

@@ -11,6 +11,14 @@
 
 using boost::asio::ip::udp;
 
+/* LTS
+SERVER = (ping->(worldPacket->updateGlobal->SERVER | physicsPacket->updateGlobal->SERVER | playerPacket->updateGlobal->SERVER)).
+
+CLIENT = (ping->(worldPacket->updateLocal->CLIENT | physicsPacket->updateLocal->CLIENT | playerPacket->updateLocal->CLIENT)).
+
+||SERVER_CLIENT = (SERVER || {a,b,c,d}:CLIENT)/{{a,b,c,d}.ping/ping,{a,b,c,d}.worldPacket/worldPacket,{a,b,c,d}.physicsPacket/physicsPacket,{a,b,c,d}.playerPacket/playerPacket}.
+*/
+
 /**
  * Server implementation for world engine.
  **/

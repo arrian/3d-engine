@@ -87,7 +87,7 @@ void World::initialise(std::string iniFile)
   fabricationManager.setDefaultPhysicsMaterial(physicsMaterial);//move all material stuff to the fabrication manager
 
   //creating default scene
-  Scene* scene = loadScene(0);
+  Scene* scene = loadScene(defaultScene);
   if(scene == NULL) throw NHException("Default scene creation failed.");
   
   //creating player
@@ -360,6 +360,8 @@ void World::parseIni(std::string filename)
     //Environment
     enableHDR = (pt.get<std::string>("Environment.HDR") == TRUE_STRING);
     enableBloom = (pt.get<std::string>("Environment.Bloom") == TRUE_STRING);
+    enableSSAO = (pt.get<std::string>("Environment.SSAO") == TRUE_STRING);
+    enableMotionBlur = (pt.get<std::string>("Environment.MotionBlur") == TRUE_STRING);
     enableShadows = (pt.get<std::string>("Environment.Shadows") == TRUE_STRING);
     enableLights = (pt.get<std::string>("Environment.Lights") == TRUE_STRING);
     enableParticles = (pt.get<std::string>("Environment.Particles") == TRUE_STRING);
@@ -383,6 +385,7 @@ void World::parseIni(std::string filename)
     freezeCollisionDebug = (pt.get<std::string>("Debug.FreezeCollision") == TRUE_STRING);
     showCollisionDebug = (pt.get<std::string>("Debug.ShowCollisionsDebug") == TRUE_STRING);
     showShadowDebug = (pt.get<std::string>("Debug.ShowShadowDebug") == TRUE_STRING);
+    defaultScene = (pt.get<int>("Debug.DefaultScene") == TRUE_STRING);
 
     physXVisualDebuggerIP = pt.get<std::string>("Debug.PhysXVisualDebuggerIP");
     physXVisualDebuggerPort = pt.get<int>("Debug.PhysXVisualDebuggerPort");
