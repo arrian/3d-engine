@@ -18,7 +18,7 @@ FabricationManager::~FabricationManager(void)
 }
 
 //-------------------------------------------------------------------------------------
-physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& mesh)//Ogre::Entity *e)
+physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& mesh)
 {
   if(convexHistory.count(mesh->getName()) > 0) return convexHistory.find(mesh->getName())->second;//if the required convex mesh has already been created then return a pointer to it
 

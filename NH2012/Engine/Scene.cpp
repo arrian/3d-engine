@@ -27,7 +27,7 @@ Scene::Scene(World* world, int id)
     stepSize(1.0 / 60.0),
     accumulator(0.0),
     active(false),
-    flockTest(100),
+    //flockTest(100),
     totalElapsed(0.0),
     particles(),
     monsters(),
@@ -73,6 +73,7 @@ Scene::Scene(World* world, int id)
 
   sceneManager->setAmbientLight(defaultAmbientColour);
 
+  /*
   Ogre::Light* light = sceneManager->createLight();
   light->setType(Ogre::Light::LT_SPOTLIGHT);
   light->setPosition(0,1,0);
@@ -82,11 +83,14 @@ Scene::Scene(World* world, int id)
   light->setAttenuation(30,0,0,0);
   light->setDiffuseColour(Ogre::ColourValue::White);
   light->setCastShadows(true);
-  
+  */
+
+  sceneManager->getRootSceneNode()->attachObject(sceneManager->createEntity("theatre_ivy.mesh"));
+
   //building static geometry
   architecture->build();
 
-  flockTest.setScene(this);
+  //flockTest.setScene(this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -180,6 +184,9 @@ void Scene::addPlayer(Player* player, int portalID)
     position = Ogre::Vector3::ZERO;
     lookAt = Ogre::Vector3::ZERO;
   }
+
+  Scene* old = player->getScene();
+  if(old) old->removePlayer(player);//need to remove player from previous scene
   player->setScene(this, position, lookAt);
   this->player = player;
 }

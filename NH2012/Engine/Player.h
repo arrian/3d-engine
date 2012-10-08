@@ -65,5 +65,7 @@ private:
   float handMoveScalar;
 
   int itemGenerationID;//for debug item generation
+
+  void keyEvent(const OIS::KeyEvent &evt, bool isDown);
 };
 

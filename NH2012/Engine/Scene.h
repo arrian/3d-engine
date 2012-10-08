@@ -95,7 +95,7 @@ private:
 
   physx::PxU32 numberPhysicsCPUThreads;
 
-  Flock flockTest;
+  //Flock flockTest;
   double totalElapsed;
 
 };

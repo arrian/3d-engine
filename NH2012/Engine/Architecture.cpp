@@ -57,7 +57,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   Ogre::Entity* entity = NULL;
   physx::PxTriangleMesh* mesh = NULL;
   
-  //searching for previously created entities
+  //searching for previously created entities//change to use find
   for(std::map<Ogre::String, StaticEntity>::iterator iter = statics.begin(); iter != statics.end(); ++iter)
   {
     if((*iter).first == meshName) 

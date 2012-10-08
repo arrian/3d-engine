@@ -171,7 +171,7 @@ std::string TimeManager::serialiseMonth(Month month)
     case OCTOBER:   return "october";
     case NOVEMBER:  return "november";
     case DECEMBER:  return "december";
-    default:        throw NHException("Serialise requested for unknown day of the week.");
+    default:        throw NHException("Serialise requested for unknown month.");
   }
 }
 

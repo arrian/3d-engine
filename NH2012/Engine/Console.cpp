@@ -440,7 +440,7 @@ void Console::setPlayerScene(Options argv)
 {
   std::string sceneName = argv[1];
   Scene* target = world->getScene(sceneName);
-  if(target) world->movePlayer(world->getPlayer(), target);
+  if(target) target->addPlayer(world->getPlayer());
   else error("no scene loaded named '" + sceneName + "'");
 }
 
@@ -448,14 +448,19 @@ void Console::setPlayerScene(Options argv)
 void Console::setSceneAmbientLight(Options argv)
 {
   Scene* target = world->getPlayer()->getScene();
-  if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(boost::lexical_cast<float>(argv[1]), boost::lexical_cast<float>(argv[2]), boost::lexical_cast<float>(argv[3]), boost::lexical_cast<float>(argv[4])));
-  else error("player needs to be located within a scene to be able to change the ambient light");
+  if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(boost::lexical_cast<float>(argv[1]), 
+                                                                          boost::lexical_cast<float>(argv[2]), 
+                                                                          boost::lexical_cast<float>(argv[3]), 
+                                                                          boost::lexical_cast<float>(argv[4])));
+  else error("player needs to be located within a scene");
 }
 
 //-------------------------------------------------------------------------------------
 void Console::setPlayerPosition(Options argv)
 {
-  Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[1])), Ogre::Real(boost::lexical_cast<float>(argv[2])), Ogre::Real(boost::lexical_cast<float>(argv[3])));
+  Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[1])), 
+                                         Ogre::Real(boost::lexical_cast<float>(argv[2])), 
+                                         Ogre::Real(boost::lexical_cast<float>(argv[3])));
   world->getPlayer()->setPosition(position);
 }
 
@@ -468,57 +473,40 @@ void Console::setPlayerItemGenerationID(Options argv)
 //-------------------------------------------------------------------------------------
 void Console::getItemData(Options argv)
 {
-  try
-  {
-    ItemDesc desc = world->getDataManager()->getItem(boost::lexical_cast<int>(argv[1]));
-    display("name", desc.name);
-    display("mesh", desc.mesh);
-  }
-  catch(NHException e)
-  {
-    error(e.what());
-  }
+  ItemDesc desc = world->getDataManager()->getItem(boost::lexical_cast<int>(argv[1]));
+  display("name", desc.name);
+  display("mesh", desc.mesh);
 }
 
 //-------------------------------------------------------------------------------------
 void Console::getMonsterData(Options argv)
 {
-  try
-  {
-    MonsterDesc desc = world->getDataManager()->getMonster(boost::lexical_cast<int>(argv[1]));
-    display("name", desc.name);
-    display("mesh", desc.mesh);
-  }
-  catch(NHException e)
-  {
-    error(e.what());
-  }
+  MonsterDesc desc = world->getDataManager()->getMonster(boost::lexical_cast<int>(argv[1]));
+  display("name", desc.name);
+  display("mesh", desc.mesh);
 }
 
 //-------------------------------------------------------------------------------------
 void Console::getArchitectureData(Options argv)
 {
-  try
-  {
-    ArchitectureDesc desc = world->getDataManager()->getArchitecture(boost::lexical_cast<int>(argv[1]));
-    display("name", desc.name);
-    display("mesh", desc.mesh);
-  }
-  catch(NHException e)
-  {
-    error(e.what());
-  }
+  ArchitectureDesc desc = world->getDataManager()->getArchitecture(boost::lexical_cast<int>(argv[1]));
+  display("name", desc.name);
+  display("mesh", desc.mesh);
 }
 //-------------------------------------------------------------------------------------
 void Console::getSoundData(Options argv)
 {
-
+  SoundDesc desc = world->getDataManager()->getSound(boost::lexical_cast<int>(argv[1]));
+  display("name", desc.name);
+  display("file", desc.file);
 }
 
 //-------------------------------------------------------------------------------------
 void Console::getSceneData(Options argv)
 {
-
+  SceneDesc desc = world->getDataManager()->getScene(boost::lexical_cast<int>(argv[1]));
+  display("name", desc.name);
+  display("file", desc.file);
 }
 
 //-------------------------------------------------------------------------------------
@@ -583,16 +571,16 @@ void Console::getSceneInfo(Options argv)
 //-------------------------------------------------------------------------------------
 void Console::getWorldInfo(Options argv)
 {
-
+  
 }
 
 //-------------------------------------------------------------------------------------
 void Console::getPlayerPosition(Options argv)
 {
   Ogre::Vector3 position = world->getPlayer()->getPosition();
-  display("x", boost::lexical_cast<std::string>(position.x));
-  display("y", boost::lexical_cast<std::string>(position.y));
-  display("z", boost::lexical_cast<std::string>(position.z));
+  display("x,y,z: ", "(" + boost::lexical_cast<std::string>(position.x) + "," 
+                         + boost::lexical_cast<std::string>(position.y) + "," 
+                         + boost::lexical_cast<std::string>(position.z) + ")");
 }
 
 //-------------------------------------------------------------------------------------
@@ -603,7 +591,16 @@ void Console::addItem(Options argv)
   {
     int numberToAdd = 1;
     if(argv.size() > 5) numberToAdd = boost::lexical_cast<int>(argv[5]);
-    Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), Ogre::Real(boost::lexical_cast<float>(argv[3])), Ogre::Real(boost::lexical_cast<float>(argv[4])));
+    
+    Ogre::Vector3 position;
+    if(argv.size() > 1 && argv[1] == "@player")//the user specified to add the item at the current location
+    {
+      position = world->getPlayer()->getPosition();
+      if(argv.size() > 2) numberToAdd = boost::lexical_cast<int>(argv[2]);
+    }
+    else position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
+                                  Ogre::Real(boost::lexical_cast<float>(argv[3])), 
+                                  Ogre::Real(boost::lexical_cast<float>(argv[4])));
     int idNum = boost::lexical_cast<int>(argv[1]);
     for(int i = 0; i < numberToAdd; i++) target->addItem(idNum, position);
   }
@@ -615,7 +612,9 @@ void Console::addMonster(Options argv)
   Scene* target = world->getPlayer()->getScene();
   if(target)
   {
-    Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), Ogre::Real(boost::lexical_cast<float>(argv[3])), Ogre::Real(boost::lexical_cast<float>(argv[4])));
+    Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
+                                           Ogre::Real(boost::lexical_cast<float>(argv[3])), 
+                                           Ogre::Real(boost::lexical_cast<float>(argv[4])));
     int idNum = boost::lexical_cast<int>(argv[1]);
     target->addMonster(idNum, position);
   }
@@ -633,27 +632,13 @@ void Console::setSceneLoaded(Options argv)
   bool load = boost::lexical_cast<bool>(argv[2]);
   if(load)
   {
-    try
-    {
-      if(world->loadScene(boost::lexical_cast<int>(argv[1]))) display("scene loaded");
-      else display("could not load the scene");
-    }
-    catch(NHException e)
-    {
-      error(e.what());
-    }
+    if(world->loadScene(boost::lexical_cast<int>(argv[1]))) display("scene loaded");
+    else display("could not load the scene");
   }
   else
   {
-    try
-    {
-      if(world->destroyScene(argv[1])) display("scene unloaded");
-      else error("could not unload the scene");
-    }
-    catch(NHException e)
-    {
-      error(e.what());
-    }
+    if(world->destroyScene(argv[1])) display("scene unloaded");
+    else error("could not unload the scene");
   }
 }
 

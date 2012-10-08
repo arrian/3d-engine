@@ -30,11 +30,10 @@ Player::~Player(void)
 //-------------------------------------------------------------------------------------
 void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt)
 {
-  assert(scene);
-
   //pulling down
   if(this->scene)
   {
+    //scene->removePlayer(this);//should be called in addPlayer
     visual.removeNode();
     camera.removeNode();
     skeleton.removeNode();
@@ -43,8 +42,11 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
     node = NULL;
   }
 
+  if(!scene) return;//no new scene given
+
   //setting up
   this->scene = scene;
+  //scene->addPlayer(this);//set scene usually called from addPlayer
 
   //entity = scene->getSceneManager()->createEntity("actor.mesh");
   node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
@@ -57,8 +59,6 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   skeleton.setNode(scene, node);
   camera.setNode(scene, skeleton.getHead());
 
-  
-  
   //if(window) hook(window);//if the player has a render window then connect camera to new scene
 
   stop();
@@ -75,9 +75,7 @@ Scene* Player::getScene()
 //-------------------------------------------------------------------------------------
 void Player::update(double elapsedSeconds)
 {
-  //std::cout << "x:" << node->getPosition().x << " z:" <<  node->getPosition().z << " y:" <<  node->getPosition().y << std::endl;
-
-  camera.rayQuery();//testing ray queries
+  //camera.rayQuery();//testing ray queries
 
   skeleton.update(elapsedSeconds);
   camera.update(elapsedSeconds);//for aspect ratio changes
@@ -91,24 +89,25 @@ void Player::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void Player::injectKeyDown(const OIS::KeyEvent &evt)
 {
-  if (evt.key == world->controls.moveForward) skeleton.setMoveForward(true);
-  else if (evt.key == world->controls.moveBack) skeleton.setMoveBackward(true);
-  else if (evt.key == world->controls.moveLeft) skeleton.setMoveLeft(true);
-  else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(true);
-  else if (evt.key == world->controls.run) skeleton.setRun(true);
-  else if (evt.key == world->controls.jump) skeleton.jump();
-  else if (evt.key == OIS::KC_1) addItem = true;
+  if (evt.key == world->controls.jump) skeleton.jump();
+  else keyEvent(evt, true);
 }
 
 //-------------------------------------------------------------------------------------
 void Player::injectKeyUp(const OIS::KeyEvent &evt)
 {
-  if (evt.key == world->controls.moveForward) skeleton.setMoveForward(false);
-  else if (evt.key == world->controls.moveBack) skeleton.setMoveBackward(false);
-  else if (evt.key == world->controls.moveLeft) skeleton.setMoveLeft(false);
-  else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(false);
-  else if (evt.key == world->controls.run) skeleton.setRun(false);
-  else if (evt.key == OIS::KC_1) addItem = false;
+  keyEvent(evt, false);
+}
+
+//-------------------------------------------------------------------------------------
+void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
+{
+  if (evt.key == world->controls.moveForward) skeleton.setMoveForward(isDown);
+  else if (evt.key == world->controls.moveBack) skeleton.setMoveBackward(isDown);
+  else if (evt.key == world->controls.moveLeft) skeleton.setMoveLeft(isDown);
+  else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(isDown);
+  else if (evt.key == world->controls.run) skeleton.setRun(isDown);
+  else if (evt.key == OIS::KC_1) addItem = isDown;
 }
 
 //-------------------------------------------------------------------------------------

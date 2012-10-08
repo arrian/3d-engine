@@ -125,7 +125,7 @@ public:
   void setSceneChangeListener(SceneChangeListener* listener);
   void setSceneManager(Ogre::SceneManager* sceneManager);
   void hookWindow(Ogre::RenderWindow* window);//convenience method for hooking the render window to the player
-  void movePlayer(Player* player, Scene* target);/* Moves the player to the target scene.*/
+  //void movePlayer(Player* player, Scene* target);/* Moves the player to the target scene.*/
   
   //Injection
   void injectKeyDown(const OIS::KeyEvent &arg);

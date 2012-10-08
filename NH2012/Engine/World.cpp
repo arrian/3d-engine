@@ -88,10 +88,11 @@ void World::initialise(std::string iniFile)
 
   //creating default scene
   Scene* scene = loadScene(defaultScene);
-  if(scene == NULL) throw NHException("Default scene creation failed.");
+  if(!scene) throw NHException("Default scene creation failed.");
   
   //creating player
   player = new Player(this);
+  if(!player) throw NHException("Initial player creation failed.");
   scene->addPlayer(player);
 
 #ifdef _DEBUG
@@ -159,13 +160,13 @@ const physx::PxTolerancesScale& World::getTolerancesScale()
 }
 
 //-------------------------------------------------------------------------------------
-void World::movePlayer(Player* player, Scene* target)
+/*void World::movePlayer(Player* player, Scene* target)
 {
   if(!player) return;
   Scene* old = player->getScene();
   if(old) old->removePlayer(player);
   if(target) target->addPlayer(player);
-}
+}*/
 
 //-------------------------------------------------------------------------------------
 void World::getSceneNames(std::vector<Ogre::String> &names)
@@ -385,7 +386,7 @@ void World::parseIni(std::string filename)
     freezeCollisionDebug = (pt.get<std::string>("Debug.FreezeCollision") == TRUE_STRING);
     showCollisionDebug = (pt.get<std::string>("Debug.ShowCollisionsDebug") == TRUE_STRING);
     showShadowDebug = (pt.get<std::string>("Debug.ShowShadowDebug") == TRUE_STRING);
-    defaultScene = (pt.get<int>("Debug.DefaultScene") == TRUE_STRING);
+    defaultScene = pt.get<int>("Debug.DefaultScene");
 
     physXVisualDebuggerIP = pt.get<std::string>("Debug.PhysXVisualDebuggerIP");
     physXVisualDebuggerPort = pt.get<int>("Debug.PhysXVisualDebuggerPort");

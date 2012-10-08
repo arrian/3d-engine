@@ -8,5 +8,5 @@
   <light tx="5" ty="1" tz="0" range="10" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <light tx="-5" ty="1" tz="0" range="10" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <sound id="1" tx="100" ty="0" tz="0" range="10" />
-  <architecture id="124" tx="-10" ty="12" tz="95" />
+  <architecture id="124" tx="-12" ty="10.5" tz="96.4" />
 </scene>

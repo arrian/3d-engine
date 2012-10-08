@@ -47,11 +47,12 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
     delete ssao;
     ssao = NULL;
   }
+  if(enableSSAO) ssao = new PFXSSAO(window, camera);//enables screen space ambient occlusion
 
   if(enableMotionBlur)//not working??
   {
-    Ogre::CompositorManager::getSingleton().addCompositor(viewport, "Ogre/Compositor/MotionBlur");
-    Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Ogre/Compositor/MotionBlur", true);
+    Ogre::CompositorManager::getSingleton().addCompositor(viewport, "Motion Blur");
+    Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Motion Blur", true);
   }
 
   if(enableBloom)
@@ -60,8 +61,8 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
     Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Bloom", true);
   }
 
-
-  if(enableSSAO) ssao = new PFXSSAO(window, camera);//enables screen space ambient occlusion
+  //Ogre::CompositorManager::getSingleton().addCompositor(viewport, "B&W");
+  //Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "B&W", true);
 }
 
 //-------------------------------------------------------------------------------------
