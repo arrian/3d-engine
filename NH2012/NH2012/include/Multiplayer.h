@@ -10,7 +10,7 @@
 
 #include "Game.h"
 
-#include "Client.h"
+//#include "Client.h"
  
 class Multiplayer :
   public Game
@@ -32,7 +32,7 @@ public:
   void sceneChanged();
 
 private:
-  Client* client;
+  //Client* client;
 
   boost::thread listener;
   void listen(const std::string& host, unsigned short port);

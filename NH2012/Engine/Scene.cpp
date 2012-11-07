@@ -74,6 +74,7 @@ Scene::Scene(World* world, int id)
   sceneManager->setAmbientLight(defaultAmbientColour);
 
   /*
+  //static spotlight
   Ogre::Light* light = sceneManager->createLight();
   light->setType(Ogre::Light::LT_SPOTLIGHT);
   light->setPosition(0,1,0);
@@ -85,12 +86,14 @@ Scene::Scene(World* world, int id)
   light->setCastShadows(true);
   */
 
-  sceneManager->getRootSceneNode()->attachObject(sceneManager->createEntity("theatre_ivy.mesh"));
+  //ivyTestNoDestruction = new PlantOgreMesh(sceneManager, PlantDesc(), Ogre::Vector3(0,0,0));
+
+  //sceneManager->getRootSceneNode()->attachObject(sceneManager->createEntity("theatre_ivy.mesh"));//static ivy mesh
 
   //building static geometry
   architecture->build();
 
-  //flockTest.setScene(this);
+  //flockTest.setScene(this);//boids flocking test
 }
 
 //-------------------------------------------------------------------------------------
@@ -221,9 +224,9 @@ void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range,
   light->setCastShadows(castShadows);
 
   //Same clipping as the camera set up
-  light->setShadowNearClipDistance(0.4f);
-  light->setShadowFarClipDistance(400.0f);
-  light->setShadowFarDistance(400.0f);
+  //light->setShadowNearClipDistance(0.4f);
+  //light->setShadowFarClipDistance(400.0f);
+  //light->setShadowFarDistance(400.0f);
 }
 
 //-------------------------------------------------------------------------------------
@@ -279,6 +282,8 @@ void Scene::update(double elapsedSeconds)
 
   totalElapsed += elapsedSeconds;
   //flockTest.update(totalElapsed);//evt.timeSinceLastFrame);
+
+  //ivyTestNoDestruction->grow(elapsedSeconds);
 
   if(!world->freezeCollisionDebug) advancePhysics(elapsedSeconds);
 }

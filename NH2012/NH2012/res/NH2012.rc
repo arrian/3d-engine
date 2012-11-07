@@ -13,25 +13,6 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Danish (Denmark) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DAN)
-LANGUAGE LANG_DANISH, SUBLANG_DEFAULT
-#pragma code_page(1252)
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_APPICON             ICON                    "NH2012.ico"
-#endif    // Danish (Denmark) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
 // English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)

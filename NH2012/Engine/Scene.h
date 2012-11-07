@@ -7,6 +7,7 @@
 #include <OgreParticleSystem.h>
 
 #include "Flock.h"
+#include "./Ivy/Ivy.h"
 
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxControllerManager.h"
@@ -97,6 +98,8 @@ private:
 
   //Flock flockTest;
   double totalElapsed;
+
+  //PlantOgreMesh* ivyTestNoDestruction;
 
 };
 

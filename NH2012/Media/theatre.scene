@@ -8,7 +8,7 @@
   <light tx="10" ty="1" tz="-1" range="10" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <light tx="-10" ty="1" tz="-1" range="10" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <sound id="1" tx="100" ty="0" tz="0" range="10" />
-  <particle name="Sun" template_name="Space/Sun" tx="0" ty="10" tz="-70" speed="1" />
+  <!--<particle name="Sun" template_name="Space/Sun" tx="0" ty="10" tz="-70" speed="1" />-->
   <architecture id="106" />
   <architecture id="107" />
   <architecture id="108" />

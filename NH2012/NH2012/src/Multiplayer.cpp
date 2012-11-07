@@ -19,7 +19,7 @@ Multiplayer::~Multiplayer(void)
 void Multiplayer::listen(const std::string& host, unsigned short port)
 {
   boost::asio::io_service io_service;
-  client = new Client(io_service, host, port);
+  //client = new Client(io_service, host, port);
 
   //while(true)
   //{
