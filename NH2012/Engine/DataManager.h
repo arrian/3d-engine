@@ -26,19 +26,28 @@ struct ArchitectureDesc
 
 struct ItemDesc
 {
-  ItemDesc(std::string name, std::string mesh)
+  ItemDesc(std::string name, std::string mesh, std::string simplifiedMesh)
     : name(name),
-      mesh(mesh)
+      mesh(mesh),
+      simplifiedMesh(simplifiedMesh),
+      dynamicFriction(0.7f),
+      staticFriction(0.7f),
+      resititution(0.5f),
+      density(0.1f)
   {
   }
 
   std::string mesh;
+  std::string simplifiedMesh;//mesh suitable for collison
   std::string name;
 
-  int value;
+  float dynamicFriction;
+  float staticFriction;
+  float resititution;
+  float density;
 
   int instanceID;
-  std::string simplifiedCollisionMesh;
+  
 };
 
 struct MonsterDesc
@@ -95,6 +104,10 @@ typedef std::map<int, ItemDesc > ItemList;
 #define SCENES_IDENTIFIER "#Scenes"
 #define SOUNDS_IDENTIFIER "#Sounds"
 #define ITEMS_IDENTIFIER "#Items"
+
+#define ID_INDEX 0
+#define NAME_INDEX 1
+#define MESH_INDEX 2
 
 /**
  * Handles the loading of all object information from the data files.

@@ -10,7 +10,7 @@
 
 #include "Bar.h"
 #include "ComponentList.h"
-#include "PhysicalInterface.h"
+#include "IdentificationInterface.h"
 #include "HumanoidSkeletonComponent.h"
 #include "CameraComponent.h"
 #include "VisualComponent.h"
@@ -18,7 +18,7 @@
 class Scene;
 class World;
 
-class Player : public PhysicalInterface
+class Player : public IdentificationInterface
 {
 public:
   Player(World* world);

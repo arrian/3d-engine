@@ -344,13 +344,15 @@ void HumanoidSkeletonComponent::setCrouch(bool crouch)
 {
   if(crouch)
   {
-    controller->setHeight(height/2);
+    controller->setHeight(height/2);//note: relies on falling for interpolation between crouching and standing
     head->setPosition(headCrouchOrigin);
     this->crouch = true;
   }
   else//stand
   {
     //scene->getPhysicsManager()->overlapAny(controller->getActor()->)
+    controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(0, height/4, 0));
+    //node->translate(0.0f, height/2, 0.0f);//height is modified from the centre so the controller needs to be moved up
     controller->setHeight(height);//need to check that there is no geometry above using overlapAny
     head->setPosition(headOrigin);
     std::cout << "warning: not checking for overlaps when swapping from crouching to standing." << std::endl;

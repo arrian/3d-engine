@@ -5,7 +5,7 @@
 
 //-------------------------------------------------------------------------------------
 Player::Player(World* world) 
-  : PhysicalInterface("Local", "Player"),
+  : IdentificationInterface("Local", "Player"),
     world(world),
     scene(NULL),
     camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
@@ -53,7 +53,7 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   node->setPosition(position);
   //node->attachObject(entity);
 
-  skeleton.mapPhysical((PhysicalInterface*) this);//needs to be before skeleton.setNode()
+  skeleton.mapPhysical((IdentificationInterface*) this);//needs to be before skeleton.setNode()
 
   visual.setNode(scene, node);
   skeleton.setNode(scene, node);

@@ -3,6 +3,7 @@
 
 PathfindManager::PathfindManager(void)
 {
+  
 }
 
 

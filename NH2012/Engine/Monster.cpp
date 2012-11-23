@@ -6,7 +6,7 @@
 //Monster::Monster(int id)
 Monster::Monster(MonsterDesc desc)
   : BasicComponent(),
-    PhysicalInterface(desc.name, "Monster"),
+    IdentificationInterface(desc.name, "Monster"),
     speed(desc.speed),
     height(1.75f),
     node(NULL),
@@ -16,7 +16,7 @@ Monster::Monster(MonsterDesc desc)
 {
   setPosition(Ogre::Vector3::ZERO);
   setTarget(Ogre::Vector3::ZERO);
-  skeleton.mapPhysical((PhysicalInterface*) this);
+  skeleton.mapPhysical((IdentificationInterface*) this);
   /*
   health = Bar(Ogre::Real(difficulty * difficulty));
   magic = Bar(Ogre::Real(difficulty * difficulty));

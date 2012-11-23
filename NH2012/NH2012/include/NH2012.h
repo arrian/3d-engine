@@ -4,6 +4,7 @@
 #include "../res/resource.h"
 #endif
 
+
 //#include <OgreLogManager.h>
 #include <OgreRoot.h>
 #include <OgreSceneManager.h>

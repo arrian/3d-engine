@@ -7,7 +7,7 @@
 
 //-------------------------------------------------------------------------------------
 Architecture::Architecture(Scene* scene)
-  : PhysicalInterface("Main", "Architecture"),
+  : IdentificationInterface("Main", "Architecture"),
     scene(scene),
     instanceNumber(0),
     geometry(scene->getSceneManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getscenemanager have been constructed

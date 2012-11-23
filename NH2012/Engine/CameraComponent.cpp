@@ -2,7 +2,7 @@
 
 #include "Scene.h"
 #include "NHException.h"
-#include "PhysicalInterface.h"
+#include "IdentificationInterface.h"
 
 #include "OgreCompositorManager.h"
 
@@ -118,7 +118,7 @@ void CameraComponent::rayQuery()
     if(hit.shape->userData)
     {
       if(hit.shape->userData == (void*) 0x43435453 || hit.shape->userData == (void*) 0x5354435b || hit.shape->userData == (void*) 0x53544343) return;//the default physx character controller insists on using the userData field for its own purposes putting the value 'CCTS' in.
-      PhysicalInterface* target = static_cast<PhysicalInterface*>(hit.shape->userData);//Unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
+      IdentificationInterface* target = static_cast<IdentificationInterface*>(hit.shape->userData);//Unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
       std::cout << target->getType() << ":" << target->getName() << ":" << target->getInstanceID() << std::endl;
       
     }

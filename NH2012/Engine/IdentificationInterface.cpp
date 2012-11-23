@@ -1,9 +1,9 @@
-#include "PhysicalInterface.h"
+#include "IdentificationInterface.h"
 
 #include "NHException.h"
 
 //-------------------------------------------------------------------------------------
-PhysicalInterface::PhysicalInterface(std::string name, std::string type)
+IdentificationInterface::IdentificationInterface(std::string name, std::string type)
   : instanceID(-1),
     name(name),
     type(type)
@@ -11,30 +11,30 @@ PhysicalInterface::PhysicalInterface(std::string name, std::string type)
 }
 
 //-------------------------------------------------------------------------------------
-PhysicalInterface::~PhysicalInterface(void)
+IdentificationInterface::~IdentificationInterface(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-int PhysicalInterface::getInstanceID()
+int IdentificationInterface::getInstanceID()
 {
   return instanceID;
 }
 
 //-------------------------------------------------------------------------------------
-void PhysicalInterface::setInstanceID(int instanceID)
+void IdentificationInterface::setInstanceID(int instanceID)
 {
   this->instanceID = instanceID;
 }
 
 //-------------------------------------------------------------------------------------
-std::string PhysicalInterface::getType()
+std::string IdentificationInterface::getType()
 {
   return type;
 }
 
 //-------------------------------------------------------------------------------------
-std::string PhysicalInterface::getName()
+std::string IdentificationInterface::getName()
 {
   return name;
 }

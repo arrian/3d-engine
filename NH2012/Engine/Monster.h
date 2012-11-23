@@ -12,7 +12,7 @@
 
 class Scene;
 
-class Monster : public BasicComponent, public PhysicalInterface
+class Monster : public BasicComponent, public IdentificationInterface
 {
 public:
   //Monster(int id);

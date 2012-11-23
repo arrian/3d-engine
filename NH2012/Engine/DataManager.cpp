@@ -29,34 +29,35 @@ void DataManager::addData(std::string file)
   std::string temp;
 
   std::string type = "";
-  std::string group = "";
+  //std::string group = "";
 
   while(std::getline(ifs, temp))
   {
     if(temp == "") continue;
     
-    if(temp[0] == '#') 
+    if(temp[0] == '#')//new data set
     {
       if(type == "") type = temp;
       continue;
     }
-    else if(temp[0] == '[')//assuming this line is the start of a new group
-    {
-      group = temp;
-      continue;
-    }
+    //else if(temp[0] == '[')//assuming this line is the start of a new group
+    //{
+    //  group = temp;
+    //  continue;
+    //}
 
     std::vector<std::string> words;
     boost::split(words, temp, boost::is_any_of(","), boost::token_compress_on);
 
     if(words.size() < 3) continue;
-    int id = std::atoi(words[0].c_str());
-    std::string name = words[1];
-    std::string mesh = words[2];
+    int id = std::atoi(words[ID_INDEX].c_str());
+    std::string name = words[NAME_INDEX];
+    std::string mesh = words[MESH_INDEX];
     
+    //Need to extend for other data options
     if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(std::pair<int, ArchitectureDesc>(id, ArchitectureDesc(name, mesh)));
     else if(type == MONSTERS_IDENTIFIER) monsters.insert(std::pair<int, MonsterDesc>(id, MonsterDesc(name, mesh)));
-    else if(type == ITEMS_IDENTIFIER) items.insert(std::pair<int, ItemDesc>(id, ItemDesc(name, mesh)));
+    else if(type == ITEMS_IDENTIFIER) items.insert(std::pair<int, ItemDesc>(id, ItemDesc(name, mesh, mesh)));
     else if(type == SCENES_IDENTIFIER) scenes.insert(std::pair<int, SceneDesc>(id, SceneDesc(name, mesh)));
     else if(type == SOUNDS_IDENTIFIER) sounds.insert(std::pair<int, SoundDesc>(id, SoundDesc(name, mesh)));
   }

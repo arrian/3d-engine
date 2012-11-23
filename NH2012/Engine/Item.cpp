@@ -7,21 +7,19 @@
 #include "geometry/PxConvexMeshGeometry.h"
 
 //-------------------------------------------------------------------------------------
-Item::Item(ItemDesc desc)
-  : BasicComponent(),
-    PhysicalInterface(desc.name, "Item"),
-    mesh(desc.mesh),
+Item::Item(ItemDesc desc, Ogre::Vector3 position, Ogre::Quaternion rotation)
+  : desc(desc),
+    BasicComponent(),
+    IdentificationInterface(desc.name, "Item"),
     entity(NULL),
+    simplifiedEntity(NULL),
     node(NULL),
-    friction(0.7f),
-    restitution(0.5f),
     material(NULL),
     physical(NULL),
-    shape(NULL),
-    tempCollisionDensity(0.1f)
+    shape(NULL)
 {
-  setPosition(Ogre::Vector3::ZERO);
-  setRotation(Ogre::Quaternion::IDENTITY);
+  setPosition(position);
+  setRotation(rotation);
 }
 
 //-------------------------------------------------------------------------------------
@@ -35,16 +33,16 @@ void Item::hasSceneChange()
   //Visual
   if(oldScene && entity) oldScene->getSceneManager()->destroyEntity(entity);
   entity = NULL;
-  entity = scene->getSceneManager()->createEntity(mesh);
+  entity = scene->getSceneManager()->createEntity(desc.mesh);
   node->attachObject(entity);
   node->setVisible(true);
 
   //Physical
-  if(!material) material = scene->getWorld()->getDefaultPhysicsMaterial();
+  simplifiedEntity = scene->getSceneManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
   if(physical) physical->release();//also releases shape
   loadPhysical();
 
-  mapPhysical((PhysicalInterface*) this);
+  mapPhysical((IdentificationInterface*) this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -84,6 +82,12 @@ void Item::setRotation(Ogre::Quaternion rotation)
 }
 
 //-------------------------------------------------------------------------------------
+void Item::setVelocity(Ogre::Vector3 velocity)
+{
+  physical->setLinearVelocity(physx::PxVec3(velocity.x, velocity.y, velocity.z));
+}
+
+//-------------------------------------------------------------------------------------
 Ogre::Vector3 Item::getPosition()
 {
   return position;
@@ -93,6 +97,19 @@ Ogre::Vector3 Item::getPosition()
 Ogre::Quaternion Item::getRotation()
 {
   return rotation;
+}
+
+//-------------------------------------------------------------------------------------
+Ogre::Vector3 Item::getVelocity()
+{
+  physx::PxVec3 vel = physical->getLinearVelocity();
+  return Ogre::Vector3(vel.x, vel.y, vel.z);
+}
+
+//-------------------------------------------------------------------------------------
+ItemDesc Item::getDescription()
+{
+  return desc;
 }
 
 //-------------------------------------------------------------------------------------
@@ -110,11 +127,12 @@ void Item::loadPhysical()
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
 
   physical = scene->getWorld()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
+  if(!material) material = scene->getWorld()->getPhysics()->createMaterial(desc.staticFriction, desc.dynamicFriction, desc.resititution);//need to index materials so i'm not creating them for every item instance  //scene->getWorld()->getDefaultPhysicsMaterial();
   //shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);//temporary simplified collision mesh
   shape = physical->createShape(physx::PxConvexMeshGeometry(scene->getWorld()->getFabricationManager()->createConvexMesh(entity->getMesh())), *material);//temporary complex collision mesh
   physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
   scene->getPhysicsManager()->addActor(*physical);
-  physx::PxRigidBodyExt::updateMassAndInertia(*physical, tempCollisionDensity);
+  physx::PxRigidBodyExt::updateMassAndInertia(*physical, desc.density);
 }
 
 

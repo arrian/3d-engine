@@ -1,4 +1,6 @@
 
+#pragma once
+
 //OIS
 #include <OISKeyboard.h>
 #include <OISMouse.h>

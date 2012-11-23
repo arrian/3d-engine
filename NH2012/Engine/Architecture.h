@@ -5,7 +5,7 @@
 #include <OgreString.h>
 #include <OgreVector3.h>
 
-#include "PhysicalInterface.h"
+#include "IdentificationInterface.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -23,7 +23,7 @@ struct StaticEntity
   }
 };
 
-class Architecture : public PhysicalInterface
+class Architecture : public IdentificationInterface
 {
 public:
   Architecture(Scene* scene);
