@@ -35,6 +35,7 @@ public:
   physx::PxU32 getBehaviorFlags(const physx::PxController& controller);
   physx::PxU32 getBehaviorFlags(const physx::PxObstacle& obstacle);
   Ogre::Vector3 getForwardPosition(Ogre::Real distance);/** Gets a position in front of the skeleton that is the given distance from it. */
+  Ogre::Vector3 getVelocity();
 
   //Setters
   void setMoveForward(bool state);
@@ -85,6 +86,7 @@ protected:
 
   //Relative Origins
   Ogre::Vector3 headOrigin;
+  Ogre::Vector3 headCrouchOrigin;
   Ogre::Vector3 leftHandOrigin;
   Ogre::Vector3 rightHandOrigin;
 

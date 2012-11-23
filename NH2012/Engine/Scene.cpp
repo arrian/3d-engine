@@ -106,7 +106,7 @@ Scene::~Scene(void)
   //Deleting all monsters
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
   {
-    world->releaseMonster(*it);
+    //world->releaseMonster(*it);
     if(*it) delete (*it);
     (*it) = NULL;
   }
@@ -114,7 +114,7 @@ Scene::~Scene(void)
   //Deleting all items
   for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it)
   {
-    world->releaseItem(*it);
+    //world->releaseItem(*it);
     if(*it) delete (*it);
     (*it) = NULL;
   }
@@ -197,7 +197,7 @@ void Scene::addPlayer(Player* player, int portalID)
 //-------------------------------------------------------------------------------------
 void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
-  Monster* monster = this->getWorld()->createMonster(id);
+  Monster* monster = new Monster(world->getDataManager()->getMonster(id));//this->getWorld()->createMonster(id);
   monster->setPosition(position);
   monster->setScene(this);
   monsters.push_back(monster);
@@ -206,7 +206,7 @@ void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation
 //-------------------------------------------------------------------------------------
 void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
-  Item* item = this->getWorld()->createItem(id);
+  Item* item = new Item(world->getDataManager()->getItem(id));//this->getWorld()->createItem(id);
   item->setPosition(position);
   item->setScene(this);
   items.push_back(item);
@@ -299,6 +299,39 @@ bool Scene::advancePhysics(double elapsedSeconds)
   return true;
 }
 
+
+//XML scene file string constants
+#define SCENE_STRING "scene"
+#define AMBIENT_RED_STRING "ambient_r"
+#define AMBIENT_GREEN_STRING "ambient_g"
+#define AMBIENT_BLUE_STRING "ambient_b"
+#define NORTH_STRING "north"
+#define ARCHITECTURE_STRING "architecture"
+#define ID_STRING "id"
+#define LIGHT_STRING "light"
+#define CAST_SHADOWS_STRING "cast_shadows"
+#define RANGE_STRING "range"
+#define ITEM_STRING "item"
+#define PORTAL_STRING "portal"
+#define TARGET_SCENE_ID_STRING "target_scene_id"
+#define TARGET_PORTAL_ID_STRING "target_portal_id"
+#define LOOK_AT_X_STRING "ltx"
+#define LOOK_AT_Y_STRING "lty"
+#define LOOK_AT_Z_STRING "ltz"
+#define PARTICLE_STRING "particle"
+#define NAME_STRING "name"
+#define TEMPLATE_NAME_STRING "template_name"
+
+#define TRANSLATION_X_STRING "tx"
+#define TRANSLATION_Y_STRING "ty"
+#define TRANSLATION_Z_STRING "tz"
+#define ROTATION_X_STRING "rx"
+#define ROTATION_Y_STRING "ry"
+#define ROTATION_Z_STRING "rz"
+#define SCALE_X_STRING "sx"
+#define SCALE_Y_STRING "sy"
+#define SCALE_Z_STRING "sz"
+
 //-------------------------------------------------------------------------------------
 void Scene::load(std::string file)
 {
@@ -314,61 +347,61 @@ void Scene::load(std::string file)
     //std::cout << &buffer[0] << std::endl; /*test the buffer */
 
     doc.parse<0>(&buffer[0]);
-    rapidxml::xml_node<>* root = doc.first_node("scene");
+    rapidxml::xml_node<>* root = doc.first_node(SCENE_STRING);//"scene");
 
-    defaultAmbientColour = getXMLColour(root, "ambient_r", "ambient_g", "ambient_b");
+    defaultAmbientColour = getXMLColour(root, AMBIENT_RED_STRING, AMBIENT_GREEN_STRING, AMBIENT_BLUE_STRING);//"ambient_r", "ambient_g", "ambient_b");
 
     
     //description attributes
-    north = boost::lexical_cast<float>(root->first_attribute("north")->value());
+    north = boost::lexical_cast<float>(root->first_attribute(NORTH_STRING)->value());
    
     //Architecture
-    rapidxml::xml_node<>* architectureNode = root->first_node("architecture");
+    rapidxml::xml_node<>* architectureNode = root->first_node(ARCHITECTURE_STRING);//"architecture");
     while(architectureNode != NULL)
     {
-      int id = boost::lexical_cast<int>(architectureNode->first_attribute("id")->value());
+      int id = boost::lexical_cast<int>(architectureNode->first_attribute(ID_STRING)->value());
       architecture->add(world->getDataManager()->getArchitecture(id).mesh, getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
-      architectureNode = architectureNode->next_sibling("architecture");
+      architectureNode = architectureNode->next_sibling(ARCHITECTURE_STRING);
     }
    
     //Lights
-    rapidxml::xml_node<>* lightNode = root->first_node("light");
+    rapidxml::xml_node<>* lightNode = root->first_node(LIGHT_STRING);//"light");
     while(lightNode != NULL)
     {
-      bool cast_shadows = boost::lexical_cast<bool>(lightNode->first_attribute("cast_shadows")->value());
-      float range = boost::lexical_cast<float>(lightNode->first_attribute("range")->value());
+      bool cast_shadows = boost::lexical_cast<bool>(lightNode->first_attribute(CAST_SHADOWS_STRING)->value());
+      float range = boost::lexical_cast<float>(lightNode->first_attribute(RANGE_STRING)->value());
       Ogre::ColourValue colour = getXMLColour(lightNode);
       addLight(getXMLPosition(lightNode),cast_shadows,range);
-      lightNode = lightNode->next_sibling("light");
+      lightNode = lightNode->next_sibling(LIGHT_STRING);
     }
     
     //Items
-    rapidxml::xml_node<>* itemNode = root->first_node("item");
+    rapidxml::xml_node<>* itemNode = root->first_node(ITEM_STRING);
     while(itemNode != NULL)
     {
-      int id = boost::lexical_cast<int>(itemNode->first_attribute("id")->value());
+      int id = boost::lexical_cast<int>(itemNode->first_attribute(ID_STRING)->value());
       addItem(id, getXMLPosition(itemNode), getXMLRotation(itemNode));
-      itemNode = itemNode->next_sibling("item");
+      itemNode = itemNode->next_sibling(ITEM_STRING);
     }    
     
     //Portals
-    rapidxml::xml_node<>* portalNode = root->first_node("portal");
+    rapidxml::xml_node<>* portalNode = root->first_node(PORTAL_STRING);
     while(portalNode != NULL)
     {
-      int id = boost::lexical_cast<int>(portalNode->first_attribute("id")->value());
-      int targetSceneID = boost::lexical_cast<int>(portalNode->first_attribute("target_scene_id")->value());
-      int targetPortalID = boost::lexical_cast<int>(portalNode->first_attribute("target_portal_id")->value());
-      addPortal(new Portal(id, targetSceneID, targetPortalID, getXMLPosition(portalNode), getXMLVector(portalNode, "ltx", "lty", "ltz")));
+      int id = boost::lexical_cast<int>(portalNode->first_attribute(ID_STRING)->value());
+      int targetSceneID = boost::lexical_cast<int>(portalNode->first_attribute(TARGET_SCENE_ID_STRING)->value());
+      int targetPortalID = boost::lexical_cast<int>(portalNode->first_attribute(TARGET_PORTAL_ID_STRING)->value());
+      addPortal(new Portal(id, targetSceneID, targetPortalID, getXMLPosition(portalNode), getXMLVector(portalNode, LOOK_AT_X_STRING, LOOK_AT_Y_STRING, LOOK_AT_Z_STRING)));
       if(defaultEntry == NULL && portals.size() > 0) defaultEntry = portals[0];//creating a default entry point
-      portalNode = portalNode->next_sibling("portal");
+      portalNode = portalNode->next_sibling(PORTAL_STRING);//"portal");
     }
 
     //Particles
-    rapidxml::xml_node<>* particleNode = root->first_node("particle");
+    rapidxml::xml_node<>* particleNode = root->first_node(PARTICLE_STRING);//"particle");
     while(particleNode != NULL)
     {
-      addParticles(particleNode->first_attribute("name")->value(), particleNode->first_attribute("template_name")->value(),getXMLPosition(particleNode));
-      particleNode = particleNode->next_sibling("particle");
+      addParticles(particleNode->first_attribute(NAME_STRING)->value(), particleNode->first_attribute(TEMPLATE_NAME_STRING)->value(),getXMLPosition(particleNode));
+      particleNode = particleNode->next_sibling(PARTICLE_STRING);
     }
   }
   catch (rapidxml::parse_error e)
@@ -411,7 +444,7 @@ Ogre::Vector3 Scene::getXMLVector(rapidxml::xml_node<>* node, std::string first,
 Ogre::Quaternion Scene::getXMLRotation(rapidxml::xml_node<>* node)
 {
   Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
-  Ogre::Vector3 components = getXMLVector(node, "rx", "ry", "rz");
+  Ogre::Vector3 components = getXMLVector(node, ROTATION_X_STRING, ROTATION_Y_STRING, ROTATION_Z_STRING);
   
   rotation.FromAngleAxis(Ogre::Degree(components.x), Ogre::Vector3::UNIT_X);
   rotation.FromAngleAxis(Ogre::Degree(components.y), Ogre::Vector3::UNIT_Y);
@@ -435,13 +468,13 @@ Ogre::ColourValue Scene::getXMLColour(rapidxml::xml_node<>* node, std::string fi
 //-------------------------------------------------------------------------------------
 Ogre::Vector3 Scene::getXMLScale(rapidxml::xml_node<>* node)
 {
-  return getXMLVector(node, "sx", "sy", "sz");
+  return getXMLVector(node, SCALE_X_STRING, SCALE_Y_STRING, SCALE_Z_STRING);//"sx", "sy", "sz");
 }
 
 //-------------------------------------------------------------------------------------
 Ogre::Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node)
 {
-  return getXMLVector(node, "tx", "ty", "tz");
+  return getXMLVector(node, TRANSLATION_X_STRING, TRANSLATION_Y_STRING, TRANSLATION_Z_STRING);//"tx", "ty", "tz");
 }
 
 //-------------------------------------------------------------------------------------

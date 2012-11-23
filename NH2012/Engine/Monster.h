@@ -15,7 +15,8 @@ class Scene;
 class Monster : public BasicComponent, public PhysicalInterface
 {
 public:
-  Monster(int id);
+  //Monster(int id);
+  Monster(MonsterDesc description);
   virtual ~Monster(void);
 
   void update(double elapsedSeconds);

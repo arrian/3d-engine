@@ -21,7 +21,7 @@
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/asio/ip/address.hpp>
 
-//OIS
+//Controls
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
@@ -37,6 +37,7 @@
 #include "cooking/PxCooking.h"
 
 //Local
+#include "Controls.h"
 #include "DataManager.h"
 #include "SoundManager.h"
 #include "FabricationManager.h"
@@ -50,35 +51,6 @@ class Monster;
 class Item;
 class Scene;
 
-//Keyboard and Mouse Controls
-struct Controls
-{
-  //Move
-  OIS::KeyCode moveForward;
-  OIS::KeyCode moveLeft;
-  OIS::KeyCode moveBack;
-  OIS::KeyCode moveRight;
-
-  //Actions
-  OIS::KeyCode jump;
-  OIS::KeyCode kick;
-  OIS::KeyCode run;
-
-  //Hands
-  OIS::MouseButtonID leftHand;
-  OIS::MouseButtonID rightHand;
-
-  //Miscellaneous
-  std::vector<OIS::KeyCode> quickslots;
-  OIS::KeyCode exit;
-
-  //Debug
-  OIS::KeyCode freezeCollision;
-  OIS::KeyCode addItem;
-  OIS::KeyCode addMonster;
-  OIS::KeyCode reset;
-  OIS::KeyCode console;
-};
 
 /************************************************************************/
 /* Contains the entire game world. Multiple scenes can be loaded at once*/
@@ -112,12 +84,12 @@ public:
   const physx::PxTolerancesScale& getTolerancesScale();//messy tolerance bind
 
   //Creation
-  Item* createItem(int id);
-  Monster* createMonster(int id);
+  //Item* createItem(int id);
+  //Monster* createMonster(int id);
 
   //Removal
-  void releaseItem(Item* item);
-  void releaseMonster(Monster* monster);
+  //void releaseItem(Item* item);
+  //void releaseMonster(Monster* monster);
   bool destroyScene(Ogre::String name);
 
   //Setters
@@ -175,8 +147,8 @@ private:
   
   //World Contents
   Player* player;//std::vector<Player> players;
-  std::vector<Monster*> monsters;
-  std::vector<Item*> items;
+  //std::vector<Monster*> monsters;
+  //std::vector<Item*> items;
   std::vector<Scene*> scenes;
 
   //PhysX

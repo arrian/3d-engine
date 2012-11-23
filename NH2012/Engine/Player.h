@@ -39,6 +39,7 @@ public:
   //Getters
   Ogre::Vector3 getPosition();
   Ogre::Quaternion getRotation();
+  Ogre::Vector3 getVelocity();
   Scene* getScene();//gets the scene the player is currently in
 
   //Injectors

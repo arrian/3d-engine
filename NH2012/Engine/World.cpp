@@ -15,9 +15,9 @@
 //-------------------------------------------------------------------------------------
 World::World(Ogre::Root* root)
   : root(root),
-    items(),
+    //items(),
     scenes(),
-    monsters(),
+    //monsters(),
     dataFiles(),
     dataManager(),
     soundManager(),
@@ -274,7 +274,7 @@ physx::PxMaterial* World::getDefaultPhysicsMaterial()
 }
 
 //-------------------------------------------------------------------------------------
-Item* World::createItem(int id)
+/*Item* World::createItem(int id)
 {
   Item* item = new Item(dataManager.getItem(id));
   items.push_back(item);
@@ -287,10 +287,10 @@ Monster* World::createMonster(int id)
   Monster* monster = new Monster(id);
   monsters.push_back(monster);
   return monster;
-}
+}*/
 
 //-------------------------------------------------------------------------------------
-void World::releaseItem(Item* item)
+/*void World::releaseItem(Item* item)
 {
   //!!! fix to delete from items list
   if(item) delete item;
@@ -301,7 +301,7 @@ void World::releaseMonster(Monster* monster)
 {
   //!!! fix to delete from monsters list
   if(monster) delete monster;
-}
+}*/
 
 //-------------------------------------------------------------------------------------
 void World::parseIni(std::string filename)
@@ -335,6 +335,7 @@ void World::parseIni(std::string filename)
     controls.jump = OIS::KC_SPACE;
     controls.kick = OIS::KC_F;
     controls.run = OIS::KC_LSHIFT;
+    controls.crouch = OIS::KC_LCONTROL;
     controls.leftHand = OIS::MB_Left;
     controls.rightHand = OIS::MB_Right;
 

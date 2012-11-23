@@ -19,6 +19,10 @@ public:
 
   void setInstanceID(int instanceID);
 
+  //virtual void setPosition(Ogre::Vector3 position) = 0;
+  //virtual Ogre::Vector3 getPosition() = 0;
+  //maybe add more getters and setters here. eg. velocity and facing
+
 protected:
   int instanceID;
   std::string name;

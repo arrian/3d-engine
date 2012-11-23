@@ -81,7 +81,7 @@ private:
   /*Defines if the scene should receive frame updates.*/
   bool active;
 
-  int instanceNumber;//Tracks the identification numbers for the objects in the scene.
+  int instanceNumber;//tracks the number of object instances in the scene
   
   void load(std::string file);
   Ogre::Vector3 getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third);

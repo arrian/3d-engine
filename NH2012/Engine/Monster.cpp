@@ -3,26 +3,25 @@
 #include "Scene.h"
 
 //-------------------------------------------------------------------------------------
-Monster::Monster(int id)
+//Monster::Monster(int id)
+Monster::Monster(MonsterDesc desc)
   : BasicComponent(),
-    PhysicalInterface("NameError", "Monster"),
-    speed(200.0f),
+    PhysicalInterface(desc.name, "Monster"),
+    speed(desc.speed),
     height(1.75f),
     node(NULL),
     intelligence(),
-    visual("actor.mesh"),
+    visual(desc.mesh),
     skeleton()
 {
   setPosition(Ogre::Vector3::ZERO);
   setTarget(Ogre::Vector3::ZERO);
-
   skeleton.mapPhysical((PhysicalInterface*) this);
   /*
   health = Bar(Ogre::Real(difficulty * difficulty));
   magic = Bar(Ogre::Real(difficulty * difficulty));
   level = Bar(Ogre::Real(difficulty));
   */
-
 }
 
 //-------------------------------------------------------------------------------------

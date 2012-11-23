@@ -15,6 +15,7 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent()
     leftHandOrigin(0,-0.5,0.5),//test value
     rightHandOrigin(0,0.5,0.5),//test value
     headOrigin(0,1.4,0),
+    headCrouchOrigin(0,0.7,0),
     speed(1),
     gravity(-9.81f),
     velocity(Ogre::Vector3::ZERO),
@@ -315,6 +316,12 @@ Ogre::Vector3 HumanoidSkeletonComponent::getForwardPosition(Ogre::Real distance)
 }
 
 //-------------------------------------------------------------------------------------
+Ogre::Vector3 HumanoidSkeletonComponent::getVelocity()
+{
+  return velocity;
+}
+
+//-------------------------------------------------------------------------------------
 bool HumanoidSkeletonComponent::isLeftHand()
 {
   return moveLeftHand;
@@ -338,12 +345,14 @@ void HumanoidSkeletonComponent::setCrouch(bool crouch)
   if(crouch)
   {
     controller->setHeight(height/2);
+    head->setPosition(headCrouchOrigin);
     this->crouch = true;
   }
   else//stand
   {
     //scene->getPhysicsManager()->overlapAny(controller->getActor()->)
     controller->setHeight(height);//need to check that there is no geometry above using overlapAny
+    head->setPosition(headOrigin);
     std::cout << "warning: not checking for overlaps when swapping from crouching to standing." << std::endl;
     this->crouch = false;
   }

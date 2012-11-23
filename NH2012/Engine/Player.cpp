@@ -15,7 +15,7 @@ Player::Player(World* world)
     lookResponsiveness(0.15f),
     handMoveScalar(0.1f),
     skeleton(),
-    itemGenerationID(353)
+    itemGenerationID(353)//temporarily generating a watermelon when the 1 key is pressed
 {
   
 }
@@ -107,7 +107,8 @@ void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
   else if (evt.key == world->controls.moveLeft) skeleton.setMoveLeft(isDown);
   else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(isDown);
   else if (evt.key == world->controls.run) skeleton.setRun(isDown);
-  else if (evt.key == OIS::KC_1) addItem = isDown;
+  else if (evt.key == world->controls.crouch) skeleton.setCrouch(isDown);
+  else if (evt.key == OIS::KC_1) addItem = isDown; 
 }
 
 //-------------------------------------------------------------------------------------
@@ -164,6 +165,12 @@ Ogre::Vector3 Player::getPosition()
 Ogre::Quaternion Player::getRotation()
 {
   return node->getOrientation();
+}
+
+//-------------------------------------------------------------------------------------
+Ogre::Vector3 Player::getVelocity()
+{
+  return skeleton.getVelocity();
 }
 
 //-------------------------------------------------------------------------------------
