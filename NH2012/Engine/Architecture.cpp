@@ -15,7 +15,9 @@ Architecture::Architecture(Scene* scene)
     actors(),
     statics(),
     defaultFriction(0.2f),
-    defaultRestitution(0.7f)
+    defaultRestitution(0.7f),
+    pathfind(scene),
+    isBuilt(false)
 {
   //geometry->setCastShadows(true);//produces no shadows at all?
 }
@@ -88,15 +90,35 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   actors.push_back(actor);
   instanceNumber++;
 
+  pathfind.addEntity(entity);
   geometry->addEntity(entity, position, quaternion, scale);
 }
 
 //-------------------------------------------------------------------------------------
 void Architecture::build()
 {
+  if(isBuilt) throw NHException("Attempting to build the architecture multiple times.");
+  isBuilt = true;
+
+  //attach all entities to a scenenode
+  //add scenenode to geometry
+  //add scenenode entities to pathfind
+  //build pathfind
+  //build geometry
+  //detach scenenode from scene
+  //destroy all associated entites
+  
+
+
+  //old
   geometry->build();
+  pathfind.build();
 }
 
+//-------------------------------------------------------------------------------------
+void Architecture::update(double elapsedSeconds)
+{
 
-
+  pathfind.update(elapsedSeconds);
+}
 

@@ -15,12 +15,10 @@ class Scene;
 class Monster : public BasicComponent, public IdentificationInterface
 {
 public:
-  //Monster(int id);
   Monster(MonsterDesc description);
   virtual ~Monster(void);
 
   void update(double elapsedSeconds);
-  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void setPosition(Ogre::Vector3 position);
   void setTarget(Ogre::Vector3 target);//Sets the monsters target position.
@@ -28,11 +26,11 @@ public:
   friend bool operator==(const Monster& x, const Monster& y);
 
 protected:
+  MonsterDesc description;
+
   Ogre::SceneNode* node;
   Ogre::Vector3 position;
   Ogre::Vector3 target;
-  float speed;//Number of units to move per second ~100 = 1 metre per second.
-  float height;//Height of the actor in units.
 
   IntelligenceComponent intelligence;
   HumanoidSkeletonComponent skeleton;

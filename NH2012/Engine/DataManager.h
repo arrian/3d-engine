@@ -13,27 +13,31 @@
 
 struct ArchitectureDesc
 {
-  ArchitectureDesc(std::string name, std::string mesh)
+  ArchitectureDesc(int id, std::string name, std::string mesh)
     : name(name),
-      mesh(mesh)
+      mesh(mesh),
+      id(id)
   {
   }
 
   std::string mesh;
   std::string name;
+
+  int id;
 };
 
 
 struct ItemDesc
 {
-  ItemDesc(std::string name, std::string mesh, std::string simplifiedMesh)
+  ItemDesc(int id, std::string name, std::string mesh, std::string simplifiedMesh)
     : name(name),
       mesh(mesh),
       simplifiedMesh(simplifiedMesh),
       dynamicFriction(0.7f),
       staticFriction(0.7f),
       resititution(0.5f),
-      density(0.1f)
+      density(0.1f),
+      id(id)
   {
   }
 
@@ -46,51 +50,62 @@ struct ItemDesc
   float resititution;
   float density;
 
-  int instanceID;
+  int id;
+  //int instanceID;
   
 };
 
 struct MonsterDesc
 {
-  MonsterDesc(std::string name, std::string mesh)
+  MonsterDesc(int id, std::string name, std::string mesh)
     : name(name),
-      mesh(mesh)
+      mesh(mesh),
+      height(1.75f),
+      speed(1.0f),
+      health(100.0f),
+      id(id)
   {
   }
 
   std::string mesh;
   std::string name;
 
-  float frequency;
   float speed;
-  float size;
-  float weight;
+  float height;
+  float health;
 
-  int instanceID;
+  int id;
+  //int instanceID;
 };
 
 struct SceneDesc
 {
-  SceneDesc(std::string name, std::string file)
+  SceneDesc(int id, std::string name, std::string file)
     : name(name),
-      file(file)
+      file(file),
+      id(id)
   {
   }
 
   std::string file;
   std::string name;
+
+  int id;
 };
 
 struct SoundDesc
 {
-  SoundDesc(std::string name, std::string file)
+  SoundDesc(int id, std::string name, std::string file)
     : name(name),
-      file(file)
+      file(file),
+      id(id)
   {
   }
 
   std::string file;
   std::string name;
+
+  int id;
 };
 
 typedef std::map<int, ArchitectureDesc > ArchitectureList;

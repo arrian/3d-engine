@@ -6,6 +6,7 @@
 #include <OgreVector3.h>
 
 #include "IdentificationInterface.h"
+#include "PathfindManager.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -34,8 +35,12 @@ public:
   void add(Ogre::String meshName, Ogre::Vector3 position = Ogre::Vector3(0,0,0), Ogre::Quaternion quaternion = Ogre::Quaternion::IDENTITY, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE);
 
   void build();
+
+  void update(double elapsedSeconds);
 private:
   Scene* scene;
+
+  bool isBuilt;//true if build has been called
   
   /*! Current number of physics items.*/
   int instanceNumber;
@@ -50,5 +55,7 @@ private:
 
   float defaultFriction;
   float defaultRestitution;
+  
+  PathfindManager pathfind;
 };
 

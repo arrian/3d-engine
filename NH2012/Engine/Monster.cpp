@@ -7,8 +7,7 @@
 Monster::Monster(MonsterDesc desc)
   : BasicComponent(),
     IdentificationInterface(desc.name, "Monster"),
-    speed(desc.speed),
-    height(1.75f),
+    description(desc),
     node(NULL),
     intelligence(),
     visual(desc.mesh),

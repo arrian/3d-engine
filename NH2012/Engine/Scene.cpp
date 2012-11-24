@@ -270,6 +270,8 @@ void Scene::update(double elapsedSeconds)
   
   physicsManager->fetchResults(true);
   
+  architecture->update(elapsedSeconds);//only really needed for pathfinding debug display
+
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->update(elapsedSeconds);//iterate monsters
   for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) (*it)->update(elapsedSeconds);//iterate items
   

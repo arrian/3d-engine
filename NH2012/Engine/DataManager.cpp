@@ -55,11 +55,11 @@ void DataManager::addData(std::string file)
     std::string mesh = words[MESH_INDEX];
     
     //Need to extend for other data options
-    if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(std::pair<int, ArchitectureDesc>(id, ArchitectureDesc(name, mesh)));
-    else if(type == MONSTERS_IDENTIFIER) monsters.insert(std::pair<int, MonsterDesc>(id, MonsterDesc(name, mesh)));
-    else if(type == ITEMS_IDENTIFIER) items.insert(std::pair<int, ItemDesc>(id, ItemDesc(name, mesh, mesh)));
-    else if(type == SCENES_IDENTIFIER) scenes.insert(std::pair<int, SceneDesc>(id, SceneDesc(name, mesh)));
-    else if(type == SOUNDS_IDENTIFIER) sounds.insert(std::pair<int, SoundDesc>(id, SoundDesc(name, mesh)));
+    if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(std::pair<int, ArchitectureDesc>(id, ArchitectureDesc(id, name, mesh)));
+    else if(type == MONSTERS_IDENTIFIER) monsters.insert(std::pair<int, MonsterDesc>(id, MonsterDesc(id, name, mesh)));
+    else if(type == ITEMS_IDENTIFIER) items.insert(std::pair<int, ItemDesc>(id, ItemDesc(id, name, mesh, mesh)));//change second mesh argument to the simplified mesh
+    else if(type == SCENES_IDENTIFIER) scenes.insert(std::pair<int, SceneDesc>(id, SceneDesc(id, name, mesh)));
+    else if(type == SOUNDS_IDENTIFIER) sounds.insert(std::pair<int, SoundDesc>(id, SoundDesc(id, name, mesh)));
   }
 }
 
