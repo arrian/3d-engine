@@ -4,10 +4,11 @@
 
 //-------------------------------------------------------------------------------------
 //Monster::Monster(int id)
-Monster::Monster(MonsterDesc desc)
+Monster::Monster(MonsterDesc desc, PathfindManager* pathfinder)
   : BasicComponent(),
     IdentificationInterface(desc.name, "Monster"),
     description(desc),
+    pathfinder(pathfinder),
     node(NULL),
     intelligence(),
     visual(desc.mesh),
@@ -27,7 +28,6 @@ Monster::Monster(MonsterDesc desc)
 Monster::~Monster(void)
 {
 
-  //scene->getSceneManager()->destroySceneNode(node);
 }
 
 //-------------------------------------------------------------------------------------

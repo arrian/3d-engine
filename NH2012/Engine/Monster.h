@@ -4,6 +4,7 @@
 #include <OgreString.h>
 #include <OgreVector3.h>
 
+#include "PathfindManager.h"
 #include "BasicComponent.h"
 #include "HumanoidSkeletonComponent.h"
 #include "IntelligenceComponent.h"
@@ -15,7 +16,7 @@ class Scene;
 class Monster : public BasicComponent, public IdentificationInterface
 {
 public:
-  Monster(MonsterDesc description);
+  Monster(MonsterDesc description, PathfindManager* pathfinder);
   virtual ~Monster(void);
 
   void update(double elapsedSeconds);
@@ -27,6 +28,7 @@ public:
 
 protected:
   MonsterDesc description;
+  PathfindManager* pathfinder;
 
   Ogre::SceneNode* node;
   Ogre::Vector3 position;

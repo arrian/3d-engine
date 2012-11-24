@@ -1,7 +1,7 @@
 #include "PathfindManager.h"
 
 
-PathfindManager::PathfindManager(Scene* scene)
+PathfindManager::PathfindManager(Ogre::SceneManager* sceneManager)
   : recast(NULL),
     entities(),
     geom(NULL)
@@ -9,7 +9,7 @@ PathfindManager::PathfindManager(Scene* scene)
   OgreRecastConfigParams params;
   //set up parameters here
 
-  recast = new OgreRecast(scene->getSceneManager(), params);
+  recast = new OgreRecast(sceneManager, params);
 }
 
 PathfindManager::~PathfindManager(void)

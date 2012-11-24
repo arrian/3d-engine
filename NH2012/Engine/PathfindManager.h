@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Scene.h"
+#include <OgreSceneManager.h>
 #include "./Crowd/OgreRecast.h"
 
 class PathfindManager
 {
 public:
-  PathfindManager(Scene* scene);
+  PathfindManager(Ogre::SceneManager* sceneManager);
   virtual ~PathfindManager(void);
 
   OgreRecast* recast;

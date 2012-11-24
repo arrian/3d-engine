@@ -6,17 +6,16 @@
 #include "OgreStaticGeometry.h"
 
 //-------------------------------------------------------------------------------------
-Architecture::Architecture(Scene* scene)
+Architecture::Architecture(Scene* scene, PathfindManager* pathfinder)
   : IdentificationInterface("Main", "Architecture"),
     scene(scene),
+    rootNode(scene->getSceneManager()->getRootSceneNode()->createChildSceneNode()),
     instanceNumber(0),
     geometry(scene->getSceneManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getscenemanager have been constructed
     nodes(),
     actors(),
     statics(),
-    defaultFriction(0.2f),
-    defaultRestitution(0.7f),
-    pathfind(scene),
+    pathfinder(pathfinder),
     isBuilt(false)
 {
   //geometry->setCastShadows(true);//produces no shadows at all?
@@ -48,9 +47,9 @@ Architecture::~Architecture(void)
 }
 
 //-------------------------------------------------------------------------------------
-void Architecture::add(Ogre::String meshName, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
+void Architecture::add(ArchitectureDesc description, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
-  addStaticTrimesh(meshName, defaultRestitution, defaultFriction, position, quaternion);
+  addStaticTrimesh(description.mesh, description.restitution, description.friction, position, quaternion);
 }
 
 //-------------------------------------------------------------------------------------
@@ -90,8 +89,15 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   actors.push_back(actor);
   instanceNumber++;
 
-  pathfind.addEntity(entity);
-  geometry->addEntity(entity, position, quaternion, scale);
+
+  Ogre::SceneNode* child = rootNode->createChildSceneNode();
+  child->setPosition(position);
+  child->setOrientation(quaternion);
+  child->setScale(scale);
+  child->attachObject(entity);
+
+  if(pathfinder) pathfinder->addEntity(entity);
+  //geometry->addEntity(entity, position, quaternion, scale);
 }
 
 //-------------------------------------------------------------------------------------
@@ -100,25 +106,18 @@ void Architecture::build()
   if(isBuilt) throw NHException("Attempting to build the architecture multiple times.");
   isBuilt = true;
 
-  //attach all entities to a scenenode
-  //add scenenode to geometry
-  //add scenenode entities to pathfind
-  //build pathfind
-  //build geometry
-  //detach scenenode from scene
-  //destroy all associated entites
-  
+  if(pathfinder) pathfinder->build();
 
-
-  //old
+  geometry->addSceneNode(rootNode);
   geometry->build();
-  pathfind.build();
+
+  scene->destroySceneNode(rootNode);
+  //is there anything leftover here?
 }
 
 //-------------------------------------------------------------------------------------
 void Architecture::update(double elapsedSeconds)
 {
-
-  pathfind.update(elapsedSeconds);
+  if(pathfinder) pathfinder->update(elapsedSeconds);
 }
 

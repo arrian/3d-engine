@@ -4,9 +4,11 @@
 
 #include <OgreString.h>
 #include <OgreVector3.h>
+#include <OgreSceneNode.h>
 
 #include "IdentificationInterface.h"
 #include "PathfindManager.h"
+#include "DataManager.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -27,18 +29,20 @@ struct StaticEntity
 class Architecture : public IdentificationInterface
 {
 public:
-  Architecture(Scene* scene);
+  Architecture(Scene* scene, PathfindManager* pathfinder = NULL);
 
   ~Architecture(void);
 
   /*! Adds a static mesh to the current dungeon architecture.*/
-  void add(Ogre::String meshName, Ogre::Vector3 position = Ogre::Vector3(0,0,0), Ogre::Quaternion quaternion = Ogre::Quaternion::IDENTITY, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE);
+  void add(ArchitectureDesc description, Ogre::Vector3 position = Ogre::Vector3(0,0,0), Ogre::Quaternion quaternion = Ogre::Quaternion::IDENTITY, Ogre::Vector3 scale = Ogre::Vector3::UNIT_SCALE);
 
   void build();
 
   void update(double elapsedSeconds);
 private:
   Scene* scene;
+
+  Ogre::SceneNode* rootNode;
 
   bool isBuilt;//true if build has been called
   
@@ -56,6 +60,6 @@ private:
   float defaultFriction;
   float defaultRestitution;
   
-  PathfindManager pathfind;
+  PathfindManager* pathfinder;
 };
 

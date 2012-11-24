@@ -16,12 +16,17 @@ struct ArchitectureDesc
   ArchitectureDesc(int id, std::string name, std::string mesh)
     : name(name),
       mesh(mesh),
-      id(id)
+      id(id),
+      friction(0.2f),
+      restitution(0.5f)
   {
   }
 
   std::string mesh;
   std::string name;
+
+  float friction;
+  float restitution;
 
   int id;
 };
@@ -107,6 +112,17 @@ struct SoundDesc
 
   int id;
 };
+
+/* //implement later
+struct PlayerDesc
+{
+  PlayerDesc()
+  {
+  }
+
+
+
+};*/
 
 typedef std::map<int, ArchitectureDesc > ArchitectureList;
 typedef std::map<int, MonsterDesc > MonsterList;

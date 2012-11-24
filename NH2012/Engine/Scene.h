@@ -6,6 +6,7 @@
 #include <OgreEntity.h>
 #include <OgreParticleSystem.h>
 
+#include "PathfindManager.h"
 #include "Flock.h"
 #include "./Ivy/Ivy.h"
 
@@ -52,10 +53,16 @@ public:
   physx::PxScene* getPhysicsManager();
   physx::PxControllerManager* getControllerManager();
   World* getWorld();
+  Architecture* getArchitecture();
+  PathfindManager* getPathfindManager();
   
   void update(double elapsedSeconds);
 
   bool isActive();
+
+  //utility to detroy a scene node and all child nodes and entities
+  void destroyAllAttachedMoveables(Ogre::SceneNode* node);
+  void destroySceneNode(Ogre::SceneNode* node);
   
 private:
   int id;
@@ -69,7 +76,8 @@ private:
   Ogre::SceneManager* sceneManager;
   physx::PxScene* physicsManager;
   physx::PxControllerManager* controllerManager;//may only need one manager in the world
-
+  PathfindManager pathfinder;
+  
   Architecture* architecture;
   std::vector<Ogre::Light*> lights;
   std::vector<Ogre::ParticleSystem*> particles;

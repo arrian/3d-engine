@@ -27,6 +27,7 @@ Scene::Scene(World* world, int id)
     stepSize(1.0 / 60.0),
     accumulator(0.0),
     active(false),
+    pathfinder(sceneManager),
     //flockTest(100),
     totalElapsed(0.0),
     particles(),
@@ -197,7 +198,7 @@ void Scene::addPlayer(Player* player, int portalID)
 //-------------------------------------------------------------------------------------
 void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
-  Monster* monster = new Monster(world->getDataManager()->getMonster(id));//this->getWorld()->createMonster(id);
+  Monster* monster = new Monster(world->getDataManager()->getMonster(id), &pathfinder);//this->getWorld()->createMonster(id);
   monster->setPosition(position);
   monster->setScene(this);
   monsters.push_back(monster);
@@ -362,7 +363,7 @@ void Scene::load(std::string file)
     while(architectureNode != NULL)
     {
       int id = boost::lexical_cast<int>(architectureNode->first_attribute(ID_STRING)->value());
-      architecture->add(world->getDataManager()->getArchitecture(id).mesh, getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
+      architecture->add(world->getDataManager()->getArchitecture(id), getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
       architectureNode = architectureNode->next_sibling(ARCHITECTURE_STRING);
     }
    
@@ -497,4 +498,44 @@ Portal* Scene::getDefaultPortal()
   return getPortal(0);//could make more intelligent
 }
 
+//-------------------------------------------------------------------------------------
+void Scene::destroyAllAttachedMoveables(Ogre::SceneNode* node)
+{
+  if(!node) return;
+
+  // Destroy all the attached objects
+  Ogre::SceneNode::ObjectIterator itObject = node->getAttachedObjectIterator();
+
+  while (itObject.hasMoreElements()) node->getCreator()->destroyMovableObject(itObject.getNext());
+
+  // Recurse to child SceneNodes
+  Ogre::SceneNode::ChildNodeIterator itChild = node->getChildIterator();
+
+  while (itChild.hasMoreElements())
+  {
+    Ogre::SceneNode* pChildNode = static_cast<Ogre::SceneNode*>(itChild.getNext());
+    destroyAllAttachedMoveables(pChildNode);
+  }
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::destroySceneNode(Ogre::SceneNode* node)
+{
+  if(!node) return;
+  destroyAllAttachedMoveables(node);
+  node->removeAndDestroyAllChildren();
+  node->getCreator()->destroySceneNode(node);
+}
+
+//-------------------------------------------------------------------------------------
+Architecture* Scene::getArchitecture()
+{
+  return architecture;
+}
+
+//-------------------------------------------------------------------------------------
+PathfindManager* Scene::getPathfindManager()
+{
+  return &pathfinder;
+}
 
