@@ -8,6 +8,9 @@
 
 #include <boost/algorithm/string.hpp>
 
+#include <OgreColourValue.h>
+#include <OgreVector3.h>
+
 #include "NHException.h"
 
 
@@ -56,8 +59,6 @@ struct ItemDesc
   float density;
 
   int id;
-  //int instanceID;
-  
 };
 
 struct MonsterDesc
@@ -80,7 +81,6 @@ struct MonsterDesc
   float health;
 
   int id;
-  //int instanceID;
 };
 
 struct SceneDesc
@@ -88,7 +88,14 @@ struct SceneDesc
   SceneDesc(int id, std::string name, std::string file)
     : name(name),
       file(file),
-      id(id)
+      id(id),
+      ambientLight(0.1f,0.1f,0.1f),
+      shadowColour(1.0f,1.0f,1.0f),
+      gravity(0.0f, -9.81f, 0.0f),
+      north(0.0f, 0.0f, 1.0f),
+      fogStart(100.0f),
+      fogEnd(200.0f),
+      fogColour(0.5f,0.5f,0.5f)
   {
   }
 
@@ -96,6 +103,14 @@ struct SceneDesc
   std::string name;
 
   int id;
+
+  Ogre::ColourValue ambientLight;
+  Ogre::ColourValue shadowColour;
+  Ogre::Vector3 gravity;
+  Ogre::Vector3 north;
+  float fogStart;
+  float fogEnd;
+  Ogre::ColourValue fogColour;
 };
 
 struct SoundDesc

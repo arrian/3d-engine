@@ -16,7 +16,7 @@ class Scene;
 class Monster : public BasicComponent, public IdentificationInterface
 {
 public:
-  Monster(MonsterDesc description, PathfindManager* pathfinder);
+  Monster(MonsterDesc description);
   virtual ~Monster(void);
 
   void update(double elapsedSeconds);
@@ -28,7 +28,6 @@ public:
 
 protected:
   MonsterDesc description;
-  PathfindManager* pathfinder;
 
   Ogre::SceneNode* node;
   Ogre::Vector3 position;
@@ -39,5 +38,8 @@ protected:
   VisualComponent visual;
 
   void hasSceneChange();
+
+
+  
 };
 

@@ -36,6 +36,7 @@ public:
   physx::PxU32 getBehaviorFlags(const physx::PxObstacle& obstacle);
   Ogre::Vector3 getForwardPosition(Ogre::Real distance);/** Gets a position in front of the skeleton that is the given distance from it. */
   Ogre::Vector3 getVelocity();
+  float getSpeed();
 
   //Setters
   void setMoveForward(bool state);
@@ -55,6 +56,7 @@ public:
   void headRelative(Ogre::Degree x, Ogre::Degree y);
   void leftHandRelative(Ogre::Degree x, Ogre::Degree y);
   void rightHandRelative(Ogre::Degree x, Ogre::Degree y);
+  void followPath(std::vector<Ogre::Vector3> path);
 
   //Assertions
   bool isLeftHand();
@@ -105,7 +107,7 @@ protected:
 
   //State Data
   Ogre::Vector3 velocity;
-  Ogre::Real speed;
+  float speed;
   float gravity;
   bool collisionEnabled;
   
@@ -121,5 +123,8 @@ protected:
   float runScalar;
   float moveScalar;
   float jumpVelocity;
+
+  bool isFollowingPath;
+  std::vector<Ogre::Vector3> path;
 };
 

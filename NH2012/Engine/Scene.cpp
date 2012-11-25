@@ -13,16 +13,15 @@
 #include "Flock.h"
 
 //-------------------------------------------------------------------------------------
-Scene::Scene(World* world, int id)
+Scene::Scene(World* world, SceneDesc desc)
   : world(world),
-    id(id),
+    desc(desc),
     sceneManager(world->getRoot()->createSceneManager(Ogre::ST_GENERIC)),
     controllerManager(NULL),
     physicsManager(NULL),
     instanceNumber(0),
     defaultEntry(NULL),
     player(NULL),
-    defaultAmbientColour(0.1f,0.1f,0.1f),
     numberPhysicsCPUThreads(4),
     stepSize(1.0 / 60.0),
     accumulator(0.0),
@@ -39,40 +38,33 @@ Scene::Scene(World* world, int id)
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
   //scene physics
-  physx::PxSceneDesc desc(world->getTolerancesScale());
-  desc.gravity = physx::PxVec3(0.0f, world->gravity, 0.0f);
+  physx::PxSceneDesc physicsDesc(world->getTolerancesScale());
+  physicsDesc.gravity = physx::PxVec3(desc.gravity.x, desc.gravity.y, desc.gravity.z);
   
-  desc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
-  if(!desc.cpuDispatcher) throw NHException("Could not create scene CPU dispatcher.");
+  physicsDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
+  if(!physicsDesc.cpuDispatcher) throw NHException("Could not create scene CPU dispatcher.");
 
-  desc.filterShader = &physx::PxDefaultSimulationFilterShader;
-  if(!desc.filterShader) throw NHException("Filter shader creation failed.");
+  physicsDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
+  if(!physicsDesc.filterShader) throw NHException("Filter shader creation failed.");
   
-  physicsManager = world->getPhysics()->createScene(desc);
+  physicsManager = world->getPhysics()->createScene(physicsDesc);
   if(!physicsManager) throw NHException("Could not create scene physics manager.");
 
   controllerManager = PxCreateControllerManager(world->getPhysics()->getFoundation());
   if(!controllerManager) throw NHException("Could not create scene controller manager.");
 
-  if(world->enableShadows) 
-  {
-    sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
-    sceneManager->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5));
-    sceneManager->setShadowTextureSize(1024);
-    sceneManager->setShadowTextureCount(5);
-  }
+  setShadowsEnabled(world->enableShadows);
 
-  sceneManager->setShowDebugShadows(world->isDebug());
-  sceneManager->showBoundingBoxes(world->isDebug());
+  //sceneManager->setShowDebugShadows(world->isDebug());
+  //sceneManager->showBoundingBoxes(world->isDebug());
   
-  architecture = new Architecture(this);
+  architecture = new Architecture(this, &pathfinder);
 
-  SceneDesc sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
+  //SceneDesc sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
   
-  name = sceneDesc.name;
-  load(sceneDesc.file);//loading the scene file
+  load(desc.file);//loading the scene file
 
-  sceneManager->setAmbientLight(defaultAmbientColour);
+  sceneManager->setAmbientLight(desc.ambientLight);
 
   /*
   //static spotlight
@@ -92,6 +84,7 @@ Scene::Scene(World* world, int id)
   //sceneManager->getRootSceneNode()->attachObject(sceneManager->createEntity("theatre_ivy.mesh"));//static ivy mesh
 
   //building static geometry
+  pathfinder.build();//note that this needs to be done before building architecture because architecture->build destroys the required scenenode
   architecture->build();
 
   //flockTest.setScene(this);//boids flocking test
@@ -107,7 +100,6 @@ Scene::~Scene(void)
   //Deleting all monsters
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
   {
-    //world->releaseMonster(*it);
     if(*it) delete (*it);
     (*it) = NULL;
   }
@@ -115,7 +107,6 @@ Scene::~Scene(void)
   //Deleting all items
   for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it)
   {
-    //world->releaseItem(*it);
     if(*it) delete (*it);
     (*it) = NULL;
   }
@@ -145,7 +136,7 @@ bool Scene::isActive()
 //-------------------------------------------------------------------------------------
 Ogre::String Scene::getName()
 {
-  return name;
+  return desc.name;
 }
 
 //-------------------------------------------------------------------------------------
@@ -198,7 +189,7 @@ void Scene::addPlayer(Player* player, int portalID)
 //-------------------------------------------------------------------------------------
 void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
-  Monster* monster = new Monster(world->getDataManager()->getMonster(id), &pathfinder);//this->getWorld()->createMonster(id);
+  Monster* monster = new Monster(world->getDataManager()->getMonster(id));
   monster->setPosition(position);
   monster->setScene(this);
   monsters.push_back(monster);
@@ -271,6 +262,7 @@ void Scene::update(double elapsedSeconds)
   
   physicsManager->fetchResults(true);
   
+  pathfinder.update(elapsedSeconds);
   architecture->update(elapsedSeconds);//only really needed for pathfinding debug display
 
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->update(elapsedSeconds);//iterate monsters
@@ -356,7 +348,7 @@ void Scene::load(std::string file)
 
     
     //description attributes
-    north = boost::lexical_cast<float>(root->first_attribute(NORTH_STRING)->value());
+    //north = boost::lexical_cast<float>(root->first_attribute(NORTH_STRING)->value());
    
     //Architecture
     rapidxml::xml_node<>* architectureNode = root->first_node(ARCHITECTURE_STRING);//"architecture");
@@ -422,7 +414,7 @@ World* Scene::getWorld()
 //-------------------------------------------------------------------------------------
 int Scene::getSceneID()
 {
-  return id;
+  return desc.id;
 }
 
 //-------------------------------------------------------------------------------------
@@ -537,5 +529,46 @@ Architecture* Scene::getArchitecture()
 PathfindManager* Scene::getPathfindManager()
 {
   return &pathfinder;
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::setShadowsEnabled(bool enabled)
+{
+  if(enabled) 
+  {
+    sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
+    sceneManager->setShadowColour(desc.shadowColour);
+    sceneManager->setShadowTextureSize(1024);
+    sceneManager->setShadowTextureCount(5);
+  }
+  else
+  {
+    sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_NONE);
+  }
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::setDebugDrawShadows(bool enabled)
+{
+  sceneManager->setShowDebugShadows(enabled);
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::setDebugDrawBoundingBoxes(bool enabled)
+{
+  sceneManager->showBoundingBoxes(enabled);
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::setDebugDrawNavigationMesh(bool enabled)
+{
+  if(enabled) pathfinder.drawNavMesh();
+  else throw NHException("Removing a drawn navigation mesh is not implemented.");
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::setGravity(Ogre::Vector3 gravity)
+{
+  physicsManager->setGravity(physx::PxVec3(gravity.x, gravity.y, gravity.z));
 }
 

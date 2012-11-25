@@ -3,13 +3,13 @@
 #include <OgreSceneManager.h>
 #include "./Crowd/OgreRecast.h"
 
-class PathfindManager
+class PathfindManager : public OgreRecast
 {
 public:
   PathfindManager(Ogre::SceneManager* sceneManager);
   virtual ~PathfindManager(void);
 
-  OgreRecast* recast;
+  
 
   void update(double elapsedSeconds);
 
@@ -17,6 +17,8 @@ public:
 
   void addEntity(Ogre::Entity* entity);
 private:
+  //OgreRecast* recast;
+
   std::vector<Ogre::Entity*> entities;
   InputGeom* geom;
 };

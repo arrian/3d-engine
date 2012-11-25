@@ -19,8 +19,9 @@ template<typename Owner>
 class Command
 {
 public:
-  Command(std::string name, std::string help, void (Owner::*Run) (Options), Owner* owner)
+  Command(std::string name, std::string arguments, std::string help, void (Owner::*Run) (Options), Owner* owner)
     : name(name),
+      args(arguments),
       help(help),
       Run(Run),
       owner(owner)
@@ -30,6 +31,7 @@ public:
   ~Command() {}
 
   std::string name;//command name
+  std::string args;//arguments
   std::string help;//help information about the command
 
   /**
@@ -116,6 +118,8 @@ private:
   void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
   void error(std::string comment);//displays an error on the console
 
+  bool stringToBool(std::string string);
+
   //Set of executable commands
   void clear                     (Options);
   void refresh                   (Options);
@@ -144,7 +148,9 @@ private:
   void getPlayerPosition         (Options);
   void addItem                   (Options);
   void addMonster                (Options);
-  void addSound                  (Options);
   void setSceneLoaded            (Options);
+  void setSceneDrawDebugNavMesh  (Options);
+  void setSceneShadowsEnabled    (Options);
+  void setSceneGravity           (Options);
 };
 

@@ -72,7 +72,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   //creating entity if not already created
   if(!entity || !mesh)
   {
-    std::cout << "Creating " << meshName << "... ";
+    std::cout << "Building " << meshName << "... ";
     entity = scene->getSceneManager()->createEntity(meshName);
     mesh = scene->getWorld()->getFabricationManager()->createTriangleMeshV2(entity);
     statics.insert(std::pair<Ogre::String,StaticEntity>(meshName, StaticEntity(entity,mesh)));
@@ -106,8 +106,6 @@ void Architecture::build()
   if(isBuilt) throw NHException("Attempting to build the architecture multiple times.");
   isBuilt = true;
 
-  if(pathfinder) pathfinder->build();
-
   geometry->addSceneNode(rootNode);
   geometry->build();
 
@@ -118,6 +116,6 @@ void Architecture::build()
 //-------------------------------------------------------------------------------------
 void Architecture::update(double elapsedSeconds)
 {
-  if(pathfinder) pathfinder->update(elapsedSeconds);
+  //if(pathfinder) pathfinder->update(elapsedSeconds);
 }
 

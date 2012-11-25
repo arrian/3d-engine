@@ -4,11 +4,10 @@
 
 //-------------------------------------------------------------------------------------
 //Monster::Monster(int id)
-Monster::Monster(MonsterDesc desc, PathfindManager* pathfinder)
+Monster::Monster(MonsterDesc desc)
   : BasicComponent(),
     IdentificationInterface(desc.name, "Monster"),
     description(desc),
-    pathfinder(pathfinder),
     node(NULL),
     intelligence(),
     visual(desc.mesh),
@@ -33,26 +32,16 @@ Monster::~Monster(void)
 //-------------------------------------------------------------------------------------
 void Monster::update(double elapsedSeconds)
 {
+  scene->getPathfindManager()->FindPath(node->getPosition(), target, getInstanceID(), 0);//final argument is the target id which is not used by recast
+  skeleton.followPath(scene->getPathfindManager()->getPath(getInstanceID()));
+
   intelligence.update(elapsedSeconds);
   skeleton.update(elapsedSeconds);
-  //if(health.getCurrent() <= 0) awareness = MonsterAttribute::DEAD;
+  
 
-  //moving
-  /*
-  if(evt.timeSinceLastFrame == 0 || target == node->getPosition()) return;
 
-  Ogre::Vector3 unitDirection = target - node->getPosition();
-  Ogre::Real distance = unitDirection.normalise();
-  Ogre::Real move = speed * evt.timeSinceLastFrame;
-  distance -= move;
-  if (distance <= 0.0f)
-  {
-    node->setPosition(target);
-  }
-  else
-  {
-    node->translate(unitDirection * move);
-  }*/
+  //if(elapsedSeconds == 0 || target == node->getPosition()) return;
+
 }
 
 //-------------------------------------------------------------------------------------
@@ -67,11 +56,21 @@ void Monster::hasSceneChange()
 {
   if(oldScene && node) oldScene->getSceneManager()->destroySceneNode(node);
   node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+
+
+  //temporary testing
+  setPosition(scene->getPathfindManager()->getRandomNavMeshPoint());
+  setTarget(scene->getPathfindManager()->getRandomNavMeshPoint());
+
+
   node->setPosition(position);
 
   intelligence.setNode(scene, node);
   visual.setNode(scene, node);
   skeleton.setNode(scene, node);
+
+
+
 }
 
 //-------------------------------------------------------------------------------------

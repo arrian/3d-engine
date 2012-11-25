@@ -69,6 +69,9 @@ public:
   void parseIni(std::string filename);
   Scene* loadScene(int id);
 
+  //Destruction
+  bool destroyScene(Ogre::String name);
+
   //Getters
   DataManager* getDataManager();
   FabricationManager* getFabricationManager();
@@ -82,15 +85,6 @@ public:
   physx::PxMaterial* getDefaultPhysicsMaterial();
   SceneChangeListener* getSceneChangeListener();
   const physx::PxTolerancesScale& getTolerancesScale();//messy tolerance bind
-
-  //Creation
-  //Item* createItem(int id);
-  //Monster* createMonster(int id);
-
-  //Removal
-  //void releaseItem(Item* item);
-  //void releaseMonster(Monster* monster);
-  bool destroyScene(Ogre::String name);
 
   //Setters
   void setRoot(Ogre::Root* root);
@@ -108,10 +102,10 @@ public:
 
   //Assertions
   bool hasScene(int id);
-  bool isDebug();
+  //bool isDebug();
 
-  //Flags... extract to settings class
-  bool debug;
+  //Flags... eventually remove
+  //bool debug;
   bool verbose;
   bool enablePhysics;
   bool enableAI;
@@ -132,9 +126,9 @@ public:
   bool freezeCollisionDebug;
   bool showCollisionDebug;
   bool showShadowDebug;
-  float gravity;
   int defaultScene;
-  std::vector<std::string> dataFiles;//monsters,items,architecture,sounds,scenes etc.
+
+  //std::vector<std::string> dataFiles;//monsters,items,architecture,sounds,scenes etc.
   Controls controls;//Control mappings
 
 private:

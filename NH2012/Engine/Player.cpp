@@ -11,11 +11,13 @@ Player::Player(World* world)
     camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
     visual("actor.mesh"),
     addItem(false),
+    addMonster(false),
     placementDistance(3.0f),
     lookResponsiveness(0.15f),
     handMoveScalar(0.1f),
     skeleton(),
-    itemGenerationID(353)//temporarily generating a watermelon when the 1 key is pressed
+    itemGenerationID(353),//temporarily generating a watermelon when the 1 key is pressed
+    monsterGenerationID(381)
 {
   
 }
@@ -84,6 +86,7 @@ void Player::update(double elapsedSeconds)
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
+  if(addMonster) scene->addMonster(monsterGenerationID);//create a monster at an arbitrary location
 }
 
 //-------------------------------------------------------------------------------------
@@ -108,7 +111,8 @@ void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
   else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(isDown);
   else if (evt.key == world->controls.run) skeleton.setRun(isDown);
   else if (evt.key == world->controls.crouch) skeleton.setCrouch(isDown);
-  else if (evt.key == OIS::KC_1) addItem = isDown; 
+  else if (evt.key == OIS::KC_1) addItem = isDown;
+  else if (evt.key == OIS::KC_2) addMonster = isDown;
 }
 
 //-------------------------------------------------------------------------------------

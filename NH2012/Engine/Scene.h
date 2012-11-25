@@ -6,6 +6,7 @@
 #include <OgreEntity.h>
 #include <OgreParticleSystem.h>
 
+#include "DataManager.h"
 #include "PathfindManager.h"
 #include "Flock.h"
 #include "./Ivy/Ivy.h"
@@ -31,14 +32,28 @@ class Architecture;
 class Scene
 {
 public:
-  Scene(World* world, int id = 0);
+  Scene(World* world, SceneDesc desc);
   ~Scene(void);
+
+  void setGravity(Ogre::Vector3 gravity);
+  void setShadowsEnabled(bool enabled);
+  void setDebugDrawShadows(bool enabled);
+  void setDebugDrawBoundingBoxes(bool enabled);
+  void setDebugDrawNavigationMesh(bool enabled);
+
 
   Ogre::String getName();
   int getSceneID();
   int getNewInstanceNumber();
   Portal* getPortal(int id = DEFAULT_PORTAL);
   Portal* getDefaultPortal();
+
+  Ogre::SceneManager* getSceneManager();
+  physx::PxScene* getPhysicsManager();
+  physx::PxControllerManager* getControllerManager();
+  World* getWorld();
+  Architecture* getArchitecture();
+  PathfindManager* getPathfindManager();
 
   void addPlayer(Player* player, int portalID = DEFAULT_PORTAL);
   void addMonster(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
@@ -49,13 +64,6 @@ public:
 
   void removePlayer(Player* player);
   
-  Ogre::SceneManager* getSceneManager();
-  physx::PxScene* getPhysicsManager();
-  physx::PxControllerManager* getControllerManager();
-  World* getWorld();
-  Architecture* getArchitecture();
-  PathfindManager* getPathfindManager();
-  
   void update(double elapsedSeconds);
 
   bool isActive();
@@ -65,9 +73,10 @@ public:
   void destroySceneNode(Ogre::SceneNode* node);
   
 private:
-  int id;
-  Ogre::String name;
-  float north;
+  SceneDesc desc;
+  //int id;
+  //Ogre::String name;
+  //float north;
   Portal* defaultEntry;//portal to drop the player at by default. if null pointer then the player will be dropped at zero.
   
   Ogre::ColourValue defaultAmbientColour;

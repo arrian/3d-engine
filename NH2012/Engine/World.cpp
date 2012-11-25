@@ -18,7 +18,7 @@ World::World(Ogre::Root* root)
     //items(),
     scenes(),
     //monsters(),
-    dataFiles(),
+    //dataFiles(),
     dataManager(),
     soundManager(),
     errorCallback(),
@@ -31,8 +31,8 @@ World::World(Ogre::Root* root)
     sceneChangeListener(NULL),
     defaultRestitution(0.2f),
     defaultStaticFriction(0.3f),
-    defaultDynamicFriction(0.4f),
-    debug(false)
+    defaultDynamicFriction(0.4f)//,
+    //debug(false)
 {
 }
 
@@ -62,7 +62,7 @@ void World::initialise(std::string iniFile)
   parseIni(iniFile);
 
   //Adding datafiles collected from ini file to dataManager
-  for(std::vector<std::string>::iterator it = dataFiles.begin(); it < dataFiles.end(); ++it) dataManager.addData(*it);
+  //for(std::vector<std::string>::iterator it = dataFiles.begin(); it < dataFiles.end(); ++it) dataManager.addData(*it);
 
   //creating physics
   physx::PxAllocatorCallback* allocator = &allocatorCallback;
@@ -181,7 +181,7 @@ void World::getSceneNames(std::vector<Ogre::String> &names)
 Scene* World::loadScene(int id)
 {
   if(hasScene(id)) return getScene(id);//check that the scene has not been loaded already
-  Scene* scene = new Scene(this, id);
+  Scene* scene = new Scene(this, dataManager.getScene(id));
   scenes.push_back(scene);
   return scene;
 }
@@ -274,39 +274,9 @@ physx::PxMaterial* World::getDefaultPhysicsMaterial()
 }
 
 //-------------------------------------------------------------------------------------
-/*Item* World::createItem(int id)
-{
-  Item* item = new Item(dataManager.getItem(id));
-  items.push_back(item);
-  return item;
-}
-
-//-------------------------------------------------------------------------------------
-Monster* World::createMonster(int id)
-{
-  Monster* monster = new Monster(id);
-  monsters.push_back(monster);
-  return monster;
-}*/
-
-//-------------------------------------------------------------------------------------
-/*void World::releaseItem(Item* item)
-{
-  //!!! fix to delete from items list
-  if(item) delete item;
-}
-
-//-------------------------------------------------------------------------------------
-void World::releaseMonster(Monster* monster)
-{
-  //!!! fix to delete from monsters list
-  if(monster) delete monster;
-}*/
-
-//-------------------------------------------------------------------------------------
 void World::parseIni(std::string filename)
 {
-  std::cout << "Getting initialisation data..." << std::endl;
+  std::cout << "Initialising..." << std::endl;
 
   try
   {
@@ -324,7 +294,7 @@ void World::parseIni(std::string filename)
     enableAI = (pt.get<std::string>("General.EnableAI") == TRUE_STRING);
     enableAudio = (pt.get<std::string>("General.EnableAudio") == TRUE_STRING);
 
-    gravity = pt.get<float>("General.Gravity");
+    //gravity = pt.get<float>("General.Gravity");
 
     //Controls //temp default values
     controls.moveForward = OIS::KC_W;
@@ -373,14 +343,15 @@ void World::parseIni(std::string filename)
     enableSky = (pt.get<std::string>("Environment.Sky") == TRUE_STRING);
 
     //Data File Paths
-    dataFiles.push_back(pt.get<std::string>("Scenes.Data"));
-    dataFiles.push_back(pt.get<std::string>("Architecture.Data"));
-    dataFiles.push_back(pt.get<std::string>("Monsters.Data"));
-    dataFiles.push_back(pt.get<std::string>("Items.Data"));
-    dataFiles.push_back(pt.get<std::string>("Sounds.Data"));
+    dataManager.addData(pt.get<std::string>("Scenes.Data"));
+    dataManager.addData(pt.get<std::string>("Architecture.Data"));
+    dataManager.addData(pt.get<std::string>("Monsters.Data"));
+    dataManager.addData(pt.get<std::string>("Items.Data"));
+    dataManager.addData(pt.get<std::string>("Sounds.Data"));
+    //dataFiles.push_back(pt.get<std::string>("Sounds.Data"));
 
     //Debug
-    debug = (pt.get<std::string>("Debug.DebugMode") == TRUE_STRING);
+    //debug = (pt.get<std::string>("Debug.DebugMode") == TRUE_STRING);
     verbose = (pt.get<std::string>("Debug.VerboseMode") == TRUE_STRING);
     freeCameraDebug = (pt.get<std::string>("Debug.FreeCamera") == TRUE_STRING);
     wireframeDebug = (pt.get<std::string>("Debug.Wireframe") == TRUE_STRING);
@@ -410,10 +381,10 @@ DataManager* World::getDataManager()
 }
 
 //-------------------------------------------------------------------------------------
-bool World::isDebug()
+/*bool World::isDebug()
 {
   return debug;
-}
+}*/
 
 //-------------------------------------------------------------------------------------
 void World::setRoot(Ogre::Root* root)

@@ -502,3 +502,6 @@
 378,guide,8,X,0,medium,1450,400,No,33
 379,warrior,7,X,-1,medium,1450,400,No,33
 380,apprentice,8,X,0,medium,1450,400,No,33
+
+[Debug]
+381,Default Monster,actor.mesh

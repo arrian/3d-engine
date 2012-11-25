@@ -60,12 +60,14 @@ private:
   VisualComponent visual;
 
   bool addItem;
+  bool addMonster;
 
   float placementDistance;
   float lookResponsiveness;
   float handMoveScalar;
 
   int itemGenerationID;//for debug item generation
+  int monsterGenerationID;//for debug monster generation
 
   void keyEvent(const OIS::KeyEvent &evt, bool isDown);
 };

@@ -33,7 +33,9 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent()
     minimumMoveDistance(0.001f),
     userData(NULL),
     onGround(false),
-    crouch(false)
+    crouch(false),
+    isFollowingPath(false),
+    path()
 {
 }
 
@@ -95,8 +97,6 @@ void HumanoidSkeletonComponent::hasNodeChange()
   head->setPosition(headOrigin);
   rightHand = node->createChildSceneNode();
   leftHand = node->createChildSceneNode();
-
-  
 }
 
 //-------------------------------------------------------------------------------------
@@ -110,6 +110,7 @@ void HumanoidSkeletonComponent::stop()
   rightHand = false;
   leftHand = false;
   velocity = Ogre::Vector3::ZERO;
+  isFollowingPath = false;
 }
 
 //-------------------------------------------------------------------------------------
@@ -173,6 +174,26 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
     physx::PxExtendedVec3 cPosition = controller->getPosition();
     node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position
   }
+
+  //////////////////////////////////////////
+  if(isFollowingPath)//specific to monsters
+  {
+    if(path.size() < 1) return;
+    Ogre::Vector3 unitDirection = path[0] - node->getPosition();
+    Ogre::Real distance = unitDirection.normalise();
+    Ogre::Real move = speed * elapsedSeconds;
+    distance -= move;
+    if (distance <= 0.0f)
+    {
+      node->setPosition(path[0]);
+      isFollowingPath = false;
+    }
+    else
+    {
+      node->translate(unitDirection * move);
+    }
+  }
+  ///////////////////////////////////////////
   
   /*if (world->freeCameraDebug) 
   {
@@ -281,6 +302,12 @@ physx::PxU32 HumanoidSkeletonComponent::getBehaviorFlags(const physx::PxObstacle
 }
 
 //-------------------------------------------------------------------------------------
+float HumanoidSkeletonComponent::getSpeed()
+{
+  return speed;
+}
+
+//-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hit)
 {
   physx::PxRigidDynamic* dActor = hit.shape->getActor().isRigidDynamic();
@@ -377,5 +404,14 @@ bool HumanoidSkeletonComponent::isJumping()
 {
   return !onGround;
 }
+
+//-------------------------------------------------------------------------------------
+void HumanoidSkeletonComponent::followPath(std::vector<Ogre::Vector3> path)
+{
+  isFollowingPath = true;
+  this->path = path;
+}
+
+
 
 
