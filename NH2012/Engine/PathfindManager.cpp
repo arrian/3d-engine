@@ -29,5 +29,4 @@ void PathfindManager::build()
   geom = new InputGeom(entities);
   NavMeshBuild(geom);
   std::cout << "done." << std::endl;
-  //drawNavMesh();
 }

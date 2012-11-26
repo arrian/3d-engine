@@ -4,20 +4,20 @@
 #include "Scene.h"
 
 //-------------------------------------------------------------------------------------
-Player::Player(World* world) 
+Player::Player(PlayerDesc description, World* world)
   : IdentificationInterface("Local", "Player"),
     world(world),
     scene(NULL),
     camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
-    visual("actor.mesh"),
+    visual(description.mesh),
     addItem(false),
     addMonster(false),
     placementDistance(3.0f),
     lookResponsiveness(0.15f),
     handMoveScalar(0.1f),
-    skeleton(),
-    itemGenerationID(353),//temporarily generating a watermelon when the 1 key is pressed
-    monsterGenerationID(381)
+    skeleton(description.gravity),
+    itemGenerationID(3),//temporarily generating a watermelon when the 1 key is pressed
+    monsterGenerationID(1)
 {
   
 }
@@ -35,7 +35,6 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   //pulling down
   if(this->scene)
   {
-    //scene->removePlayer(this);//should be called in addPlayer
     visual.removeNode();
     camera.removeNode();
     skeleton.removeNode();
@@ -48,20 +47,15 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
 
   //setting up
   this->scene = scene;
-  //scene->addPlayer(this);//set scene usually called from addPlayer
 
-  //entity = scene->getSceneManager()->createEntity("actor.mesh");
   node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
   node->setPosition(position);
-  //node->attachObject(entity);
 
   skeleton.mapPhysical((IdentificationInterface*) this);//needs to be before skeleton.setNode()
 
   visual.setNode(scene, node);
   skeleton.setNode(scene, node);
   camera.setNode(scene, skeleton.getHead());
-
-  //if(window) hook(window);//if the player has a render window then connect camera to new scene
 
   stop();
 
@@ -80,6 +74,75 @@ void Player::update(double elapsedSeconds)
   //camera.rayQuery();//testing ray queries
 
   skeleton.update(elapsedSeconds);
+
+
+  ////////////////////////////////Implement later
+  /*
+  if(node)
+  {
+    //Calculating the acceleration vector
+    Ogre::Vector3 accel = Ogre::Vector3::ZERO;
+    if (moveForward) accel -= node->getOrientation().zAxis();//equivalent to camera->getDirection()
+    if (moveBack) accel += node->getOrientation().zAxis();
+    if (moveRight) accel += node->getOrientation().xAxis();//equivalent to camera->getRight()
+    if (moveLeft) accel -= node->getOrientation().xAxis();
+  
+    float oldY;
+    if(collisionEnabled)//ignore up/down directional movement from camera when collision enabled
+    {
+      oldY = velocity.y;
+      velocity.y = 0;
+    }
+  
+    float topSpeed = run ? speed * runScalar : speed;
+    if (accel.squaredLength() != 0)
+    {
+      accel.normalise();
+      velocity += accel * topSpeed * (float) elapsedSeconds * moveScalar;
+    }
+    else 
+    {
+      Ogre::Vector3 reduce = velocity * (float) elapsedSeconds * moveScalar;
+      if(velocity.squaredLength() > reduce.squaredLength()) velocity -= reduce;//comparing with reduction length reduces jitter at low frame rates
+      else velocity = Ogre::Vector3::ZERO;
+    }
+
+    Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
+
+    if (velocity.squaredLength() > topSpeed * topSpeed)//don't go over the top speed
+    {
+      velocity.normalise();
+      velocity *= topSpeed;
+    }
+    else if (velocity.squaredLength() < tooSmall * tooSmall) velocity = Ogre::Vector3::ZERO;
+
+    if(collisionEnabled)
+    {
+      velocity.y = oldY;//restoring saved up/down speed
+      velocity.y += gravity.y * (float) elapsedSeconds;//only apply gravity when collision enabled
+
+      physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * (float) elapsedSeconds * moveScalar, velocity.y * (float) elapsedSeconds * moveScalar, velocity.z * (float) elapsedSeconds * moveScalar), minimumMoveDistance, (float) elapsedSeconds, physx::PxControllerFilters());//moving character controller
+      if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0)
+      {
+        onGround = true;
+        velocity.y = 0.0f;//stop falling when collision at the base of the skeleton occurs
+      }
+      physx::PxExtendedVec3 cPosition = controller->getPosition();
+      node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position from the physics world calculated position
+    }
+    else //just move the controller ignoring all collisions
+    {
+      controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(velocity.x * (float) elapsedSeconds * moveScalar, velocity.y * (float) elapsedSeconds * moveScalar, velocity.z * (float) elapsedSeconds * moveScalar));
+      physx::PxExtendedVec3 cPosition = controller->getPosition();
+      node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position
+    }
+  }
+  */
+  ////////////////////////////////
+
+
+
+
   camera.update(elapsedSeconds);//for aspect ratio changes
 
   if(addItem) 
@@ -111,8 +174,8 @@ void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
   else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(isDown);
   else if (evt.key == world->controls.run) skeleton.setRun(isDown);
   else if (evt.key == world->controls.crouch) skeleton.setCrouch(isDown);
-  else if (evt.key == OIS::KC_1) addItem = isDown;
-  else if (evt.key == OIS::KC_2) addMonster = isDown;
+  else if (evt.key == world->controls.addItem) addItem = isDown;
+  else if (evt.key == world->controls.addMonster) addMonster = isDown;
 }
 
 //-------------------------------------------------------------------------------------
@@ -192,7 +255,7 @@ void Player::setRotation(Ogre::Quaternion rotation)
 }
 
 //-------------------------------------------------------------------------------------
-void Player::setGravity(float gravity)
+void Player::setGravity(Ogre::Vector3 gravity)
 {
   skeleton.setGravity(gravity);
 }

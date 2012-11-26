@@ -5,19 +5,19 @@
 #include "extensions/PxRigidBodyExt.h"
 
 //-------------------------------------------------------------------------------------
-HumanoidSkeletonComponent::HumanoidSkeletonComponent()
+HumanoidSkeletonComponent::HumanoidSkeletonComponent(Ogre::Vector3 gravity)
   : NodeComponent(),
     physx::PxControllerBehaviorCallback(),
     controller(NULL),
     leftHandItem(NULL),
     rightHandItem(NULL),
     headItem(NULL),
-    leftHandOrigin(0,-0.5,0.5),//test value
-    rightHandOrigin(0,0.5,0.5),//test value
-    headOrigin(0,1.4,0),
-    headCrouchOrigin(0,0.7,0),
-    speed(1),
-    gravity(-9.81f),
+    leftHandOrigin(0.0f,-0.5f,0.5f),//test value
+    rightHandOrigin(0.0f,0.5f,0.5f),//test value
+    headOrigin(0.0f,1.4f,0.0f),
+    headCrouchOrigin(0.0f,0.7f,0.0f),
+    speed(1.0f),
+    gravity(gravity),
     velocity(Ogre::Vector3::ZERO),
     collisionEnabled(true),
     moveLeftHand(false),
@@ -132,7 +132,7 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
     velocity.y = 0;
   }
   
-  Ogre::Real topSpeed = run ? speed * runScalar : speed;
+  float topSpeed = run ? speed * runScalar : speed;
   if (accel.squaredLength() != 0)
   {
     accel.normalise();
@@ -157,7 +157,7 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
   if(collisionEnabled)
   {
     velocity.y = oldY;//restoring saved up/down speed
-    velocity.y += gravity * (float) elapsedSeconds;//only apply gravity when collision enabled
+    velocity.y += gravity.y * (float) elapsedSeconds;//only apply gravity when collision enabled
 
     physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * (float) elapsedSeconds * moveScalar, velocity.y * (float) elapsedSeconds * moveScalar, velocity.z * (float) elapsedSeconds * moveScalar), minimumMoveDistance, (float) elapsedSeconds, physx::PxControllerFilters());//moving character controller
     if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0)
@@ -181,7 +181,7 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
     if(path.size() < 1) return;
     Ogre::Vector3 unitDirection = path[0] - node->getPosition();
     Ogre::Real distance = unitDirection.normalise();
-    Ogre::Real move = speed * elapsedSeconds;
+    Ogre::Real move = speed * (float) elapsedSeconds;
     distance -= move;
     if (distance <= 0.0f)
     {
@@ -322,7 +322,7 @@ void HumanoidSkeletonComponent::onShapeHit(const physx::PxControllerShapeHit& hi
 }
 
 //-------------------------------------------------------------------------------------
-void HumanoidSkeletonComponent::setGravity(float gravity)
+void HumanoidSkeletonComponent::setGravity(Ogre::Vector3 gravity)
 {
   this->gravity = gravity;
 }

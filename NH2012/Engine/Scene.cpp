@@ -8,12 +8,13 @@
 #include "Player.h."
 #include "Monster.h"
 #include "Item.h"
+#include "Light.h"
 #include "Architecture.h"
 #include "Portal.h"
 #include "Flock.h"
 
 //-------------------------------------------------------------------------------------
-Scene::Scene(World* world, SceneDesc desc)
+Scene::Scene(SceneDesc desc, World* world)
   : world(world),
     desc(desc),
     sceneManager(world->getRoot()->createSceneManager(Ogre::ST_GENERIC)),
@@ -207,6 +208,11 @@ void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 //-------------------------------------------------------------------------------------
 void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
 {
+  Light* light = new Light(this, position, castShadows, range, colour);
+  //add set position and set scene to light
+  lights.push_back(light);
+
+  /*Old basic ogre light code
   Ogre::Light* light = sceneManager->createLight("light" + Ogre::StringConverter::toString(getNewInstanceNumber()));
   lights.push_back(light);
   light->setPosition(position);
@@ -214,6 +220,7 @@ void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range,
   light->setDiffuseColour(colour);
   light->setSpecularColour(Ogre::ColourValue::White);
   light->setCastShadows(castShadows);
+  */
 
   //Same clipping as the camera set up
   //light->setShadowNearClipDistance(0.4f);
@@ -225,8 +232,8 @@ void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range,
 void Scene::addParticles(Ogre::String name, Ogre::String templateName, Ogre::Vector3 position, Ogre::Real speed)
 {
   Ogre::ParticleSystem* particle = sceneManager->createParticleSystem(name, templateName);//"Rain");//, "Examples/Rain");
-  particle->fastForward(speed);
-  Ogre::SceneNode* particleNode = sceneManager->getRootSceneNode()->createChildSceneNode("particle" + Ogre::StringConverter::toString(getNewInstanceNumber()));
+  particle->setSpeedFactor(speed);
+  Ogre::SceneNode* particleNode = sceneManager->getRootSceneNode()->createChildSceneNode();//"particle" + Ogre::StringConverter::toString(getNewInstanceNumber()));
   particleNode->setPosition(position);
   particleNode->attachObject(particle);
   particles.push_back(particle);
@@ -263,8 +270,9 @@ void Scene::update(double elapsedSeconds)
   physicsManager->fetchResults(true);
   
   pathfinder.update(elapsedSeconds);
-  architecture->update(elapsedSeconds);//only really needed for pathfinding debug display
+  architecture->update(elapsedSeconds);//only really needed for pathfinding debug display... not needed anymore?
 
+  for(std::vector<Light*>::iterator it = lights.begin(); it != lights.end(); ++it) (*it)->update(elapsedSeconds);//iterate lights
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->update(elapsedSeconds);//iterate monsters
   for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) (*it)->update(elapsedSeconds);//iterate items
   
@@ -538,7 +546,7 @@ void Scene::setShadowsEnabled(bool enabled)
   {
     sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
     sceneManager->setShadowColour(desc.shadowColour);
-    sceneManager->setShadowTextureSize(1024);
+    sceneManager->setShadowTextureSize(4096);//1024 seems very pixelated
     sceneManager->setShadowTextureCount(5);
   }
   else
@@ -570,5 +578,12 @@ void Scene::setDebugDrawNavigationMesh(bool enabled)
 void Scene::setGravity(Ogre::Vector3 gravity)
 {
   physicsManager->setGravity(physx::PxVec3(gravity.x, gravity.y, gravity.z));
+}
+
+//-------------------------------------------------------------------------------------
+Ogre::Vector3 Scene::getGravity()
+{
+  physx::PxVec3 gravity = physicsManager->getGravity();
+  return Ogre::Vector3(gravity.x, gravity.y, gravity.z);
 }
 

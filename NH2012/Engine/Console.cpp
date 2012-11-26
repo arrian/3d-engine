@@ -548,7 +548,7 @@ void Console::getPhysicsInfo(Options argv)
     physx::PxScene* physics = target->getPhysicsManager();
     if(physics)
     {
-      display("gravity", boost::lexical_cast<std::string>(physics->getGravity().magnitude()));
+      display("gravity", boost::lexical_cast<std::string>(target->getGravity().length()));
       display("current timestamp", boost::lexical_cast<std::string>(physics->getTimestamp()));
       display("number of rigid static actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_STATIC))));
       display("number of rigid dynamic actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_DYNAMIC))));

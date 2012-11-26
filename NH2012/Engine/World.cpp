@@ -58,13 +58,9 @@ World::~World(void)
 //-------------------------------------------------------------------------------------
 void World::initialise(std::string iniFile)
 {
-  //loading initialisation file
   parseIni(iniFile);
 
-  //Adding datafiles collected from ini file to dataManager
-  //for(std::vector<std::string>::iterator it = dataFiles.begin(); it < dataFiles.end(); ++it) dataManager.addData(*it);
-
-  //creating physics
+  //Creating physics
   physx::PxAllocatorCallback* allocator = &allocatorCallback;
   physicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *allocator, errorCallback);//getErrorCallback());
   physicsFoundation->setErrorLevel(physx::PxErrorCode::eDEBUG_INFO);
@@ -91,7 +87,9 @@ void World::initialise(std::string iniFile)
   if(!scene) throw NHException("Default scene creation failed.");
   
   //creating player
-  player = new Player(this);
+  PlayerDesc playerDesc = PlayerDesc();
+  playerDesc.gravity = scene->getGravity();
+  player = new Player(playerDesc, this);
   if(!player) throw NHException("Initial player creation failed.");
   scene->addPlayer(player);
 
@@ -160,15 +158,6 @@ const physx::PxTolerancesScale& World::getTolerancesScale()
 }
 
 //-------------------------------------------------------------------------------------
-/*void World::movePlayer(Player* player, Scene* target)
-{
-  if(!player) return;
-  Scene* old = player->getScene();
-  if(old) old->removePlayer(player);
-  if(target) target->addPlayer(player);
-}*/
-
-//-------------------------------------------------------------------------------------
 void World::getSceneNames(std::vector<Ogre::String> &names)
 {
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
@@ -181,7 +170,7 @@ void World::getSceneNames(std::vector<Ogre::String> &names)
 Scene* World::loadScene(int id)
 {
   if(hasScene(id)) return getScene(id);//check that the scene has not been loaded already
-  Scene* scene = new Scene(this, dataManager.getScene(id));
+  Scene* scene = new Scene(dataManager.getScene(id), this);
   scenes.push_back(scene);
   return scene;
 }
@@ -322,10 +311,11 @@ void World::parseIni(std::string filename)
 
     controls.exit = OIS::KC_ESCAPE;
 
-    controls.freezeCollision = OIS::KC_Q;
+    
     controls.addItem = OIS::KC_1;
     controls.addMonster = OIS::KC_2;
-    controls.reset = OIS::KC_3;
+    controls.freezeCollision = OIS::KC_3;
+    controls.reset = OIS::KC_4;
 
     controls.console = OIS::KC_GRAVE;
 
@@ -352,7 +342,7 @@ void World::parseIni(std::string filename)
 
     //Debug
     //debug = (pt.get<std::string>("Debug.DebugMode") == TRUE_STRING);
-    verbose = (pt.get<std::string>("Debug.VerboseMode") == TRUE_STRING);
+    //verbose = (pt.get<std::string>("Debug.VerboseMode") == TRUE_STRING);
     freeCameraDebug = (pt.get<std::string>("Debug.FreeCamera") == TRUE_STRING);
     wireframeDebug = (pt.get<std::string>("Debug.Wireframe") == TRUE_STRING);
     freezeCollisionDebug = (pt.get<std::string>("Debug.FreezeCollision") == TRUE_STRING);
@@ -379,12 +369,6 @@ DataManager* World::getDataManager()
 {
   return &dataManager;
 }
-
-//-------------------------------------------------------------------------------------
-/*bool World::isDebug()
-{
-  return debug;
-}*/
 
 //-------------------------------------------------------------------------------------
 void World::setRoot(Ogre::Root* root)

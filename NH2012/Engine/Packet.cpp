@@ -2,7 +2,6 @@
 
 
 Packet::Packet(void)
-  : timestamp(0)
 {
 }
 

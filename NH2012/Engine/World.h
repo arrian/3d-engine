@@ -106,7 +106,7 @@ public:
 
   //Flags... eventually remove
   //bool debug;
-  bool verbose;
+  //bool verbose;
   bool enablePhysics;
   bool enableAI;
   bool enableAudio;

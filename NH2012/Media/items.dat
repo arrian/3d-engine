@@ -1,406 +1,99 @@
 #Items
-#Id,Name,Mesh
-
-[Amulets]
-1,amulet of change,amulet.mesh
-2,amulet of ESP,amulet.mesh
-3,amulet of life saving,amulet.mesh
-4,amulet of magical breathing,amulet.mesh
-5,amulet of reflection,amulet.mesh
-6,amulet of restful sleep,amulet.mesh
-7,amulet of strangulation,amulet.mesh
-8,amulet of unchanging,amulet.mesh
-9,amulet versus poison,amulet.mesh
-10,imitation amulet of Yendor,amulet.mesh
-11,Amulet of Yendor,amulet.mesh
-
-[Daggers]
-12,orcish dagger,dagger.mesh
-13,dagger,dagger.mesh
-14,silver dagger,dagger.mesh
-15,athame,dagger.mesh
-16,elven dagger,dagger.mesh
-
-[Knives]
-17,worm tooth,knife.mesh
-18,knife,knife.mesh
-19,stiletto,knife.mesh
-20,scalpel,knife.mesh
-21,crysknife,knife.mesh
-
-[Axes]
-22,axe,axe.mesh
-23,battle-axe,axe.mesh
-
-[Picks]
-24,pick-axe,pick.mesh
-25,dwarvish mattock,pick.mesh
-
-[Short Swords]
-26,orcish short sword,sword.mesh
-27,short sword,sword.mesh
-28,dwarvish short sword,sword.mesh
-29,elven short sword,sword.mesh
-
-[Broadswords]
-30,broadsword,sword.mesh
-31,runesword,sword.mesh
-32,elven broadsword,sword.mesh
-
-[Long Swords]
-33,long sword,sword.mesh
-34,katana,sword.mesh
-
-[Two-handed Swords]
-35,two-handed sword,sword.mesh
-36,tsurugi,sword.mesh
-37,scimitar,sword.mesh
-
-[Quarterstaffs]
-46,quarterstaff,staff.mesh
-
-[Bows]
-67,orcish bow,bow.mesh
-68,bow,bow.mesh
-69,elven bow,bow.mesh
-70,yumi,bow.mesh
-
-[Arrows]
-71,orcish arrow,arrow.mesh
-72,arrow,arrow.mesh
-73,silver arrow,arrow.mesh
-74,elven arrow,arrow.mesh
-75,ya,arrow.mesh
-
-[Unicorn Horn]
-85,unicorn horn,horn.mesh
-
-[Shirts]
-86,Hawaiian shirt,shirt.mesh
-87,T-shirt,shirt.mesh
-
-[Suits]
-88,leather jacket,armour.mesh
-89,leather armor,armour.mesh
-90,orcish ring mail,armour.mesh
-91,crude ring mail,armour.mesh
-92,studded leather armor,armour.mesh
-93,ring mail,armour.mesh
-94,scale mail,armour.mesh
-95,orcish chain mail,armour.mesh
-96,crude chain mail,armour.mesh
-97,chain mail,armour.mesh
-98,elven mithril coat,armour.mesh
-99,splint mail,armour.mesh
-100,banded mail,armour.mesh
-101,dwarvish mithril coat,armour.mesh
-102,bronze plate mail,armour.mesh
-103,plate mail,armour.mesh
-104,crystal plate mail,armour.mesh
-
-[Dragon Scales]
-105,red dragon scales,scales.mesh
-106,white dragon scales,scales.mesh
-107,orange dragon scales,scales.mesh
-108,blue dragon scales,scales.mesh
-109,green dragon scales,scales.mesh
-110,yellow dragon scales,scales.mesh
-111,black dragon scales,scales.mesh
-112,silver dragon scales,scales.mesh
-113,gray dragon scales,scales.mesh
-
-[Dragon Suits]
-114,red dragon scale mail,armour.mesh
-115,white dragon scale mail,armour.mesh
-116,orange dragon scale mail,armour.mesh
-117,blue dragon scale mail,armour.mesh
-118,green dragon scale mail,armour.mesh
-119,yellow dragon scale mail,armour.mesh
-120,black dragon scale mail,armour.mesh
-121,silver dragon scale mail,armour.mesh
-122,gray dragon scale mail,armour.mesh
-
-[Cloaks]
-123,mummy wrapping,cloak.mesh
-124,orcish cloak,cloak.mesh
-125,coarse mantelet,cloak.mesh
-126,dwarvish cloak,cloak.mesh
-127,hooded cloak,cloak.mesh
-128,leather cloak,cloak.mesh
-129,cloak of displacement,cloak.mesh
-130,piece of cloth,cloak.mesh
-131,oilskin cloak,cloak.mesh
-132,slippery cloak,cloak.mesh
-133,alchemy smock,cloak.mesh
-134,apron,cloak.mesh
-135,cloak of invisibility,cloak.mesh
-136,opera cloak,cloak.mesh
-137,cloak of magic resistance,cloak.mesh
-138,ornamental cope,cloak.mesh
-139,elven cloak,cloak.mesh
-140,faded pall,cloak.mesh
-141,robe,cloak.mesh
-142,cloak of protection,cloak.mesh
-143,tattered cape,cloak.mesh
-
-[Helmets]
-144,fedora,hat.mesh
-145,dunce cap,hat.mesh
-146,conical hat,hat.mesh
-147,cornuthaum,hat.mesh
-148,conical hat,hat.mesh
-150,elven leather helm,helmet.mesh
-151,leather hat,hat.mesh
-152,helmet,helmet.mesh
-153,plumed helmet,helmet.mesh
-154,orcish helm,helmet.mesh
-155,iron skull cap,helmet.mesh
-156,helm of brilliance,helmet.mesh
-157,etched helmet,helmet.mesh
-158,helm of opposite alignment,helmet.mesh
-159,crested helmet,helmet.mesh
-160,helm of telepathy,helmet.mesh
-161,visored helmet,helmet.mesh
-162,dwarvish iron helm,helmet.mesh
-163,hard hat,hat.mesh
-
-[Gloves]
-164,leather gloves,gloves.mesh
-165,old gloves,gloves.mesh
-166,gauntlets of dexterity,gloves.mesh
-167,padded gloves,gloves.mesh
-168,gauntlets of fumbling,gloves.mesh
-169,riding gloves,gloves.mesh
-170,gauntlets of power,gloves.mesh
-171,fencing gloves,gloves.mesh
-
-[Shields]
-172,small shield,shield.mesh
-173,orcish shield,shield.mesh
-174,red-eyed shield,shield.mesh
-175,Uruk-hai shield,shield.mesh
-176,white-handed shield,shield.mesh
-177,elven shield,shield.mesh
-178,blue and green shield,shield.mesh
-179,dwarvish roundshield,shield.mesh
-180,large round shield,shield.mesh
-181,large shield,shield.mesh
-182,shield of reflection,shield.mesh
-183,polished silver shield,shield.mesh
-
-[Boots]
-184,low boots,boots.mesh
-185,walking shoes,boots.mesh
-186,elven boots,boots.mesh
-187,mud boots,boots.mesh
-188,kicking boots,boots.mesh
-189,buckled boots,boots.mesh
-190,fumble boots,boots.mesh
-191,riding boots,boots.mesh
-192,levitation boots,boots.mesh
-193,snow boots,boots.mesh
-194,jumping boots,boots.mesh
-195,hiking boots,boots.mesh
-196,speed boots,boots.mesh
-197,combat boots,boots.mesh
-198,water walking boots,boots.mesh
-199,jungle boots,boots.mesh
-200,high boots,boots.mesh
-201,jackboots,boots.mesh
-202,iron shoes,boots.mesh
-203,hard shoes,boots.mesh
+#Id[,Name[,Mesh[,PhysicsMesh]]]
 
 [Food]
-204,meatball
-205,meat ring
-206,meat stick
-207,egg,egg.mesh
-208,tripe ration
-209,huge chunk of meat
-210,corpse
+1,Apple,apple.mesh,apple_physics.mesh
+2,Orange,orange.mesh,orange_physics.mesh
+3,Watermelon Whole,watermelon.mesh,watermelon_physics.mesh
+4,Watermelon Half,watermelon2.mesh,watermelon2_physics.mesh
+5,Lemon,lemon.mesh,lemon_physics.mesh
+6,Bread,bread.mesh,bread_physics.mesh
+7,Cheese,cheese.mesh,cheese_physics.mesh
+8,Steak,steak.mesh,steak_physics.mesh
+9,Coke Can,can.mesh,can_phyics.mesh
 
-[Fruits and Vegetables]
-211,kelp frond
-212,eucalyptus leaf
-213,clove of garlic
-214,sprig of wolfsbane
-215,apple,apple.mesh
-216,carrot.carrot.mesh
-217,pear,pear.mesh
-218,banana,banana.mesh
-219,orange,orange.mesh
-220,melon,melon.mesh
-221,slime mold
+[Dining]
+10,Plate 1
+11,Plate 2
+12,Bowl 1
+13,Bowl 2
+14,Knife 1
+15,Knife 2
+16,Fork 1
+17,Fork 2
+18,Spoon 1
+19,Spoon 2
+20,Cup 1
+21,Cup 2
 
-[Human Food]
-222,fortune cookie,cookie.mesh
-223,candy bar
-224,cream pie
-225,lump of royal jelly,jelly.mesh
-226,pancake,pancake.mesh
-227,C-ration
-228,K-ration
-229,cram ration
-230,food ration
-231,lembas wafer
-232,tin,tin.mesh
+[Library]
+22,Newspaper
+23,Book Thin Tall,book1.mesh
+24,Book Thin Normal,book2.mesh
+25,Book Thin Short,book3.mesh
+26,Book Medium Tall,book4.mesh
+27,Book Medium Normal,book5.mesh
+28,Book Medium Short,book6.mesh
+29,Book Thick Tall,book7.mesh
+30,Book Thick Normal,book8.mesh
+31,Book Thick Short,book9.mesh
+
+[Electrics]
+32,TV
+33,Macintosh
+34,Lightbulb,lightbulb.mesh
 
 [Containers]
-233,sack,sack.mesh
-234,bag,bag.mesh
-235,large box,box.mesh
-236,chest,chest.mesh
-237,ice box,box.mesh
-238,bag of holding,bag.mesh
-239,bag of tricks,bag.mesh
-240,oilskin sack,sack.mesh
-
-[Unlocking Tools]
-241,credit card,credit_card.mesh
-242,lock pick,lock_pick.mesh
-243,skeleton key,key.mesh
-244,key,key.mesh
-
-[Light Sources]
-245,tallow candle,candle.mesh
-246,candle,candle.mesh
-247,wax candle,candle.mesh
-248,brass lantern,lamp.mesh
-249,oil lamp,lamp.mesh
-250,lamp,lamp.mesh
-251,magic lamp,lamp.mesh
-252,Candelabrum of Invocation,candelabrum.mesh
-253,candelabrum,candelabrum.mesh
-
-[Instruments]
-254,tin whistle
-255,whistle
-256,magic whistle
-257,bugle
-258,wooden flute
-259,flute
-260,magic flute
-261,tooled horn
-262,horn
-263,frost horn
-264,fire horn
-265,horn of plenty
-266,leather drum
-267,drum
-268,drum of earthquake
-269,wooden harp
-270,harp
-271,magic harp
-272,bell
-273,Bell of Opening
-274,silver bell
-
-[Traps]
-275,beartrap,beartrap.mesh
-276,land mine
-
-[Tools]
-277,pick-axe,pick.mesh
-278,grappling hook
-279,iron hook
-280,unicorn horn
-281,expensive camera
-282,mirror
-283,looking glass
-284,crystal ball
-285,glass orb
-286,lenses
-287,blindfold
-288,towel
-289,saddle
-290,leash
-291,stethoscope
-292,tinning kit
-293,tin opener
-294,can of grease
-295,figurine
-296,magic marker
-
-[Gems]
-297,dilithium crystal
-298,diamond
-299,ruby
-300,jacinth
-301,sapphire
-302,black opal
-303,emerald
-304,turquoise
-305,aquamarine
-306,citrine
-307,amber
-308,topaz
-309,jet
-310,opal
-311,chrysoberyl
-312,garnet
-313,amethyst
-314,jasper
-315,fluorite
-316,jade
-317,agate
-318,obsidian
-
-[Worthless Gems]
-319,black glass
-320,blue glass
-321,green glass
-322,orange glass
-323,red glass
-324,violet glass
-325,white glass
-326,yellow glass
-327,yellowish brown glass
-
-[Stones]
-328,luckstone
-329,touchstone
-330,flintstone
-331,loadstone
-332,rock
+35,Barrel 1,barrel.mesh,barrel_physics.mesh
+36,Barrel 2,barrel2.mesh
+37,Crate 1,crate.mesh
+38,Crate 2,crate2.mesh
+39,Crate 3,crate3.mesh
+40,Chest,chest.mesh
 
 [Miscellaneous]
-333,gold piece,gold.mesh
-334,boulder
-335,statue
-336,heavy iron ball
-337,iron chain
-338,acid venom
-339,blinding venom
+41,Coin,coin.mesh,coin_physics.mesh
+42,Earth,earth.mesh,earth_physics.mesh
+43,Moon,moon.mesh,moon_physics.mesh
+44,Mars,mars.mesh,mars_physics.mesh
 
 [Debug]
-340,Barrel,barrel.mesh
-341,Crate 2,crate2.mesh
-342,Lightbulb,lightbulb.mesh
-343,Orange Debug Entity,item.mesh
-344,Trigger Symbol,trigger.mesh
-345,Sound Symbol,sound.mesh
-346,Error Symbol,default.mesh
-347,TV,tv.mesh
-348,Basic Tuxedo Person,person_tux.mesh
-349,Test Maya Box,test_maya_box.mesh
-350,Crate,crate.mesh
-351,Apple,apple.mesh
-352,Orange,orange.mesh
-353,Watermelon Whole,watermelon.mesh
-354,Watermelon Half,watermelon2.mesh
-355,Earth,earth.mesh
-356,Moon,moon.mesh
-357,Mars,mars.mesh
-358,Plate,plate.mesh
-358,Book Thin Tall,book1.mesh
-360,Book Thin Normal,book2.mesh
-361,Book Thin Short,book3.mesh
-362,Book Medium Tall,book4.mesh
-363,Book Medium Normal,book5.mesh
-364,Book Medium Short,book6.mesh
-365,Book Thick Tall,book7.mesh
-366,Book Thick Normal,book8.mesh
-367,Book Thick Short,book9.mesh
+45,1 Centimetre Box,1cmBox.mesh
+46,10 Centimetre Box,10cmBox.mesh
+47,1 Metre Box,1mBox.mesh
+48,10 Metre Box,10mBox.mesh
+49,100 Metre Box,100mBox.mesh
+50,1 Centimetre Sphere,1cmSphere.mesh
+51,10 Centimetre Sphere,10cmSphere.mesh
+52,1 Metre Sphere,1mSphere.mesh
+53,10 Metre Sphere,10mSphere.mesh
+54,100 Metre Sphere,100mSphere.mesh
+55,Default Item Symbol,item_default.mesh
+56,Default Monster Symbol,monster_default.mesh
+57,Default Player Symbol,player_default.mesh
+58,Default Light Symbol,light_default.mesh
+59,Default Sound Symbol,sound_default.mesh
+60,Default Portal Symbol,portal_default.mesh
+61,Default Architecture Symbol,architecture_default.mesh
+62,Default Trigger Symbol,trigger_default.mesh
+63,Default Error Symbol,error_default.mesh
+64,Move Gizmo
+65,Rotate Gizmo
+66,Scale Gizmo
+
+[Weapons]
+67,Sword
+68,Knife
+69,Bow
+70,Spear
+
+[Lighting]
+71,Candle
+72,Lantern
+
+
+
+
 
 
 

@@ -63,19 +63,19 @@ public:
       * Initialize some default recast parameters
       **/
     OgreRecastConfigParams(void)
-        : cellSize(0.3),
-          cellHeight(0.2),
-          agentMaxSlope(20),
-          agentHeight(2.5),
-          agentMaxClimb(1),
-          agentRadius(0.5),
-          edgeMaxLen(12),
-          edgeMaxError(1.3),
-          regionMinSize(50),
-          regionMergeSize(20),
+        : cellSize(0.3f),
+          cellHeight(0.2f),
+          agentMaxSlope(20.0f),
+          agentHeight(2.5f),
+          agentMaxClimb(1.0f),
+          agentRadius(0.5f),
+          edgeMaxLen(12.0f),
+          edgeMaxError(1.3f),
+          regionMinSize(50.0f),
+          regionMergeSize(20.0f),
           vertsPerPoly(DT_VERTS_PER_POLYGON),   // (=6)
-          detailSampleDist(6),
-          detailSampleMaxError(1),
+          detailSampleDist(6.0f),
+          detailSampleMaxError(1.0f),
           keepInterResults(false)
     { eval(); }
 

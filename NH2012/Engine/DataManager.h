@@ -13,7 +13,6 @@
 
 #include "NHException.h"
 
-
 struct ArchitectureDesc
 {
   ArchitectureDesc(int id, std::string name, std::string mesh)
@@ -21,7 +20,10 @@ struct ArchitectureDesc
       mesh(mesh),
       id(id),
       friction(0.2f),
-      restitution(0.5f)
+      restitution(0.5f),
+      isNavigable(true),
+      isPhysical(true),
+      isStatic(true)
   {
   }
 
@@ -31,9 +33,12 @@ struct ArchitectureDesc
   float friction;
   float restitution;
 
+  bool isNavigable;//enable ai navigation
+  bool isStatic;//enable static mesh generation
+  bool isPhysical;//enable physics fabrication
+
   int id;
 };
-
 
 struct ItemDesc
 {
@@ -45,7 +50,9 @@ struct ItemDesc
       staticFriction(0.7f),
       resititution(0.5f),
       density(0.1f),
-      id(id)
+      id(id),
+      isDynamic(true),
+      isPhysical(true)
   {
   }
 
@@ -58,6 +65,9 @@ struct ItemDesc
   float resititution;
   float density;
 
+  bool isDynamic;//movement applies eg. gravity and forces
+  bool isPhysical;//can interact with the world
+
   int id;
 };
 
@@ -69,7 +79,8 @@ struct MonsterDesc
       height(1.75f),
       speed(1.0f),
       health(100.0f),
-      id(id)
+      id(id),
+      gravity(0.0f, -9.81f, 0.0f)
   {
   }
 
@@ -79,6 +90,7 @@ struct MonsterDesc
   float speed;
   float height;
   float health;
+  Ogre::Vector3 gravity;
 
   int id;
 };
@@ -128,16 +140,21 @@ struct SoundDesc
   int id;
 };
 
-/* //implement later
 struct PlayerDesc
 {
   PlayerDesc()
+    : mesh("actor.mesh"),
+      name("Default Name"),
+      gravity(0.0f, -9.81f, 0.0f)
   {
   }
 
+  std::string mesh;
+  std::string name;
 
+  Ogre::Vector3 gravity;
 
-};*/
+};
 
 typedef std::map<int, ArchitectureDesc > ArchitectureList;
 typedef std::map<int, MonsterDesc > MonsterList;

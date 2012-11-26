@@ -21,7 +21,7 @@ class World;
 class Player : public IdentificationInterface
 {
 public:
-  Player(World* world);
+  Player(PlayerDesc description, World* world);
   ~Player(void);
 
   void update(double elapsedSeconds);
@@ -32,7 +32,7 @@ public:
   void setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt);
   void setPosition(Ogre::Vector3 position);
   void setRotation(Ogre::Quaternion rotation);
-  void setGravity(float gravity);
+  void setGravity(Ogre::Vector3 gravity);
   void setCollisionEnabled(bool enabled);
   void setItemGenerationID(int id);
   

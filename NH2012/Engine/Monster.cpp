@@ -11,7 +11,7 @@ Monster::Monster(MonsterDesc desc)
     node(NULL),
     intelligence(),
     visual(desc.mesh),
-    skeleton()
+    skeleton(desc.gravity)
 {
   setPosition(Ogre::Vector3::ZERO);
   setTarget(Ogre::Vector3::ZERO);

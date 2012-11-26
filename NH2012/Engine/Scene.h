@@ -27,12 +27,13 @@ class Portal;
 class Flock;
 class BoidExtension;
 class Item;
+class Light;
 class Architecture;
 
 class Scene
 {
 public:
-  Scene(World* world, SceneDesc desc);
+  Scene(SceneDesc desc, World* world);
   ~Scene(void);
 
   void setGravity(Ogre::Vector3 gravity);
@@ -47,6 +48,7 @@ public:
   int getNewInstanceNumber();
   Portal* getPortal(int id = DEFAULT_PORTAL);
   Portal* getDefaultPortal();
+  Ogre::Vector3 getGravity();
 
   Ogre::SceneManager* getSceneManager();
   physx::PxScene* getPhysicsManager();
@@ -88,7 +90,8 @@ private:
   PathfindManager pathfinder;
   
   Architecture* architecture;
-  std::vector<Ogre::Light*> lights;
+  //std::vector<Ogre::Light*> lights;
+  std::vector<Light*> lights;
   std::vector<Ogre::ParticleSystem*> particles;
   std::vector<Monster*> monsters;
   std::vector<Item*> items;

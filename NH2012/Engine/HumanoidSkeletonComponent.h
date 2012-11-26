@@ -20,7 +20,7 @@
 class HumanoidSkeletonComponent : public NodeComponent, public physx::PxControllerBehaviorCallback, public physx::PxUserControllerHitReport
 {
 public:
-  HumanoidSkeletonComponent(void);
+  HumanoidSkeletonComponent(Ogre::Vector3 gravity);
   ~HumanoidSkeletonComponent(void);
 
   void update(double elapsedSeconds);
@@ -46,7 +46,7 @@ public:
   void setRun(bool state);
   void setLeftHand(bool state);
   void setRightHand(bool state);
-  void setGravity(float gravity);
+  void setGravity(Ogre::Vector3 gravity);
   void setCollisionEnabled(bool enabled);
   void setCrouch(bool crouch);
 
@@ -108,7 +108,7 @@ protected:
   //State Data
   Ogre::Vector3 velocity;
   float speed;
-  float gravity;
+  Ogre::Vector3 gravity;//note that only the y value is currently used
   bool collisionEnabled;
   
   //PhysX Constants

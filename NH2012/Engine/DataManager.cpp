@@ -1,5 +1,7 @@
 #include "DataManager.h"
 
+#include <boost/lexical_cast.hpp>
+
 //-------------------------------------------------------------------------------------
 DataManager::DataManager(void)
   : files(std::vector<std::string>()),
@@ -29,10 +31,13 @@ void DataManager::addData(std::string file)
   std::string temp;
 
   std::string type = "";
-  //std::string group = "";
+
+  int line = 0;
 
   while(std::getline(ifs, temp))
   {
+    line++;
+
     if(temp == "") continue;
     
     if(temp[0] == '#')//new data set
@@ -40,20 +45,33 @@ void DataManager::addData(std::string file)
       if(type == "") type = temp;
       continue;
     }
-    //else if(temp[0] == '[')//assuming this line is the start of a new group
-    //{
-    //  group = temp;
-    //  continue;
-    //}
 
     std::vector<std::string> words;
     boost::split(words, temp, boost::is_any_of(","), boost::token_compress_on);
 
-    if(words.size() < 3) continue;
-    int id = std::atoi(words[ID_INDEX].c_str());
-    std::string name = words[NAME_INDEX];
-    std::string mesh = words[MESH_INDEX];
+    if(words.size() == 0) continue;
     
+    int id = -1;
+    try
+    {
+      id = boost::lexical_cast<int>(words[ID_INDEX]);
+    }
+    catch(boost::bad_lexical_cast ex)
+    {
+      //we can, in general, safely ignore any badly formatted data entries but we should warn the user
+      std::cout << "Incorrectly formatted data entry in " << file << " on line " << line << "." << std::endl;
+      continue;
+    }
+
+    std::string name;
+    std::string mesh;
+    
+    if(words.size() >= 2) name = words[NAME_INDEX];
+    else name = "Name Error";
+    
+    if(words.size() >= 3) mesh = words[MESH_INDEX];
+    else mesh = "error.mesh";
+
     //Need to extend for other data options
     if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(std::pair<int, ArchitectureDesc>(id, ArchitectureDesc(id, name, mesh)));
     else if(type == MONSTERS_IDENTIFIER) monsters.insert(std::pair<int, MonsterDesc>(id, MonsterDesc(id, name, mesh)));
