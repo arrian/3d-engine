@@ -2,5 +2,6 @@
 #ID,Name,Filename
 
 [Default]
-0,Theatre Detail,C:\Dev\Nethack2012\NH2012\Media\theatre_detail.scene
-1,Theatre,C:\Dev\Nethack2012\NH2012\Media\theatre.scene
+0,Brutalist,C:\Dev\Nethack2012\NH2012\Media\brutalist.scene
+1,Theatre Detail,C:\Dev\Nethack2012\NH2012\Media\theatre_detail.scene
+2,Theatre,C:\Dev\Nethack2012\NH2012\Media\theatre.scene
