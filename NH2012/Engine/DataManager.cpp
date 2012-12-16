@@ -2,6 +2,7 @@
 
 #include <boost/lexical_cast.hpp>
 
+
 //-------------------------------------------------------------------------------------
 DataManager::DataManager(void)
   : files(std::vector<std::string>()),

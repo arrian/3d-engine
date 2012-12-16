@@ -59,8 +59,8 @@ void Monster::hasSceneChange()
 
 
   //temporary testing
-  setPosition(scene->getPathfindManager()->getRandomNavMeshPoint());
-  setTarget(scene->getPathfindManager()->getRandomNavMeshPoint());
+  setPosition(scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0.0f,2.0f,0.0f));
+  setTarget(scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0.0f,2.0f,0.0f));
 
 
   node->setPosition(position);

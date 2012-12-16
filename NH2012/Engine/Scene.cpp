@@ -29,7 +29,7 @@ Scene::Scene(SceneDesc desc, World* world)
     active(false),
     pathfinder(sceneManager),
     //flockTest(100),
-    totalElapsed(0.0),
+    //totalElapsed(0.0),
     particles(),
     monsters(),
     portals(),
@@ -56,76 +56,13 @@ Scene::Scene(SceneDesc desc, World* world)
 
   setShadowsEnabled(world->enableShadows);
 
-  //sceneManager->setShowDebugShadows(world->isDebug());
-  //sceneManager->showBoundingBoxes(world->isDebug());
-  
-  architecture = new Architecture(this, &pathfinder);
-
-  //SceneDesc sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
-  
-  load(desc.file);//loading the scene file
-
-  sceneManager->setAmbientLight(desc.ambientLight);
-
-  /*
-  //static spotlight
-  Ogre::Light* light = sceneManager->createLight();
-  light->setType(Ogre::Light::LT_SPOTLIGHT);
-  light->setPosition(0,1,0);
-  light->setDirection(0,-1,0);
-  light->setSpotlightInnerAngle(Ogre::Degree(25));
-  light->setSpotlightOuterAngle(Ogre::Degree(45));
-  light->setAttenuation(30,0,0,0);
-  light->setDiffuseColour(Ogre::ColourValue::White);
-  light->setCastShadows(true);
-  */
-
-  //ivyTestNoDestruction = new PlantOgreMesh(sceneManager, PlantDesc(), Ogre::Vector3(0,0,0));
-
-  //sceneManager->getRootSceneNode()->attachObject(sceneManager->createEntity("theatre_ivy.mesh"));//static ivy mesh
-
-  //building static geometry
-  pathfinder.build();//note that this needs to be done before building architecture because architecture->build destroys the required scenenode
-  architecture->build();
-
-  //flockTest.setScene(this);//boids flocking test
+  setup();
 }
 
 //-------------------------------------------------------------------------------------
 Scene::~Scene(void)
 {
-  //Deleting architecture
-  if(architecture) delete architecture;
-  architecture = NULL;
-
-  //Deleting all monsters
-  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
-  {
-    if(*it) delete (*it);
-    (*it) = NULL;
-  }
-
-  //Deleting all items
-  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it)
-  {
-    if(*it) delete (*it);
-    (*it) = NULL;
-  }
-
-  //Deleting all portals
-  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
-  {
-    if(*it) delete (*it);
-    (*it) = NULL;
-  }
-
-  //Releasing physics
-  physicsManager->release();
-  physicsManager = NULL;
-
-  //Releasing scene manager
-  world->getRoot()->destroySceneManager(sceneManager);
-  sceneManager = NULL;
+  release();
 }
 
 //-------------------------------------------------------------------------------------
@@ -209,23 +146,7 @@ void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
 {
   Light* light = new Light(this, position, castShadows, range, colour);
-  //add set position and set scene to light
   lights.push_back(light);
-
-  /*Old basic ogre light code
-  Ogre::Light* light = sceneManager->createLight("light" + Ogre::StringConverter::toString(getNewInstanceNumber()));
-  lights.push_back(light);
-  light->setPosition(position);
-  light->setAttenuation(range, 0.95f, 0.05f, 0);
-  light->setDiffuseColour(colour);
-  light->setSpecularColour(Ogre::ColourValue::White);
-  light->setCastShadows(castShadows);
-  */
-
-  //Same clipping as the camera set up
-  //light->setShadowNearClipDistance(0.4f);
-  //light->setShadowFarClipDistance(400.0f);
-  //light->setShadowFarDistance(400.0f);
 }
 
 //-------------------------------------------------------------------------------------
@@ -283,10 +204,8 @@ void Scene::update(double elapsedSeconds)
     if((*it)->isLoadRequired(player->getPosition())) world->loadScene((*it)->getID());
   }
 
-  totalElapsed += elapsedSeconds;
+  //totalElapsed += elapsedSeconds;
   //flockTest.update(totalElapsed);//evt.timeSinceLastFrame);
-
-  //ivyTestNoDestruction->grow(elapsedSeconds);
 
   if(!world->freezeCollisionDebug) advancePhysics(elapsedSeconds);
 }
@@ -585,5 +504,85 @@ Ogre::Vector3 Scene::getGravity()
 {
   physx::PxVec3 gravity = physicsManager->getGravity();
   return Ogre::Vector3(gravity.x, gravity.y, gravity.z);
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::reset()
+{
+  release();
+  setup();
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::setup()
+{
+  //sceneManager->setShowDebugShadows(world->isDebug());
+  //sceneManager->showBoundingBoxes(world->isDebug());
+  
+  architecture = new Architecture(this, &pathfinder);
+
+  //SceneDesc sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
+  
+  load(desc.file);//loading the scene file
+
+  sceneManager->setAmbientLight(desc.ambientLight);
+
+  /*
+  //static spotlight
+  Ogre::Light* light = sceneManager->createLight();
+  light->setType(Ogre::Light::LT_SPOTLIGHT);
+  light->setPosition(0,1,0);
+  light->setDirection(0,-1,0);
+  light->setSpotlightInnerAngle(Ogre::Degree(25));
+  light->setSpotlightOuterAngle(Ogre::Degree(45));
+  light->setAttenuation(30,0,0,0);
+  light->setDiffuseColour(Ogre::ColourValue::White);
+  light->setCastShadows(true);
+  */
+
+  //sceneManager->getRootSceneNode()->attachObject(sceneManager->createEntity("theatre_ivy.mesh"));//static ivy mesh
+
+  //building static geometry
+  pathfinder.build();//note that this needs to be done before building architecture because architecture->build destroys the required scenenode
+  architecture->build();
+
+  //flockTest.setScene(this);//boids flocking test
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::release()
+{
+  //Deleting architecture
+  if(architecture) delete architecture;
+  architecture = NULL;
+
+  //Deleting all monsters
+  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
+  {
+    if(*it) delete (*it);
+    (*it) = NULL;
+  }
+
+  //Deleting all items
+  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it)
+  {
+    if(*it) delete (*it);
+    (*it) = NULL;
+  }
+
+  //Deleting all portals
+  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
+  {
+    if(*it) delete (*it);
+    (*it) = NULL;
+  }
+
+  //Releasing physics
+  physicsManager->release();
+  physicsManager = NULL;
+
+  //Releasing scene manager
+  world->getRoot()->destroySceneManager(sceneManager);
+  sceneManager = NULL;
 }
 

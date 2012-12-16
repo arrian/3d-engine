@@ -66,6 +66,8 @@ Console::Console()//World* world, OIS::Keyboard* keyboard)
   commands.push_back(new Command<Console>("setSceneDrawDebugNavigationMesh", "(true | false)", "displays or hides the scene navigation mesh", &Console::setSceneDrawDebugNavMesh, this));
   commands.push_back(new Command<Console>("setSceneShadowsEnabled", "(true | false)", "shows or hides shadows", &Console::setSceneShadowsEnabled, this));
   commands.push_back(new Command<Console>("setSceneGravity", "x y z", "sets the scene gravity", &Console::setSceneGravity, this));
+  commands.push_back(new Command<Console>("reset", "", "resets the scene", &Console::reset, this));
+
 }
 
 //-------------------------------------------------------------------------------------
@@ -239,6 +241,8 @@ void Console::enter()
 
   Options elements;
   split(command, ' ', elements);
+
+  if(elements.size() == 0) elements.push_back(command);//must be a one word command
 
   for(std::vector<Command<Console>*>::iterator iter = commands.begin(); iter < commands.end(); ++iter)
   {
@@ -695,6 +699,13 @@ void Console::setSceneGravity(Options argv)
     return;
   }
   world->getPlayer()->getScene()->setGravity(Ogre::Vector3(boost::lexical_cast<float>(argv[1]), boost::lexical_cast<float>(argv[2]), boost::lexical_cast<float>(argv[3])));
+}
+
+//-------------------------------------------------------------------------------------
+void Console::reset(Options argv)
+{
+  throw NHException("Reset not implemented properly in Scene.");
+  world->getPlayer()->getScene()->reset();
 }
 
 //-------------------------------------------------------------------------------------

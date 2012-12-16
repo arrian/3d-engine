@@ -102,26 +102,20 @@ void CameraComponent::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-void CameraComponent::rayQuery()
+Ogre::Camera* CameraComponent::getCamera()
 {
-  //ray seems wrong when facing in the negative direction
+  return camera;
+}
 
-  Ogre::Vector3 oOrigin = camera->getDerivedPosition();
-  Ogre::Vector3 oUnitDir = camera->getDerivedDirection();
-  physx::PxVec3 origin = physx::PxVec3(oOrigin.x, oOrigin.y, oOrigin.z);
-  physx::PxVec3 unitDir = physx::PxVec3(oUnitDir.x, oUnitDir.y, oUnitDir.z);
-  physx::PxSceneQueryFlags outputFlags = physx::PxSceneQueryFlags();
-  physx::PxRaycastHit hit;
-  if(scene->getPhysicsManager()->raycastSingle(origin, unitDir, rayCastDistance, outputFlags, hit))
-  {
-    std::cout << "ray hit at a distance of " << hit.distance << " with user data " << hit.shape->userData << std::endl;
-    if(hit.shape->userData)
-    {
-      if(hit.shape->userData == (void*) 0x43435453 || hit.shape->userData == (void*) 0x5354435b || hit.shape->userData == (void*) 0x53544343) return;//the default physx character controller insists on using the userData field for its own purposes putting the value 'CCTS' in.
-      IdentificationInterface* target = static_cast<IdentificationInterface*>(hit.shape->userData);//Unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
-      std::cout << target->getType() << ":" << target->getName() << ":" << target->getInstanceID() << std::endl;
-      
-    }
-  }
+//-------------------------------------------------------------------------------------
+Ogre::Viewport* CameraComponent::getViewport()
+{
+  return viewport;
+}
+
+//-------------------------------------------------------------------------------------
+Ogre::Vector3 CameraComponent::getDirection()
+{
+  return camera->getRealDirection();//am i using the correct direction function?
 }
 

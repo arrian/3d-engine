@@ -38,7 +38,7 @@ SoundManager::SoundManager(void)
 //-------------------------------------------------------------------------------------
 SoundManager::~SoundManager(void)
 {
-  int result;
+  //int result;
   for(std::vector<FMOD::Sound*>::iterator it = sounds2D.begin(); it < sounds2D.end(); ++it)
   {
     (*it)->release();

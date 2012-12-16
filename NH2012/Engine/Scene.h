@@ -9,7 +9,7 @@
 #include "DataManager.h"
 #include "PathfindManager.h"
 #include "Flock.h"
-#include "./Ivy/Ivy.h"
+
 
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxControllerManager.h"
@@ -73,12 +73,11 @@ public:
   //utility to detroy a scene node and all child nodes and entities
   void destroyAllAttachedMoveables(Ogre::SceneNode* node);
   void destroySceneNode(Ogre::SceneNode* node);
+
+  void reset();
   
 private:
   SceneDesc desc;
-  //int id;
-  //Ogre::String name;
-  //float north;
   Portal* defaultEntry;//portal to drop the player at by default. if null pointer then the player will be dropped at zero.
   
   Ogre::ColourValue defaultAmbientColour;
@@ -90,13 +89,13 @@ private:
   PathfindManager pathfinder;
   
   Architecture* architecture;
-  //std::vector<Ogre::Light*> lights;
   std::vector<Light*> lights;
   std::vector<Ogre::ParticleSystem*> particles;
   std::vector<Monster*> monsters;
   std::vector<Item*> items;
   std::vector<Portal*> portals;
   Player* player;
+  
 
   /*Defines if the scene should receive frame updates.*/
   bool active;
@@ -117,9 +116,10 @@ private:
   physx::PxU32 numberPhysicsCPUThreads;
 
   //Flock flockTest;
-  double totalElapsed;
+  //double totalElapsed;
 
-  //PlantOgreMesh* ivyTestNoDestruction;
-
+  void setup();
+  void release();
+  
 };
 

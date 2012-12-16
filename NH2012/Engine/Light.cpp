@@ -6,11 +6,16 @@ Light::Light(Scene* scene, Ogre::Vector3 position, bool castShadows, Ogre::Real 
     hasIntensityVariation(false),
     hasColourVariation(false)
 {
-  light->setPosition(position);
+  lightNode = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode(position);
+  lightNode->attachObject(light);
   light->setAttenuation(range, 0.95f, 0.05f, 0);
   light->setDiffuseColour(colour);
   light->setSpecularColour(Ogre::ColourValue::White);
   light->setCastShadows(castShadows);
+
+  
+  //temp intensity variation
+  addIntensityVariation(IntensityVariationDesc());
 }
 
 

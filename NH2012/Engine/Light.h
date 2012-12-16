@@ -65,5 +65,7 @@ private:
 
   bool hasColourVariation;//should this light's colour variate
   ColourVariationDesc colourVariation;
+
+  Ogre::SceneNode* lightNode;
 };
 

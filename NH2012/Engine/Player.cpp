@@ -10,6 +10,7 @@ Player::Player(PlayerDesc description, World* world)
     scene(NULL),
     camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
     visual(description.mesh),
+    query(),
     addItem(false),
     addMonster(false),
     placementDistance(3.0f),
@@ -38,6 +39,7 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
     visual.removeNode();
     camera.removeNode();
     skeleton.removeNode();
+    query.removeNode();
     
     if(node) this->scene->getSceneManager()->destroySceneNode(node);
     node = NULL;
@@ -56,9 +58,10 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   visual.setNode(scene, node);
   skeleton.setNode(scene, node);
   camera.setNode(scene, skeleton.getHead());
+  query.setNode(scene, skeleton.getHead());
 
   stop();
-
+  
   if(world->getSceneChangeListener()) world->getSceneChangeListener()->sceneChanged();//notify the scene change listener that the scene has changed
 }
 
@@ -71,10 +74,7 @@ Scene* Player::getScene()
 //-------------------------------------------------------------------------------------
 void Player::update(double elapsedSeconds)
 {
-  //camera.rayQuery();//testing ray queries
-
   skeleton.update(elapsedSeconds);
-
 
   ////////////////////////////////Implement later
   /*
@@ -140,16 +140,18 @@ void Player::update(double elapsedSeconds)
   */
   ////////////////////////////////
 
-
-
-
   camera.update(elapsedSeconds);//for aspect ratio changes
+
+
 
   if(addItem) 
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
   if(addMonster) scene->addMonster(monsterGenerationID);//create a monster at an arbitrary location
+
+
+  query.rayQuery(camera.getDirection(), 200.0f);
 }
 
 //-------------------------------------------------------------------------------------
@@ -273,3 +275,15 @@ void Player::setItemGenerationID(int itemGenerationID)
   this->itemGenerationID = itemGenerationID;
 }
 
+//-------------------------------------------------------------------------------------
+Ogre::Camera* Player::getCamera()
+{
+  return camera.getCamera();
+}
+
+
+//-------------------------------------------------------------------------------------
+Ogre::Viewport* Player::getViewport()
+{
+  return camera.getViewport();
+}

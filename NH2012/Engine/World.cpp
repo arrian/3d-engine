@@ -12,13 +12,15 @@
 #include "extensions/PxVisualDebuggerExt.h"
 #include "PxTkStream.h"
 
+//Hydrax
+#include "Hydrax.h"
+#include "Noise/Perlin/Perlin.h"
+#include "Modules/ProjectedGrid/ProjectedGrid.h"
+
 //-------------------------------------------------------------------------------------
 World::World(Ogre::Root* root)
   : root(root),
-    //items(),
     scenes(),
-    //monsters(),
-    //dataFiles(),
     dataManager(),
     soundManager(),
     errorCallback(),
@@ -29,10 +31,10 @@ World::World(Ogre::Root* root)
     physicsMaterial(NULL),
     physicsFoundation(NULL),
     sceneChangeListener(NULL),
+    //waterManager(NULL),
     defaultRestitution(0.2f),
     defaultStaticFriction(0.3f),
-    defaultDynamicFriction(0.4f)//,
-    //debug(false)
+    defaultDynamicFriction(0.4f)
 {
 }
 
@@ -41,6 +43,8 @@ World::~World(void)
 {
   if(player) delete player;
   player = NULL;
+
+  //if(waterManager) delete waterManager;
 
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
@@ -104,6 +108,37 @@ void World::hookWindow(Ogre::RenderWindow* window)
 {
   assert(player);
   player->hook(window);
+
+  //need to move inside scene
+  //waterManager = new Hydrax::Hydrax(player->getScene()->getSceneManager(), player->getCamera(), player->getViewport());
+  
+  
+  
+  // Change skybox
+  //player->getScene()->getSceneManager()->setSkyBox(true, "Sky/ClubTropicana", 100.0f, true);
+
+  // Update Hydrax sun position and colour
+  //waterManager->setSunPosition(Ogre::Vector3(0.0f, 100.0f, 0.0f));
+  //waterManager->setSunColor(Ogre::Vector3(1.0f, 0.9f, 0.6f));
+
+  ////////////////////////////////////////////////Hydrax setup 
+  /*
+  Hydrax::Noise::Perlin* noise = new Hydrax::Noise::Perlin();
+  Ogre::Plane plane = Ogre::Plane(Ogre::Vector3(0,1,0), Ogre::Vector3(0,-7.0f,0));
+  Hydrax::Module::ProjectedGrid::Options options = Hydrax::Module::ProjectedGrid::Options(128, 3.5f,5.0f,false);
+
+  Hydrax::Module::ProjectedGrid *mModule = new Hydrax::Module::ProjectedGrid(waterManager, 
+                                                                             noise, 
+                                                                             plane,
+                                                                             Hydrax::MaterialManager::NM_VERTEX, 
+                                                                             options);
+
+  waterManager->setModule(static_cast<Hydrax::Module::Module*>(mModule));
+  waterManager->loadCfg("HydraxDemo.hdx");*/
+  //////////////////////////////////////////////////
+  
+  
+  //waterManager->create();
 }
 
 //-------------------------------------------------------------------------------------
@@ -207,6 +242,7 @@ bool World::destroyScene(Ogre::String name)
 //-------------------------------------------------------------------------------------
 bool World::update(double elapsedSeconds)
 {
+  //if(waterManager) waterManager->update(elapsedSeconds);
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
     if((*it)->isActive()) (*it)->update(elapsedSeconds);//only send frame events to the active scenes

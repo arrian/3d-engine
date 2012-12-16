@@ -9,11 +9,11 @@
 #include <OISMouse.h>
 
 #include "Bar.h"
-#include "ComponentList.h"
 #include "IdentificationInterface.h"
 #include "HumanoidSkeletonComponent.h"
 #include "CameraComponent.h"
 #include "VisualComponent.h"
+#include "QueryComponent.h"
 
 class Scene;
 class World;
@@ -41,6 +41,8 @@ public:
   Ogre::Quaternion getRotation();
   Ogre::Vector3 getVelocity();
   Scene* getScene();//gets the scene the player is currently in
+  Ogre::Camera* getCamera();
+  Ogre::Viewport* getViewport();
 
   //Injectors
   void injectKeyDown(const OIS::KeyEvent &evt);
@@ -58,16 +60,16 @@ private:
   CameraComponent camera;//the player camera generally attached to the head node
   HumanoidSkeletonComponent skeleton;
   VisualComponent visual;
+  QueryComponent query;
 
   bool addItem;
   bool addMonster;
-
-  float placementDistance;
-  float lookResponsiveness;
-  float handMoveScalar;
-
   int itemGenerationID;//for debug item generation
   int monsterGenerationID;//for debug monster generation
+  float placementDistance;
+
+  float lookResponsiveness;
+  float handMoveScalar;
 
   void keyEvent(const OIS::KeyEvent &evt, bool isDown);
 };

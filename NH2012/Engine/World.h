@@ -44,6 +44,7 @@
 #include "PhysicsErrorCallback.h"
 #include "SceneChangeListener.h"
 #include "NHException.h"
+#include "Hydrax.h"
 
 //Forward Declarations
 class Player;
@@ -141,8 +142,7 @@ private:
   
   //World Contents
   Player* player;//std::vector<Player> players;
-  //std::vector<Monster*> monsters;
-  //std::vector<Item*> items;
+  //Hydrax::Hydrax* waterManager;//temporarily external to scene. can only have one instance??
   std::vector<Scene*> scenes;
 
   //PhysX

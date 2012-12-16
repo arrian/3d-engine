@@ -19,7 +19,10 @@ public:
 
   void update(double elapsedSeconds);
 
-  void rayQuery();
+  Ogre::Vector3 getDirection();
+
+  Ogre::Camera* getCamera();
+  Ogre::Viewport* getViewport();
 
 private:
   Ogre::Camera* camera;
