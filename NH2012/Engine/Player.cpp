@@ -45,10 +45,10 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
     node = NULL;
   }
 
-  if(!scene) return;//no new scene given
-
   //setting up
   this->scene = scene;
+
+  if(!scene) return;//no new scene given
 
   node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
   node->setPosition(position);
@@ -62,6 +62,7 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
 
   stop();
   
+  camera.unhookWindow();//need to ensure that all viewports are reset
   if(world->getSceneChangeListener()) world->getSceneChangeListener()->sceneChanged();//notify the scene change listener that the scene has changed
 }
 
@@ -148,7 +149,7 @@ void Player::update(double elapsedSeconds)
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
-  if(addMonster) scene->addMonster(monsterGenerationID);//create a monster at an arbitrary location
+  if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavMeshPoint());//create a monster at an arbitrary location
 
 
   query.rayQuery(camera.getDirection(), 200.0f);
@@ -248,6 +249,7 @@ void Player::setPosition(Ogre::Vector3 position)
   node->setPosition(position);
   skeleton.setNode(scene, node);//do i need to do this?
   camera.setNode(scene, skeleton.getHead());//do i need to do this?
+  query.setNode(scene,skeleton.getHead());
 }
 
 //-------------------------------------------------------------------------------------

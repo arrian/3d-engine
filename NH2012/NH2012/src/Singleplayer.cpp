@@ -87,6 +87,7 @@ void Singleplayer::notify(Ogre::String comment)
 
 void Singleplayer::sceneChanged()
 {
+  world.hookWindow(renderWindow);
   Console::getInstance().hookWindow(renderWindow);//reconnect the console to the scene
 }
 

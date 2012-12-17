@@ -36,6 +36,8 @@ Architecture::~Architecture(void)
     (*it) = NULL;
   }
 
+  //do i need this
+  /*
   for(std::map<Ogre::String, StaticEntity>::iterator it = statics.begin(); it != statics.end(); ++it) 
   {
     if(it->second.entity) scene->getSceneManager()->destroyEntity(it->second.entity);
@@ -43,7 +45,7 @@ Architecture::~Architecture(void)
     
     it->second.entity = NULL;
     it->second.mesh = NULL;
-  }
+  }*/
 }
 
 //-------------------------------------------------------------------------------------

@@ -11,11 +11,11 @@
 class IntelligenceComponent : public NodeComponent
 {
 public:
-  IntelligenceComponent(void);
+  IntelligenceComponent(float speed);
   ~IntelligenceComponent(void);
   
   /*! Finds a path within a scene.*/
-  void go(Ogre::Vector3 to);
+  void setGoal(Ogre::Vector3 to);
 
   void patrol(Ogre::Vector3 from, Ogre::Vector3 to);
 
@@ -31,13 +31,16 @@ public:
 
   void open();
   
-  Ogre::Vector3 getNextPosition();
+  Ogre::Vector3 getNextPosition(double elapsedSeconds);
 
   void update(double elapsedSeconds);
-  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
 protected:
-  std::queue<Ogre::Vector3> points;
+  bool hasGoal;
+  Ogre::Vector3 goal;
+  std::vector<Ogre::Vector3> intermediates;
+
+  float speed;
 
   void hasNodeChange();
 };

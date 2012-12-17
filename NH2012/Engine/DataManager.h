@@ -13,6 +13,8 @@
 
 #include "NHException.h"
 
+#define GRAVITY -9.81f
+
 struct ArchitectureDesc
 {
   ArchitectureDesc(int id, std::string name, std::string mesh)
@@ -77,10 +79,10 @@ struct MonsterDesc
     : name(name),
       mesh(mesh),
       height(1.75f),
-      speed(1.0f),
+      speed(100.0f),
       health(100.0f),
       id(id),
-      gravity(0.0f, -9.81f, 0.0f)
+      gravity(0.0f, GRAVITY, 0.0f)
   {
   }
 
@@ -103,7 +105,7 @@ struct SceneDesc
       id(id),
       ambientLight(0.1f,0.1f,0.1f),
       shadowColour(1.0f,1.0f,1.0f),
-      gravity(0.0f, -9.81f, 0.0f),
+      gravity(0.0f, GRAVITY, 0.0f),
       north(0.0f, 0.0f, 1.0f),
       fogStart(100.0f),
       fogEnd(200.0f),
@@ -145,7 +147,7 @@ struct PlayerDesc
   PlayerDesc()
     : mesh("actor.mesh"),
       name("Default Name"),
-      gravity(0.0f, -9.81f, 0.0f)
+      gravity(0.0f, GRAVITY, 0.0f)
   {
   }
 

@@ -86,7 +86,7 @@ private:
   Ogre::SceneManager* sceneManager;
   physx::PxScene* physicsManager;
   physx::PxControllerManager* controllerManager;//may only need one manager in the world
-  PathfindManager pathfinder;
+  PathfindManager* pathfinder;
   
   Architecture* architecture;
   std::vector<Light*> lights;

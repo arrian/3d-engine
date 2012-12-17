@@ -17,7 +17,7 @@
 Scene::Scene(SceneDesc desc, World* world)
   : world(world),
     desc(desc),
-    sceneManager(world->getRoot()->createSceneManager(Ogre::ST_GENERIC)),
+    sceneManager(NULL),
     controllerManager(NULL),
     physicsManager(NULL),
     instanceNumber(0),
@@ -27,7 +27,7 @@ Scene::Scene(SceneDesc desc, World* world)
     stepSize(1.0 / 60.0),
     accumulator(0.0),
     active(false),
-    pathfinder(sceneManager),
+    pathfinder(NULL),
     //flockTest(100),
     //totalElapsed(0.0),
     particles(),
@@ -36,26 +36,6 @@ Scene::Scene(SceneDesc desc, World* world)
     lights(),
     items()
 {
-  //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
-
-  //scene physics
-  physx::PxSceneDesc physicsDesc(world->getTolerancesScale());
-  physicsDesc.gravity = physx::PxVec3(desc.gravity.x, desc.gravity.y, desc.gravity.z);
-  
-  physicsDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
-  if(!physicsDesc.cpuDispatcher) throw NHException("Could not create scene CPU dispatcher.");
-
-  physicsDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
-  if(!physicsDesc.filterShader) throw NHException("Filter shader creation failed.");
-  
-  physicsManager = world->getPhysics()->createScene(physicsDesc);
-  if(!physicsManager) throw NHException("Could not create scene physics manager.");
-
-  controllerManager = PxCreateControllerManager(world->getPhysics()->getFoundation());
-  if(!controllerManager) throw NHException("Could not create scene controller manager.");
-
-  setShadowsEnabled(world->enableShadows);
-
   setup();
 }
 
@@ -138,6 +118,7 @@ void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
   Item* item = new Item(world->getDataManager()->getItem(id));//this->getWorld()->createItem(id);
   item->setPosition(position);
+  item->setRotation(rotation);
   item->setScene(this);
   items.push_back(item);
 }
@@ -190,7 +171,7 @@ void Scene::update(double elapsedSeconds)
   
   physicsManager->fetchResults(true);
   
-  pathfinder.update(elapsedSeconds);
+  pathfinder->update(elapsedSeconds);
   architecture->update(elapsedSeconds);//only really needed for pathfinding debug display... not needed anymore?
 
   for(std::vector<Light*>::iterator it = lights.begin(); it != lights.end(); ++it) (*it)->update(elapsedSeconds);//iterate lights
@@ -234,6 +215,7 @@ bool Scene::advancePhysics(double elapsedSeconds)
 #define CAST_SHADOWS_STRING "cast_shadows"
 #define RANGE_STRING "range"
 #define ITEM_STRING "item"
+#define MONSTER_STRING "monster"
 #define PORTAL_STRING "portal"
 #define TARGET_SCENE_ID_STRING "target_scene_id"
 #define TARGET_PORTAL_ID_STRING "target_portal_id"
@@ -285,6 +267,10 @@ void Scene::load(std::string file)
       architecture->add(world->getDataManager()->getArchitecture(id), getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
       architectureNode = architectureNode->next_sibling(ARCHITECTURE_STRING);
     }
+
+    //building static geometry - must do here else monster placement suffers
+    pathfinder->build();//note that this needs to be done before building architecture because architecture->build destroys the required scenenode
+    architecture->build();
    
     //Lights
     rapidxml::xml_node<>* lightNode = root->first_node(LIGHT_STRING);//"light");
@@ -304,7 +290,16 @@ void Scene::load(std::string file)
       int id = boost::lexical_cast<int>(itemNode->first_attribute(ID_STRING)->value());
       addItem(id, getXMLPosition(itemNode), getXMLRotation(itemNode));
       itemNode = itemNode->next_sibling(ITEM_STRING);
-    }    
+    }
+
+    //Monsters
+    rapidxml::xml_node<>* monsterNode = root->first_node(MONSTER_STRING);
+    while(monsterNode != NULL)
+    {
+      int id = boost::lexical_cast<int>(monsterNode->first_attribute(ID_STRING)->value());
+      addMonster(id, getXMLPosition(monsterNode), getXMLRotation(monsterNode));
+      monsterNode = monsterNode->next_sibling(MONSTER_STRING);
+    }
     
     //Portals
     rapidxml::xml_node<>* portalNode = root->first_node(PORTAL_STRING);
@@ -455,7 +450,7 @@ Architecture* Scene::getArchitecture()
 //-------------------------------------------------------------------------------------
 PathfindManager* Scene::getPathfindManager()
 {
-  return &pathfinder;
+  return pathfinder;
 }
 
 //-------------------------------------------------------------------------------------
@@ -489,7 +484,7 @@ void Scene::setDebugDrawBoundingBoxes(bool enabled)
 //-------------------------------------------------------------------------------------
 void Scene::setDebugDrawNavigationMesh(bool enabled)
 {
-  if(enabled) pathfinder.drawNavMesh();
+  if(enabled) pathfinder->drawNavMesh();
   else throw NHException("Removing a drawn navigation mesh is not implemented.");
 }
 
@@ -509,17 +504,43 @@ Ogre::Vector3 Scene::getGravity()
 //-------------------------------------------------------------------------------------
 void Scene::reset()
 {
+  if(player) player->setScene(NULL);//detach player from this scene
   release();
   setup();
+  if(player) addPlayer(player);
 }
 
 //-------------------------------------------------------------------------------------
 void Scene::setup()
 {
+  //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
+
+  //scene physics
+  physx::PxSceneDesc physicsDesc(world->getTolerancesScale());
+  physicsDesc.gravity = physx::PxVec3(desc.gravity.x, desc.gravity.y, desc.gravity.z);
+
+  physicsDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
+  if(!physicsDesc.cpuDispatcher) throw NHException("Could not create scene CPU dispatcher.");
+
+  physicsDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
+  if(!physicsDesc.filterShader) throw NHException("Filter shader creation failed.");
+
+  physicsManager = world->getPhysics()->createScene(physicsDesc);
+  if(!physicsManager) throw NHException("Could not create scene physics manager.");
+
+  controllerManager = PxCreateControllerManager(world->getPhysics()->getFoundation());
+  if(!controllerManager) throw NHException("Could not create scene controller manager.");
+
+  sceneManager = world->getRoot()->createSceneManager(Ogre::ST_GENERIC);
+
+  pathfinder = new PathfindManager(sceneManager);
+
+  setShadowsEnabled(world->enableShadows);
+
   //sceneManager->setShowDebugShadows(world->isDebug());
   //sceneManager->showBoundingBoxes(world->isDebug());
   
-  architecture = new Architecture(this, &pathfinder);
+  architecture = new Architecture(this, pathfinder);
 
   //SceneDesc sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
   
@@ -542,9 +563,7 @@ void Scene::setup()
 
   //sceneManager->getRootSceneNode()->attachObject(sceneManager->createEntity("theatre_ivy.mesh"));//static ivy mesh
 
-  //building static geometry
-  pathfinder.build();//note that this needs to be done before building architecture because architecture->build destroys the required scenenode
-  architecture->build();
+
 
   //flockTest.setScene(this);//boids flocking test
 }
@@ -552,36 +571,39 @@ void Scene::setup()
 //-------------------------------------------------------------------------------------
 void Scene::release()
 {
-  //Deleting architecture
+  defaultEntry = NULL;
+
+  if(pathfinder) delete pathfinder;
+  pathfinder = NULL;
+
   if(architecture) delete architecture;
   architecture = NULL;
 
-  //Deleting all monsters
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
   {
     if(*it) delete (*it);
     (*it) = NULL;
   }
+  monsters.clear();
 
-  //Deleting all items
   for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it)
   {
     if(*it) delete (*it);
     (*it) = NULL;
   }
+  items.clear();
 
-  //Deleting all portals
   for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
   {
     if(*it) delete (*it);
     (*it) = NULL;
   }
+  portals.clear();
+  
 
-  //Releasing physics
   physicsManager->release();
   physicsManager = NULL;
 
-  //Releasing scene manager
   world->getRoot()->destroySceneManager(sceneManager);
   sceneManager = NULL;
 }

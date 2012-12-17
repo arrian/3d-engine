@@ -56,7 +56,7 @@ public:
   void headRelative(Ogre::Degree x, Ogre::Degree y);
   void leftHandRelative(Ogre::Degree x, Ogre::Degree y);
   void rightHandRelative(Ogre::Degree x, Ogre::Degree y);
-  void followPath(std::vector<Ogre::Vector3> path);
+  //void followPath(std::vector<Ogre::Vector3> path);
 
   //Assertions
   bool isLeftHand();
@@ -124,7 +124,7 @@ protected:
   float moveScalar;
   float jumpVelocity;
 
-  bool isFollowingPath;
-  std::vector<Ogre::Vector3> path;
+  //bool isFollowingPath;
+  //std::vector<Ogre::Vector3> path;
 };
 

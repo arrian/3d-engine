@@ -3,24 +3,17 @@
 #include "Scene.h"
 
 //-------------------------------------------------------------------------------------
-//Monster::Monster(int id)
 Monster::Monster(MonsterDesc desc)
   : BasicComponent(),
     IdentificationInterface(desc.name, "Monster"),
     description(desc),
     node(NULL),
-    intelligence(),
+    intelligence(desc.speed),
     visual(desc.mesh),
-    skeleton(desc.gravity)
+    skeleton(desc.gravity),
+    position(Ogre::Vector3::ZERO)
 {
-  setPosition(Ogre::Vector3::ZERO);
-  setTarget(Ogre::Vector3::ZERO);
   skeleton.mapPhysical((IdentificationInterface*) this);
-  /*
-  health = Bar(Ogre::Real(difficulty * difficulty));
-  magic = Bar(Ogre::Real(difficulty * difficulty));
-  level = Bar(Ogre::Real(difficulty));
-  */
 }
 
 //-------------------------------------------------------------------------------------
@@ -32,16 +25,8 @@ Monster::~Monster(void)
 //-------------------------------------------------------------------------------------
 void Monster::update(double elapsedSeconds)
 {
-  scene->getPathfindManager()->FindPath(node->getPosition(), target, getInstanceID(), 0);//final argument is the target id which is not used by recast
-  skeleton.followPath(scene->getPathfindManager()->getPath(getInstanceID()));
-
   intelligence.update(elapsedSeconds);
   skeleton.update(elapsedSeconds);
-  
-
-
-  //if(elapsedSeconds == 0 || target == node->getPosition()) return;
-
 }
 
 //-------------------------------------------------------------------------------------
@@ -55,33 +40,33 @@ bool operator==(const Monster& x, const Monster& y)
 void Monster::hasSceneChange()
 {
   if(oldScene && node) oldScene->getSceneManager()->destroySceneNode(node);
+  
+  if(!scene) return;
+
   node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
 
-
   //temporary testing
-  setPosition(scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0.0f,2.0f,0.0f));
+  //setPosition(scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0.0f,2.0f,0.0f));
   setTarget(scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0.0f,2.0f,0.0f));
 
-
-  node->setPosition(position);
+  node->_setDerivedPosition(position);
 
   intelligence.setNode(scene, node);
   visual.setNode(scene, node);
   skeleton.setNode(scene, node);
-
-
-
 }
 
 //-------------------------------------------------------------------------------------
 void Monster::setPosition(Ogre::Vector3 position)
 {
   this->position = position;
+  if(node) node->_setDerivedPosition(position);
 }
 
 //-------------------------------------------------------------------------------------
 void Monster::setTarget(Ogre::Vector3 target)
 {
+  intelligence.setGoal(target);
   this->target = target;
 }
 

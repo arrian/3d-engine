@@ -28,6 +28,8 @@ void VisualComponent::hasNodeChange()
   if(oldScene && entity) oldScene->getSceneManager()->destroyEntity(entity);
   entity = NULL;
 
+  if(!scene || !node) return;
+
   entity = scene->getSceneManager()->createEntity(mesh);
   node->attachObject(entity);
 

@@ -4,8 +4,7 @@
 
 
 QueryComponent::QueryComponent(void)
-  : NodeComponent(),
-    debugHit(NULL)
+  : NodeComponent()
 {
 }
 
@@ -22,17 +21,9 @@ void QueryComponent::update(double elapsedSeconds)
 
 void QueryComponent::hasNodeChange()
 {
-  if(debugHit && oldScene) oldScene->getSceneManager()->destroyManualObject(debugHit);//cleanup
-  
-  debugHit = scene->getSceneManager()->createManualObject();
-  scene->getSceneManager()->getRootSceneNode()->attachObject(debugHit);
-  debugHit->setDynamic(true);//we will be updating the object for every hit
-  debugHit->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_LIST);
-  debugHit->position(Ogre::Vector3::ZERO);
-  debugHit->position(Ogre::Vector3::ZERO);
-  debugHit->end();
+  if(!scene || !node) return;
 
-  debugHitPosition = scene->getSceneManager()->createEntity("watermelon.mesh");
+  debugHitPosition = scene->getSceneManager()->createEntity("1mBox.mesh");
   hitNode = node->createChildSceneNode();
   hitNode->attachObject(debugHitPosition);
   
@@ -48,11 +39,7 @@ bool QueryComponent::rayQuery(Ogre::Vector3 direction, float distance)
   physx::PxRaycastHit hit;
   if(scene->getPhysicsManager()->raycastSingle(physx::PxVec3(position.x, position.y, position.z), physx::PxVec3(unitDirection.x, unitDirection.y, unitDirection.z), distance, outputFlags, hit))
   {
-    std::cout << "ray hit at a distance of " << hit.distance << " with user data " << hit.shape->userData << std::endl;
-    debugHit->beginUpdate(0);
-    debugHit->position(node->_getDerivedPosition());
-    debugHit->position(Ogre::Vector3(hit.impact.x, hit.impact.y, hit.impact.z));
-    debugHit->end();
+    //std::cout << "ray hit at a distance of " << hit.distance << " with user data " << hit.shape->userData << std::endl;
 
     hitNode->_setDerivedPosition(Ogre::Vector3(hit.impact.x, hit.impact.y, hit.impact.z));
     

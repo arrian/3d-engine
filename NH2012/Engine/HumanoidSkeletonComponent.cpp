@@ -33,9 +33,9 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(Ogre::Vector3 gravity)
     minimumMoveDistance(0.001f),
     userData(NULL),
     onGround(false),
-    crouch(false),
-    isFollowingPath(false),
-    path()
+    crouch(false)//,
+    //isFollowingPath(false),
+    //path()
 {
 }
 
@@ -62,12 +62,15 @@ void HumanoidSkeletonComponent::hasNodeChange()
   //if(entity) entity->detachFromParent();
   //if(scene) scene->getSceneManager()->destroySceneNode(body);
   if(controller) controller->release();
+  controller = NULL;
   //also destroy body
 
   //setting up
 
   //body = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
   //body->attachObject(entity);
+
+  if(!scene || !node) return;
 
   physx::PxCapsuleControllerDesc desc;
   desc.material = scene->getWorld()->getDefaultPhysicsMaterial();
@@ -86,10 +89,10 @@ void HumanoidSkeletonComponent::hasNodeChange()
 
   if(!controller) throw NHException("Could not create character kinematic.");
 
-  std::cout << "Actor address: " << ((void*) controller->getActor()) << std::endl;
-  std::cout << "Actor user data: " << controller->getActor()->userData << std::endl;
-  std::cout << "Controller user data: " << controller->getUserData() << std::endl;
-  std::cout << "Controller address: " << ((void*) controller) << std::endl;
+  //std::cout << "Actor address: " << ((void*) controller->getActor()) << std::endl;
+  //std::cout << "Actor user data: " << controller->getActor()->userData << std::endl;
+  //std::cout << "Controller user data: " << controller->getUserData() << std::endl;
+  //std::cout << "Controller address: " << ((void*) controller) << std::endl;
 
   stop();
 
@@ -110,7 +113,7 @@ void HumanoidSkeletonComponent::stop()
   rightHand = false;
   leftHand = false;
   velocity = Ogre::Vector3::ZERO;
-  isFollowingPath = false;
+  //isFollowingPath = false;
 }
 
 //-------------------------------------------------------------------------------------
@@ -176,6 +179,7 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
   }
 
   //////////////////////////////////////////
+  /*
   if(isFollowingPath)//specific to monsters
   {
     if(path.size() < 1) return;
@@ -193,6 +197,7 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
       node->translate(unitDirection * move);
     }
   }
+  */
   ///////////////////////////////////////////
   
   /*if (world->freeCameraDebug) 
@@ -406,11 +411,12 @@ bool HumanoidSkeletonComponent::isJumping()
 }
 
 //-------------------------------------------------------------------------------------
+/*
 void HumanoidSkeletonComponent::followPath(std::vector<Ogre::Vector3> path)
 {
   isFollowingPath = true;
   this->path = path;
-}
+}*/
 
 
 

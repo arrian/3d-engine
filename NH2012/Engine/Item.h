@@ -17,7 +17,7 @@ class Scene;
 class Item : public BasicComponent, public IdentificationInterface, public DynamicInterface
 {
 public:
-  Item(ItemDesc description, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
+  Item(ItemDesc description);
   virtual ~Item(void);
 
   friend bool operator==(const Item& x, const Item& y);

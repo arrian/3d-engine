@@ -84,7 +84,7 @@ void Console::hookWindow(Ogre::RenderWindow* window)
 {
   assert(window);
   bool visibleTemp = isVisible();
-  if(screen) overlay->destroyScreen(screen);
+  //if(screen) overlay->destroyScreen(screen);//might be necessary for scene changes or memory leaks?
   this->window = window;
   screen = overlay->createScreen(window->getViewport(0), "dejavu");
   layer = screen->createLayer();
@@ -704,7 +704,6 @@ void Console::setSceneGravity(Options argv)
 //-------------------------------------------------------------------------------------
 void Console::reset(Options argv)
 {
-  throw NHException("Reset not implemented properly in Scene.");
   world->getPlayer()->getScene()->reset();
 }
 

@@ -75,10 +75,14 @@ void CameraComponent::unhookWindow()
 //-------------------------------------------------------------------------------------
 void CameraComponent::hasNodeChange()
 {
-  if(oldScene == scene) oldNode->detachObject(camera);
-  else 
+  if(oldScene == scene)
+  {
+    if(oldNode) oldNode->detachObject(camera);
+  }
+  else
   {
     if(oldScene && camera) oldScene->getSceneManager()->destroyCamera(camera);//cleaning up previous scene
+    if(!scene) return;
     camera = scene->getSceneManager()->createCamera("CameraComponent");
   }
 
@@ -86,7 +90,7 @@ void CameraComponent::hasNodeChange()
   camera->setFarClipDistance(farClipDefault);//might be able to make this larger if necessary
   //if(world->wireframeDebug) camera->setPolygonMode(Ogre::PM_WIREFRAME);
   
-  node->attachObject(camera);
+  if(node) node->attachObject(camera);
 }
 
 //-------------------------------------------------------------------------------------

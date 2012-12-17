@@ -29,7 +29,7 @@ public:
   void stop();
 
   //Setters
-  void setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt);
+  void setScene(Scene* scene, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Vector3 lookAt = Ogre::Vector3::ZERO);
   void setPosition(Ogre::Vector3 position);
   void setRotation(Ogre::Quaternion rotation);
   void setGravity(Ogre::Vector3 gravity);

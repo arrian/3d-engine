@@ -7,7 +7,7 @@
 #include "geometry/PxConvexMeshGeometry.h"
 
 //-------------------------------------------------------------------------------------
-Item::Item(ItemDesc desc, Ogre::Vector3 position, Ogre::Quaternion rotation)
+Item::Item(ItemDesc desc)
   : desc(desc),
     BasicComponent(),
     IdentificationInterface(desc.name, "Item"),
@@ -16,10 +16,10 @@ Item::Item(ItemDesc desc, Ogre::Vector3 position, Ogre::Quaternion rotation)
     node(NULL),
     material(NULL),
     physical(NULL),
-    shape(NULL)
+    shape(NULL),
+    position(Ogre::Vector3::ZERO),
+    rotation(Ogre::Quaternion::IDENTITY)
 {
-  setPosition(position);
-  setRotation(rotation);
 }
 
 //-------------------------------------------------------------------------------------

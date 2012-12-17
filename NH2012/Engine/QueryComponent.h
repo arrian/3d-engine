@@ -21,7 +21,6 @@ public:
 protected:
   void hasNodeChange();
 
-  Ogre::ManualObject* debugHit;
   Ogre::Entity* debugHitPosition;
   Ogre::SceneNode* hitNode;
 };

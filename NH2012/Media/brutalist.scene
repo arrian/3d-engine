@@ -10,4 +10,5 @@
   <light tx="33" ty="24" tz="-5" range="50" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <light tx="63" ty="7" tz="56" range="20" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <architecture id="130" tx="0" ty="0" tz="0" />
+  <monster id="1" tx="0" ty="2" tz="4" rx="0" ry="0" rz="0" />
 </scene>
