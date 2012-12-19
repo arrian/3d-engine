@@ -59,7 +59,7 @@ bool Game::keyReleased(const OIS::KeyEvent &arg)
 {
   try
   {
-    if(arg.key == world.controls.console) Console::getInstance().setVisible(!Console::getInstance().isVisible());
+    if(arg.key == world.getControlManager()->console) Console::getInstance().setVisible(!Console::getInstance().isVisible());
     Console::getInstance().injectKeyUp(arg);
     if(Console::getInstance().isVisible()) return true;//ignore other key notifications while console visible
 

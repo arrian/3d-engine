@@ -1,7 +1,7 @@
 #pragma once
 
 //Standard
-#include <vector>
+#include <map>
 #include <ctime>
 #include <iostream>
 #include <string>
@@ -60,7 +60,7 @@ public:
   Scene* loadScene(int id);
 
   //Destruction
-  bool destroyScene(Ogre::String name);
+  bool destroyScene(int id);
 
   //Getters
   DataManager* getDataManager();
@@ -73,9 +73,8 @@ public:
   Ogre::Root* getRoot();
   int getNumberScenes();
   Scene* getScene(int id);
-  Scene* getScene(Ogre::String name);
   SceneChangeListener* getSceneChangeListener();
-  void getSceneNames(std::vector<Ogre::String> &names);
+  void getSceneNames(std::map<int, std::string> &names);
 
   //Setters
   void setRoot(Ogre::Root* root);
@@ -131,6 +130,6 @@ private:
   FabricationManager fabricationManager;
   
   Player* player;
-  std::vector<Scene*> scenes;
+  std::map<int, Scene*> scenes;
 };
 

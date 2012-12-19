@@ -28,10 +28,10 @@ World::~World(void)
   if(player) delete player;
   player = NULL;
 
-  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
+  for(std::map<int, Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
-    if(*it) delete (*it);
-    (*it) = NULL;
+    if(it->second) delete (it->second);
+    it->second = NULL;
   }
 }
 
@@ -74,23 +74,10 @@ Player* World::getPlayer()
 }
 
 //-------------------------------------------------------------------------------------
-Scene* World::getScene(Ogre::String name)
-{
-  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
-  {
-    if((*it)->getName() == name) return (*it);
-  }
-  return NULL;
-}
-
-//-------------------------------------------------------------------------------------
 Scene* World::getScene(int id)
 {
-  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
-  {
-    if((*it)->getSceneID() == id) return (*it);
-  }
-  return NULL;
+  if(!hasScene(id)) return NULL;
+  return scenes.find(id)->second;
 }
 
 //-------------------------------------------------------------------------------------
@@ -118,11 +105,11 @@ ControlManager* World::getControlManager()
 }
 
 //-------------------------------------------------------------------------------------
-void World::getSceneNames(std::vector<Ogre::String> &names)
+void World::getSceneNames(std::map<int, std::string> &names)
 {
-  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
+  for(std::map<int, Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
-    names.push_back((*it)->getName());
+    names.insert(std::pair<int, std::string>(it->first,it->second->getName()));
   }
 }
 
@@ -131,46 +118,33 @@ Scene* World::loadScene(int id)
 {
   if(hasScene(id)) return getScene(id);//check that the scene has not been loaded already
   Scene* scene = new Scene(dataManager.getScene(id), this);
-  scenes.push_back(scene);
+  scenes.insert(std::pair<int, Scene*>(scene->getSceneID(), scene));
   return scene;
 }
 
 //-------------------------------------------------------------------------------------
 bool World::hasScene(int id)
 {
-  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it)
-  {
-    if((*it)->getSceneID() == id) return true;
-  }
-  return false;
+  return scenes.count(id) > 0;
 }
 
 //-------------------------------------------------------------------------------------
-bool World::destroyScene(Ogre::String name)
+bool World::destroyScene(int id)
 {
-  //is unsafe
-
-  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
-  {
-    if((*it)->getName() == name) 
-    {
-      Scene* scene = *it;
-      if(scene->isActive()) return false;//can't destroy active scene
-      scenes.erase(it);
-      delete scene;
-      return true;
-    }
-  }
-  return false;
+  if(!hasScene(id)) return false;
+  Scene* scene = scenes.find(id)->second;
+  if(scene->isActive()) return false;
+  delete scene;
+  scenes.erase(scenes.find(id));
+  return true;
 }
 
 //-------------------------------------------------------------------------------------
 bool World::update(double elapsedSeconds)
 {
-  //if(waterManager) waterManager->update(elapsedSeconds);
-  for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
+  for(std::map<int, Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
-    if((*it)->isActive()) (*it)->update(elapsedSeconds);//only send frame events to the active scenes
+    if(it->second->isActive()) it->second->update(elapsedSeconds);//only send frame events to the active scenes
   }
   return true;
 }

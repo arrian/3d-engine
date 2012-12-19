@@ -8,6 +8,11 @@ ControlManager::ControlManager()
     ("LCONTROL",OIS::KC_LCONTROL)("ESCAPE",OIS::KC_ESCAPE);
 }
 
+ControlManager::~ControlManager()
+{
+
+}
+
 OIS::KeyCode ControlManager::stringToKeyCode(std::string string)
 {
   if(stringToEnum.count(string) < 1) throw NHException("Could not find a mapping for a string in ControlManager.");

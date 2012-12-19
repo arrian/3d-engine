@@ -10,11 +10,11 @@
 
 #include "../Engine/Console.h"
 #include "../Engine/World.h"
+#include "../Engine/Packet.h"
 #include "../Engine/SceneChangeListener.h"
 
 using boost::asio::ip::udp;
 
-#define MAX_MESSAGE_LENGTH 1024
 #define DEFAULT_PORT 22225
 #define SERVER_VERSION "v0.1"
 
@@ -36,8 +36,8 @@ private:
   boost::asio::io_service& io_service;
   udp::socket socket;
   udp::endpoint sender_endpoint;
-  enum { max_length = MAX_MESSAGE_LENGTH };
-  char data[max_length];
+
+  char data[MAX_PACKET_LENGTH];
 
   boost::thread game;
 };
