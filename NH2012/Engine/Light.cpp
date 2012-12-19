@@ -4,7 +4,8 @@
 Light::Light(Scene* scene, Ogre::Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
   : light(scene->getSceneManager()->createLight()),
     hasIntensityVariation(false),
-    hasColourVariation(false)
+    hasColourVariation(false),
+    up(false)//temp colour change
 {
   lightNode = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode(position);
   lightNode->attachObject(light);
@@ -47,7 +48,11 @@ void Light::off()
 
 void Light::update(double elapsedSeconds)
 {
+  //if(up) light->setDiffuseColour(light->getDiffuseColour() + Ogre::ColourValue(0,0,0.01));
+  //else light->setDiffuseColour(light->getDiffuseColour() - Ogre::ColourValue(0,0,0.01));
 
+  //if(light->getDiffuseColour().b >= 1.0f) up = false;
+  //else if(light->getDiffuseColour().b <= 0.0f) up = true;
 }
 
 

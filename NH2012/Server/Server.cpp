@@ -3,7 +3,9 @@
 
 Server::Server(boost::asio::io_service& io_service, short port)
   : io_service(io_service),
-    socket(io_service, udp::endpoint(udp::v4(), port))
+    socket(io_service, udp::endpoint(udp::v4(), port)),
+    world(),
+    game(update)
 {
   std::cout << "Server " << SERVER_VERSION << " using port " << socket.local_endpoint().port() << std::endl;
   std::cin.get();
@@ -17,6 +19,15 @@ Server::~Server(void)
 void Server::run()
 {
   io_service.run();
+}
+
+void Server::update()//thread this method
+{
+  while(true)
+  {
+    //handle console input
+    world.update(0.015);//make variable timestep
+  }
 }
 
 void Server::handleReceive(const boost::system::error_code& error, size_t bytes_recvd)

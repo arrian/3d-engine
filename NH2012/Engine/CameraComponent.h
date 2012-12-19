@@ -16,6 +16,7 @@ public:
 
   void hookWindow(Ogre::RenderWindow* window);
   void unhookWindow();
+  void rehookWindow();
 
   void update(double elapsedSeconds);
 

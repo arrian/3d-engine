@@ -82,8 +82,8 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   }
 
   /*Construct PhysX triangle mesh here.*/
-  physx::PxRigidStatic* actor = scene->getWorld()->getPhysics()->createRigidStatic(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physx::PxQuat(quaternion.x,quaternion.y,quaternion.z,quaternion.w)));
-  actor->createShape(physx::PxTriangleMeshGeometry(mesh), *scene->getWorld()->getDefaultPhysicsMaterial());
+  physx::PxRigidStatic* actor = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidStatic(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physx::PxQuat(quaternion.x,quaternion.y,quaternion.z,quaternion.w)));
+  actor->createShape(physx::PxTriangleMeshGeometry(mesh), *scene->getWorld()->getPhysicsManager()->getDefaultMaterial());
   actor->userData = this;
 
   scene->getPhysicsManager()->addActor(*actor);

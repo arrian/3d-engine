@@ -56,6 +56,7 @@ public:
   void headRelative(Ogre::Degree x, Ogre::Degree y);
   void leftHandRelative(Ogre::Degree x, Ogre::Degree y);
   void rightHandRelative(Ogre::Degree x, Ogre::Degree y);
+  void lookAt(Ogre::Vector3 position);
   //void followPath(std::vector<Ogre::Vector3> path);
 
   //Assertions

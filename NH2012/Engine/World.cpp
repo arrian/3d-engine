@@ -5,36 +5,20 @@
 #include "Player.h"
 #include "Item.h"
 #include "Monster.h"
-#include "NHException.h"
-
-//PhysX
-#include "extensions/PxExtensionsAPI.h"
-#include "extensions/PxVisualDebuggerExt.h"
-#include "PxTkStream.h"
-
-//Hydrax
-#include "Hydrax.h"
-#include "Noise/Perlin/Perlin.h"
-#include "Modules/ProjectedGrid/ProjectedGrid.h"
 
 //-------------------------------------------------------------------------------------
 World::World(Ogre::Root* root)
   : root(root),
     scenes(),
+    timeManager(),
     dataManager(),
     soundManager(),
-    errorCallback(),
-    allocatorCallback(),
+    physicsManager(),
+    controlManager(),
     fabricationManager(),
     player(NULL),
-    physicsWorld(NULL),
-    physicsMaterial(NULL),
-    physicsFoundation(NULL),
-    sceneChangeListener(NULL),
-    //waterManager(NULL),
-    defaultRestitution(0.2f),
-    defaultStaticFriction(0.3f),
-    defaultDynamicFriction(0.4f)
+    sceneChangeListener(NULL), 
+    defaultScene(0)
 {
 }
 
@@ -44,19 +28,11 @@ World::~World(void)
   if(player) delete player;
   player = NULL;
 
-  //if(waterManager) delete waterManager;
-
   for(std::vector<Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
     if(*it) delete (*it);
     (*it) = NULL;
   }
-
-  physicsWorld->release();
-  physicsWorld = NULL;
-
-  physicsFoundation->release();
-  physicsFoundation = NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -64,27 +40,13 @@ void World::initialise(std::string iniFile)
 {
   parseIni(iniFile);
 
-  //Creating physics
-  physx::PxAllocatorCallback* allocator = &allocatorCallback;
-  physicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *allocator, errorCallback);//getErrorCallback());
-  physicsFoundation->setErrorLevel(physx::PxErrorCode::eDEBUG_INFO);
-  if(!physicsFoundation) throw NHException("Physics foundation could not be created.");
+  fabricationManager.setPhysics(physicsManager.getPhysics());
+  fabricationManager.setCooking(physicsManager.getCooking());
+  fabricationManager.setDefaultPhysicsMaterial(physicsManager.getDefaultMaterial());//move all material stuff to the fabrication manager
 
-  bool recordMemoryAllocations = true;
-  physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations);
-  if(!physicsWorld) throw NHException("Physics world could not be created.");
-
-  PxInitExtensions(*physicsWorld);
-  fabricationManager.setPhysics(physicsWorld);
-
-  physicsCooking = PxCreateCooking(PX_PHYSICS_VERSION, physicsWorld->getFoundation(), physx::PxCookingParams());
-  if(!physicsCooking) throw NHException("Physics cooker could not be created.");
-  //should release cooking during gameplay
-  fabricationManager.setCooking(physicsCooking);
-
-  physicsMaterial = physicsWorld->createMaterial(defaultStaticFriction, defaultDynamicFriction, defaultRestitution);
-  if(!physicsMaterial) throw NHException("Default physics material could not be created.");
-  fabricationManager.setDefaultPhysicsMaterial(physicsMaterial);//move all material stuff to the fabrication manager
+#ifdef _DEBUG
+  physicsManager.initialiseVisualDebugger(physXVisualDebuggerIP, physXVisualDebuggerPort, physXVisualDebuggerTimeoutMilliseconds);
+#endif
 
   //creating default scene
   Scene* scene = loadScene(defaultScene);
@@ -96,49 +58,13 @@ void World::initialise(std::string iniFile)
   player = new Player(playerDesc, this);
   if(!player) throw NHException("Initial player creation failed.");
   scene->addPlayer(player);
-
-#ifdef _DEBUG
-  //Creating connection to the PhysX Visual Debugger
-  physx::PxExtensionVisualDebugger::connect(physicsWorld->getPvdConnectionManager(), physXVisualDebuggerIP.c_str(), physXVisualDebuggerPort, physXVisualDebuggerTimeoutMilliseconds);
-#endif
 }
 
 //-------------------------------------------------------------------------------------
 void World::hookWindow(Ogre::RenderWindow* window)
 {
   assert(player);
-  player->hook(window);
-
-  //need to move inside scene
-  //waterManager = new Hydrax::Hydrax(player->getScene()->getSceneManager(), player->getCamera(), player->getViewport());
-  
-  
-  
-  // Change skybox
-  //player->getScene()->getSceneManager()->setSkyBox(true, "Sky/ClubTropicana", 100.0f, true);
-
-  // Update Hydrax sun position and colour
-  //waterManager->setSunPosition(Ogre::Vector3(0.0f, 100.0f, 0.0f));
-  //waterManager->setSunColor(Ogre::Vector3(1.0f, 0.9f, 0.6f));
-
-  ////////////////////////////////////////////////Hydrax setup 
-  /*
-  Hydrax::Noise::Perlin* noise = new Hydrax::Noise::Perlin();
-  Ogre::Plane plane = Ogre::Plane(Ogre::Vector3(0,1,0), Ogre::Vector3(0,-7.0f,0));
-  Hydrax::Module::ProjectedGrid::Options options = Hydrax::Module::ProjectedGrid::Options(128, 3.5f,5.0f,false);
-
-  Hydrax::Module::ProjectedGrid *mModule = new Hydrax::Module::ProjectedGrid(waterManager, 
-                                                                             noise, 
-                                                                             plane,
-                                                                             Hydrax::MaterialManager::NM_VERTEX, 
-                                                                             options);
-
-  waterManager->setModule(static_cast<Hydrax::Module::Module*>(mModule));
-  waterManager->loadCfg("HydraxDemo.hdx");*/
-  //////////////////////////////////////////////////
-  
-  
-  //waterManager->create();
+  player->hookWindow(window);
 }
 
 //-------------------------------------------------------------------------------------
@@ -174,22 +100,21 @@ int World::getNumberScenes()
 }
 
 //-------------------------------------------------------------------------------------
-/*WARNING: May be a null pointer.*/
 Ogre::Root* World::getRoot()
 {
   return root;
 }
 
 //-------------------------------------------------------------------------------------
-physx::PxPhysics* World::getPhysics()
+PhysicsManager* World::getPhysicsManager()
 {
-  return physicsWorld;
+  return &physicsManager;
 }
 
 //-------------------------------------------------------------------------------------
-const physx::PxTolerancesScale& World::getTolerancesScale()
+ControlManager* World::getControlManager()
 {
-  return physicsWorld->getTolerancesScale();
+  return &controlManager;
 }
 
 //-------------------------------------------------------------------------------------
@@ -293,24 +218,15 @@ SceneChangeListener* World::getSceneChangeListener()
 }
 
 //-------------------------------------------------------------------------------------
-physx::PxMaterial* World::getDefaultPhysicsMaterial()
-{
-  return physicsMaterial;
-}
-
-//-------------------------------------------------------------------------------------
 void World::parseIni(std::string filename)
 {
-  std::cout << "Initialising..." << std::endl;
-
   try
   {
-    std::ifstream s(filename);
-
-    if(!s) throw NHException("Error opening initialisation file.");
+    Ogre::FileInfoListPtr fileListPtr = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", filename);
+    if(fileListPtr->size() < 1) throw NHException("Could not find the path to the specified initialisation file.");
 
     boost::property_tree::ptree pt;
-    boost::property_tree::ini_parser::read_ini(s, pt);
+    boost::property_tree::ini_parser::read_ini(fileListPtr->front().archive->getName() + "/" + fileListPtr->front().filename, pt);
 
     std::string TRUE_STRING = "true";
 
@@ -319,42 +235,23 @@ void World::parseIni(std::string filename)
     enableAI = (pt.get<std::string>("General.EnableAI") == TRUE_STRING);
     enableAudio = (pt.get<std::string>("General.EnableAudio") == TRUE_STRING);
 
-    //gravity = pt.get<float>("General.Gravity");
-
-    //Controls //temp default values
-    controls.moveForward = OIS::KC_W;
-    controls.moveLeft = OIS::KC_A;
-    controls.moveBack = OIS::KC_S;
-    controls.moveRight = OIS::KC_D;
-
-    controls.jump = OIS::KC_SPACE;
-    controls.kick = OIS::KC_F;
-    controls.run = OIS::KC_LSHIFT;
-    controls.crouch = OIS::KC_LCONTROL;
-    controls.leftHand = OIS::MB_Left;
-    controls.rightHand = OIS::MB_Right;
-
-    controls.quickslots.push_back(OIS::KC_1);
-    controls.quickslots.push_back(OIS::KC_2);
-    controls.quickslots.push_back(OIS::KC_3);
-    controls.quickslots.push_back(OIS::KC_4);
-    controls.quickslots.push_back(OIS::KC_5);
-    controls.quickslots.push_back(OIS::KC_6);
-    controls.quickslots.push_back(OIS::KC_7);
-    controls.quickslots.push_back(OIS::KC_8);
-    controls.quickslots.push_back(OIS::KC_9);
-    controls.quickslots.push_back(OIS::KC_0);
-
-    controls.exit = OIS::KC_ESCAPE;
-
+    //Controls
+    controlManager.moveForward = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Forward"));
+    controlManager.moveLeft = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Left"));
+    controlManager.moveBack = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Back"));
+    controlManager.moveRight = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Right"));
+    controlManager.jump = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Jump"));
+    controlManager.run = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Run"));
+    controlManager.crouch = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Crouch"));
+    controlManager.quickslots.push_back(controlManager.stringToKeyCode(pt.get<std::string>("Controls.QuickSlot1")));
+    controlManager.quickslots.push_back(controlManager.stringToKeyCode(pt.get<std::string>("Controls.QuickSlot2")));
+    controlManager.console = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Console"));
+    controlManager.exit = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Exit"));
+    controlManager.leftHand = OIS::MB_Left;
+    controlManager.rightHand = OIS::MB_Right;
+    controlManager.addItem = OIS::KC_1;
+    controlManager.addMonster = OIS::KC_2;
     
-    controls.addItem = OIS::KC_1;
-    controls.addMonster = OIS::KC_2;
-    controls.freezeCollision = OIS::KC_3;
-    controls.reset = OIS::KC_4;
-
-    controls.console = OIS::KC_GRAVE;
-
     //Environment
     enableHDR = (pt.get<std::string>("Environment.HDR") == TRUE_STRING);
     enableBloom = (pt.get<std::string>("Environment.Bloom") == TRUE_STRING);
@@ -374,11 +271,8 @@ void World::parseIni(std::string filename)
     dataManager.addData(pt.get<std::string>("Monsters.Data"));
     dataManager.addData(pt.get<std::string>("Items.Data"));
     dataManager.addData(pt.get<std::string>("Sounds.Data"));
-    //dataFiles.push_back(pt.get<std::string>("Sounds.Data"));
 
     //Debug
-    //debug = (pt.get<std::string>("Debug.DebugMode") == TRUE_STRING);
-    //verbose = (pt.get<std::string>("Debug.VerboseMode") == TRUE_STRING);
     freeCameraDebug = (pt.get<std::string>("Debug.FreeCamera") == TRUE_STRING);
     wireframeDebug = (pt.get<std::string>("Debug.Wireframe") == TRUE_STRING);
     freezeCollisionDebug = (pt.get<std::string>("Debug.FreezeCollision") == TRUE_STRING);
@@ -390,13 +284,17 @@ void World::parseIni(std::string filename)
     physXVisualDebuggerPort = pt.get<int>("Debug.PhysXVisualDebuggerPort");
     physXVisualDebuggerTimeoutMilliseconds = pt.get<int>("Debug.PhysXVisualDebuggerTimeoutMilliseconds");
   }
-  catch(boost::property_tree::ini_parser::ini_parser_error e)
+  catch(boost::property_tree::ini_parser::ini_parser_error e)//need to provide default values
   {
     std::cout << e.what() << std::endl;
   }
   catch(boost::property_tree::ptree_bad_path e)
   {
     std::cout << e.what() << std::endl;
+  }
+  catch(NHException e)
+  {
+    std::cout << "Initialisation Error: " << e.what() << std::endl;
   }
 }
 

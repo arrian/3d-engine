@@ -9,7 +9,7 @@ Monster::Monster(MonsterDesc desc)
     description(desc),
     node(NULL),
     intelligence(desc.speed),
-    visual(desc.mesh),
+    mesh(desc.mesh),
     skeleton(desc.gravity),
     position(Ogre::Vector3::ZERO)
 {
@@ -52,7 +52,7 @@ void Monster::hasSceneChange()
   node->_setDerivedPosition(position);
 
   intelligence.setNode(scene, node);
-  visual.setNode(scene, node);
+  mesh.setNode(scene, node);
   skeleton.setNode(scene, node);
 }
 

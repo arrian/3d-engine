@@ -121,13 +121,13 @@ void Item::mapPhysical(void* target)
 }
 
 //-------------------------------------------------------------------------------------
-void Item::loadPhysical()
+void Item::loadPhysical()//move to meshcomponent
 {
   Ogre::Vector3 oPosition = node->getPosition();
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
 
-  physical = scene->getWorld()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
-  if(!material) material = scene->getWorld()->getPhysics()->createMaterial(desc.staticFriction, desc.dynamicFriction, desc.resititution);//need to index materials so i'm not creating them for every item instance  //scene->getWorld()->getDefaultPhysicsMaterial();
+  physical = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
+  if(!material) material = scene->getWorld()->getPhysicsManager()->getPhysics()->createMaterial(desc.staticFriction, desc.dynamicFriction, desc.resititution);//need to index materials so i'm not creating them for every item instance  //scene->getWorld()->getDefaultPhysicsMaterial();
   //shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);//temporary simplified collision mesh
   shape = physical->createShape(physx::PxConvexMeshGeometry(scene->getWorld()->getFabricationManager()->createConvexMesh(entity->getMesh())), *material);//temporary complex collision mesh
   physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));

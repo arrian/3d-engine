@@ -4,8 +4,6 @@
 #include "../res/resource.h"
 #endif
 
-
-//#include <OgreLogManager.h>
 #include <OgreRoot.h>
 #include <OgreSceneManager.h>
 #include <OgreRenderWindow.h>
@@ -17,10 +15,8 @@
 #include <OISMouse.h>
 
 #include <Game.h>
-#include <Singleplayer.h>
-#include <Multiplayer.h>
 
-class NH2012 : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
+class NH2012 : public Ogre::FrameListener, public Ogre::WindowEventListener
 {
 public:
     NH2012(void);
@@ -32,20 +28,10 @@ protected:
     Ogre::Root *root;
     Ogre::RenderWindow* window;
 
-    bool cursorWasVisible;
-    bool shutDown;
-
     //Input devices
     OIS::InputManager* inputManager;
     OIS::Mouse* mouse;
     OIS::Keyboard* keyboard;
-
-    //Input events
-    bool keyPressed(const OIS::KeyEvent &arg);
-    bool keyReleased(const OIS::KeyEvent &arg);
-    bool mouseMoved(const OIS::MouseEvent &arg);
-    bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
-    bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
     //Render events
     //void preRenderTargetUpdate(const Ogre::RenderTargetEvent& evt);

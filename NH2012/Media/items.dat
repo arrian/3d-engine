@@ -13,21 +13,21 @@
 9,Coke Can,can.mesh,can_phyics.mesh
 
 [Dining]
-10,Plate 1
-11,Plate 2
-12,Bowl 1
-13,Bowl 2
-14,Knife 1
-15,Knife 2
-16,Fork 1
-17,Fork 2
-18,Spoon 1
-19,Spoon 2
-20,Cup 1
-21,Cup 2
+10,Plate 1,plate1.mesh
+11,Plate 2,plate2.mesh
+12,Bowl 1,bowl1.mesh
+13,Bowl 2,bowl2.mesh
+14,Knife 1,knife1.mesh
+15,Knife 2,knife2.mesh
+16,Fork 1,fork1.mesh
+17,Fork 2,fork2.mesh
+18,Spoon 1,spoon1.mesh
+19,Spoon 2,spoon2.mesh
+20,Cup 1,cup1.mesh
+21,Cup 2,cup2.mesh
 
 [Library]
-22,Newspaper
+22,Newspaper,newspaper.mesh
 23,Book Thin Tall,book1.mesh
 24,Book Thin Normal,book2.mesh
 25,Book Thin Short,book3.mesh
@@ -39,8 +39,8 @@
 31,Book Thick Short,book9.mesh
 
 [Electrics]
-32,TV
-33,Macintosh
+32,TV,tv.mesh
+33,Macintosh,mac.mesh
 34,Lightbulb,lightbulb.mesh
 
 [Containers]
@@ -77,19 +77,19 @@
 61,Default Architecture Symbol,architecture_default.mesh
 62,Default Trigger Symbol,trigger_default.mesh
 63,Default Error Symbol,error_default.mesh
-64,Move Gizmo
-65,Rotate Gizmo
-66,Scale Gizmo
+64,Move Gizmo,move_gizmo.mesh
+65,Rotate Gizmo,rotate_gizmo.mesh
+66,Scale Gizmo,scale_gizmo.mesh
 
 [Weapons]
-67,Sword
-68,Knife
-69,Bow
-70,Spear
+67,Sword,sword.mesh
+68,Knife,knife.mesh
+69,Bow,bow.mesh
+70,Spear,spear.mesh
 
 [Lighting]
-71,Candle
-72,Lantern
+71,Candle,candle.mesh
+72,Lantern,lantern.mesh
 
 [Misc]
 73,Palm,Palm.mesh

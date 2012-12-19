@@ -5,10 +5,6 @@
 #include <ctime>
 #include <iostream>
 #include <string>
-#include <set>
-#include <sstream>
-#include <exception>
-#include <fstream>
 
 //Boost
 #include <boost/config.hpp>
@@ -30,26 +26,19 @@
 #include <OgreVector3.h>
 #include <OgreString.h>
 
-//PhysX
-#include "PxPhysicsAPI.h"
-//#include "extensions/PxDefaultErrorCallback.h"
-#include "extensions/PxDefaultAllocator.h"
-#include "cooking/PxCooking.h"
-
 //Local
-#include "Controls.h"
 #include "DataManager.h"
+#include "TimeManager.h"
 #include "SoundManager.h"
+#include "ControlManager.h"
+#include "PhysicsManager.h"
 #include "FabricationManager.h"
 #include "PhysicsErrorCallback.h"
 #include "SceneChangeListener.h"
 #include "NHException.h"
-#include "Hydrax.h"
 
 //Forward Declarations
 class Player;
-class Monster;
-class Item;
 class Scene;
 
 
@@ -75,24 +64,24 @@ public:
 
   //Getters
   DataManager* getDataManager();
+  TimeManager* getTimeManager();
+  SoundManager* getSoundManager();
+  PhysicsManager* getPhysicsManager();
+  ControlManager* getControlManager();
   FabricationManager* getFabricationManager();
   Player* getPlayer();
-  Scene* getScene(Ogre::String name);
-  Scene* getScene(int id);
   Ogre::Root* getRoot();
-  physx::PxPhysics* getPhysics();
   int getNumberScenes();
-  void getSceneNames(std::vector<Ogre::String> &names);
-  physx::PxMaterial* getDefaultPhysicsMaterial();
+  Scene* getScene(int id);
+  Scene* getScene(Ogre::String name);
   SceneChangeListener* getSceneChangeListener();
-  const physx::PxTolerancesScale& getTolerancesScale();//messy tolerance bind
+  void getSceneNames(std::vector<Ogre::String> &names);
 
   //Setters
   void setRoot(Ogre::Root* root);
   void setSceneChangeListener(SceneChangeListener* listener);
   void setSceneManager(Ogre::SceneManager* sceneManager);
   void hookWindow(Ogre::RenderWindow* window);//convenience method for hooking the render window to the player
-  //void movePlayer(Player* player, Scene* target);/* Moves the player to the target scene.*/
   
   //Injection
   void injectKeyDown(const OIS::KeyEvent &arg);
@@ -103,11 +92,8 @@ public:
 
   //Assertions
   bool hasScene(int id);
-  //bool isDebug();
 
   //Flags... eventually remove
-  //bool debug;
-  //bool verbose;
   bool enablePhysics;
   bool enableAI;
   bool enableAudio;
@@ -127,40 +113,24 @@ public:
   bool freezeCollisionDebug;
   bool showCollisionDebug;
   bool showShadowDebug;
-  int defaultScene;
-
-  //std::vector<std::string> dataFiles;//monsters,items,architecture,sounds,scenes etc.
-  Controls controls;//Control mappings
 
 private:
-
-  Ogre::Root* root;
-  SceneChangeListener* sceneChangeListener;
-  DataManager dataManager;
-  SoundManager soundManager;
-  FabricationManager fabricationManager;
-  
-  //World Contents
-  Player* player;//std::vector<Player> players;
-  //Hydrax::Hydrax* waterManager;//temporarily external to scene. can only have one instance??
-  std::vector<Scene*> scenes;
-
-  //PhysX
-  PhysicsErrorCallback errorCallback;
-  physx::PxDefaultAllocator allocatorCallback;//for allocating memory to physics manager
-  physx::PxFoundation* physicsFoundation;
-  physx::PxCooking* physicsCooking;
-  physx::PxPhysics* physicsWorld;
-  physx::PxMaterial* physicsMaterial;//default material
-
-  //Defaults
-  physx::PxReal defaultStaticFriction;
-  physx::PxReal defaultDynamicFriction;
-  physx::PxReal defaultRestitution;
-
+  int defaultScene;
   std::string physXVisualDebuggerIP;
   int physXVisualDebuggerPort;
   int physXVisualDebuggerTimeoutMilliseconds;
 
+  Ogre::Root* root;
+  SceneChangeListener* sceneChangeListener;
+
+  DataManager dataManager;
+  TimeManager timeManager;
+  SoundManager soundManager;
+  PhysicsManager physicsManager;
+  ControlManager controlManager;
+  FabricationManager fabricationManager;
+  
+  Player* player;
+  std::vector<Scene*> scenes;
 };
 

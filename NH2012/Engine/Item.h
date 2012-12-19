@@ -5,7 +5,7 @@
 
 #include "IdentificationInterface.h"
 #include "DynamicInterface.h"
-#include "VisualComponent.h"
+#include "MeshComponent.h"
 #include "PhysicalComponent.h"
 #include "BasicComponent.h"
 #include "DataManager.h"

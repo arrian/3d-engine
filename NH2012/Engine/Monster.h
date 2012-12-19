@@ -8,7 +8,7 @@
 #include "BasicComponent.h"
 #include "HumanoidSkeletonComponent.h"
 #include "IntelligenceComponent.h"
-#include "VisualComponent.h"
+#include "MeshComponent.h"
 #include "Bar.h"
 
 class Scene;
@@ -35,7 +35,7 @@ protected:
 
   IntelligenceComponent intelligence;
   HumanoidSkeletonComponent skeleton;
-  VisualComponent visual;
+  MeshComponent mesh;
 
   void hasSceneChange();
 

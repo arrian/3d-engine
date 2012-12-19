@@ -73,7 +73,7 @@ void HumanoidSkeletonComponent::hasNodeChange()
   if(!scene || !node) return;
 
   physx::PxCapsuleControllerDesc desc;
-  desc.material = scene->getWorld()->getDefaultPhysicsMaterial();
+  desc.material = scene->getWorld()->getPhysicsManager()->getDefaultMaterial();
   desc.radius = radius;
   desc.height = height;
   desc.density = density;
@@ -156,6 +156,12 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
     velocity *= topSpeed;
   }
   else if (velocity.squaredLength() < tooSmall * tooSmall) velocity = Ogre::Vector3::ZERO;
+
+
+  //temp node propagation to controller
+  controller->setPosition(physx::PxExtendedVec3(node->getPosition().x, node->getPosition().y, node->getPosition().z));
+
+
 
   if(collisionEnabled)
   {
@@ -411,12 +417,10 @@ bool HumanoidSkeletonComponent::isJumping()
 }
 
 //-------------------------------------------------------------------------------------
-/*
-void HumanoidSkeletonComponent::followPath(std::vector<Ogre::Vector3> path)
+void HumanoidSkeletonComponent::lookAt(Ogre::Vector3 position)
 {
-  isFollowingPath = true;
-  this->path = path;
-}*/
+  //head->lookAt(position);
+}
 
 
 

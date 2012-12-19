@@ -5,14 +5,13 @@
 
 #include "NodeComponent.h"
 
-class VisualComponent : public NodeComponent
+class MeshComponent : public NodeComponent
 {
 public:
-  VisualComponent(Ogre::String mesh);
-  ~VisualComponent(void);
+  MeshComponent(Ogre::String mesh);
+  ~MeshComponent(void);
 
   void update(double elapsedSeconds);
-  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   Ogre::Entity* getEntity();
 

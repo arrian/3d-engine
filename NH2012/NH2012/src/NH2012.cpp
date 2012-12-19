@@ -3,13 +3,11 @@
 
 //-------------------------------------------------------------------------------------
 NH2012::NH2012(void)
-: root(NULL),
+: inputManager(NULL),
+  keyboard(NULL),  
   window(NULL),
-  cursorWasVisible(false),
-  shutDown(false),
-  inputManager(NULL),
   mouse(NULL),
-  keyboard(NULL),
+  root(NULL),
   game(NULL)
 {
 }
@@ -90,10 +88,10 @@ bool NH2012::go(void)
   keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject(OIS::OISKeyboard, true));
   mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject(OIS::OISMouse, true));
 
-  game = new Singleplayer(root, window, keyboard);
+  game = new Game(root, window, keyboard);
 
-  mouse->setEventCallback(this);
-  keyboard->setEventCallback(this);
+  mouse->setEventCallback(game);
+  keyboard->setEventCallback(game);
 
   windowResized(window);//Set initial mouse clipping size
   Ogre::WindowEventUtilities::addWindowEventListener(window, this);//Register as a Window listener
@@ -106,51 +104,11 @@ bool NH2012::go(void)
 bool NH2012::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
   if(window->isClosed()) return false;
-  if(shutDown) return false;
 
   keyboard->capture();
   mouse->capture();
 
-  game->update(evt.timeSinceLastFrame);
-
-  return true;
-}
-
-//-------------------------------------------------------------------------------------
-bool NH2012::keyPressed( const OIS::KeyEvent &arg )
-{
-  if (arg.key == OIS::KC_ESCAPE) shutDown = true;
-
-  game->injectKeyDown(arg);
-  return true;
-}
-
-//-------------------------------------------------------------------------------------
-bool NH2012::keyReleased( const OIS::KeyEvent &arg )
-{
-  game->injectKeyUp(arg);
-  return true;
-}
-
-//-------------------------------------------------------------------------------------
-bool NH2012::mouseMoved( const OIS::MouseEvent &arg )
-{
-  game->injectMouseMove(arg);
-  return true;
-}
-
-//-------------------------------------------------------------------------------------
-bool NH2012::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
-{
-  game->injectMouseDown(arg, id);
-  return true;
-}
-
-//-------------------------------------------------------------------------------------
-bool NH2012::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
-{
-  game->injectMouseUp(arg, id);
-  return true;
+  return game->update(evt.timeSinceLastFrame);
 }
 
 //-------------------------------------------------------------------------------------

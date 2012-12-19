@@ -5,26 +5,31 @@
 
 #include <OgreFrameListener.h>
 
+#include "Game.h"
+#include "../../Engine/Console.h"
 #include "../../Engine/World.h"
-#include "../../Engine/SceneChangeListener.h"
 
-class Game : public SceneChangeListener
+
+class Game : public OIS::KeyListener, public OIS::MouseListener
 {
 public:
-  Game(Ogre::RenderWindow* renderWindow);
+  Game(Ogre::Root* root, Ogre::RenderWindow* renderWindow, OIS::Keyboard* keyboard);
   virtual ~Game(void);
 
-  virtual void update(double elapsedSeconds) = 0;
+  bool update(double elapsedSeconds);
+  void setSceneManager(Ogre::SceneManager* scene);
 
-  virtual void injectKeyDown(const OIS::KeyEvent &arg) = 0;
-  virtual void injectKeyUp(const OIS::KeyEvent &arg) = 0;
-  virtual void injectMouseMove(const OIS::MouseEvent &arg) = 0;
-  virtual void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id) = 0;
-  virtual void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id) = 0;
-
-  virtual void notify(Ogre::String comment) = 0;
+  bool keyPressed(const OIS::KeyEvent &arg);
+  bool keyReleased(const OIS::KeyEvent &arg);
+  bool mouseMoved(const OIS::MouseEvent &arg);
+  bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+  bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
 protected:
+  bool done;
+  World world;
   Ogre::RenderWindow* renderWindow;
 };
+
+
 

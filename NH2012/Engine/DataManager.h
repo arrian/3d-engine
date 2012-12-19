@@ -79,7 +79,7 @@ struct MonsterDesc
     : name(name),
       mesh(mesh),
       height(1.75f),
-      speed(100.0f),
+      speed(1.0f),
       health(100.0f),
       id(id),
       gravity(0.0f, GRAVITY, 0.0f)

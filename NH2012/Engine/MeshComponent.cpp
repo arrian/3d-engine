@@ -1,9 +1,9 @@
-#include "VisualComponent.h"
+#include "MeshComponent.h"
 
 #include "Scene.h"
 
 //-------------------------------------------------------------------------------------
-VisualComponent::VisualComponent(Ogre::String mesh)
+MeshComponent::MeshComponent(Ogre::String mesh)
   : NodeComponent(),
     entity(NULL),
     mesh(mesh)
@@ -12,18 +12,18 @@ VisualComponent::VisualComponent(Ogre::String mesh)
 }
 
 //-------------------------------------------------------------------------------------
-VisualComponent::~VisualComponent(void)
+MeshComponent::~MeshComponent(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-void VisualComponent::update(double elapsedSeconds)
+void MeshComponent::update(double elapsedSeconds)
 {
 
 }
 
 //-------------------------------------------------------------------------------------
-void VisualComponent::hasNodeChange()
+void MeshComponent::hasNodeChange()
 {
   if(oldScene && entity) oldScene->getSceneManager()->destroyEntity(entity);
   entity = NULL;
@@ -37,8 +37,10 @@ void VisualComponent::hasNodeChange()
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Entity* VisualComponent::getEntity()
+Ogre::Entity* MeshComponent::getEntity()
 {
 
   return entity;
 }
+
+

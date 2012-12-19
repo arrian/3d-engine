@@ -37,7 +37,7 @@ void PhysicalComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void PhysicalComponent::hasNodeChange()
 {
-  if(!material) material = scene->getWorld()->getDefaultPhysicsMaterial();
+  if(!material) material = scene->getWorld()->getPhysicsManager()->getDefaultMaterial();
   if(physical) physical->release();//also releases shape
 
   loadPhysical();
@@ -60,7 +60,7 @@ void PhysicalComponent::loadPhysical()
   Ogre::Vector3 oPosition = node->getPosition();
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
 
-  physical = scene->getWorld()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
+  physical = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
   shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);//temporary simplified collision mesh
   physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
   scene->getPhysicsManager()->addActor(*physical);

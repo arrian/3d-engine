@@ -30,15 +30,18 @@ Console::Console()//World* world, OIS::Keyboard* keyboard)
     showCursor(true),
     hasDoneFirstHold(false),
     previousKey(OIS::KC_UNASSIGNED),
-    keyIsDown(false)
+    keyIsDown(false),
+    done(false)
 
 {
   overlay->loadAtlas("dejavu");
 
+  commands.push_back(new Command<Console>("help", "", "shows the help list", &Console::help, this));
   commands.push_back(new Command<Console>("clear", "", "clears the console", &Console::clear, this));
   commands.push_back(new Command<Console>("refresh", "", "re-hooks the console to the render window", &Console::refresh, this));
   commands.push_back(new Command<Console>("about", "", "show game info", &Console::about, this));
-  commands.push_back(new Command<Console>("help", "", "shows the help list", &Console::help, this));
+  commands.push_back(new Command<Console>("reset", "", "resets the scene", &Console::reset, this));
+  commands.push_back(new Command<Console>("exit", "", "exits the game", &Console::exit, this));
   commands.push_back(new Command<Console>("screenshot", "", "takes a screenshot and outputs to the executable directory", &Console::screenshot, this));
   commands.push_back(new Command<Console>("setPhysicsEnabled", "(true | false)", "enables and disables collision", &Console::setPhysicsEnabled, this));
   commands.push_back(new Command<Console>("setCameraFree", "(true | false)", "frees or attaches the camera from/to the player", &Console::setCameraFree, this));
@@ -63,10 +66,10 @@ Console::Console()//World* world, OIS::Keyboard* keyboard)
   commands.push_back(new Command<Console>("addItem", "id (@player | (x y z)) [number]", "adds the given item to the scene", &Console::addItem, this));
   commands.push_back(new Command<Console>("addMonster", "id x y z", "adds the given monster to the scene", &Console::addMonster, this));
   commands.push_back(new Command<Console>("setSceneLoaded", "id (true | false)", "loads or unloads the given scene", &Console::setSceneLoaded, this));
-  commands.push_back(new Command<Console>("setSceneDrawDebugNavigationMesh", "(true | false)", "displays or hides the scene navigation mesh", &Console::setSceneDrawDebugNavMesh, this));
+  commands.push_back(new Command<Console>("setSceneDrawDebugNavMesh", "(true | false)", "displays or hides the scene navigation mesh", &Console::setSceneDrawDebugNavMesh, this));
   commands.push_back(new Command<Console>("setSceneShadowsEnabled", "(true | false)", "shows or hides shadows", &Console::setSceneShadowsEnabled, this));
   commands.push_back(new Command<Console>("setSceneGravity", "x y z", "sets the scene gravity", &Console::setSceneGravity, this));
-  commands.push_back(new Command<Console>("reset", "", "resets the scene", &Console::reset, this));
+  
 
 }
 
@@ -77,6 +80,13 @@ Console::~Console(void)
   {
     if(*iter) delete (*iter);//deallocate commands
   }
+}
+
+//-------------------------------------------------------------------------------------
+void Console::sceneChanged()
+{
+  //world->hookWindow(window);
+  hookWindow(window);//reconnect the console to the scene
 }
 
 //-------------------------------------------------------------------------------------
@@ -108,9 +118,9 @@ bool Console::isVisible()
 }
 
 //-------------------------------------------------------------------------------------
-void Console::update(double elapsedSeconds)
+bool Console::update(double elapsedSeconds)
 {
-  if(!isVisible()) return;
+  if(!isVisible()) return !done;
 
   cursorAccumulator += elapsedSeconds;
 
@@ -147,6 +157,8 @@ void Console::update(double elapsedSeconds)
     holdAccumulator = 0.0;
     hasDoneFirstHold = false;
   }
+
+  return !done;
 }
 
 //-------------------------------------------------------------------------------------
@@ -376,6 +388,12 @@ void Console::refresh(Options argv)
 void Console::about(Options argv)
 {
   display("Copyright Arrian Purcell 2012.");
+}
+
+//-------------------------------------------------------------------------------------
+void Console::exit(Options argv)
+{
+  done = true;
 }
 
 //-------------------------------------------------------------------------------------
@@ -708,9 +726,14 @@ void Console::reset(Options argv)
 }
 
 //-------------------------------------------------------------------------------------
-void Console::setRequired(World* world, OIS::Keyboard* keyboard)
+void Console::setWorld(World* world)
 {
   this->world = world;
+}
+
+//-------------------------------------------------------------------------------------
+void Console::setKeyboard(OIS::Keyboard* keyboard)
+{
   this->keyboard = keyboard;
 }
 

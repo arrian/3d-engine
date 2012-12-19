@@ -12,7 +12,7 @@
 #include "IdentificationInterface.h"
 #include "HumanoidSkeletonComponent.h"
 #include "CameraComponent.h"
-#include "VisualComponent.h"
+#include "MeshComponent.h"
 #include "QueryComponent.h"
 
 class Scene;
@@ -25,7 +25,7 @@ public:
   ~Player(void);
 
   void update(double elapsedSeconds);
-  void hook(Ogre::RenderWindow* window);/*! Hooks the player camera to a render window.*/
+  void hookWindow(Ogre::RenderWindow* window);/*! Hooks the player camera to a render window.*/
   void stop();
 
   //Setters
@@ -59,7 +59,7 @@ private:
 
   CameraComponent camera;//the player camera generally attached to the head node
   HumanoidSkeletonComponent skeleton;
-  VisualComponent visual;
+  MeshComponent mesh;
   QueryComponent query;
 
   bool addItem;

@@ -516,7 +516,7 @@ void Scene::setup()
   //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
 
   //scene physics
-  physx::PxSceneDesc physicsDesc(world->getTolerancesScale());
+  physx::PxSceneDesc physicsDesc(world->getPhysicsManager()->getTolerancesScale());
   physicsDesc.gravity = physx::PxVec3(desc.gravity.x, desc.gravity.y, desc.gravity.z);
 
   physicsDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
@@ -525,10 +525,10 @@ void Scene::setup()
   physicsDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
   if(!physicsDesc.filterShader) throw NHException("Filter shader creation failed.");
 
-  physicsManager = world->getPhysics()->createScene(physicsDesc);
+  physicsManager = world->getPhysicsManager()->getPhysics()->createScene(physicsDesc);
   if(!physicsManager) throw NHException("Could not create scene physics manager.");
 
-  controllerManager = PxCreateControllerManager(world->getPhysics()->getFoundation());
+  controllerManager = PxCreateControllerManager(*world->getPhysicsManager()->getFoundation());
   if(!controllerManager) throw NHException("Could not create scene controller manager.");
 
   sceneManager = world->getRoot()->createSceneManager(Ogre::ST_GENERIC);

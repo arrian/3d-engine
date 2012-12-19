@@ -57,24 +57,23 @@ Ogre::Vector3 IntelligenceComponent::getNextPosition(double elapsedSeconds)
     if(intermediates.size() == 0) return result;//no points found
 
 
-    Ogre::Vector3 unitDirection = intermediates.back() - node->_getDerivedPosition();
+    Ogre::Vector3 unitDirection = intermediates.front() - node->_getDerivedPosition();
     Ogre::Real distance = unitDirection.normalise();
     Ogre::Real move = speed * (float) elapsedSeconds;
     distance -= move;
 
-    //if(distance <= 0.0f)
-    //{
-      //need to remove intermediate
-    //  result = intermediates.front();
-    //  intermediates.erase(intermediates.begin());
-    //}
-    //else
-    //{
-      result += (unitDirection * move);
-    //}
+    if (distance <= 0.0f)
+    {
+      result = intermediates.front();
+      intermediates.erase(intermediates.begin());
+    }
+    else
+    {
+      result += (unitDirection * move) + Ogre::Vector3(0,1,0);
+    }
 
   }
-  std::cout << result.x << "," << result.y << "," << result.z << std::endl;
+  //std::cout << result.x << "," << result.y << "," << result.z << std::endl;
   return result;
 }
 

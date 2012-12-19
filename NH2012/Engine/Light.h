@@ -57,6 +57,8 @@ public:
 
   void update(double elapsedSeconds);
 
+  bool up;
+
 private:
   Ogre::Light* light;
 

@@ -35,7 +35,9 @@ CameraComponent::~CameraComponent(void)
 //-------------------------------------------------------------------------------------
 void CameraComponent::hookWindow(Ogre::RenderWindow* window)
 {
-  assert(window && camera);
+  assert(window);
+  assert(camera);
+
   unhookWindow();
   this->window = window;//not sure about order here
   viewport = window->addViewport(camera);
@@ -70,6 +72,12 @@ void CameraComponent::unhookWindow()
 {
   viewport = NULL;
   if(window) window->removeAllViewports();
+}
+
+//-------------------------------------------------------------------------------------
+void CameraComponent::rehookWindow()
+{
+  if(window) hookWindow(window);//clean this up
 }
 
 //-------------------------------------------------------------------------------------

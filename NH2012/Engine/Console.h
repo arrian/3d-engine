@@ -8,6 +8,7 @@
 #include <OgreString.h>
 
 #include "World.h"
+#include "SceneChangeListener.h"
 #include "Gorilla.h"
 
 typedef std::vector<std::string> Options;//shorter vector string typedef
@@ -52,7 +53,7 @@ private:
 /**
  * In-game command console singleton.
  */
-class Console
+class Console : public SceneChangeListener
 {
 public:
   static Console& getInstance()
@@ -61,23 +62,30 @@ public:
       return instance;
   }
 
-  void setRequired(World* world, OIS::Keyboard* keyboard);//need this to do most things
+  void setWorld(World* world);
+  void setKeyboard(OIS::Keyboard* keyboard);
+
+
   void hookWindow(Ogre::RenderWindow* window);//hooks the console to a render window
   bool isVisible();//returns the visibility of the console
   void setVisible(bool visible);//sets the visibility of the console
-  void update(double elapsedSeconds);
+  bool update(double elapsedSeconds);
   void injectKeyDown(const OIS::KeyEvent &arg);//key down
   void injectKeyUp(const OIS::KeyEvent &arg);//key up
   void injectKey(const OIS::KeyEvent &arg, bool isDown);//key down or up
   void keyPressed(const OIS::KeyEvent &arg);
 
   void print(std::string comment);
+
+  void sceneChanged();
   
 private:
   Console();//World* world, OIS::Keyboard* keyboard);
   ~Console(void);
   Console(Console const&);              // Don't Implement
   void operator=(Console const&); // Don't implement
+
+  bool done;//exit called
 
   bool isShift;//True if shift is pressed.
   bool isControl;//True if control is pressed.
@@ -125,6 +133,7 @@ private:
   void refresh                   (Options);
   void about                     (Options);
   void help                      (Options);
+  void exit                      (Options);
   void screenshot                (Options);
   void setPhysicsEnabled         (Options);
   void setCameraFree             (Options);

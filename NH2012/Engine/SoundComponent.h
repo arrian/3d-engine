@@ -19,7 +19,6 @@ public:
   virtual ~SoundComponent(void);
 
   void update(double elapsedSeconds);
-  //void frameRenderingQueued(const Ogre::FrameEvent& evt);
 
   void play();
   void playLoop();

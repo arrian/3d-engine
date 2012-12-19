@@ -1,13 +1,24 @@
 
 #pragma once
 
+#include <map>
+#include <boost/assign/list_of.hpp>
+
 //OIS
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
+#include "NHException.h"
+
 //Keyboard and Mouse Controls
-struct Controls
+class ControlManager
 {
+public:
+  ControlManager();
+  virtual ~ControlManager();
+
+  OIS::KeyCode stringToKeyCode(std::string string);
+
   //Move
   OIS::KeyCode moveForward;
   OIS::KeyCode moveLeft;
@@ -16,7 +27,6 @@ struct Controls
 
   //Actions
   OIS::KeyCode jump;
-  OIS::KeyCode kick;
   OIS::KeyCode run;
   OIS::KeyCode crouch;
 
@@ -29,9 +39,10 @@ struct Controls
   OIS::KeyCode exit;
 
   //Debug
-  OIS::KeyCode freezeCollision;
   OIS::KeyCode addItem;
   OIS::KeyCode addMonster;
-  OIS::KeyCode reset;
   OIS::KeyCode console;
+
+private:
+  std::map<std::string, OIS::KeyCode> stringToEnum;
 };

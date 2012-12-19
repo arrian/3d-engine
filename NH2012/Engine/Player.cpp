@@ -9,7 +9,7 @@ Player::Player(PlayerDesc description, World* world)
     world(world),
     scene(NULL),
     camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
-    visual(description.mesh),
+    mesh(description.mesh),
     query(),
     addItem(false),
     addMonster(false),
@@ -36,7 +36,7 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   //pulling down
   if(this->scene)
   {
-    visual.removeNode();
+    mesh.removeNode();
     camera.removeNode();
     skeleton.removeNode();
     query.removeNode();
@@ -55,14 +55,14 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
 
   skeleton.mapPhysical((IdentificationInterface*) this);//needs to be before skeleton.setNode()
 
-  visual.setNode(scene, node);
+  mesh.setNode(scene, node);
   skeleton.setNode(scene, node);
   camera.setNode(scene, skeleton.getHead());
   query.setNode(scene, skeleton.getHead());
 
   stop();
   
-  camera.unhookWindow();//need to ensure that all viewports are reset
+  camera.rehookWindow();
   if(world->getSceneChangeListener()) world->getSceneChangeListener()->sceneChanged();//notify the scene change listener that the scene has changed
 }
 
@@ -76,80 +76,13 @@ Scene* Player::getScene()
 void Player::update(double elapsedSeconds)
 {
   skeleton.update(elapsedSeconds);
-
-  ////////////////////////////////Implement later
-  /*
-  if(node)
-  {
-    //Calculating the acceleration vector
-    Ogre::Vector3 accel = Ogre::Vector3::ZERO;
-    if (moveForward) accel -= node->getOrientation().zAxis();//equivalent to camera->getDirection()
-    if (moveBack) accel += node->getOrientation().zAxis();
-    if (moveRight) accel += node->getOrientation().xAxis();//equivalent to camera->getRight()
-    if (moveLeft) accel -= node->getOrientation().xAxis();
-  
-    float oldY;
-    if(collisionEnabled)//ignore up/down directional movement from camera when collision enabled
-    {
-      oldY = velocity.y;
-      velocity.y = 0;
-    }
-  
-    float topSpeed = run ? speed * runScalar : speed;
-    if (accel.squaredLength() != 0)
-    {
-      accel.normalise();
-      velocity += accel * topSpeed * (float) elapsedSeconds * moveScalar;
-    }
-    else 
-    {
-      Ogre::Vector3 reduce = velocity * (float) elapsedSeconds * moveScalar;
-      if(velocity.squaredLength() > reduce.squaredLength()) velocity -= reduce;//comparing with reduction length reduces jitter at low frame rates
-      else velocity = Ogre::Vector3::ZERO;
-    }
-
-    Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
-
-    if (velocity.squaredLength() > topSpeed * topSpeed)//don't go over the top speed
-    {
-      velocity.normalise();
-      velocity *= topSpeed;
-    }
-    else if (velocity.squaredLength() < tooSmall * tooSmall) velocity = Ogre::Vector3::ZERO;
-
-    if(collisionEnabled)
-    {
-      velocity.y = oldY;//restoring saved up/down speed
-      velocity.y += gravity.y * (float) elapsedSeconds;//only apply gravity when collision enabled
-
-      physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * (float) elapsedSeconds * moveScalar, velocity.y * (float) elapsedSeconds * moveScalar, velocity.z * (float) elapsedSeconds * moveScalar), minimumMoveDistance, (float) elapsedSeconds, physx::PxControllerFilters());//moving character controller
-      if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0)
-      {
-        onGround = true;
-        velocity.y = 0.0f;//stop falling when collision at the base of the skeleton occurs
-      }
-      physx::PxExtendedVec3 cPosition = controller->getPosition();
-      node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position from the physics world calculated position
-    }
-    else //just move the controller ignoring all collisions
-    {
-      controller->setPosition(controller->getPosition() + physx::PxExtendedVec3(velocity.x * (float) elapsedSeconds * moveScalar, velocity.y * (float) elapsedSeconds * moveScalar, velocity.z * (float) elapsedSeconds * moveScalar));
-      physx::PxExtendedVec3 cPosition = controller->getPosition();
-      node->setPosition(Ogre::Real(cPosition.x), Ogre::Real(cPosition.y), Ogre::Real(cPosition.z));//updating the body's visual position
-    }
-  }
-  */
-  ////////////////////////////////
-
   camera.update(elapsedSeconds);//for aspect ratio changes
-
-
 
   if(addItem) 
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
-  if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavMeshPoint());//create a monster at an arbitrary location
+  if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0,1,0));//create a monster at an arbitrary location
 
 
   query.rayQuery(camera.getDirection(), 200.0f);
@@ -158,7 +91,7 @@ void Player::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void Player::injectKeyDown(const OIS::KeyEvent &evt)
 {
-  if (evt.key == world->controls.jump) skeleton.jump();
+  if (evt.key == world->getControlManager()->jump) skeleton.jump();
   else keyEvent(evt, true);
 }
 
@@ -171,14 +104,14 @@ void Player::injectKeyUp(const OIS::KeyEvent &evt)
 //-------------------------------------------------------------------------------------
 void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
 {
-  if (evt.key == world->controls.moveForward) skeleton.setMoveForward(isDown);
-  else if (evt.key == world->controls.moveBack) skeleton.setMoveBackward(isDown);
-  else if (evt.key == world->controls.moveLeft) skeleton.setMoveLeft(isDown);
-  else if (evt.key == world->controls.moveRight) skeleton.setMoveRight(isDown);
-  else if (evt.key == world->controls.run) skeleton.setRun(isDown);
-  else if (evt.key == world->controls.crouch) skeleton.setCrouch(isDown);
-  else if (evt.key == world->controls.addItem) addItem = isDown;
-  else if (evt.key == world->controls.addMonster) addMonster = isDown;
+  if (evt.key == world->getControlManager()->moveForward) skeleton.setMoveForward(isDown);
+  else if (evt.key == world->getControlManager()->moveBack) skeleton.setMoveBackward(isDown);
+  else if (evt.key == world->getControlManager()->moveLeft) skeleton.setMoveLeft(isDown);
+  else if (evt.key == world->getControlManager()->moveRight) skeleton.setMoveRight(isDown);
+  else if (evt.key == world->getControlManager()->run) skeleton.setRun(isDown);
+  else if (evt.key == world->getControlManager()->crouch) skeleton.setCrouch(isDown);
+  else if (evt.key == world->getControlManager()->addItem) addItem = isDown;
+  else if (evt.key == world->getControlManager()->addMonster) addMonster = isDown;
 }
 
 //-------------------------------------------------------------------------------------
@@ -201,22 +134,21 @@ void Player::injectMouseMove(const OIS::MouseEvent &evt)
 //-------------------------------------------------------------------------------------
 void Player::injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  if(id == world->controls.leftHand) skeleton.setLeftHand(true);
-  if(id == world->controls.rightHand) skeleton.setRightHand(true);
+  if(id == world->getControlManager()->leftHand) skeleton.setLeftHand(true);
+  if(id == world->getControlManager()->rightHand) skeleton.setRightHand(true);
 }
 
 //-------------------------------------------------------------------------------------
 void Player::injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  if(id == world->controls.leftHand) skeleton.setLeftHand(false);
-  if(id == world->controls.rightHand) skeleton.setRightHand(false);
+  if(id == world->getControlManager()->leftHand) skeleton.setLeftHand(false);
+  if(id == world->getControlManager()->rightHand) skeleton.setRightHand(false);
 }
 
 //-------------------------------------------------------------------------------------
-void Player::hook(Ogre::RenderWindow* window)
+void Player::hookWindow(Ogre::RenderWindow* window)
 {
-  assert(window && scene);
-  camera.hookWindow(window);
+  if(window) camera.hookWindow(window);
 }
 
 //-------------------------------------------------------------------------------------
@@ -282,7 +214,6 @@ Ogre::Camera* Player::getCamera()
 {
   return camera.getCamera();
 }
-
 
 //-------------------------------------------------------------------------------------
 Ogre::Viewport* Player::getViewport()
