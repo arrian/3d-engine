@@ -14,6 +14,7 @@
 
 class Scene;
 
+/*
 struct StaticEntity
 {
   Ogre::Entity* entity;
@@ -24,7 +25,7 @@ struct StaticEntity
       mesh(mesh)
   {
   }
-};
+};*/
 
 class Architecture : public IdentificationInterface
 {
@@ -50,7 +51,7 @@ private:
   int instanceNumber;
 
   std::vector<Ogre::SceneNode*> nodes;
-  std::map<Ogre::String, StaticEntity> statics;
+  std::map<Ogre::String, physx::PxTriangleMesh*> statics;
   std::vector<physx::PxRigidStatic*> actors;
 
   Ogre::StaticGeometry* geometry;

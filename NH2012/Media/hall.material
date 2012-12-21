@@ -1,5 +1,4 @@
-
-material wall_wood
+material wall_plaster
 {
 	technique
 	{
@@ -11,7 +10,8 @@ material wall_wood
 
 			texture_unit
 			{
-				texture wood_c13.jpg
+				texture stucco01.tga
+				transform 2.5 0 0 0 0 1.6 0 0 0 0 1 0 0 0 0 1
 			}
 		}
 
@@ -44,7 +44,7 @@ material floor_wood
 
 
 
-material wall_plaster
+material wall_wood
 {
 	technique
 	{
@@ -56,13 +56,10 @@ material wall_plaster
 
 			texture_unit
 			{
-				texture stucco01.tga
-				transform 2.5 0 0 0 0 1.6 0 0 0 0 1 0 0 0 0 1
+				texture wood_c13.jpg
 			}
 		}
 
 	}
 
 }
-
-

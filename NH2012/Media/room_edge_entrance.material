@@ -1,4 +1,3 @@
-
 material floor_wood
 {
 	technique
@@ -64,5 +63,3 @@ material wall_plaster
 	}
 
 }
-
-

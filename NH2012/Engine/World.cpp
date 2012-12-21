@@ -13,6 +13,7 @@ World::World(Ogre::Root* root)
     timeManager(),
     dataManager(),
     soundManager(),
+    scriptManager(),
     physicsManager(),
     controlManager(),
     fabricationManager(),
@@ -20,6 +21,7 @@ World::World(Ogre::Root* root)
     sceneChangeListener(NULL), 
     defaultScene(0)
 {
+  scriptManager.setWorld(this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -102,6 +104,12 @@ PhysicsManager* World::getPhysicsManager()
 ControlManager* World::getControlManager()
 {
   return &controlManager;
+}
+
+//-------------------------------------------------------------------------------------
+ScriptManager* World::getScriptManager()
+{
+  return &scriptManager;
 }
 
 //-------------------------------------------------------------------------------------

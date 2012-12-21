@@ -32,5 +32,7 @@ private:
   std::vector<FMOD::Sound*> sounds2D;
   std::vector<SoundComponent*> sounds3D;
   std::vector<FMOD::Channel*> channels;
+
+  std::string getSoundPath(std::string filename);
 };
 

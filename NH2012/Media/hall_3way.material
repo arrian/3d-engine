@@ -1,4 +1,3 @@
-
 material wall_plaster
 {
 	technique
@@ -64,5 +63,3 @@ material wall_wood
 	}
 
 }
-
-

@@ -1,6 +1,7 @@
 #include "DataManager.h"
 
 #include <boost/lexical_cast.hpp>
+#include <OgreResourceGroupManager.h>
 
 
 //-------------------------------------------------------------------------------------
@@ -28,7 +29,10 @@ void DataManager::addData(std::string file)
   }
   files.push_back(file);//record loading this file
 
-  std::ifstream ifs(file);
+  Ogre::FileInfoListPtr fileListPtr = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", file);
+  if(fileListPtr->size() < 1) throw NHException("Could not find the path to the specified data file.");
+
+  std::ifstream ifs(fileListPtr->front().archive->getName() + "/" + fileListPtr->front().filename);
   std::string temp;
 
   std::string type = "";
@@ -41,11 +45,13 @@ void DataManager::addData(std::string file)
 
     if(temp == "") continue;
     
-    if(temp[0] == '#')//new data set
+    if(temp[0] == '#')//comment
     {
       if(type == "") type = temp;
       continue;
     }
+
+    if(temp[0] == '[') continue;//new group
 
     std::vector<std::string> words;
     boost::split(words, temp, boost::is_any_of(","), boost::token_compress_on);

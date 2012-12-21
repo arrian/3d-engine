@@ -1,5 +1,6 @@
 #include "SoundManager.h"
 
+#include <OgreResourceGroupManager.h>
 
 SoundManager::SoundManager(void)
   : sounds2D(),
@@ -84,4 +85,13 @@ void SoundManager::setMuteAll(bool mute)
   {
     (*iter)->setMute(mute);
   }
+}
+
+//-------------------------------------------------------------------------------------
+std::string SoundManager::getSoundPath(std::string filename)
+{
+  Ogre::FileInfoListPtr fileListPtr = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", filename);
+  if(fileListPtr->size() < 1) throw NHException("Could not find the path to the specified sound file.");
+
+  return fileListPtr->front().archive->getName() + "/" + fileListPtr->front().filename;
 }

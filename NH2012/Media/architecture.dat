@@ -45,7 +45,7 @@
 103,Hall Stairs,hall_stairs.mesh
 
 104,Hall Tall,hall_tall.mesh
-105,Hall Tall Entrance, hall_tall_entrance.mesh
+105,Hall Tall Entrance,hall_tall_entrance.mesh
 
 [Theatre Preset]
 106,Theatre 1,t1.mesh
@@ -72,3 +72,6 @@
 
 [Brutalism]
 130,Brutalist Interior,brutalist.mesh
+
+[Cave]
+140,Cave,cave.mesh

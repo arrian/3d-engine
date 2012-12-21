@@ -161,6 +161,6 @@ private:
   void setSceneDrawDebugNavMesh  (Options);
   void setSceneShadowsEnabled    (Options);
   void setSceneGravity           (Options);
-  void reset                     (Options); 
+  void reset                     (Options);
 };
 

@@ -35,17 +35,6 @@ Architecture::~Architecture(void)
     if(*it) scene->getSceneManager()->destroySceneNode(*it);
     (*it) = NULL;
   }
-
-  //do i need this
-  /*
-  for(std::map<Ogre::String, StaticEntity>::iterator it = statics.begin(); it != statics.end(); ++it) 
-  {
-    if(it->second.entity) scene->getSceneManager()->destroyEntity(it->second.entity);
-    if(it->second.mesh) it->second.mesh->release();
-    
-    it->second.entity = NULL;
-    it->second.mesh = NULL;
-  }*/
 }
 
 //-------------------------------------------------------------------------------------
@@ -57,31 +46,23 @@ void Architecture::add(ArchitectureDesc description, Ogre::Vector3 position, Ogr
 //-------------------------------------------------------------------------------------
 void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
-  Ogre::Entity* entity = NULL;
-  physx::PxTriangleMesh* mesh = NULL;
-  
-  //searching for previously created entities//change to use find
-  for(std::map<Ogre::String, StaticEntity>::iterator iter = statics.begin(); iter != statics.end(); ++iter)
-  {
-    if((*iter).first == meshName) 
-    {
-      entity = (*iter).second.entity;
-      mesh = (*iter).second.mesh;
-      break;
-    }
-  }
+  Ogre::Entity* entity = scene->getSceneManager()->createEntity(meshName);
+  if(!entity) throw NHException("Could not create architecture entity.");
 
-  //creating entity if not already created
-  if(!entity || !mesh)
+  physx::PxTriangleMesh* mesh = NULL;
+
+  if(statics.count(meshName) > 0) mesh = statics.find(meshName)->second;
+  else
   {
     std::cout << "Building " << meshName << "... ";
-    entity = scene->getSceneManager()->createEntity(meshName);
     mesh = scene->getWorld()->getFabricationManager()->createTriangleMeshV2(entity);
-    statics.insert(std::pair<Ogre::String,StaticEntity>(meshName, StaticEntity(entity,mesh)));
+    statics.insert(std::pair<Ogre::String,physx::PxTriangleMesh*>(meshName, mesh));
     std::cout << "done." << std::endl;
   }
 
-  /*Construct PhysX triangle mesh here.*/
+  if(!mesh) throw NHException("Could not create architecture triangle mesh.");
+
+  /*Construct architecture actor.*/
   physx::PxRigidStatic* actor = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidStatic(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physx::PxQuat(quaternion.x,quaternion.y,quaternion.z,quaternion.w)));
   actor->createShape(physx::PxTriangleMeshGeometry(mesh), *scene->getWorld()->getPhysicsManager()->getDefaultMaterial());
   actor->userData = this;
@@ -91,7 +72,6 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   actors.push_back(actor);
   instanceNumber++;
 
-
   Ogre::SceneNode* child = rootNode->createChildSceneNode();
   child->setPosition(position);
   child->setOrientation(quaternion);
@@ -99,7 +79,6 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   child->attachObject(entity);
 
   if(pathfinder) pathfinder->addEntity(entity);
-  //geometry->addEntity(entity, position, quaternion, scale);
 }
 
 //-------------------------------------------------------------------------------------

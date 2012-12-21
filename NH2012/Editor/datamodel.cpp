@@ -1,4 +1,4 @@
-#include "datamodel.h"
+#include "DataModel.h"
 
 #include <QtGui>
 
@@ -9,41 +9,6 @@ DataModel::DataModel(DataManager* dataManager, QObject *parent)
   QList<QVariant> rootData;
   rootData << "Data";
   rootItem = new DataItem(rootData);
-
-  /*
-  //Testing Qt trees
-  ItemGroups* itemGroups = dataManager->getItemGroups();
-  QList<QVariant> itemSection;
-  itemSection << "Items";
-  DataItem* itemNode = new DataItem(itemSection, rootItem);
-  rootItem->appendChild(itemNode);
-  for(std::map<std::string, std::vector<ItemModel*>>::iterator it = itemGroups->begin(); it != itemGroups->end(); ++it)
-  {
-    QList<QVariant> groupSection;
-    groupSection << "test";//(*it).first.c_str();
-    
-    rootItem->appendChild(new DataItem(groupSection, rootItem));
-  }
-  */
-
-  /*
-
-  QList<QVariant> columnData2;
-  columnData2 << "test2" << "more2";
-  QList<QVariant> columnData3;
-  columnData3 << "test3" << "more3";
-  QList<QVariant> columnData4;
-  columnData4 << "test4" << "more4";
-
-  DataItem* subNode = new DataItem(columnData1,rootItem);
-  subNode->appendChild(new DataItem(columnData1,rootItem));
-
-  rootItem->appendChild(subNode);
-  rootItem->appendChild(new DataItem(columnData2,rootItem));
-  rootItem->appendChild(new DataItem(columnData3,rootItem));
-  rootItem->appendChild(new DataItem(columnData4,rootItem));
-
-  */
 }
 
 DataModel::~DataModel()
@@ -53,10 +18,7 @@ DataModel::~DataModel()
 
 int DataModel::columnCount(const QModelIndex &parent) const
 {
-  if (parent.isValid())
-      return static_cast<DataItem*>(parent.internalPointer())->columnCount();
-  else
-      return rootItem->columnCount();
+  return 1;
 }
 
 QVariant DataModel::data(const QModelIndex &index, int role) const

@@ -30,6 +30,7 @@
 #include "DataManager.h"
 #include "TimeManager.h"
 #include "SoundManager.h"
+#include "ScriptManager.h"
 #include "ControlManager.h"
 #include "PhysicsManager.h"
 #include "FabricationManager.h"
@@ -66,6 +67,7 @@ public:
   DataManager* getDataManager();
   TimeManager* getTimeManager();
   SoundManager* getSoundManager();
+  ScriptManager* getScriptManager();
   PhysicsManager* getPhysicsManager();
   ControlManager* getControlManager();
   FabricationManager* getFabricationManager();
@@ -125,6 +127,7 @@ private:
   DataManager dataManager;
   TimeManager timeManager;
   SoundManager soundManager;
+  ScriptManager scriptManager;
   PhysicsManager physicsManager;
   ControlManager controlManager;
   FabricationManager fabricationManager;
