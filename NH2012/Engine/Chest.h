@@ -1,11 +1,23 @@
 #pragma once
 
-#include "InteractiveInterface.h"
+#include "Interactive.h"
 
-class Chest : public InteractiveInterface
+class Chest : public Interactive
 {
 public:
   Chest(void);
   ~Chest(void);
+
+  void setOpen(bool open);
+  void setLocked(bool locked);
+
+  bool isOpen();
+  bool isLocked();
+
+  virtual void interact();
+
+private:
+  bool open;
+  bool locked;
 };
 

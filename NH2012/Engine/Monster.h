@@ -10,6 +10,7 @@
 #include "IntelligenceComponent.h"
 #include "MeshComponent.h"
 #include "Bar.h"
+#include "Group.h"
 
 class Scene;
 

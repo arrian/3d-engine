@@ -33,6 +33,7 @@ public:
   //Hands
   OIS::MouseButtonID leftHand;
   OIS::MouseButtonID rightHand;
+  OIS::KeyCode interact;
 
   //Miscellaneous
   std::vector<OIS::KeyCode> quickslots;

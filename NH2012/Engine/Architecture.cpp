@@ -7,7 +7,7 @@
 
 //-------------------------------------------------------------------------------------
 Architecture::Architecture(Scene* scene, PathfindManager* pathfinder)
-  : IdentificationInterface("Main", "Architecture"),
+  : IdentificationInterface(this, "Main", ARCHITECTURE),
     scene(scene),
     rootNode(scene->getSceneManager()->getRootSceneNode()->createChildSceneNode()),
     instanceNumber(0),
@@ -47,7 +47,7 @@ void Architecture::add(ArchitectureDesc description, Ogre::Vector3 position, Ogr
 void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
 {
   Ogre::Entity* entity = scene->getSceneManager()->createEntity(meshName);
-  if(!entity) throw NHException("Could not create architecture entity.");
+  if(!entity) throw NHException("could not create architecture entity");
 
   physx::PxTriangleMesh* mesh = NULL;
 
@@ -60,12 +60,16 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
     std::cout << "done." << std::endl;
   }
 
-  if(!mesh) throw NHException("Could not create architecture triangle mesh.");
+  if(!mesh) throw NHException("could not create architecture triangle mesh");
 
   /*Construct architecture actor.*/
   physx::PxRigidStatic* actor = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidStatic(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physx::PxQuat(quaternion.x,quaternion.y,quaternion.z,quaternion.w)));
-  actor->createShape(physx::PxTriangleMeshGeometry(mesh), *scene->getWorld()->getPhysicsManager()->getDefaultMaterial());
-  actor->userData = this;
+  actor->userData = (IdentificationInterface*) this;
+  physx::PxShape* shape = actor->createShape(physx::PxTriangleMeshGeometry(mesh), *scene->getWorld()->getPhysicsManager()->getDefaultMaterial());
+  if(!shape) throw NHException("could not create architecture physics shape");
+  physx::PxFilterData filter;
+  filter.word0 = ARCHITECTURE;
+  shape->setQueryFilterData(filter);
 
   scene->getPhysicsManager()->addActor(*actor);
 
@@ -84,7 +88,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
 //-------------------------------------------------------------------------------------
 void Architecture::build()
 {
-  if(isBuilt) throw NHException("Attempting to build the architecture multiple times.");
+  if(isBuilt) throw NHException("attempting to build the architecture multiple times");
   isBuilt = true;
 
   geometry->addSceneNode(rootNode);

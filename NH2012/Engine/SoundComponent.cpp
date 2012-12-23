@@ -6,11 +6,12 @@ SoundComponent::SoundComponent(SoundManager* manager)
 {
 }
 
-
+//-------------------------------------------------------------------------------------
 SoundComponent::~SoundComponent(void)
 {
 }
 
+//-------------------------------------------------------------------------------------
 void SoundComponent::update(double elapsedSeconds)
 {
   if(channel && node)
@@ -22,16 +23,19 @@ void SoundComponent::update(double elapsedSeconds)
   }
 }
 
+//-------------------------------------------------------------------------------------
 void SoundComponent::hasNodeChange()
 {
 
 }
 
+//-------------------------------------------------------------------------------------
 void SoundComponent::play()
 {
   manager->playSound(sound, channel);
 }
 
+//-------------------------------------------------------------------------------------
 void SoundComponent::playLoop()
 {
   throw NHException("playLoop in SoundComponent not yet implemented.");

@@ -42,10 +42,8 @@ public:
   void setDebugDrawBoundingBoxes(bool enabled);
   void setDebugDrawNavigationMesh(bool enabled);
 
-
   Ogre::String getName();
   int getSceneID();
-  int getNewInstanceNumber();
   Portal* getPortal(int id = DEFAULT_PORTAL);
   Portal* getDefaultPortal();
   Ogre::Vector3 getGravity();
@@ -65,6 +63,8 @@ public:
   void addPortal(Portal* portal);
 
   void removePlayer(Player* player);
+  void removeMonster(Monster* monster);
+  void removeItem(Item* item);
   
   void update(double elapsedSeconds);
 
@@ -100,8 +100,6 @@ private:
   /*Defines if the scene should receive frame updates.*/
   bool active;
 
-  int instanceNumber;//tracks the number of object instances in the scene
-  
   void load(std::string file);
   Ogre::Vector3 getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third);
   Ogre::Quaternion getXMLRotation(rapidxml::xml_node<>* node);

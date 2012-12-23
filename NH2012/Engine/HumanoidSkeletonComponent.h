@@ -13,6 +13,7 @@
 //Local
 #include "Item.h"
 #include "NodeComponent.h"
+#include "Group.h"
 
 /************************************************************************/
 /* A humanoid skeleton that can be attached to a node.                  */
@@ -24,8 +25,6 @@ public:
   ~HumanoidSkeletonComponent(void);
 
   void update(double elapsedSeconds);
-
-  void mapPhysical(void* userData);
 
   //Getters
   Ogre::SceneNode* getHead();
@@ -49,6 +48,8 @@ public:
   void setGravity(Ogre::Vector3 gravity);
   void setCollisionEnabled(bool enabled);
   void setCrouch(bool crouch);
+  void setUserData(void* userData);
+  void setGroup(Group group);
 
   //Movement
   void stop();
@@ -73,6 +74,7 @@ public:
 
 protected:
   void* userData;
+  Group group;
 
   //PhysX Physical Body
   physx::PxCapsuleController* controller;

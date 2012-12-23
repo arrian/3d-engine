@@ -10,11 +10,11 @@
 Item::Item(ItemDesc desc)
   : desc(desc),
     BasicComponent(),
-    IdentificationInterface(desc.name, "Item"),
+    IdentificationInterface(this, desc.name, ITEM),
     entity(NULL),
     simplifiedEntity(NULL),
     node(NULL),
-    material(NULL),
+    material(),
     physical(NULL),
     shape(NULL),
     position(Ogre::Vector3::ZERO),
@@ -42,14 +42,22 @@ void Item::hasSceneChange()
   if(physical) physical->release();//also releases shape
   loadPhysical();
 
-  mapPhysical((IdentificationInterface*) this);
+  setUserData((IdentificationInterface*) this);
+  setGroup(ITEM);
 }
 
 //-------------------------------------------------------------------------------------
 Item::~Item(void)
 {
-  if(scene && node) scene->getSceneManager()->destroySceneNode(node);
-  node = NULL;
+  if(physical) physical->release();
+
+  if(scene)
+  {
+    if(entity) scene->getSceneManager()->destroyEntity(entity);
+
+    if(node) scene->getSceneManager()->destroySceneNode(node);
+    node = NULL;
+  }
 }
 
 //-------------------------------------------------------------------------------------
@@ -113,11 +121,18 @@ ItemDesc Item::getDescription()
 }
 
 //-------------------------------------------------------------------------------------
-void Item::mapPhysical(void* target)
+void Item::setUserData(void* target)
 {
-  assert(physical && shape);
-  physical->userData = target;
-  shape->userData = target;
+  if(physical) physical->userData = target;
+}
+
+//-------------------------------------------------------------------------------------
+void Item::setGroup(Group group)
+{
+  if(!shape) return;
+  physx::PxFilterData filter;
+  filter.word0 = group;
+  shape->setQueryFilterData(filter);
 }
 
 //-------------------------------------------------------------------------------------

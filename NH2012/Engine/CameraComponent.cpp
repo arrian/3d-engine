@@ -42,7 +42,6 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
   this->window = window;//not sure about order here
   viewport = window->addViewport(camera);
   viewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
-  assert(viewport);
 
   if(ssao)//remove previously created ssao
   {
@@ -81,6 +80,12 @@ void CameraComponent::rehookWindow()
 }
 
 //-------------------------------------------------------------------------------------
+Ogre::RenderWindow* CameraComponent::getWindow()
+{
+  return window;
+}
+
+//-------------------------------------------------------------------------------------
 void CameraComponent::hasNodeChange()
 {
   if(oldScene == scene)
@@ -104,6 +109,8 @@ void CameraComponent::hasNodeChange()
 //-------------------------------------------------------------------------------------
 void CameraComponent::update(double elapsedSeconds)
 {
+  if(!window || !viewport) return;//nothing to do
+  
   //Checking aspect ratio for resolution changes... find better way of doing this
   if(viewport->getActualWidth() != oldCameraWidth || viewport->getActualHeight() != oldCameraHeight)
   {

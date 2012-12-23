@@ -2,10 +2,11 @@
 
 #include "World.h"
 #include "Scene.h"
+#include "Interactive.h"
 
 //-------------------------------------------------------------------------------------
 Player::Player(PlayerDesc description, World* world)
-  : IdentificationInterface("Local", "Player"),
+  : IdentificationInterface(this, "Self", PLAYER_SELF),
     world(world),
     scene(NULL),
     camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
@@ -18,7 +19,9 @@ Player::Player(PlayerDesc description, World* world)
     handMoveScalar(0.1f),
     skeleton(description.gravity),
     itemGenerationID(3),//temporarily generating a watermelon when the 1 key is pressed
-    monsterGenerationID(1)
+    monsterGenerationID(1),
+    currentTarget(NULL),
+    interactPressed(false)
 {
   
 }
@@ -53,7 +56,8 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
   node->setPosition(position);
 
-  skeleton.mapPhysical((IdentificationInterface*) this);//needs to be before skeleton.setNode()
+  skeleton.setUserData((IdentificationInterface*) this);
+  skeleton.setGroup(PLAYER_SELF);//add ability to have other player groups
 
   mesh.setNode(scene, node);
   skeleton.setNode(scene, node);
@@ -78,20 +82,42 @@ void Player::update(double elapsedSeconds)
   skeleton.update(elapsedSeconds);
   camera.update(elapsedSeconds);//for aspect ratio changes
 
-  if(addItem) 
+  if(addItem)
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
   if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0,1,0));//create a monster at an arbitrary location
 
+  currentTarget = query.rayQuery(camera.getDirection(), 20.0f, EXCLUDE_SELF);
+  
+  if(currentTarget)
+  {
+    std::cout << currentTarget->getName() << "::" << currentTarget->getInstanceID() << std::endl;
 
-  query.rayQuery(camera.getDirection(), 200.0f);
+    if(interactPressed)
+    {
+      if(currentTarget->isInGroup(ITEM))
+      {
+        Item* item = static_cast<Item*>(currentTarget->getInstancePointer());
+        item->getDescription();
+        scene->removeItem(item);
+      }
+      else if(currentTarget->isInGroup(INTERACTIVE))
+      {
+        Interactive* interactive = static_cast<Interactive*>(currentTarget->getInstancePointer());
+        interactive->interact();
+      
+      }
+      interactPressed = false;
+    }
+  }
 }
 
 //-------------------------------------------------------------------------------------
 void Player::injectKeyDown(const OIS::KeyEvent &evt)
 {
   if (evt.key == world->getControlManager()->jump) skeleton.jump();
+  else if(evt.key == world->getControlManager()->interact) interactPressed = true;
   else keyEvent(evt, true);
 }
 
@@ -104,14 +130,14 @@ void Player::injectKeyUp(const OIS::KeyEvent &evt)
 //-------------------------------------------------------------------------------------
 void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
 {
-  if (evt.key == world->getControlManager()->moveForward) skeleton.setMoveForward(isDown);
-  else if (evt.key == world->getControlManager()->moveBack) skeleton.setMoveBackward(isDown);
-  else if (evt.key == world->getControlManager()->moveLeft) skeleton.setMoveLeft(isDown);
-  else if (evt.key == world->getControlManager()->moveRight) skeleton.setMoveRight(isDown);
-  else if (evt.key == world->getControlManager()->run) skeleton.setRun(isDown);
-  else if (evt.key == world->getControlManager()->crouch) skeleton.setCrouch(isDown);
-  else if (evt.key == world->getControlManager()->addItem) addItem = isDown;
-  else if (evt.key == world->getControlManager()->addMonster) addMonster = isDown;
+  if(evt.key == world->getControlManager()->moveForward) skeleton.setMoveForward(isDown);
+  else if(evt.key == world->getControlManager()->moveBack) skeleton.setMoveBackward(isDown);
+  else if(evt.key == world->getControlManager()->moveLeft) skeleton.setMoveLeft(isDown);
+  else if(evt.key == world->getControlManager()->moveRight) skeleton.setMoveRight(isDown);
+  else if(evt.key == world->getControlManager()->run) skeleton.setRun(isDown);
+  else if(evt.key == world->getControlManager()->crouch) skeleton.setCrouch(isDown);
+  else if(evt.key == world->getControlManager()->addItem) addItem = isDown;
+  else if(evt.key == world->getControlManager()->addMonster) addMonster = isDown;
 }
 
 //-------------------------------------------------------------------------------------
@@ -149,6 +175,12 @@ void Player::injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 void Player::hookWindow(Ogre::RenderWindow* window)
 {
   if(window) camera.hookWindow(window);
+}
+
+//-------------------------------------------------------------------------------------
+Ogre::RenderWindow* Player::getWindow()
+{
+  return camera.getWindow();
 }
 
 //-------------------------------------------------------------------------------------

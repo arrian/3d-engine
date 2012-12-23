@@ -1,9 +1,13 @@
 #pragma once
-#include "NodeComponent.h"
 
 #include <PxPhysics.h>
 #include "geometry/PxGeometry.h"
 #include <OgreVector3.h>
+
+#include "NodeComponent.h"
+#include "IdentificationInterface.h"
+#include "Group.h"
+
 
 class QueryComponent :
   public NodeComponent
@@ -14,14 +18,14 @@ public:
 
   void update(double elapsedSeconds);
 
-  bool rayQuery(Ogre::Vector3 direction, float distance);
+  IdentificationInterface* rayQuery(Ogre::Vector3 direction, float distance, Group groups);//returns hit or null
   bool sweepQuery(Ogre::Vector3 direction, float distance);
   bool overlapQuery();
 
 protected:
   void hasNodeChange();
 
-  Ogre::Entity* debugHitPosition;
-  Ogre::SceneNode* hitNode;
+  //Ogre::Entity* debugHitPosition;
+  //Ogre::SceneNode* hitNode;
 };
 

@@ -5,7 +5,7 @@ PacketInterface::PacketInterface(void)
 {
 }
 
-
+//-------------------------------------------------------------------------------------
 PacketInterface::~PacketInterface(void)
 {
 }

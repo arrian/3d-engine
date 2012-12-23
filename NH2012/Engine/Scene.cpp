@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+#include <algorithm>
+
 #include "extensions/PxDefaultCpuDispatcher.h"
 #include "extensions/PxDefaultSimulationFilterShader.h"
 #include "extensions/PxSimpleFactory.h"
@@ -20,7 +22,6 @@ Scene::Scene(SceneDesc desc, World* world)
     sceneManager(NULL),
     controllerManager(NULL),
     physicsManager(NULL),
-    instanceNumber(0),
     defaultEntry(NULL),
     player(NULL),
     numberPhysicsCPUThreads(4),
@@ -145,6 +146,7 @@ void Scene::addParticles(Ogre::String name, Ogre::String templateName, Ogre::Vec
 void Scene::addPortal(Portal* portal)
 {
   portals.push_back(portal);
+  if(defaultEntry == NULL) defaultEntry = portals[0];//creating a default entry point
 }
 
 //-------------------------------------------------------------------------------------
@@ -158,16 +160,29 @@ void Scene::removePlayer(Player* player)
 }
 
 //-------------------------------------------------------------------------------------
-int Scene::getNewInstanceNumber()
+void Scene::removeItem(Item* item)
 {
-  instanceNumber++;
-  return instanceNumber;
+  std::vector<Item*>::iterator itemIter = std::find(items.begin(), items.end(), item);
+  if(itemIter == items.end()) throw NHException("could not find the item");
+
+  delete item;
+  items.erase(itemIter);
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::removeMonster(Monster* monster)
+{
+  std::vector<Monster*>::iterator monsterIter = std::find(monsters.begin(), monsters.end(), monster);
+  if(monsterIter == monsters.end()) throw NHException("could not find the monster");
+
+  delete monster;
+  monsters.erase(monsterIter);  
 }
 
 //-------------------------------------------------------------------------------------
 void Scene::update(double elapsedSeconds)
 {
-  if(!physicsManager) throw NHException("No physics found. Scene::frameRenderingQueued()");
+  if(!physicsManager) throw NHException("no physics found in Scene::update()");
   
   physicsManager->fetchResults(true);
   
@@ -241,10 +256,15 @@ void Scene::load(std::string file)
 {
   try
   {
-    std::ifstream streamfile(file);
+    Ogre::FileInfoListPtr files = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", file);
+    if(files->size() < 1) throw NHException("could not find the path to the specified scene");
+
+    std::string filePath = files->front().archive->getName() + "/" + files->front().filename;
+
+    std::ifstream streamfile(filePath);
     rapidxml::xml_document<> doc;
 
-    std::vector<char> buffer((std::istreambuf_iterator<char>(streamfile)), std::istreambuf_iterator<char>());
+    std::vector<char> buffer((std::istreambuf_iterator<char>(streamfile)), std::istreambuf_iterator<char>());//streamfile)), std::istreambuf_iterator<char>());
 
     buffer.push_back('\0');//null terminating the buffer
 
@@ -309,7 +329,6 @@ void Scene::load(std::string file)
       int targetSceneID = boost::lexical_cast<int>(portalNode->first_attribute(TARGET_SCENE_ID_STRING)->value());
       int targetPortalID = boost::lexical_cast<int>(portalNode->first_attribute(TARGET_PORTAL_ID_STRING)->value());
       addPortal(new Portal(id, targetSceneID, targetPortalID, getXMLPosition(portalNode), getXMLVector(portalNode, LOOK_AT_X_STRING, LOOK_AT_Y_STRING, LOOK_AT_Z_STRING)));
-      if(defaultEntry == NULL && portals.size() > 0) defaultEntry = portals[0];//creating a default entry point
       portalNode = portalNode->next_sibling(PORTAL_STRING);//"portal");
     }
 
@@ -402,7 +421,7 @@ Portal* Scene::getPortal(int id)
     if((*it)->getID() == id) return (*it);
   }
 
-  throw NHException("No portal was found with the given id in 'Scene::getPortal(int)'.");//temporarily throw exception
+  throw NHException("no portal was found with the given id in Scene::getPortal()");//temporarily throw exception
   return NULL;
 }
 
@@ -485,7 +504,7 @@ void Scene::setDebugDrawBoundingBoxes(bool enabled)
 void Scene::setDebugDrawNavigationMesh(bool enabled)
 {
   if(enabled) pathfinder->drawNavMesh();
-  else throw NHException("Removing a drawn navigation mesh is not implemented.");
+  else throw NHException("removing a drawn navigation mesh is not implemented");
 }
 
 //-------------------------------------------------------------------------------------
@@ -520,16 +539,16 @@ void Scene::setup()
   physicsDesc.gravity = physx::PxVec3(desc.gravity.x, desc.gravity.y, desc.gravity.z);
 
   physicsDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
-  if(!physicsDesc.cpuDispatcher) throw NHException("Could not create scene CPU dispatcher.");
+  if(!physicsDesc.cpuDispatcher) throw NHException("could not create scene CPU dispatcher");
 
   physicsDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
-  if(!physicsDesc.filterShader) throw NHException("Filter shader creation failed.");
+  if(!physicsDesc.filterShader) throw NHException("filter shader creation failed");
 
   physicsManager = world->getPhysicsManager()->getPhysics()->createScene(physicsDesc);
-  if(!physicsManager) throw NHException("Could not create scene physics manager.");
+  if(!physicsManager) throw NHException("could not create scene physics manager");
 
   controllerManager = PxCreateControllerManager(*world->getPhysicsManager()->getFoundation());
-  if(!controllerManager) throw NHException("Could not create scene controller manager.");
+  if(!controllerManager) throw NHException("could not create scene controller manager");
 
   sceneManager = world->getRoot()->createSceneManager(Ogre::ST_GENERIC);
 

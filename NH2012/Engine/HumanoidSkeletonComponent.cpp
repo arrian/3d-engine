@@ -86,8 +86,8 @@ void HumanoidSkeletonComponent::hasNodeChange()
  
   //creating the controller//make sure casting to correct controller type
   controller = (physx::PxCapsuleController*) scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
-
   if(!controller) throw NHException("Could not create character kinematic.");
+  controller->getActor()->userData = userData;
 
   //std::cout << "Actor address: " << ((void*) controller->getActor()) << std::endl;
   //std::cout << "Actor user data: " << controller->getActor()->userData << std::endl;
@@ -372,9 +372,17 @@ bool HumanoidSkeletonComponent::isRightHand()
 }
 
 //-------------------------------------------------------------------------------------
-void HumanoidSkeletonComponent::mapPhysical(void* userData)
+void HumanoidSkeletonComponent::setUserData(void* userData)
 {
   this->userData = userData;
+  if(controller) controller->getActor()->userData = userData;
+}
+
+//-------------------------------------------------------------------------------------
+void HumanoidSkeletonComponent::setGroup(Group group)
+{
+  this->group = group;
+  if(controller) controller->setGroupsBitmask(group);
 }
 
 //-------------------------------------------------------------------------------------

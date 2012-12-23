@@ -95,12 +95,17 @@ public:
   bool isHalloween();
   bool isNewYears();
 
+  void tick();
+  unsigned long getTicks();
+
 private:
   //Serialisers
   std::string serialiseDate(Date date);
   std::string serialiseMoonPhase(MoonPhase moonPhase);
   std::string serialiseDay(Day day);
   std::string serialiseMonth(Month month);
+
+  unsigned long ticks;
 
   //Getters
   MoonPhase getMoonPhase(Date date);

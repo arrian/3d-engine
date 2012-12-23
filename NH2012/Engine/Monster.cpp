@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------------------------
 Monster::Monster(MonsterDesc desc)
   : BasicComponent(),
-    IdentificationInterface(desc.name, "Monster"),
+    IdentificationInterface(this, desc.name, MONSTER),
     description(desc),
     node(NULL),
     intelligence(desc.speed),
@@ -13,7 +13,8 @@ Monster::Monster(MonsterDesc desc)
     skeleton(desc.gravity),
     position(Ogre::Vector3::ZERO)
 {
-  skeleton.mapPhysical((IdentificationInterface*) this);
+  skeleton.setUserData((IdentificationInterface*) this);
+  skeleton.setGroup(MONSTER);
 }
 
 //-------------------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 #include "PhysicalComponent.h"
 #include "BasicComponent.h"
 #include "DataManager.h"
+#include "Group.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -46,7 +47,8 @@ protected:
   void hasSceneChange();
 
   void loadPhysical();//loads a simplified collision mesh
-  void mapPhysical(void* target);
+  void setUserData(void* target);
+  void setGroup(Group group);
 
   physx::PxMaterial* material;
   physx::PxRigidDynamic* physical;

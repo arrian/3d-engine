@@ -43,6 +43,7 @@ public:
   Scene* getScene();//gets the scene the player is currently in
   Ogre::Camera* getCamera();
   Ogre::Viewport* getViewport();
+  Ogre::RenderWindow* getWindow();
 
   //Injectors
   void injectKeyDown(const OIS::KeyEvent &evt);
@@ -62,11 +63,15 @@ private:
   MeshComponent mesh;
   QueryComponent query;
 
+  IdentificationInterface* currentTarget;
+
   bool addItem;
   bool addMonster;
   int itemGenerationID;//for debug item generation
   int monsterGenerationID;//for debug monster generation
   float placementDistance;
+
+  bool interactPressed;
 
   float lookResponsiveness;
   float handMoveScalar;

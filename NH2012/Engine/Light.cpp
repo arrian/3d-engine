@@ -9,7 +9,7 @@ Light::Light(Scene* scene, Ogre::Vector3 position, bool castShadows, Ogre::Real 
 {
   lightNode = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode(position);
   lightNode->attachObject(light);
-  light->setAttenuation(range, 0.95f, 0.05f, 0);
+  light->setAttenuation(range, 0.95f, 0.05f, 0.0f);
   light->setDiffuseColour(colour);
   light->setSpecularColour(Ogre::ColourValue::White);
   light->setCastShadows(castShadows);
@@ -19,7 +19,7 @@ Light::Light(Scene* scene, Ogre::Vector3 position, bool castShadows, Ogre::Real 
   addIntensityVariation(IntensityVariationDesc());
 }
 
-
+//-------------------------------------------------------------------------------------
 Light::~Light(void)
 {
 }
@@ -30,22 +30,26 @@ void Light::addColourVariation(ColourVariationDesc colourVariation)
   this->colourVariation = colourVariation;
 }
 
+//-------------------------------------------------------------------------------------
 void Light::addIntensityVariation(IntensityVariationDesc intensityVariation)
 {
   hasIntensityVariation = true;
   this->intensityVariation = intensityVariation;
 }
 
+//-------------------------------------------------------------------------------------
 void Light::on(bool flicker, float flickerTime, IntensityVariationDesc flickerParams)
 {
   light->setVisible(true);
 }
 
+//-------------------------------------------------------------------------------------
 void Light::off()
 {
   light->setVisible(false);
 }
 
+//-------------------------------------------------------------------------------------
 void Light::update(double elapsedSeconds)
 {
   //if(up) light->setDiffuseColour(light->getDiffuseColour() + Ogre::ColourValue(0,0,0.01));

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "Monster.h"
+#include "ScriptManager.h"
 
 //-------------------------------------------------------------------------------------
 World::World(Ogre::Root* root)
@@ -13,7 +14,7 @@ World::World(Ogre::Root* root)
     timeManager(),
     dataManager(),
     soundManager(),
-    scriptManager(),
+    scriptManager(new ScriptManager()),
     physicsManager(),
     controlManager(),
     fabricationManager(),
@@ -21,7 +22,7 @@ World::World(Ogre::Root* root)
     sceneChangeListener(NULL), 
     defaultScene(0)
 {
-  scriptManager.setWorld(this);
+  scriptManager->setWorld(this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -35,6 +36,8 @@ World::~World(void)
     if(it->second) delete (it->second);
     it->second = NULL;
   }
+
+  if(scriptManager) delete scriptManager;
 }
 
 //-------------------------------------------------------------------------------------
@@ -52,13 +55,13 @@ void World::initialise(std::string iniFile)
 
   //creating default scene
   Scene* scene = loadScene(defaultScene);
-  if(!scene) throw NHException("Default scene creation failed.");
+  if(!scene) throw NHException("default scene creation failed");
   
   //creating player
   PlayerDesc playerDesc = PlayerDesc();
   playerDesc.gravity = scene->getGravity();
   player = new Player(playerDesc, this);
-  if(!player) throw NHException("Initial player creation failed.");
+  if(!player) throw NHException("initial player creation failed");
   scene->addPlayer(player);
 }
 
@@ -109,7 +112,7 @@ ControlManager* World::getControlManager()
 //-------------------------------------------------------------------------------------
 ScriptManager* World::getScriptManager()
 {
-  return &scriptManager;
+  return scriptManager;
 }
 
 //-------------------------------------------------------------------------------------
@@ -150,10 +153,12 @@ bool World::destroyScene(int id)
 //-------------------------------------------------------------------------------------
 bool World::update(double elapsedSeconds)
 {
-  for(std::map<int, Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
-  {
-    if(it->second->isActive()) it->second->update(elapsedSeconds);//only send frame events to the active scenes
-  }
+  if(!scriptManager->update(elapsedSeconds)) return false;
+
+  if(player && player->getScene()) player->getScene()->update(elapsedSeconds);//only update the active scene
+
+  timeManager.tick();
+
   return true;
 }
 
@@ -205,7 +210,7 @@ void World::parseIni(std::string filename)
   try
   {
     Ogre::FileInfoListPtr fileListPtr = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", filename);
-    if(fileListPtr->size() < 1) throw NHException("Could not find the path to the specified initialisation file.");
+    if(fileListPtr->size() < 1) throw NHException("could not find the path to the specified initialisation file");
 
     boost::property_tree::ptree pt;
     boost::property_tree::ini_parser::read_ini(fileListPtr->front().archive->getName() + "/" + fileListPtr->front().filename, pt);
@@ -225,6 +230,7 @@ void World::parseIni(std::string filename)
     controlManager.jump = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Jump"));
     controlManager.run = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Run"));
     controlManager.crouch = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Crouch"));
+    controlManager.interact = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Interact"));
     controlManager.quickslots.push_back(controlManager.stringToKeyCode(pt.get<std::string>("Controls.QuickSlot1")));
     controlManager.quickslots.push_back(controlManager.stringToKeyCode(pt.get<std::string>("Controls.QuickSlot2")));
     controlManager.console = controlManager.stringToKeyCode(pt.get<std::string>("Controls.Console"));
@@ -247,12 +253,12 @@ void World::parseIni(std::string filename)
     enableWater = (pt.get<std::string>("Environment.Water") == TRUE_STRING);
     enableSky = (pt.get<std::string>("Environment.Sky") == TRUE_STRING);
 
-    //Data File Paths
-    dataManager.addData(pt.get<std::string>("Scenes.Data"));
-    dataManager.addData(pt.get<std::string>("Architecture.Data"));
-    dataManager.addData(pt.get<std::string>("Monsters.Data"));
-    dataManager.addData(pt.get<std::string>("Items.Data"));
-    dataManager.addData(pt.get<std::string>("Sounds.Data"));
+    //Data
+    dataManager.addData(pt.get<std::string>("Data.Scenes"));
+    dataManager.addData(pt.get<std::string>("Data.Architecture"));
+    dataManager.addData(pt.get<std::string>("Data.Monsters"));
+    dataManager.addData(pt.get<std::string>("Data.Items"));
+    dataManager.addData(pt.get<std::string>("Data.Sounds"));
 
     //Debug
     freeCameraDebug = (pt.get<std::string>("Debug.FreeCamera") == TRUE_STRING);
@@ -274,10 +280,6 @@ void World::parseIni(std::string filename)
   {
     std::cout << e.what() << std::endl;
   }
-  catch(NHException e)
-  {
-    std::cout << "Initialisation Error: " << e.what() << std::endl;
-  }
 }
 
 //-------------------------------------------------------------------------------------
@@ -296,6 +298,12 @@ void World::setRoot(Ogre::Root* root)
 FabricationManager* World::getFabricationManager()
 {
   return &fabricationManager;
+}
+
+//-------------------------------------------------------------------------------------
+TimeManager* World::getTimeManager()
+{
+  return &timeManager;
 }
 
 

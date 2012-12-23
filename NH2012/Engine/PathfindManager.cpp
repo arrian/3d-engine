@@ -8,21 +8,25 @@ PathfindManager::PathfindManager(Ogre::SceneManager* sceneManager)
 {
 }
 
+//-------------------------------------------------------------------------------------
 PathfindManager::~PathfindManager(void)
 {
   if(geom) delete geom;
 }
 
+//-------------------------------------------------------------------------------------
 void PathfindManager::update(double elapsedSeconds)
 {
   OgreRecast::update();
 }
 
+//-------------------------------------------------------------------------------------
 void PathfindManager::addEntity(Ogre::Entity* entity)
 {
   entities.push_back(entity);
 }
 
+//-------------------------------------------------------------------------------------
 void PathfindManager::build()
 {
   std::cout << "Building navigation... ";

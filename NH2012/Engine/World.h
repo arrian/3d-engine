@@ -30,7 +30,6 @@
 #include "DataManager.h"
 #include "TimeManager.h"
 #include "SoundManager.h"
-#include "ScriptManager.h"
 #include "ControlManager.h"
 #include "PhysicsManager.h"
 #include "FabricationManager.h"
@@ -41,7 +40,7 @@
 //Forward Declarations
 class Player;
 class Scene;
-
+class ScriptManager;
 
 /************************************************************************/
 /* Contains the entire game world. Multiple scenes can be loaded at once*/
@@ -127,7 +126,7 @@ private:
   DataManager dataManager;
   TimeManager timeManager;
   SoundManager soundManager;
-  ScriptManager scriptManager;
+  ScriptManager* scriptManager;
   PhysicsManager physicsManager;
   ControlManager controlManager;
   FabricationManager fabricationManager;

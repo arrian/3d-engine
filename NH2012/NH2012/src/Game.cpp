@@ -22,18 +22,19 @@ Game::Game(Ogre::Root* root, Ogre::RenderWindow* renderWindow, OIS::Keyboard* ke
   }
 }
 
+//-------------------------------------------------------------------------------------
 Game::~Game(void)
 {
 }
 
+//-------------------------------------------------------------------------------------
 bool Game::update(double elapsedSeconds)
 {
   if(done) return false;
   try
   {
-    //make booleans simpler
-    done |= !Console::getInstance().update(elapsedSeconds);
-    done |= !world.update(elapsedSeconds);
+    Console::getInstance().update(elapsedSeconds);
+    if(!world.update(elapsedSeconds)) return false;
   }
   catch (NHException e)//temporarily catching update errors
   {
@@ -42,7 +43,7 @@ bool Game::update(double elapsedSeconds)
   return !done;//should update is not of done
 }
 
-//Game is dropping key presses???
+//-------------------------------------------------------------------------------------
 bool Game::keyPressed(const OIS::KeyEvent &arg)
 {
   if (arg.key == OIS::KC_ESCAPE) done = true;
@@ -55,6 +56,7 @@ bool Game::keyPressed(const OIS::KeyEvent &arg)
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 bool Game::keyReleased(const OIS::KeyEvent &arg)
 {
   try
@@ -73,6 +75,7 @@ bool Game::keyReleased(const OIS::KeyEvent &arg)
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 bool Game::mouseMoved(const OIS::MouseEvent &arg)
 {
   world.injectMouseMove(arg);
@@ -80,6 +83,7 @@ bool Game::mouseMoved(const OIS::MouseEvent &arg)
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 bool Game::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
   world.injectMouseDown(arg,id);
@@ -87,6 +91,7 @@ bool Game::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
   return true;
 }
 
+//-------------------------------------------------------------------------------------
 bool Game::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
   world.injectMouseUp(arg,id);

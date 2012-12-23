@@ -3,10 +3,11 @@
 #include "NHException.h"
 
 //-------------------------------------------------------------------------------------
-IdentificationInterface::IdentificationInterface(std::string name, std::string type)
-  : instanceID(-1),
+IdentificationInterface::IdentificationInterface(void* instancePointer, std::string name, Group group)
+  : instancePointer(instancePointer),
+    instanceID(-1),
     name(name),
-    type(type)
+    group(group)
 {
 }
 
@@ -28,9 +29,15 @@ void IdentificationInterface::setInstanceID(int instanceID)
 }
 
 //-------------------------------------------------------------------------------------
-std::string IdentificationInterface::getType()
+Group IdentificationInterface::getGroup()
 {
-  return type;
+  return group;
+}
+
+//-------------------------------------------------------------------------------------
+bool IdentificationInterface::isInGroup(Group group)
+{
+  return (group & this->group) == group;//is this correct?
 }
 
 //-------------------------------------------------------------------------------------
@@ -38,4 +45,12 @@ std::string IdentificationInterface::getName()
 {
   return name;
 }
+
+//-------------------------------------------------------------------------------------
+void* IdentificationInterface::getInstancePointer()
+{
+  return instancePointer;
+}
+
+
 
