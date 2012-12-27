@@ -12,7 +12,7 @@ TimeManager::~TimeManager(void)
 }
 
 //-------------------------------------------------------------------------------------
-void TimeManager::tick()
+void TimeManager::update(double elapsedSeconds)
 {
   if(ticks < ULONG_MAX - 1) ticks++;
   else ticks = 0;

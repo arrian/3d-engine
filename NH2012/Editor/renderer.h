@@ -14,33 +14,39 @@
 class Renderer : public QGLWidget
 {
   Q_OBJECT
-signals:
-  void mouseClickEvent();
+//signals:
+//  void mouseClickEvent();
 
 public:
   Renderer(QWidget *parent = 0)
     : QGLWidget(parent),
       window(NULL),
-      world(0)
+      world(NULL),
+      hasMouseClick(false)
   {
   }
  
   virtual ~Renderer()
   {
+    delete world;
     root->shutdown();
     delete root;
     destroy();
   }
 
-  void init(World* world);
+  void init();
  
 protected:
   virtual void initializeGL();
   virtual void resizeGL(int , int );
   virtual void paintGL();
 
-  void mouseReleaseEvent(QMouseEvent* e);
-  void mousePressEvent(QMouseEvent* e);	
+  virtual void mouseReleaseEvent(QMouseEvent* e);
+  virtual void mousePressEvent(QMouseEvent* e);	
+  virtual void mouseMoveEvent(QMouseEvent* e);
+  virtual void keyPressEvent(QKeyEvent* e);
+  virtual void keyReleaseEvent(QKeyEvent* e);
+  //virtual void wheelEvent(QWheelEvent* e);
  
   virtual Ogre::RenderSystem* chooseRenderer(Ogre::RenderSystemList* rsl);
  
@@ -50,7 +56,6 @@ protected:
   Ogre::RenderWindow *window;
 
 private:
-  QPoint lastMousePoint;	
   bool hasMouseClick;
 };
 

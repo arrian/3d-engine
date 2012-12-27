@@ -7,26 +7,49 @@
 
 #include "Scene.h"
 
-struct IntensityVariationDesc
+class LightPlugin
 {
-  IntensityVariationDesc()
-    : randomness(0.5f),
+public:
+  LightPlugin(Light* light)
+    : light(light)
+  {
+  }
+
+  virtual void update(double elapsedSeconds) = 0;
+
+protected:
+  Light* light;
+};
+
+class IntensityVariationDesc : public LightPlugin
+{
+public:
+  IntensityVariationDesc(Light* light)
+    : LightPlugin(light),
+      randomness(0.5f),
       interval(2.0f),
       minIntensity(0.5f),
       maxIntensity(1.0f)
   {
   }
 
+  void update(double elapsedSeconds)
+  {
+
+  }
+
+protected:
   float randomness;
   float interval;
   float minIntensity;
   float maxIntensity;
 };
 
-struct ColourVariationDesc
+class ColourVariationDesc : public LightPlugin
 {
-  ColourVariationDesc()
-    : colourSet(),
+  ColourVariationDesc(Light* light)
+    : LightPlugin(light),
+      colourSet(),
       randomiseColourSet(false),
       randomness(0.5f),
       interval(2.0f)
@@ -37,6 +60,12 @@ struct ColourVariationDesc
     colourSet.push_back(Ogre::ColourValue::Blue);
   }
 
+  void update(double elapsedSeconds)
+  {
+
+  }
+
+protected:
   std::vector<Ogre::ColourValue> colourSet;
   bool randomiseColourSet;
   float randomness;
@@ -49,24 +78,15 @@ public:
   Light(Scene* scene, Ogre::Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour);
   ~Light(void);
 
-  void addColourVariation(ColourVariationDesc colourVariation);
-  void addIntensityVariation(IntensityVariationDesc intensityVariation);
+  void addPlugin(LightPlugin* plugin);
 
-  void on(bool flicker = false, float flickerTime = 0.0f, IntensityVariationDesc flickerParams = IntensityVariationDesc());//turn the light on with optional flickering
-  void off();
+  void setOn(bool on);
 
   void update(double elapsedSeconds);
 
-  bool up;
-
 private:
   Ogre::Light* light;
-
-  bool hasIntensityVariation;//should this light's intensity flicker?
-  IntensityVariationDesc intensityVariation;
-
-  bool hasColourVariation;//should this light's colour variate
-  ColourVariationDesc colourVariation;
+  std::vector<LightPlugin*> plugins;
 
   Ogre::SceneNode* lightNode;
 };

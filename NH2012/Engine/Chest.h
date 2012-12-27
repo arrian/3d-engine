@@ -2,6 +2,8 @@
 
 #include "Interactive.h"
 
+#include <OgreSceneNode.h>
+
 class Chest : public Interactive
 {
 public:
@@ -15,9 +17,21 @@ public:
   bool isLocked();
 
   virtual void interact();
+  virtual void update(double elapsedSeconds);
+
+  virtual void setPosition(Ogre::Vector3 position);
+  virtual void setRotation(Ogre::Quaternion rotation);
+
+  virtual Ogre::Vector3 getPosition();
+  virtual Ogre::Quaternion getRotation();
+
+protected:
+  void hasSceneChange();
 
 private:
   bool open;
   bool locked;
+
+  Ogre::SceneNode* node;
 };
 

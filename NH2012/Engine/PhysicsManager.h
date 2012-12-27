@@ -25,8 +25,8 @@ public:
   physx::PxPhysics* getPhysics();
   physx::PxMaterial* getDefaultMaterial();
   physx::PxFoundation* getFoundation();
-
   const physx::PxTolerancesScale& getTolerancesScale();
+
   void initialiseVisualDebugger(std::string ip, int port, int timeoutMilliseconds);
 private:
   
@@ -42,8 +42,5 @@ private:
   physx::PxReal defaultStaticFriction;
   physx::PxReal defaultDynamicFriction;
   physx::PxReal defaultRestitution;
-
-
-
 };
 

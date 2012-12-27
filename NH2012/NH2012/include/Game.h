@@ -1,35 +1,50 @@
 #pragma once
 
-#include <OISKeyboard.h>
-#include <OISMouse.h>
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#include "../res/resource.h"
+#endif
 
+#include <OgreRoot.h>
+#include <OgreConfigFile.h>
+#include <OgreSceneManager.h>
+#include <OgreRenderWindow.h>
 #include <OgreFrameListener.h>
 
-#include "Game.h"
+#include <OISMouse.h>
+#include <OISEvents.h>
+#include <OISKeyboard.h>
+#include <OISInputManager.h>
+
 #include "../../Engine/Console.h"
 #include "../../Engine/World.h"
 
-
-class Game : public OIS::KeyListener, public OIS::MouseListener
+class Game : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {
 public:
-  Game(Ogre::Root* root, Ogre::RenderWindow* renderWindow, OIS::Keyboard* keyboard);
+  Game(void);
   virtual ~Game(void);
+  bool run();
 
-  bool update(double elapsedSeconds);
-  void setSceneManager(Ogre::SceneManager* scene);
+protected:
+  bool done;
+  World* world;
+
+  Ogre::Root *root;
+  Ogre::RenderWindow* window;
+
+  OIS::InputManager* inputManager;
+  OIS::Keyboard* keyboard;
+  OIS::Mouse* mouse;
+  
+  bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+  virtual void windowResized(Ogre::RenderWindow* rw);
+  virtual void windowClosed(Ogre::RenderWindow* rw);
 
   bool keyPressed(const OIS::KeyEvent &arg);
   bool keyReleased(const OIS::KeyEvent &arg);
   bool mouseMoved(const OIS::MouseEvent &arg);
   bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
   bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
-
-protected:
-  bool done;
-  World world;
-  Ogre::RenderWindow* renderWindow;
 };
-
-
 

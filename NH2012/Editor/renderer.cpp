@@ -1,6 +1,8 @@
 #include "renderer.h"
 
-void Renderer::init(World* world)
+#include "OIS.h"
+
+void Renderer::init()
 {
   hasMouseClick = false;
   this->world = world;
@@ -106,9 +108,9 @@ void Renderer::initializeGL()
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();/////////////////////test
   
   //Preparing World
-  world->setRoot(root);
-  world->initialise("C:\\Dev\\Nethack2012\\NH2012\\Media\\nh2012.ini");
-  if(world) world->hookWindow(window);
+  world = new World(root);
+  world->initialise("game.ini");
+  world->hookWindow(window);
 }
  
 void Renderer::paintGL()
@@ -136,19 +138,45 @@ Ogre::RenderSystem* Renderer::chooseRenderer(Ogre::RenderSystemList *renderers)
 
 void Renderer::mousePressEvent(QMouseEvent* e)
 {
-  // store click position
-  lastMousePoint = e->pos();
-  // set the flag meaning "click begin"
   hasMouseClick = true;
 }
 
 void Renderer::mouseReleaseEvent(QMouseEvent* e)
 {
-  // check if cursor not moved since click beginning
-  if ((hasMouseClick) && (e->pos() == lastMousePoint))
+  hasMouseClick = false;
+}
+
+void Renderer::mouseMoveEvent(QMouseEvent* e)
+{
+  if(hasMouseClick)
   {
-    // do something: for example emit Click signal
-    emit mouseClickEvent;
+    OIS::MouseState state;
+    state.X.rel = e->x();
+    state.Y.rel = e->y();
+    state.X.abs = e->globalX();
+    state.Y.abs = e->globalY();
+    state.height = window->getHeight();
+    state.width = window->getWidth();
+
+    world->mouseMoved(OIS::MouseEvent(NULL, state));
   }
 }
+
+void Renderer::keyPressEvent(QKeyEvent* e) 
+{
+  if(hasMouseClick)
+  {
+    if(e->key() == Qt::Key_W) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_W, 0));
+  }
+}
+
+void Renderer::keyReleaseEvent(QKeyEvent* e) 
+{
+  if(hasMouseClick)
+  {
+    if(e->key() == Qt::Key_W) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_W, 0));
+  }
+}
+
+
 

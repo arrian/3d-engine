@@ -7,7 +7,6 @@
 #include <OISKeyboard.h>
 #include <OgreString.h>
 
-#include "SceneChangeListener.h"
 #include "Gorilla.h"
 
 class World;
@@ -16,7 +15,7 @@ class World;
 /**
  * In-game command console singleton.
  */
-class Console : public SceneChangeListener
+class Console
 {
 public:
   static Console& getInstance()
@@ -26,28 +25,23 @@ public:
   }
 
   void setWorld(World* world);
-  void setKeyboard(OIS::Keyboard* keyboard);
 
   void hookWindow(Ogre::RenderWindow* window);//hooks the console to a render window
   void rehookWindow();
   bool isVisible();//returns the visibility of the console
   void setVisible(bool visible);//sets the visibility of the console
   void update(double elapsedSeconds);
-  void injectKeyDown(const OIS::KeyEvent &arg);//key down
-  void injectKeyUp(const OIS::KeyEvent &arg);//key up
-  void injectKey(const OIS::KeyEvent &arg, bool isDown);//key down or up
-  void keyPressed(const OIS::KeyEvent &arg);
+  void keyPressed(const OIS::KeyEvent &arg);//key down
+  void keyReleased(const OIS::KeyEvent &arg);//key up
 
   void print(std::string highlight, std::string comment);
   void print(std::string comment);
   void clear();
-
-  void sceneChanged();
   
 private:
-  Console();//World* world, OIS::Keyboard* keyboard);
+  Console();
   ~Console(void);
-  Console(Console const&);        // Don't Implement
+  Console(Console const&);        // Don't implement
   void operator=(Console const&); // Don't implement
 
   bool isShift;//True if shift is pressed.
@@ -55,7 +49,6 @@ private:
   bool showCursor;
   Ogre::Root* root;//Game root.
   Ogre::RenderWindow* window;//Game render window.
-  OIS::Keyboard* keyboard;//Keyboard manager.
   World* world;//Game world.
   Gorilla::Silverback* overlay;//Console renderer.
   Gorilla::Screen* screen;//Console screen.

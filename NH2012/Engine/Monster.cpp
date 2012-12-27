@@ -48,9 +48,9 @@ void Monster::hasSceneChange()
 
   //temporary testing
   //setPosition(scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0.0f,2.0f,0.0f));
-  setTarget(scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0.0f,2.0f,0.0f));
+  setTarget(scene->getPathfindManager()->getRandomNavigablePoint() + Ogre::Vector3(0.0f,2.0f,0.0f));
 
-  node->_setDerivedPosition(position);
+  node->setPosition(position);
 
   intelligence.setNode(scene, node);
   mesh.setNode(scene, node);
@@ -60,8 +60,14 @@ void Monster::hasSceneChange()
 //-------------------------------------------------------------------------------------
 void Monster::setPosition(Ogre::Vector3 position)
 {
-  this->position = position;
-  if(node) node->_setDerivedPosition(position);
+  if(node) node->setPosition(position);
+  else throw NHException("monster must be inside a scene to set its position");
+}
+
+//-------------------------------------------------------------------------------------
+void Monster::setRotation(Ogre::Quaternion rotation)
+{
+  throw NHException("setting the rotation of a monster has not been implemented");
 }
 
 //-------------------------------------------------------------------------------------

@@ -179,14 +179,14 @@ void ScriptManager::screenshot(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setPhysicsEnabled(Options argv)
 {
-  world->freezeCollisionDebug = !stringToBool(argv[1]);
+  world->setPhysicsEnabled(stringToBool(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::setCameraFree(Options argv)
 {
   bool isFree = stringToBool(argv[1]);
-  world->getPlayer()->setCollisionEnabled(!isFree);//freeCameraDebug = !world->freeCameraDebug;
+  world->getPlayer()->setFreeCamera(isFree);//freeCameraDebug = !world->freeCameraDebug;
 }
 
 //-------------------------------------------------------------------------------------
@@ -267,7 +267,7 @@ void ScriptManager::getItemData(Options argv)
   display("simplified mesh", desc.simplifiedMesh);
   display("dynamic friction", boost::lexical_cast<std::string>(desc.dynamicFriction));
   display("static friction", boost::lexical_cast<std::string>(desc.staticFriction));
-  display("restitution", boost::lexical_cast<std::string>(desc.resititution));
+  display("restitution", boost::lexical_cast<std::string>(desc.restitution));
   display("density", boost::lexical_cast<std::string>(desc.density));
 }
 
@@ -348,14 +348,14 @@ void ScriptManager::getGameInfo(Options argv)
 {
   Ogre::RenderWindow* window = world->getPlayer()->getWindow();
   if(!window) throw NHException("no render window found");
-  display("average fps", Ogre::StringConverter::toString(int(window->getAverageFPS())));
-  display("best fps", Ogre::StringConverter::toString(window->getBestFPS()));
-  display("batches", Ogre::StringConverter::toString(window->getBatchCount()));
-  display("colour depth", Ogre::StringConverter::toString(window->getColourDepth()));
-  display("number of viewports", Ogre::StringConverter::toString(window->getNumViewports()));
-  display("triangle count", Ogre::StringConverter::toString(window->getTriangleCount()));
-  display("window size", Ogre::StringConverter::toString(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
-  display("number of loaded scenes", Ogre::StringConverter::toString(world->getNumberScenes()));
+  display("average fps", boost::lexical_cast<std::string>(int(window->getAverageFPS())));
+  display("best fps", boost::lexical_cast<std::string>(window->getBestFPS()));
+  display("batches", boost::lexical_cast<std::string>(window->getBatchCount()));
+  display("colour depth", boost::lexical_cast<std::string>(window->getColourDepth()));
+  display("number of viewports", boost::lexical_cast<std::string>(window->getNumViewports()));
+  display("triangle count", boost::lexical_cast<std::string>(window->getTriangleCount()));
+  display("window size", boost::lexical_cast<std::string>(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
+  display("number of loaded scenes", boost::lexical_cast<std::string>(world->getNumberScenes()));
 
   std::map<int, std::string> names;
   world->getSceneNames(names);
@@ -421,8 +421,8 @@ void ScriptManager::addMonster(Options argv)
   if(target)
   {
     Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
-      Ogre::Real(boost::lexical_cast<float>(argv[3])), 
-      Ogre::Real(boost::lexical_cast<float>(argv[4])));
+                                           Ogre::Real(boost::lexical_cast<float>(argv[3])), 
+                                           Ogre::Real(boost::lexical_cast<float>(argv[4])));
     int idNum = boost::lexical_cast<int>(argv[1]);
     target->addMonster(idNum, position);
   }
@@ -432,7 +432,6 @@ void ScriptManager::addMonster(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setSceneLoaded(Options argv)
 {
-  //bool load = boost::lexical_cast<bool>(argv[2]);
   if(stringToBool(argv[2]))
   {
     if(world->loadScene(boost::lexical_cast<int>(argv[1]))) display("scene loaded");

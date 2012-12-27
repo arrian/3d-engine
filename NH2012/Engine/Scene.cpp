@@ -14,6 +14,8 @@
 #include "Architecture.h"
 #include "Portal.h"
 #include "Flock.h"
+#include "Door.h"
+#include "Chest.h"
 
 //-------------------------------------------------------------------------------------
 Scene::Scene(SceneDesc desc, World* world)
@@ -109,8 +111,8 @@ void Scene::addPlayer(Player* player, int portalID)
 void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
   Monster* monster = new Monster(world->getDataManager()->getMonster(id));
-  monster->setPosition(position);
   monster->setScene(this);
+  monster->setPosition(position);
   monsters.push_back(monster);
 }
 
@@ -118,10 +120,24 @@ void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation
 void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 {
   Item* item = new Item(world->getDataManager()->getItem(id));//this->getWorld()->createItem(id);
+  item->setScene(this);
   item->setPosition(position);
   item->setRotation(rotation);
-  item->setScene(this);
   items.push_back(item);
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::addInteractive(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
+{
+  Interactive* interactive = NULL;
+  if(id == 0) interactive = new Door();
+  else if(id == 1) interactive = new Chest();
+  else throw NHException("the specified interactive object id has not been implemented");
+
+  interactive->setScene(this);
+  interactive->setPosition(position);
+  interactive->setRotation(rotation);
+  interactives.push_back(interactive);
 }
 
 //-------------------------------------------------------------------------------------
@@ -203,7 +219,7 @@ void Scene::update(double elapsedSeconds)
   //totalElapsed += elapsedSeconds;
   //flockTest.update(totalElapsed);//evt.timeSinceLastFrame);
 
-  if(!world->freezeCollisionDebug) advancePhysics(elapsedSeconds);
+  if(world->isPhysicsEnabled()) advancePhysics(elapsedSeconds);
 }
 
 //-------------------------------------------------------------------------------------
@@ -503,8 +519,7 @@ void Scene::setDebugDrawBoundingBoxes(bool enabled)
 //-------------------------------------------------------------------------------------
 void Scene::setDebugDrawNavigationMesh(bool enabled)
 {
-  if(enabled) pathfinder->drawNavMesh();
-  else throw NHException("removing a drawn navigation mesh is not implemented");
+  pathfinder->setDrawNavigationMesh(enabled);
 }
 
 //-------------------------------------------------------------------------------------
@@ -523,10 +538,8 @@ Ogre::Vector3 Scene::getGravity()
 //-------------------------------------------------------------------------------------
 void Scene::reset()
 {
-  if(player) player->setScene(NULL);//detach player from this scene
   release();
   setup();
-  if(player) addPlayer(player);
 }
 
 //-------------------------------------------------------------------------------------
@@ -554,7 +567,7 @@ void Scene::setup()
 
   pathfinder = new PathfindManager(sceneManager);
 
-  setShadowsEnabled(world->enableShadows);
+  setShadowsEnabled(world->isShadowsEnabled());
 
   //sceneManager->setShowDebugShadows(world->isDebug());
   //sceneManager->showBoundingBoxes(world->isDebug());
@@ -585,11 +598,15 @@ void Scene::setup()
 
 
   //flockTest.setScene(this);//boids flocking test
+
+  if(player) addPlayer(player);
 }
 
 //-------------------------------------------------------------------------------------
 void Scene::release()
 {
+  if(player) player->setScene(NULL);//detach player from this scene
+
   defaultEntry = NULL;
 
   if(pathfinder) delete pathfinder;
@@ -620,10 +637,10 @@ void Scene::release()
   portals.clear();
   
 
-  physicsManager->release();
+  if(physicsManager) physicsManager->release();
   physicsManager = NULL;
 
-  world->getRoot()->destroySceneManager(sceneManager);
+  if(sceneManager) world->getRoot()->destroySceneManager(sceneManager);
   sceneManager = NULL;
 }
 

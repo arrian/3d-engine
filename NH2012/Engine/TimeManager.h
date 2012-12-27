@@ -95,7 +95,7 @@ public:
   bool isHalloween();
   bool isNewYears();
 
-  void tick();
+  void update(double elapsedSeconds);
   unsigned long getTicks();
 
 private:

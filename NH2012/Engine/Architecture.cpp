@@ -82,7 +82,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
   child->setScale(scale);
   child->attachObject(entity);
 
-  if(pathfinder) pathfinder->addEntity(entity);
+  if(pathfinder) pathfinder->addGeometry(entity);
 }
 
 //-------------------------------------------------------------------------------------

@@ -17,8 +17,6 @@ public:
   ControlManager();
   virtual ~ControlManager();
 
-  OIS::KeyCode stringToKeyCode(std::string string);
-
   //Move
   OIS::KeyCode moveForward;
   OIS::KeyCode moveLeft;
@@ -43,7 +41,4 @@ public:
   OIS::KeyCode addItem;
   OIS::KeyCode addMonster;
   OIS::KeyCode console;
-
-private:
-  std::map<std::string, OIS::KeyCode> stringToEnum;
 };

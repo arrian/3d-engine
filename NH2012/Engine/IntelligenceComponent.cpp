@@ -31,20 +31,7 @@ Ogre::Vector3 IntelligenceComponent::getNextPosition(double elapsedSeconds)
   {
     if(intermediates.size() == 0)
     {
-      int code = scene->getPathfindManager()->FindPath(node->_getDerivedPosition(), goal, 0, 0);
-      intermediates = scene->getPathfindManager()->getPath(0);
-
-      switch(code)
-      {
-        case 0: break;
-        case -1: std::cout << "Monster Pathfind: No polygon near start point." << std::endl; break;
-        case -2: std::cout << "Monster Pathfind: No polygon near end point." << std::endl; break;
-        case -3: std::cout << "Monster Pathfind: Could not create a path." << std::endl; break;
-        case -4: std::cout << "Monster Pathfind: Could not find a path." << std::endl; break;
-        case -5: std::cout << "Monster Pathfind: Could not create a straight path." << std::endl; break;
-        case -6: std::cout << "Monster Pathfind: Could not find a straight path." << std::endl; break;
-        default: break;
-      }
+      intermediates = scene->getPathfindManager()->getPath(node->_getDerivedPosition(), goal);
 
       //debug generated path
       int count = 0;

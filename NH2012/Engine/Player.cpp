@@ -21,7 +21,9 @@ Player::Player(PlayerDesc description, World* world)
     itemGenerationID(3),//temporarily generating a watermelon when the 1 key is pressed
     monsterGenerationID(1),
     currentTarget(NULL),
-    interactPressed(false)
+    interactPressed(false),
+    node(NULL),
+    freeCameraNode(NULL)
 {
   
 }
@@ -46,6 +48,9 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
     
     if(node) this->scene->getSceneManager()->destroySceneNode(node);
     node = NULL;
+
+    if(freeCameraNode) this->scene->getSceneManager()->destroySceneNode(freeCameraNode);
+    freeCameraNode = NULL;
   }
 
   //setting up
@@ -67,7 +72,6 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   stop();
   
   camera.rehookWindow();
-  if(world->getSceneChangeListener()) world->getSceneChangeListener()->sceneChanged();//notify the scene change listener that the scene has changed
 }
 
 //-------------------------------------------------------------------------------------
@@ -86,7 +90,7 @@ void Player::update(double elapsedSeconds)
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
-  if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavMeshPoint() + Ogre::Vector3(0,1,0));//create a monster at an arbitrary location
+  if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavigablePoint() + Ogre::Vector3(0,1,0));//create a monster at an arbitrary location
 
   currentTarget = query.rayQuery(camera.getDirection(), 20.0f, EXCLUDE_SELF);
   
@@ -106,7 +110,6 @@ void Player::update(double elapsedSeconds)
       {
         Interactive* interactive = static_cast<Interactive*>(currentTarget->getInstancePointer());
         interactive->interact();
-      
       }
       interactPressed = false;
     }
@@ -114,7 +117,7 @@ void Player::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-void Player::injectKeyDown(const OIS::KeyEvent &evt)
+void Player::keyPressed(const OIS::KeyEvent &evt)
 {
   if (evt.key == world->getControlManager()->jump) skeleton.jump();
   else if(evt.key == world->getControlManager()->interact) interactPressed = true;
@@ -122,7 +125,7 @@ void Player::injectKeyDown(const OIS::KeyEvent &evt)
 }
 
 //-------------------------------------------------------------------------------------
-void Player::injectKeyUp(const OIS::KeyEvent &evt)
+void Player::keyReleased(const OIS::KeyEvent &evt)
 {
   keyEvent(evt, false);
 }
@@ -141,7 +144,7 @@ void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
 }
 
 //-------------------------------------------------------------------------------------
-void Player::injectMouseMove(const OIS::MouseEvent &evt)
+void Player::mouseMoved(const OIS::MouseEvent &evt)
 {
   float lookScalar = 1.0f;
   if(skeleton.isLeftHand()) 
@@ -158,14 +161,14 @@ void Player::injectMouseMove(const OIS::MouseEvent &evt)
 }
 
 //-------------------------------------------------------------------------------------
-void Player::injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
+void Player::mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
   if(id == world->getControlManager()->leftHand) skeleton.setLeftHand(true);
   if(id == world->getControlManager()->rightHand) skeleton.setRightHand(true);
 }
 
 //-------------------------------------------------------------------------------------
-void Player::injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
+void Player::mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
   if(id == world->getControlManager()->leftHand) skeleton.setLeftHand(false);
   if(id == world->getControlManager()->rightHand) skeleton.setRightHand(false);
@@ -229,10 +232,22 @@ void Player::setGravity(Ogre::Vector3 gravity)
 }
 
 //-------------------------------------------------------------------------------------
-void Player::setCollisionEnabled(bool enabled)
+void Player::setFreeCamera(bool enabled)
 {
-  skeleton.setCollisionEnabled(enabled);
+  if(!scene) throw NHException("player must be in a scene to enable or disable the free camera");
 
+  if(enabled)
+  {
+    if(!freeCameraNode) freeCameraNode = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+    freeCameraNode->setPosition(skeleton.getHead()->_getDerivedPosition());
+    camera.setNode(scene, freeCameraNode);
+  }
+  else
+  {
+    if(freeCameraNode) scene->getSceneManager()->destroySceneNode(freeCameraNode);
+    freeCameraNode = NULL;
+    camera.setNode(scene, skeleton.getHead());
+  }
 }
 
 //-------------------------------------------------------------------------------------

@@ -166,7 +166,7 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
   if(collisionEnabled)
   {
     velocity.y = oldY;//restoring saved up/down speed
-    velocity.y += gravity.y * (float) elapsedSeconds;//only apply gravity when collision enabled
+    velocity.y += gravity.y * (float) elapsedSeconds;
 
     physx::PxU32 collisionFlags = controller->move(physx::PxVec3(velocity.x * (float) elapsedSeconds * moveScalar, velocity.y * (float) elapsedSeconds * moveScalar, velocity.z * (float) elapsedSeconds * moveScalar), minimumMoveDistance, (float) elapsedSeconds, physx::PxControllerFilters());//moving character controller
     if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0)

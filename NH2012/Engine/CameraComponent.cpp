@@ -4,6 +4,8 @@
 #include "NHException.h"
 #include "IdentificationInterface.h"
 
+#include "Console.h"
+
 #include "OgreCompositorManager.h"
 
 //-------------------------------------------------------------------------------------
@@ -29,15 +31,14 @@ CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom, bool enableM
 CameraComponent::~CameraComponent(void)
 {
   if(ssao) delete ssao;
-  this->scene->getSceneManager()->destroyCamera(camera);
+  if(scene) scene->getSceneManager()->destroyCamera(camera);
 }
 
 //-------------------------------------------------------------------------------------
 void CameraComponent::hookWindow(Ogre::RenderWindow* window)
 {
-  assert(window);
-  assert(camera);
-
+  if(!window || !camera) return;
+  
   unhookWindow();
   this->window = window;//not sure about order here
   viewport = window->addViewport(camera);
@@ -64,6 +65,8 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
 
   //Ogre::CompositorManager::getSingleton().addCompositor(viewport, "B&W");
   //Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "B&W", true);
+
+  Console::getInstance().hookWindow(window);
 }
 
 //-------------------------------------------------------------------------------------
@@ -76,7 +79,7 @@ void CameraComponent::unhookWindow()
 //-------------------------------------------------------------------------------------
 void CameraComponent::rehookWindow()
 {
-  if(window) hookWindow(window);//clean this up
+  hookWindow(window);
 }
 
 //-------------------------------------------------------------------------------------

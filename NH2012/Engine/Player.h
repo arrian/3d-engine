@@ -33,7 +33,7 @@ public:
   void setPosition(Ogre::Vector3 position);
   void setRotation(Ogre::Quaternion rotation);
   void setGravity(Ogre::Vector3 gravity);
-  void setCollisionEnabled(bool enabled);
+  void setFreeCamera(bool enabled);
   void setItemGenerationID(int id);
   
   //Getters
@@ -46,17 +46,18 @@ public:
   Ogre::RenderWindow* getWindow();
 
   //Injectors
-  void injectKeyDown(const OIS::KeyEvent &evt);
-  void injectKeyUp(const OIS::KeyEvent &evt);
-  void injectMouseMove(const OIS::MouseEvent &evt);
-  void injectMouseDown(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
-  void injectMouseUp(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
+  void keyPressed(const OIS::KeyEvent &evt);
+  void keyReleased(const OIS::KeyEvent &evt);
+  void mouseMoved(const OIS::MouseEvent &evt);
+  void mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
+  void mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
 
 private:
   World* world;
   Scene* scene;
 
   Ogre::SceneNode* node;//world location of the player
+  Ogre::SceneNode* freeCameraNode;//node for free camera
 
   CameraComponent camera;//the player camera generally attached to the head node
   HumanoidSkeletonComponent skeleton;

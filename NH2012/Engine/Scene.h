@@ -29,6 +29,7 @@ class BoidExtension;
 class Item;
 class Light;
 class Architecture;
+class Interactive;
 
 class Scene
 {
@@ -58,6 +59,7 @@ public:
   void addPlayer(Player* player, int portalID = DEFAULT_PORTAL);
   void addMonster(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
   void addItem(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
+  void addInteractive(int id, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY);
   void addLight(Ogre::Vector3 position = Ogre::Vector3::ZERO, bool castShadows = false, Ogre::Real range = 10, Ogre::ColourValue colour = Ogre::ColourValue());
   void addParticles(Ogre::String name, Ogre::String templateName, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Real speed = 1);
   void addPortal(Portal* portal);
@@ -93,6 +95,7 @@ private:
   std::vector<Ogre::ParticleSystem*> particles;
   std::vector<Monster*> monsters;
   std::vector<Item*> items;
+  std::vector<Interactive*> interactives;
   std::vector<Portal*> portals;
   Player* player;
   

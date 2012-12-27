@@ -4,7 +4,6 @@
 #include <OgreQuaternion.h>
 
 #include "IdentificationInterface.h"
-#include "DynamicInterface.h"
 #include "MeshComponent.h"
 #include "PhysicalComponent.h"
 #include "BasicComponent.h"
@@ -15,7 +14,7 @@
 
 class Scene;
 
-class Item : public BasicComponent, public IdentificationInterface, public DynamicInterface
+class Item : public BasicComponent, public IdentificationInterface
 {
 public:
   Item(ItemDesc description);
@@ -41,8 +40,6 @@ protected:
   Ogre::Entity* simplifiedEntity;
 
   Ogre::SceneNode* node;
-  Ogre::Vector3 position;
-  Ogre::Quaternion rotation;
 
   void hasSceneChange();
 

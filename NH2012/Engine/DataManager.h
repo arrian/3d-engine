@@ -13,7 +13,7 @@
 
 #include "NHException.h"
 
-#define GRAVITY -9.81f
+#define GRAVITY 0.0f, -9.81f, 0.0f
 
 struct ArchitectureDesc
 {
@@ -50,7 +50,7 @@ struct ItemDesc
       simplifiedMesh(simplifiedMesh),
       dynamicFriction(0.7f),
       staticFriction(0.7f),
-      resititution(0.5f),
+      restitution(0.5f),
       density(0.1f),
       id(id),
       isDynamic(true),
@@ -64,7 +64,7 @@ struct ItemDesc
 
   float dynamicFriction;
   float staticFriction;
-  float resititution;
+  float restitution;
   float density;
 
   bool isDynamic;//movement applies eg. gravity and forces
@@ -82,7 +82,7 @@ struct MonsterDesc
       speed(1.0f),
       health(100.0f),
       id(id),
-      gravity(0.0f, GRAVITY, 0.0f)
+      gravity(GRAVITY)
   {
   }
 
@@ -105,7 +105,7 @@ struct SceneDesc
       id(id),
       ambientLight(0.1f,0.1f,0.1f),
       shadowColour(1.0f,1.0f,1.0f),
-      gravity(0.0f, GRAVITY, 0.0f),
+      gravity(GRAVITY),
       north(0.0f, 0.0f, 1.0f),
       fogStart(100.0f),
       fogEnd(200.0f),
@@ -147,7 +147,7 @@ struct PlayerDesc
   PlayerDesc()
     : mesh("actor.mesh"),
       name("Default Name"),
-      gravity(0.0f, GRAVITY, 0.0f)
+      gravity(GRAVITY)
   {
   }
 

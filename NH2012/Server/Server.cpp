@@ -6,7 +6,7 @@ Server::Server(boost::asio::io_service& io_service, short port)
   : io_service(io_service),
     work(this->io_service),
     socket(io_service, udp::endpoint(udp::v4(), port)),
-    world(),
+    world(NULL),
     game(NULL),
     communication(NULL),
     inUpdate(false),
@@ -22,8 +22,8 @@ Server::Server(boost::asio::io_service& io_service, short port)
   resources = "resources_d.cfg";
   plugins = "plugins_d.cfg";
 #else
-  resources = "resources_d.cfg";
-  plugins = "plugins_d.cfg";
+  resources = "resources.cfg";
+  plugins = "plugins.cfg";
 #endif
 
   Ogre::Root* root = new Ogre::Root(plugins);
@@ -59,8 +59,9 @@ Server::Server(boost::asio::io_service& io_service, short port)
   
 
   std::cout << "Server " << SERVER_VERSION << " using port " << socket.local_endpoint().port() << std::endl;
-  world.setRoot(root);
-  world.initialise("nh2012.ini");
+
+  world = new World(root);
+  world->initialise("game.ini");
 
   //start threads
   game = new boost::thread(&Server::update, this);
@@ -70,6 +71,7 @@ Server::Server(boost::asio::io_service& io_service, short port)
 
 Server::~Server(void)
 {
+  delete world;
   delete game;
   delete communication;
   delete buffer;
@@ -96,7 +98,7 @@ void Server::run()
     //critical section
     try
     {
-      world.getScriptManager()->execute(input);
+      world->getScriptManager()->execute(input);
     }
     catch(NHException e)
     {
@@ -130,7 +132,7 @@ void Server::update()//thread this method
       while(inInput == true && turn == 1) {}//wait for input to release lock
       
       //critical section
-      world.update(0.015);//make variable timestep
+      world->update(0.015);//make variable timestep
 
       //if no window then we need this to update ogre root
       //my_ogre.pRoot->_fireFrameStarted();
@@ -179,20 +181,21 @@ void Server::handleSend(const boost::system::error_code& error, size_t bytes_sen
 
 void Server::execute(std::string command)
 {
-  world.getScriptManager()->execute(command);
+  world->getScriptManager()->execute(command);
 }
 
 int main(int argc, char* argv[])
 {
   boost::asio::io_service io_service;
-  Server* server;
+  short port = DEFAULT_PORT;
+  if(argc > 1) 
+  {
+    short portArg = atoi(argv[1]);
+    if(portArg > 0) port = portArg;
+  }
 
-  if(argc > 1) server = new Server(io_service, atoi(argv[1]));//.setPort(atoi(argv[1]));
-  else server = new Server(io_service);
-  
-  server->run();
-
-  if(server) delete server;
+  Server server(io_service, port);
+  server.run();
 
   return 0;
 }

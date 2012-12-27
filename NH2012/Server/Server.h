@@ -23,7 +23,7 @@ using boost::asio::ip::udp;
 class Server
 {
 public:
-  Server(boost::asio::io_service& io_service, short port = DEFAULT_PORT);
+  Server(boost::asio::io_service& io_service, short port);
   virtual ~Server(void);
   
 
@@ -34,7 +34,7 @@ public:
 
 private:
   
-  World world;
+  World* world;
 
   Ogre::DefaultHardwareBufferManager* buffer;
 

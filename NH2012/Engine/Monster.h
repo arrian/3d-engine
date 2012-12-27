@@ -23,7 +23,8 @@ public:
   void update(double elapsedSeconds);
 
   void setPosition(Ogre::Vector3 position);
-  void setTarget(Ogre::Vector3 target);//Sets the monsters target position.
+  void setRotation(Ogre::Quaternion rotation);
+  void setTarget(Ogre::Vector3 target);
 
   friend bool operator==(const Monster& x, const Monster& y);
 

@@ -34,7 +34,6 @@
 #include "PhysicsManager.h"
 #include "FabricationManager.h"
 #include "PhysicsErrorCallback.h"
-#include "SceneChangeListener.h"
 #include "NHException.h"
 
 //Forward Declarations
@@ -56,7 +55,7 @@ public:
 
   //Initialisation
   void initialise(std::string iniFile);
-  void parseIni(std::string filename);
+  void hookWindow(Ogre::RenderWindow* window);//convenience method for hooking the render window to the player
   Scene* loadScene(int id);
 
   //Destruction
@@ -74,33 +73,58 @@ public:
   Ogre::Root* getRoot();
   int getNumberScenes();
   Scene* getScene(int id);
-  SceneChangeListener* getSceneChangeListener();
   void getSceneNames(std::map<int, std::string> &names);
 
   //Setters
   void setRoot(Ogre::Root* root);
-  void setSceneChangeListener(SceneChangeListener* listener);
   void setSceneManager(Ogre::SceneManager* sceneManager);
-  void hookWindow(Ogre::RenderWindow* window);//convenience method for hooking the render window to the player
+  void setPhysicsEnabled(bool enabled);
   
   //Injection
-  void injectKeyDown(const OIS::KeyEvent &arg);
-  void injectKeyUp(const OIS::KeyEvent &arg);
-  void injectMouseMove(const OIS::MouseEvent &arg);
-  void injectMouseDown(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
-  void injectMouseUp(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+  void keyPressed(const OIS::KeyEvent &arg);
+  void keyReleased(const OIS::KeyEvent &arg);
+  void mouseMoved(const OIS::MouseEvent &arg);
+  void mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+  void mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
   //Assertions
   bool hasScene(int id);
+  bool isPhysicsEnabled();
+  bool isShadowsEnabled();
+
+  bool enableBloom;
+  bool enableSSAO;
+  bool enableMotionBlur;
+
+private:
+  int defaultScene;
+  std::string physXVisualDebuggerIP;
+  int physXVisualDebuggerPort;
+  int physXVisualDebuggerTimeoutMilliseconds;
+
+  Ogre::Root* root;
+
+  DataManager dataManager;
+  TimeManager timeManager;
+  SoundManager soundManager;
+  ScriptManager* scriptManager;
+  PhysicsManager physicsManager;
+  ControlManager controlManager;
+  FabricationManager fabricationManager;
+  
+  Player* player;
+  std::map<int, Scene*> scenes;
+
+  void parseIni(std::string filename);
+  std::string getIniString(std::string iniLabel, boost::property_tree::ptree* pt);
+  bool getIniBool(std::string iniLabel, boost::property_tree::ptree* pt);
+  int getIniInt(std::string iniLabel, boost::property_tree::ptree* pt);
 
   //Flags... eventually remove
   bool enablePhysics;
   bool enableAI;
   bool enableAudio;
   bool enableHDR;
-  bool enableBloom;
-  bool enableSSAO;
-  bool enableMotionBlur;
   bool enableShadows;
   bool enableLights;
   bool enableParticles;
@@ -113,25 +137,5 @@ public:
   bool freezeCollisionDebug;
   bool showCollisionDebug;
   bool showShadowDebug;
-
-private:
-  int defaultScene;
-  std::string physXVisualDebuggerIP;
-  int physXVisualDebuggerPort;
-  int physXVisualDebuggerTimeoutMilliseconds;
-
-  Ogre::Root* root;
-  SceneChangeListener* sceneChangeListener;
-
-  DataManager dataManager;
-  TimeManager timeManager;
-  SoundManager soundManager;
-  ScriptManager* scriptManager;
-  PhysicsManager physicsManager;
-  ControlManager controlManager;
-  FabricationManager fabricationManager;
-  
-  Player* player;
-  std::map<int, Scene*> scenes;
 };
 

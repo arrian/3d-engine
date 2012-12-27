@@ -4,7 +4,6 @@
 #include <QtGui/QMainWindow>
 #include <QFileSystemModel>
 #include "ui_editor.h"
-#include "datamodel.h"
 
 #include "../../Engine/World.h"
 
@@ -17,11 +16,7 @@ public:
   ~Editor();
 
 private:
-  World* world;
-
   Ui::EditorClass ui;
-
-  DataModel* model;
 };
 
 #endif // EDITOR_H

@@ -1,6 +1,9 @@
 #include "PhysicsErrorCallback.h"
 
 #include <iostream>
+#include <sstream>
+
+#include "NHException.h"
 
 
 //-------------------------------------------------------------------------------------
@@ -17,6 +20,9 @@ PhysicsErrorCallback::~PhysicsErrorCallback(void)
 //-------------------------------------------------------------------------------------
 void PhysicsErrorCallback::reportError(physx::PxErrorCode::Enum code, const char* message, const char* file, int line)
 {
-  std::cout << "Physx error: " << message << std::endl;
+  std::stringstream ss;
+  ss << "physics error" << code << ": " << message << " in " << file << " on line " << line << std::endl;
+
+  throw NHException(ss.str().c_str());
 }
 

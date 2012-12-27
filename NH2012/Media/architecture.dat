@@ -75,3 +75,10 @@
 
 [Cave]
 140,Cave,cave.mesh
+
+
+[Interactive]
+200,Door,door.mesh
+201,Door Frame,door_frame.mesh
+202,Chest,chest.mesh
+203,Chest Lid,chest_lid.mesh

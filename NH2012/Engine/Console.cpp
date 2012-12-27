@@ -4,12 +4,13 @@
 #include "Player.h"
 #include "World.h"
 #include "ScriptManager.h"
+#include "KeyboardMap.h"
 
 #include <boost/algorithm/string.hpp> 
 
 
 //-------------------------------------------------------------------------------------
-Console::Console()//World* world, OIS::Keyboard* keyboard)
+Console::Console()
   : overlay(new Gorilla::Silverback),
     isShift(false),
     isControl(false),
@@ -40,13 +41,6 @@ Console::Console()//World* world, OIS::Keyboard* keyboard)
 //-------------------------------------------------------------------------------------
 Console::~Console(void)
 {
-}
-
-//-------------------------------------------------------------------------------------
-void Console::sceneChanged()
-{
-  //world->hookWindow(window);
-  hookWindow(window);//reconnect the console to the scene
 }
 
 //-------------------------------------------------------------------------------------
@@ -134,86 +128,56 @@ void Console::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-void Console::injectKeyDown(const OIS::KeyEvent &arg)
-{
-  injectKey(arg, true);
-  keyPressed(arg);
-}
-
-//-------------------------------------------------------------------------------------
-void Console::injectKeyUp(const OIS::KeyEvent &arg)
-{
-  injectKey(arg, false);
-}
-
-//-------------------------------------------------------------------------------------
-void Console::injectKey(const OIS::KeyEvent &arg, bool isDown)
-{
-  if(!isVisible()) return;
-  if(keyboard) 
-  {
-    if(arg.key == OIS::KC_LSHIFT || arg.key == OIS::KC_RSHIFT) isShift = isDown;
-    else if(arg.key == OIS::KC_LCONTROL || arg.key == OIS::KC_RCONTROL) isControl = isDown;
-    else 
-    {
-      keyIsDown = isDown;
-    }
-  }
-}
-
-//-------------------------------------------------------------------------------------
 void Console::keyPressed(const OIS::KeyEvent &arg)
 {
   if(!isVisible()) return;
 
-  if(keyboard) 
+  if(arg.key == OIS::KC_SPACE) command += ' ';
+  else if(arg.key == OIS::KC_GRAVE) return;
+  else if(arg.key == OIS::KC_BACK) backspace();
+  else if(arg.key == OIS::KC_RETURN) enter();
+  else if(arg.key == OIS::KC_LSHIFT || arg.key == OIS::KC_RSHIFT) 
   {
-    if(arg.key == OIS::KC_SPACE) command += ' ';
-    else if(arg.key == OIS::KC_GRAVE) return;
-    else if(arg.key == OIS::KC_BACK) backspace();
-    else if(arg.key == OIS::KC_RETURN) enter();
-    
-    else if(arg.key == OIS::KC_LSHIFT || arg.key == OIS::KC_RSHIFT || arg.key == OIS::KC_LCONTROL || arg.key == OIS::KC_RCONTROL) {}//ignore... handled elsewhere
-    else if(isShift) 
-    {
-      if(arg.key == OIS::KC_0) command += ')';
-    
-      else if(arg.key == OIS::KC_1) command += '!';
-      else if(arg.key == OIS::KC_2) command += '@';
-      else if(arg.key == OIS::KC_3) command += '#';
-      else if(arg.key == OIS::KC_4) command += '$';
-      else if(arg.key == OIS::KC_5) command += "%%";//used as escape sequence in gorilla markup
-      else if(arg.key == OIS::KC_6) command += '^';
-      else if(arg.key == OIS::KC_7) command += '&';
-      else if(arg.key == OIS::KC_8) command += '*';
-      else if(arg.key == OIS::KC_9) command += '(';
-
-      else if(arg.key == OIS::KC_PERIOD) command += '>';
-      else if(arg.key == OIS::KC_COMMA) command += '<';
-      else if(arg.key == OIS::KC_SEMICOLON) command += ':';
-      else if(arg.key == OIS::KC_APOSTROPHE) command += '"';
-      else if(arg.key == OIS::KC_SLASH) command += '?';
-      else if(arg.key == OIS::KC_MINUS) command += '_';
-      else if(arg.key == OIS::KC_EQUALS) command += '+';
-      else if(arg.key == OIS::KC_BACKSLASH) command += '|';
-      else if(arg.key == OIS::KC_UP) displayOffset++;//show previous text
-      else if(arg.key == OIS::KC_DOWN) displayOffset--;//show more recent text
-
-      else command += keyboard->getAsString(arg.key);
-    }
-    else if(arg.key == OIS::KC_UP) up();
-    else if(arg.key == OIS::KC_DOWN) down();
-    else 
-    {
-      std::string input = keyboard->getAsString(arg.key);
-      input = std::tolower(input[0]);
-      command += input;
-    }
-    cursorAccumulator = 0.0;//we want to be able to see the cursor while typing
-    showCursor = true;
+    isShift = true; 
+    return;
   }
+  else if(arg.key == OIS::KC_LCONTROL || arg.key == OIS::KC_RCONTROL) 
+  {
+    isControl = true; 
+    return;
+  }
+  else if(arg.key == OIS::KC_5 && isShift) command += "%%";//single percent used as escape sequence in gorilla markup
+  else if(arg.key == OIS::KC_UP && isShift) displayOffset++;//show previous text
+  else if(arg.key == OIS::KC_DOWN && isShift) displayOffset--;//show more recent text
+  else if(arg.key == OIS::KC_UP) up();
+  else if(arg.key == OIS::KC_DOWN) down();
+  else 
+  {
+    try
+    {
+      command += KeyboardMap::getInstance().getAsString(arg.key, isShift);
+    }
+    catch(NHException e)
+    {
+      //unknown key was pressed. just ignore
+    }
+  }
+  cursorAccumulator = 0.0;//we want to be able to see the cursor while typing
+  showCursor = true;
+  
+  keyIsDown = true;
+
   update();
   previousKey = arg.key;
+}
+
+//-------------------------------------------------------------------------------------
+void Console::keyReleased(const OIS::KeyEvent &arg)
+{
+  if(!isVisible()) return;
+  if(arg.key == OIS::KC_LSHIFT || arg.key == OIS::KC_RSHIFT) isShift = false;
+  else if(arg.key == OIS::KC_LCONTROL || arg.key == OIS::KC_RCONTROL) isControl = false;
+  else keyIsDown = false;
 }
 
 //-------------------------------------------------------------------------------------
@@ -323,11 +287,6 @@ void Console::setWorld(World* world)
   this->world = world;
 }
 
-//-------------------------------------------------------------------------------------
-void Console::setKeyboard(OIS::Keyboard* keyboard)
-{
-  this->keyboard = keyboard;
-}
 
 
 
