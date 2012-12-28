@@ -1,16 +1,8 @@
 #include "KinematicMovementComponent.h"
 
 
-KinematicMovementComponent::KinematicMovementComponent(void)
-  : NodeComponent(),
-    speed(1.0f),
-    gravity(gravity),
-    velocity(Ogre::Vector3::ZERO),
-    gravityEnabled(true),
-    runScalar(1.8f),
-    moveScalar(10.0f),
-    jumpVelocity(2.5f),
-    minimumMoveDistance(0.001f)
+KinematicMovementComponent::KinematicMovementComponent(Ogre::Vector3 gravity)
+  : MovementComponent(gravity)
 {
   stop();
 }
@@ -19,16 +11,23 @@ KinematicMovementComponent::~KinematicMovementComponent(void)
 {
 }
 
+void KinematicMovementComponent::hasNodeChange()
+{
+
+}
+
 void KinematicMovementComponent::update(double elapsedSeconds)
 {
   if(!node) return;
 
   //Calculating the acceleration vector
   Ogre::Vector3 accel = Ogre::Vector3::ZERO;
-  if (moveForward) accel -= node->getOrientation().zAxis();//equivalent to camera->getDirection()
-  if (moveBack) accel += node->getOrientation().zAxis();
-  if (moveRight) accel += node->getOrientation().xAxis();//equivalent to camera->getRight()
-  if (moveLeft) accel -= node->getOrientation().xAxis();
+  Ogre::Vector3 zAxisOrientation = node->getOrientation().zAxis();
+  Ogre::Vector3 xAxisOrientation = node->getOrientation().xAxis();
+  if (moveForward) accel -= zAxisOrientation;
+  if (moveBack) accel += zAxisOrientation;
+  if (moveRight) accel += xAxisOrientation;
+  if (moveLeft) accel -= xAxisOrientation;
 
   float oldY;
   if(gravityEnabled)//ignore up/down directional movement from camera when gravity enabled
@@ -59,11 +58,13 @@ void KinematicMovementComponent::update(double elapsedSeconds)
   }
   else if (velocity.squaredLength() < tooSmall * tooSmall) velocity = Ogre::Vector3::ZERO;
 
-  if(gravityEnabled)
+  if(gravityEnabled)//restoring saved up/down speed and adding gravity
   {
-    velocity.y = oldY;//restoring saved up/down speed
+    velocity.y = oldY;
     velocity.y += gravity.y * (float) elapsedSeconds;
   }
+
+  node->_setDerivedPosition(node->_getDerivedPosition() + velocity * elapsedSeconds * moveScalar);
 }
 
 void KinematicMovementComponent::stop()
@@ -79,7 +80,7 @@ void KinematicMovementComponent::stop()
 
 void KinematicMovementComponent::jump()
 {
-  velocity.y = jumpVelocity;//unpredictable behaviour at low frame rates??
+  if(gravityEnabled) velocity.y = jumpVelocity;//unpredictable behaviour at low frame rates??
 }
 
 Ogre::Vector3 KinematicMovementComponent::getVelocity()
@@ -137,5 +138,8 @@ bool KinematicMovementComponent::isJumping()
   return jumping;
 }
 
-
+void KinematicMovementComponent::hitGround()
+{
+  velocity.y = 0.0f;
+}
 

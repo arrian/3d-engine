@@ -17,7 +17,8 @@ Player::Player(PlayerDesc description, World* world)
     placementDistance(3.0f),
     lookResponsiveness(0.15f),
     handMoveScalar(0.1f),
-    skeleton(description.gravity),
+    skeleton(),
+    movement(description.gravity),
     itemGenerationID(3),//temporarily generating a watermelon when the 1 key is pressed
     monsterGenerationID(1),
     currentTarget(NULL),
@@ -43,6 +44,7 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
   {
     mesh.removeNode();
     camera.removeNode();
+    movement.removeNode();
     skeleton.removeNode();
     query.removeNode();
     
@@ -66,6 +68,7 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
 
   mesh.setNode(scene, node);
   skeleton.setNode(scene, node);
+  movement.setNode(scene, node);
   camera.setNode(scene, skeleton.getHead());
   query.setNode(scene, skeleton.getHead());
 
@@ -83,8 +86,11 @@ Scene* Player::getScene()
 //-------------------------------------------------------------------------------------
 void Player::update(double elapsedSeconds)
 {
+  camera.update(elapsedSeconds);
+  movement.update(elapsedSeconds);
   skeleton.update(elapsedSeconds);
-  camera.update(elapsedSeconds);//for aspect ratio changes
+  if(skeleton.isOnGround()) movement.hitGround();
+
 
   if(addItem)
   {
@@ -119,7 +125,7 @@ void Player::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void Player::keyPressed(const OIS::KeyEvent &evt)
 {
-  if (evt.key == world->getControlManager()->jump) skeleton.jump();
+  if (evt.key == world->getControlManager()->jump) movement.jump();
   else if(evt.key == world->getControlManager()->interact) interactPressed = true;
   else keyEvent(evt, true);
 }
@@ -133,11 +139,11 @@ void Player::keyReleased(const OIS::KeyEvent &evt)
 //-------------------------------------------------------------------------------------
 void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
 {
-  if(evt.key == world->getControlManager()->moveForward) skeleton.setMoveForward(isDown);
-  else if(evt.key == world->getControlManager()->moveBack) skeleton.setMoveBackward(isDown);
-  else if(evt.key == world->getControlManager()->moveLeft) skeleton.setMoveLeft(isDown);
-  else if(evt.key == world->getControlManager()->moveRight) skeleton.setMoveRight(isDown);
-  else if(evt.key == world->getControlManager()->run) skeleton.setRun(isDown);
+  if(evt.key == world->getControlManager()->moveForward) movement.setMoveForward(isDown);
+  else if(evt.key == world->getControlManager()->moveBack) movement.setMoveBackward(isDown);
+  else if(evt.key == world->getControlManager()->moveLeft) movement.setMoveLeft(isDown);
+  else if(evt.key == world->getControlManager()->moveRight) movement.setMoveRight(isDown);
+  else if(evt.key == world->getControlManager()->run) movement.setRun(isDown);
   else if(evt.key == world->getControlManager()->crouch) skeleton.setCrouch(isDown);
   else if(evt.key == world->getControlManager()->addItem) addItem = isDown;
   else if(evt.key == world->getControlManager()->addMonster) addMonster = isDown;
@@ -189,6 +195,7 @@ Ogre::RenderWindow* Player::getWindow()
 //-------------------------------------------------------------------------------------
 void Player::stop()
 {
+  movement.stop();
   skeleton.stop();
 }
 
@@ -207,16 +214,13 @@ Ogre::Quaternion Player::getRotation()
 //-------------------------------------------------------------------------------------
 Ogre::Vector3 Player::getVelocity()
 {
-  return skeleton.getVelocity();
+  return movement.getVelocity();
 }
 
 //-------------------------------------------------------------------------------------
 void Player::setPosition(Ogre::Vector3 position)
 {
   node->setPosition(position);
-  skeleton.setNode(scene, node);//do i need to do this?
-  camera.setNode(scene, skeleton.getHead());//do i need to do this?
-  query.setNode(scene,skeleton.getHead());
 }
 
 //-------------------------------------------------------------------------------------
@@ -228,7 +232,7 @@ void Player::setRotation(Ogre::Quaternion rotation)
 //-------------------------------------------------------------------------------------
 void Player::setGravity(Ogre::Vector3 gravity)
 {
-  skeleton.setGravity(gravity);
+  movement.setGravity(gravity);
 }
 
 //-------------------------------------------------------------------------------------

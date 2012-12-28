@@ -26,7 +26,7 @@ public:
   Ogre::Viewport* getViewport();
   Ogre::RenderWindow* getWindow();
 
-private:
+protected:
   Ogre::Camera* camera;
 
   Ogre::RenderWindow* window;

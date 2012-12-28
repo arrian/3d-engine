@@ -7,6 +7,7 @@
 #include "PathfindManager.h"
 #include "BasicComponent.h"
 #include "HumanoidSkeletonComponent.h"
+#include "DynamicMovementComponent.h"
 #include "IntelligenceComponent.h"
 #include "MeshComponent.h"
 #include "Bar.h"
@@ -37,6 +38,7 @@ protected:
 
   IntelligenceComponent intelligence;
   HumanoidSkeletonComponent skeleton;
+  DynamicMovementComponent movement;
   MeshComponent mesh;
 
   void hasSceneChange();

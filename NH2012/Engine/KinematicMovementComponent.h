@@ -1,34 +1,36 @@
 #pragma once
-#include "NodeComponent.h"
+#include "MovementComponent.h"
 
-class KinematicMovementComponent : public NodeComponent
+class KinematicMovementComponent : public MovementComponent
 {
 public:
-  KinematicMovementComponent(void);
+  KinematicMovementComponent(Ogre::Vector3 gravity);
   virtual ~KinematicMovementComponent(void);
 
   virtual void update(double elapsedSeconds);
 
   //Movement
-  void stop();
-  void jump();
+  //void stop();
+  //void jump();
 
   //Getters
-  Ogre::Vector3 getVelocity();
-  float getSpeed();
+  //Ogre::Vector3 getVelocity();
+  //float getSpeed();
 
   //Setters
-  void setRun(bool run);
-  void setGravity(Ogre::Vector3 gravity);
-  void setGravityEnabled(bool enabled);
+  //void setRun(bool run);
+  //void setGravity(Ogre::Vector3 gravity);
+  //void setGravityEnabled(bool enabled);
   void setMoveForward(bool state);
   void setMoveBackward(bool state);
   void setMoveLeft(bool state);
   void setMoveRight(bool state);
 
   //Assertions
-  bool isRunning();
-  bool isJumping();
+  //bool isRunning();
+  //bool isJumping();
+
+  //void hitGround();
 
 protected:
   virtual void hasNodeChange();
@@ -38,19 +40,19 @@ protected:
   bool moveBack;
   bool moveLeft;
   bool moveRight;
-  bool running;
-  bool jumping;
+  //bool running;
+  //bool jumping;
 
   //State Data
-  Ogre::Vector3 velocity;
-  float speed;
-  Ogre::Vector3 gravity;
-  bool gravityEnabled;
+  //Ogre::Vector3 velocity;
+  //float speed;
+  //Ogre::Vector3 gravity;
+  //bool gravityEnabled;
   
   //General Constants
-  float runScalar;
-  float moveScalar;
-  float jumpVelocity;
-  float minimumMoveDistance;
+  //float runScalar;
+  //float moveScalar;
+  //float jumpVelocity;
+  //float minimumMoveDistance;
 };
 

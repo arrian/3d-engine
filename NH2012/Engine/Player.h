@@ -11,6 +11,7 @@
 #include "Bar.h"
 #include "IdentificationInterface.h"
 #include "HumanoidSkeletonComponent.h"
+#include "KinematicMovementComponent.h"
 #include "CameraComponent.h"
 #include "MeshComponent.h"
 #include "QueryComponent.h"
@@ -61,6 +62,7 @@ private:
 
   CameraComponent camera;//the player camera generally attached to the head node
   HumanoidSkeletonComponent skeleton;
+  KinematicMovementComponent movement;
   MeshComponent mesh;
   QueryComponent query;
 

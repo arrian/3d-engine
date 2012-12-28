@@ -10,7 +10,8 @@ Monster::Monster(MonsterDesc desc)
     node(NULL),
     intelligence(desc.speed),
     mesh(desc.mesh),
-    skeleton(desc.gravity),
+    movement(desc.gravity),
+    skeleton(),
     position(Ogre::Vector3::ZERO)
 {
   skeleton.setUserData((IdentificationInterface*) this);
@@ -67,6 +68,7 @@ void Monster::setPosition(Ogre::Vector3 position)
 //-------------------------------------------------------------------------------------
 void Monster::setRotation(Ogre::Quaternion rotation)
 {
+  //set node horizontal direction here
   throw NHException("setting the rotation of a monster has not been implemented");
 }
 

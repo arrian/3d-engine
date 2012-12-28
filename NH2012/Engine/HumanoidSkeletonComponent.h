@@ -21,7 +21,7 @@
 class HumanoidSkeletonComponent : public NodeComponent, public physx::PxControllerBehaviorCallback, public physx::PxUserControllerHitReport
 {
 public:
-  HumanoidSkeletonComponent(Ogre::Vector3 gravity);
+  HumanoidSkeletonComponent(void);
   ~HumanoidSkeletonComponent(void);
 
   void update(double elapsedSeconds);
@@ -34,18 +34,10 @@ public:
   physx::PxU32 getBehaviorFlags(const physx::PxController& controller);
   physx::PxU32 getBehaviorFlags(const physx::PxObstacle& obstacle);
   Ogre::Vector3 getForwardPosition(Ogre::Real distance);/** Gets a position in front of the skeleton that is the given distance from it. */
-  Ogre::Vector3 getVelocity();
-  float getSpeed();
 
   //Setters
-  void setMoveForward(bool state);
-  void setMoveBackward(bool state);
-  void setMoveLeft(bool state);
-  void setMoveRight(bool state);
-  void setRun(bool state);
   void setLeftHand(bool state);
   void setRightHand(bool state);
-  void setGravity(Ogre::Vector3 gravity);
   void setCollisionEnabled(bool enabled);
   void setCrouch(bool crouch);
   void setUserData(void* userData);
@@ -53,19 +45,16 @@ public:
 
   //Movement
   void stop();
-  void jump();
   void headRelative(Ogre::Degree x, Ogre::Degree y);
   void leftHandRelative(Ogre::Degree x, Ogre::Degree y);
   void rightHandRelative(Ogre::Degree x, Ogre::Degree y);
   void lookAt(Ogre::Vector3 position);
-  //void followPath(std::vector<Ogre::Vector3> path);
 
   //Assertions
   bool isLeftHand();
   bool isRightHand();
   bool isCrouched();
-  bool isRunning();
-  bool isJumping();
+  bool isOnGround();
 
   //Callbacks
   void onShapeHit(const physx::PxControllerShapeHit& hit);
@@ -98,21 +87,14 @@ protected:
   //Movement Flags
   bool moveLeftHand;
   bool moveRightHand;
-  bool moveForward;
-  bool moveBack;
-  bool moveLeft;
-  bool moveRight;
-  bool run;
   bool onGround;
   bool crouch;
 
   void hasNodeChange();
 
   //State Data
-  Ogre::Vector3 velocity;
-  float speed;
-  Ogre::Vector3 gravity;//note that only the y value is currently used
   bool collisionEnabled;
+  Ogre::Vector3 previousPosition;//previous update position
   
   //PhysX Constants
   float radius;
@@ -121,13 +103,5 @@ protected:
   float scaleCoeff;
   float stepOffset;
   float minimumMoveDistance;
-
-  //General Constants
-  float runScalar;
-  float moveScalar;
-  float jumpVelocity;
-
-  //bool isFollowingPath;
-  //std::vector<Ogre::Vector3> path;
 };
 
