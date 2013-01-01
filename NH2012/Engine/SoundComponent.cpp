@@ -16,7 +16,7 @@ void SoundComponent::update(double elapsedSeconds)
 {
   if(channel && node)
   {
-    Ogre::Vector3 position = node->getPosition();
+    Vector3 position = node->getPosition();
     FMOD_VECTOR pos = {position.x, position.y, position.z};
     FMOD_VECTOR vel = {0.0f, 0.0f, 0.0f};//could implement later
     channel->set3DAttributes(&pos, &vel);

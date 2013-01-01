@@ -19,11 +19,11 @@ public:
   virtual void interact();
   virtual void update(double elapsedSeconds);
 
-  virtual void setPosition(Ogre::Vector3 position);
-  virtual void setRotation(Ogre::Quaternion rotation);
+  virtual void setPosition(Vector3 position);
+  virtual void setRotation(Quaternion rotation);
 
-  virtual Ogre::Vector3 getPosition();
-  virtual Ogre::Quaternion getRotation();
+  virtual Vector3 getPosition();
+  virtual Quaternion getRotation();
 
 protected:
   void hasSceneChange();

@@ -1,14 +1,17 @@
 #pragma once
-#include "NodeComponent.h"
+#include "MovementComponent.h"
 
 
-class DynamicMovementComponent : public NodeComponent
+class DynamicMovementComponent : public MovementComponent
 {
 public:
-  DynamicMovementComponent(Ogre::Vector3 gravity);
+  DynamicMovementComponent(Vector3 gravity);
   virtual ~DynamicMovementComponent(void);
 
+  void update(double elapsedSeconds);
+
 protected:
-  Ogre::Vector3 gravity;
+
+
 };
 

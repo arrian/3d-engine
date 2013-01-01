@@ -38,13 +38,13 @@ Architecture::~Architecture(void)
 }
 
 //-------------------------------------------------------------------------------------
-void Architecture::add(ArchitectureDesc description, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
+void Architecture::add(ArchitectureDesc description, Vector3 position, Quaternion quaternion, Vector3 scale)
 {
   addStaticTrimesh(description.mesh, description.restitution, description.friction, position, quaternion);
 }
 
 //-------------------------------------------------------------------------------------
-void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Ogre::Vector3 position, Ogre::Quaternion quaternion, Ogre::Vector3 scale)
+void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Vector3 position, Quaternion quaternion, Vector3 scale)
 {
   Ogre::Entity* entity = scene->getSceneManager()->createEntity(meshName);
   if(!entity) throw NHException("could not create architecture entity");

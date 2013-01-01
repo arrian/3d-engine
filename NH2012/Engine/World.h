@@ -22,9 +22,8 @@
 #include <OISMouse.h>
 
 //Ogre
-#include <OgreFrameListener.h>
-#include <OgreVector3.h>
-#include <OgreString.h>
+#include <OgreRoot.h>
+#include <OgreSceneManager.h>
 
 //Local
 #include "DataManager.h"
@@ -35,6 +34,8 @@
 #include "FabricationManager.h"
 #include "PhysicsErrorCallback.h"
 #include "NHException.h"
+#include "Vector3.h"
+#include "Quaternion.h"
 
 //Forward Declarations
 class Player;

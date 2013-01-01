@@ -35,17 +35,17 @@ void QueryComponent::hasNodeChange()
 }
 
 //-------------------------------------------------------------------------------------
-IdentificationInterface* QueryComponent::rayQuery(Ogre::Vector3 direction, float distance, Group groups)
+IdentificationInterface* QueryComponent::rayQuery(Vector3 direction, float distance, Group groups)
 {
-  Ogre::Vector3 position = node->_getDerivedPosition();
-  Ogre::Vector3 unitDirection = direction.normalisedCopy();
+  Vector3 position = node->_getDerivedPosition();
+  Vector3 unitDirection = direction.normalisedCopy();
   physx::PxSceneQueryFlags outputFlags = physx::PxSceneQueryFlags();
   physx::PxSceneQueryFilterData filterData = physx::PxSceneQueryFilterData();
   filterData.data.word0 = groups;
   physx::PxRaycastHit hit;
   if(scene->getPhysicsManager()->raycastSingle(physx::PxVec3(position.x, position.y, position.z), physx::PxVec3(unitDirection.x, unitDirection.y, unitDirection.z), distance, outputFlags, hit, filterData))
   {
-    //hitNode->_setDerivedPosition(Ogre::Vector3(hit.impact.x, hit.impact.y, hit.impact.z));
+    //hitNode->_setDerivedPosition(Vector3(hit.impact.x, hit.impact.y, hit.impact.z));
     
     if(hit.shape->getActor().userData)
     {      
@@ -58,7 +58,7 @@ IdentificationInterface* QueryComponent::rayQuery(Ogre::Vector3 direction, float
 }
 
 //-------------------------------------------------------------------------------------
-bool QueryComponent::sweepQuery(Ogre::Vector3 direction, float distance)
+bool QueryComponent::sweepQuery(Vector3 direction, float distance)
 {
   return false;
 }

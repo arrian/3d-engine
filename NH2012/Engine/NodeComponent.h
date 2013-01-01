@@ -2,6 +2,7 @@
 
 #include <OgreSceneNode.h>
 #include "BasicComponent.h"
+#include "Vector3.h"
 
 class Scene;
 

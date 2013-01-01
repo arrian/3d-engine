@@ -57,22 +57,16 @@ Item::~Item(void)
 }
 
 //-------------------------------------------------------------------------------------
-bool operator==(const Item& x, const Item& y)
-{
-  return x.name == y.name;
-}
-
-//-------------------------------------------------------------------------------------
 void Item::update(double elapsedSeconds)
 {
   if(physical->isSleeping()) return;//no need to update the object if it has not moved
   physx::PxTransform transform = physical->getGlobalPose();
-  node->setPosition(Ogre::Vector3(transform.p.x, transform.p.y, transform.p.z));
-  node->setOrientation(Ogre::Quaternion(transform.q.w,transform.q.x,transform.q.y,transform.q.z));
+  node->setPosition(Vector3(transform.p.x, transform.p.y, transform.p.z));
+  node->setOrientation(Quaternion(transform.q.w,transform.q.x,transform.q.y,transform.q.z));
 }
 
 //-------------------------------------------------------------------------------------
-void Item::setPosition(Ogre::Vector3 position)
+void Item::setPosition(Vector3 position)
 {
   if(node && physical) 
   {
@@ -83,7 +77,7 @@ void Item::setPosition(Ogre::Vector3 position)
 }
 
 //-------------------------------------------------------------------------------------
-void Item::setRotation(Ogre::Quaternion rotation)
+void Item::setRotation(Quaternion rotation)
 {
   if(node && physical) 
   {
@@ -94,33 +88,33 @@ void Item::setRotation(Ogre::Quaternion rotation)
 }
 
 //-------------------------------------------------------------------------------------
-void Item::setVelocity(Ogre::Vector3 velocity)
+void Item::setVelocity(Vector3 velocity)
 {
   if(physical) physical->setLinearVelocity(physx::PxVec3(velocity.x, velocity.y, velocity.z));
   else throw NHException("item must be inside a scene to set its velocity");
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Item::getPosition()
+Vector3 Item::getPosition()
 {
   if(node) return node->getPosition();
   throw NHException("item must be inside a scene to get its position");
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Quaternion Item::getRotation()
+Quaternion Item::getRotation()
 {
   if(node) return node->getOrientation();
   throw NHException("item must be inside a scene to get its rotation");
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Item::getVelocity()
+Vector3 Item::getVelocity()
 {
   if(physical)
   {
     physx::PxVec3 vel = physical->getLinearVelocity();
-    return Ogre::Vector3(vel.x, vel.y, vel.z);
+    return Vector3(vel.x, vel.y, vel.z);
   }
   throw NHException("item must be inside a scene to get its velocity");
 }

@@ -75,7 +75,7 @@ protected:
 class Light
 {
 public:
-  Light(Scene* scene, Ogre::Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour);
+  Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour);
   ~Light(void);
 
   void addPlugin(LightPlugin* plugin);

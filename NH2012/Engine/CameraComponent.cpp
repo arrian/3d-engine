@@ -136,7 +136,7 @@ Ogre::Viewport* CameraComponent::getViewport()
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 CameraComponent::getDirection()
+Vector3 CameraComponent::getDirection()
 {
   return camera->getRealDirection();//am i using the correct direction function?
 }

@@ -6,9 +6,8 @@
 
 //-------------------------------------------------------------------------------------
 Player::Player(PlayerDesc description, World* world)
-  : IdentificationInterface(this, "Self", PLAYER_SELF),
+  : Actor(this, "Player", PLAYER_SELF),
     world(world),
-    scene(NULL),
     camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
     mesh(description.mesh),
     query(),
@@ -23,10 +22,8 @@ Player::Player(PlayerDesc description, World* world)
     monsterGenerationID(1),
     currentTarget(NULL),
     interactPressed(false),
-    node(NULL),
     freeCameraNode(NULL)
 {
-  
 }
 
 //-------------------------------------------------------------------------------------
@@ -37,10 +34,10 @@ Player::~Player(void)
 }
 
 //-------------------------------------------------------------------------------------
-void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt)
+void Player::hasSceneChange()
 {
   //pulling down
-  if(this->scene)
+  if(oldScene)
   {
     mesh.removeNode();
     camera.removeNode();
@@ -48,39 +45,33 @@ void Player::setScene(Scene* scene, Ogre::Vector3 position, Ogre::Vector3 lookAt
     skeleton.removeNode();
     query.removeNode();
     
-    if(node) this->scene->getSceneManager()->destroySceneNode(node);
+    if(node) oldScene->getSceneManager()->destroySceneNode(node);
     node = NULL;
 
-    if(freeCameraNode) this->scene->getSceneManager()->destroySceneNode(freeCameraNode);
+    if(freeCameraNode) oldScene->getSceneManager()->destroySceneNode(freeCameraNode);
     freeCameraNode = NULL;
   }
 
   //setting up
-  this->scene = scene;
+  if(scene)
+  {
+    node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+    
+    setPosition(position);
 
-  if(!scene) return;//no new scene given
+    skeleton.setUserData((IdentificationInterface*) this);
+    skeleton.setGroup(PLAYER_SELF);//add ability to have other player groups
 
-  node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
-  node->setPosition(position);
+    mesh.setNode(scene, node);
+    skeleton.setNode(scene, node);
+    movement.setNode(scene, node);
+    camera.setNode(scene, skeleton.getHead());
+    query.setNode(scene, skeleton.getHead());
 
-  skeleton.setUserData((IdentificationInterface*) this);
-  skeleton.setGroup(PLAYER_SELF);//add ability to have other player groups
-
-  mesh.setNode(scene, node);
-  skeleton.setNode(scene, node);
-  movement.setNode(scene, node);
-  camera.setNode(scene, skeleton.getHead());
-  query.setNode(scene, skeleton.getHead());
-
-  stop();
+    stop();
   
-  camera.rehookWindow();
-}
-
-//-------------------------------------------------------------------------------------
-Scene* Player::getScene()
-{
-  return scene;
+    camera.rehookWindow();
+  }
 }
 
 //-------------------------------------------------------------------------------------
@@ -91,12 +82,11 @@ void Player::update(double elapsedSeconds)
   skeleton.update(elapsedSeconds);
   if(skeleton.isOnGround()) movement.hitGround();
 
-
   if(addItem)
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
-  if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavigablePoint() + Ogre::Vector3(0,1,0));//create a monster at an arbitrary location
+  if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavigablePoint());//create a monster at an arbitrary location
 
   currentTarget = query.rayQuery(camera.getDirection(), 20.0f, EXCLUDE_SELF);
   
@@ -163,7 +153,13 @@ void Player::mouseMoved(const OIS::MouseEvent &evt)
     skeleton.rightHandRelative(Ogre::Degree(-evt.state.X.rel * lookResponsiveness), Ogre::Degree(-evt.state.Y.rel * lookResponsiveness));
     lookScalar = handMoveScalar;
   }
-  skeleton.headRelative(Ogre::Degree(-evt.state.X.rel * lookResponsiveness * lookScalar), Ogre::Degree(-evt.state.Y.rel * lookResponsiveness * lookScalar));
+
+  if(freeCameraNode)//TODO: make a flag for free camera enabled rather than relying on freeCameraNode to be NULL
+  {
+    node->yaw(Ogre::Degree(-evt.state.X.rel * lookResponsiveness * lookScalar));
+    freeCameraNode->pitch(Ogre::Degree(-evt.state.Y.rel * lookResponsiveness * lookScalar));
+  }
+  else skeleton.headRelative(Ogre::Degree(-evt.state.X.rel * lookResponsiveness * lookScalar), Ogre::Degree(-evt.state.Y.rel * lookResponsiveness * lookScalar));
 }
 
 //-------------------------------------------------------------------------------------
@@ -200,37 +196,39 @@ void Player::stop()
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Player::getPosition()
+Vector3 Player::getPosition()
 {
-  return node->getPosition();
+  if(node) return node->getPosition();
+  return position;
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Quaternion Player::getRotation()
+Quaternion Player::getRotation()
 {
   return node->getOrientation();
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Player::getVelocity()
+Vector3 Player::getVelocity()
 {
   return movement.getVelocity();
 }
 
 //-------------------------------------------------------------------------------------
-void Player::setPosition(Ogre::Vector3 position)
+void Player::setPosition(Vector3 position)
 {
-  node->setPosition(position);
+  this->position = position;
+  if(node) node->setPosition(position);
 }
 
 //-------------------------------------------------------------------------------------
-void Player::setRotation(Ogre::Quaternion rotation)
+void Player::setRotation(Quaternion rotation)
 {
   node->setOrientation(rotation);
 }
 
 //-------------------------------------------------------------------------------------
-void Player::setGravity(Ogre::Vector3 gravity)
+void Player::setGravity(Vector3 gravity)
 {
   movement.setGravity(gravity);
 }
@@ -244,13 +242,20 @@ void Player::setFreeCamera(bool enabled)
   {
     if(!freeCameraNode) freeCameraNode = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
     freeCameraNode->setPosition(skeleton.getHead()->_getDerivedPosition());
+    freeCameraNode->_setDerivedOrientation(skeleton.getHead()->_getDerivedOrientation());
+
     camera.setNode(scene, freeCameraNode);
+    movement.setGravityEnabled(false);
+    movement.setNode(scene, freeCameraNode);
   }
   else
   {
+    camera.setNode(scene, skeleton.getHead());
+    movement.setGravityEnabled(true);
+    movement.setNode(scene, skeleton.getHead());
+
     if(freeCameraNode) scene->getSceneManager()->destroySceneNode(freeCameraNode);
     freeCameraNode = NULL;
-    camera.setNode(scene, skeleton.getHead());
   }
 }
 
@@ -271,3 +276,62 @@ Ogre::Viewport* Player::getViewport()
 {
   return camera.getViewport();
 }
+
+//-------------------------------------------------------------------------------------
+void Player::stagger(Vector3 direction)
+{
+  //check if there is space to stagger
+  //stumble backwards
+  throw NHException("not implemented");
+}
+
+//-------------------------------------------------------------------------------------
+void Player::damage(double amount)
+{
+  throw NHException("not implemented");
+}
+
+//-------------------------------------------------------------------------------------
+void Player::heal(double amount)
+{
+
+  throw NHException("not implemented");
+}
+
+//-------------------------------------------------------------------------------------
+void Player::setLookAt(Vector3 lookAt)
+{
+  if(camera.getCamera()->getPosition() == lookAt) camera.getCamera()->lookAt(lookAt - Vector3(0.0f,0.0f,1.0f));//camera glitch if lookAt is set to the same position as its location... attempting to correct
+  else camera.getCamera()->lookAt(lookAt);
+}
+
+//-------------------------------------------------------------------------------------
+void Player::setRunning(bool running)
+{
+  movement.setRun(running);
+}
+
+//-------------------------------------------------------------------------------------
+void Player::setCrouching(bool crouching)
+{
+  skeleton.setCrouch(crouching);
+}
+
+//-------------------------------------------------------------------------------------
+bool Player::getCrouching()
+{
+  return skeleton.isCrouched();
+}
+
+//-------------------------------------------------------------------------------------
+bool Player::getRunning()
+{
+  return movement.isRunning();
+}
+
+//-------------------------------------------------------------------------------------
+Vector3 Player::getGravity()
+{
+  return movement.getGravity();
+}
+

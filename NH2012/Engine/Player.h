@@ -9,17 +9,20 @@
 #include <OISMouse.h>
 
 #include "Bar.h"
+#include "Actor.h"
 #include "IdentificationInterface.h"
 #include "HumanoidSkeletonComponent.h"
 #include "KinematicMovementComponent.h"
 #include "CameraComponent.h"
 #include "MeshComponent.h"
 #include "QueryComponent.h"
+#include "Vector3.h"
+#include "Quaternion.h"
 
 class Scene;
 class World;
 
-class Player : public IdentificationInterface
+class Player : public Actor
 {
 public:
   Player(PlayerDesc description, World* world);
@@ -27,24 +30,33 @@ public:
 
   void update(double elapsedSeconds);
   void hookWindow(Ogre::RenderWindow* window);/*! Hooks the player camera to a render window.*/
-  void stop();
+  
+  //Actions
+  virtual void stop();
+  virtual void stagger(Vector3 direction);
+  virtual void damage(double amount);
+  virtual void heal(double amount);
 
   //Setters
-  void setScene(Scene* scene, Ogre::Vector3 position = Ogre::Vector3::ZERO, Ogre::Vector3 lookAt = Ogre::Vector3::ZERO);
-  void setPosition(Ogre::Vector3 position);
-  void setRotation(Ogre::Quaternion rotation);
-  void setGravity(Ogre::Vector3 gravity);
+  virtual void setPosition(Vector3 position);
+  virtual void setRotation(Quaternion rotation);
+  virtual void setLookAt(Vector3 lookAt);
+  virtual void setRunning(bool running);
+  virtual void setCrouching(bool crouching);
+  virtual void setGravity(Vector3 gravity);
   void setFreeCamera(bool enabled);
   void setItemGenerationID(int id);
   
   //Getters
-  Ogre::Vector3 getPosition();
-  Ogre::Quaternion getRotation();
-  Ogre::Vector3 getVelocity();
-  Scene* getScene();//gets the scene the player is currently in
+  virtual Vector3 getPosition();
+  virtual Quaternion getRotation();
+  Vector3 getVelocity();
   Ogre::Camera* getCamera();
   Ogre::Viewport* getViewport();
   Ogre::RenderWindow* getWindow();
+  virtual bool getCrouching();
+  virtual bool getRunning();
+  virtual Vector3 getGravity();
 
   //Injectors
   void keyPressed(const OIS::KeyEvent &evt);
@@ -55,10 +67,9 @@ public:
 
 private:
   World* world;
-  Scene* scene;
 
-  Ogre::SceneNode* node;//world location of the player
   Ogre::SceneNode* freeCameraNode;//node for free camera
+  IdentificationInterface* currentTarget;
 
   CameraComponent camera;//the player camera generally attached to the head node
   HumanoidSkeletonComponent skeleton;
@@ -66,19 +77,16 @@ private:
   MeshComponent mesh;
   QueryComponent query;
 
-  IdentificationInterface* currentTarget;
-
   bool addItem;
   bool addMonster;
   int itemGenerationID;//for debug item generation
   int monsterGenerationID;//for debug monster generation
   float placementDistance;
-
   bool interactPressed;
-
   float lookResponsiveness;
   float handMoveScalar;
 
   void keyEvent(const OIS::KeyEvent &evt, bool isDown);
+  virtual void hasSceneChange();
 };
 

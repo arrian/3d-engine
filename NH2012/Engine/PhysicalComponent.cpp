@@ -30,8 +30,8 @@ void PhysicalComponent::update(double elapsedSeconds)
   //if(!physical) throw NHException("Physical component missed frame rendering because it is not yet created.");
   if(physical->isSleeping()) return;//no need to update the object if it has not moved
   physx::PxTransform transform = physical->getGlobalPose();
-  node->setPosition(Ogre::Vector3(transform.p.x, transform.p.y, transform.p.z));
-  node->setOrientation(Ogre::Quaternion(transform.q.w,transform.q.x,transform.q.y,transform.q.z));
+  node->setPosition(Vector3(transform.p.x, transform.p.y, transform.p.z));
+  node->setOrientation(Quaternion(transform.q.w,transform.q.x,transform.q.y,transform.q.z));
 }
 
 //-------------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ void PhysicalComponent::loadPhysical()
   float density = tempCollisionDensity;
   float side = tempCollisionCubeSides;
 
-  Ogre::Vector3 oPosition = node->getPosition();
+  Vector3 oPosition = node->getPosition();
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
 
   physical = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));

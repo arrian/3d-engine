@@ -1,7 +1,7 @@
 #pragma once
 
 #include <OgreString.h>
-#include <OgreQuaternion.h>
+#include "Quaternion.h"
 
 #include "IdentificationInterface.h"
 #include "MeshComponent.h"
@@ -20,17 +20,15 @@ public:
   Item(ItemDesc description);
   virtual ~Item(void);
 
-  friend bool operator==(const Item& x, const Item& y);
-
   void update(double elapsedSeconds);
 
-  virtual void setPosition(Ogre::Vector3 position);
-  virtual void setRotation(Ogre::Quaternion rotation);
-  virtual void setVelocity(Ogre::Vector3 velocity);
+  virtual void setPosition(Vector3 position);
+  virtual void setRotation(Quaternion rotation);
+  virtual void setVelocity(Vector3 velocity);
 
-  virtual Ogre::Vector3 getPosition();
-  virtual Ogre::Quaternion getRotation();
-  virtual Ogre::Vector3 getVelocity();
+  virtual Vector3 getPosition();
+  virtual Quaternion getRotation();
+  virtual Vector3 getVelocity();
 
   ItemDesc getDescription();
 

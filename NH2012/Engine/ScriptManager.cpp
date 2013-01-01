@@ -179,19 +179,21 @@ void ScriptManager::screenshot(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setPhysicsEnabled(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   world->setPhysicsEnabled(stringToBool(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::setCameraFree(Options argv)
 {
-  bool isFree = stringToBool(argv[1]);
-  world->getPlayer()->setFreeCamera(isFree);//freeCameraDebug = !world->freeCameraDebug;
+  if(argv.size() < 2) throw NHException("too few arguments");
+  world->getPlayer()->setFreeCamera(stringToBool(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::setConsoleVisible(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   bool visible = stringToBool(argv[1]);
   Console::getInstance().setVisible(!visible);
 }
@@ -199,12 +201,7 @@ void ScriptManager::setConsoleVisible(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setFullscreen(Options argv)
 {
-  if(argv.size() < 3)
-  {
-    throw NHException("too few arguments");
-    return;
-  }
-
+  if(argv.size() < 3) throw NHException("too few arguments");
   int widthNum = boost::lexical_cast<int>(argv[1]);
   int heightNum = boost::lexical_cast<int>(argv[2]);
 
@@ -216,6 +213,7 @@ void ScriptManager::setFullscreen(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setWindowed(Options argv)
 {
+  if(argv.size() < 3) throw NHException("too few arguments");
   int widthNum = boost::lexical_cast<int>(argv[1]);
   int heightNum = boost::lexical_cast<int>(argv[2]);
 
@@ -227,6 +225,7 @@ void ScriptManager::setWindowed(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setPlayerScene(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   Scene* target = world->getScene(boost::lexical_cast<int>(argv[1]));
   if(target) target->addPlayer(world->getPlayer());
   else throw NHException("no scene loaded with the given id");
@@ -235,6 +234,7 @@ void ScriptManager::setPlayerScene(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setSceneAmbientLight(Options argv)
 {
+  if(argv.size() < 5) throw NHException("too few arguments");
   Scene* target = world->getPlayer()->getScene();
   if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(boost::lexical_cast<float>(argv[1]), 
     boost::lexical_cast<float>(argv[2]), 
@@ -246,7 +246,8 @@ void ScriptManager::setSceneAmbientLight(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setPlayerPosition(Options argv)
 {
-  Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[1])), 
+  if(argv.size() < 4) throw NHException("too few arguments");
+  Vector3 position = Vector3(Ogre::Real(boost::lexical_cast<float>(argv[1])), 
   Ogre::Real(boost::lexical_cast<float>(argv[2])), 
   Ogre::Real(boost::lexical_cast<float>(argv[3])));
   world->getPlayer()->setPosition(position);
@@ -255,12 +256,14 @@ void ScriptManager::setPlayerPosition(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setPlayerItemGenerationID(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   world->getPlayer()->setItemGenerationID(boost::lexical_cast<int>(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::getItemData(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   ItemDesc desc = world->getDataManager()->getItem(boost::lexical_cast<int>(argv[1]));
   display("name", desc.name);
   display("mesh", desc.mesh);
@@ -274,6 +277,7 @@ void ScriptManager::getItemData(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::getMonsterData(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   MonsterDesc desc = world->getDataManager()->getMonster(boost::lexical_cast<int>(argv[1]));
   display("name", desc.name);
   display("mesh", desc.mesh);
@@ -286,6 +290,7 @@ void ScriptManager::getMonsterData(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::getArchitectureData(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   ArchitectureDesc desc = world->getDataManager()->getArchitecture(boost::lexical_cast<int>(argv[1]));
   display("name", desc.name);
   display("mesh", desc.mesh);
@@ -296,6 +301,7 @@ void ScriptManager::getArchitectureData(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::getSoundData(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   SoundDesc desc = world->getDataManager()->getSound(boost::lexical_cast<int>(argv[1]));
   display("name", desc.name);
   display("file", desc.file);
@@ -304,6 +310,7 @@ void ScriptManager::getSoundData(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::getSceneData(Options argv)
 {
+  if(argv.size() < 2) throw NHException("too few arguments");
   SceneDesc desc = world->getDataManager()->getScene(boost::lexical_cast<int>(argv[1]));
   display("name", desc.name);
   display("file", desc.file);
@@ -380,7 +387,7 @@ void ScriptManager::getWorldInfo(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::getPlayerPosition(Options argv)
 {
-  Ogre::Vector3 position = world->getPlayer()->getPosition();
+  Vector3 position = world->getPlayer()->getPosition();
   display("x,y,z: ", "(" + boost::lexical_cast<std::string>(position.x) + "," 
     + boost::lexical_cast<std::string>(position.y) + "," 
     + boost::lexical_cast<std::string>(position.z) + ")");
@@ -389,24 +396,20 @@ void ScriptManager::getPlayerPosition(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::addItem(Options argv)
 {
-  if(argv.size() < 3)
-  {
-    throw NHException("too few arguments");
-    return;
-  }
+  if(argv.size() < 3) throw NHException("too few arguments");
   Scene* target = world->getPlayer()->getScene();
   if(target)
   {
     int numberToAdd = 1;
     if(argv.size() > 5) numberToAdd = boost::lexical_cast<int>(argv[5]);
 
-    Ogre::Vector3 position;
+    Vector3 position;
     if(argv.size() > 1 && argv[2] == "@player")//the user specified to add the item at the current location
     {
       position = world->getPlayer()->getPosition();
       if(argv.size() > 2) numberToAdd = boost::lexical_cast<int>(argv[3]);
     }
-    else position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
+    else position = Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
       Ogre::Real(boost::lexical_cast<float>(argv[3])), 
       Ogre::Real(boost::lexical_cast<float>(argv[4])));
     int idNum = boost::lexical_cast<int>(argv[1]);
@@ -420,7 +423,7 @@ void ScriptManager::addMonster(Options argv)
   Scene* target = world->getPlayer()->getScene();
   if(target)
   {
-    Ogre::Vector3 position = Ogre::Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
+    Vector3 position = Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
                                            Ogre::Real(boost::lexical_cast<float>(argv[3])), 
                                            Ogre::Real(boost::lexical_cast<float>(argv[4])));
     int idNum = boost::lexical_cast<int>(argv[1]);
@@ -432,6 +435,7 @@ void ScriptManager::addMonster(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setSceneLoaded(Options argv)
 {
+  if(argv.size() < 3) throw NHException("too few arguments");
   if(stringToBool(argv[2]))
   {
     if(world->loadScene(boost::lexical_cast<int>(argv[1]))) display("scene loaded");
@@ -447,34 +451,22 @@ void ScriptManager::setSceneLoaded(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::setSceneDrawDebugNavMesh(Options argv)
 {
-  if(argv.size() < 2)
-  {
-    throw NHException("too few arguments");
-    return;
-  }
+  if(argv.size() < 2) throw NHException("too few arguments");
   world->getPlayer()->getScene()->setDebugDrawNavigationMesh(stringToBool(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::setSceneShadowsEnabled(Options argv)
 {
-  if(argv.size() < 2)
-  {
-    throw NHException("too few arguments");
-    return;
-  }
+  if(argv.size() < 2) throw NHException("too few arguments");
   world->getPlayer()->getScene()->setShadowsEnabled(stringToBool(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::setSceneGravity(Options argv)
 {
-  if(argv.size() < 4)
-  {
-    throw NHException("too few arguments");
-    return;
-  }
-  world->getPlayer()->getScene()->setGravity(Ogre::Vector3(boost::lexical_cast<float>(argv[1]), boost::lexical_cast<float>(argv[2]), boost::lexical_cast<float>(argv[3])));
+  if(argv.size() < 4) throw NHException("too few arguments");
+  world->getPlayer()->getScene()->setGravity(Vector3(boost::lexical_cast<float>(argv[1]), boost::lexical_cast<float>(argv[2]), boost::lexical_cast<float>(argv[3])));
 }
 
 //-------------------------------------------------------------------------------------

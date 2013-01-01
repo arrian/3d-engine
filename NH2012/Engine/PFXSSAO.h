@@ -123,8 +123,8 @@ public:
 	void shadowTextureCasterPreViewProj(Ogre::Light *light, Ogre::Camera *cam, size_t)
 	{
 		float range = light->getAttenuationRange();
-		cam->setNearClipDistance(0.01);
-		cam->setFarClipDistance(99990);
+		cam->setNearClipDistance(0.01f);
+		cam->setFarClipDistance(99990.0f);
 	}
 	void shadowTexturesUpdated(size_t) {}
 	void shadowTextureReceiverPreViewProj(Ogre::Light*, Ogre::Frustum*) {}

@@ -15,8 +15,10 @@
 #include <OISKeyboard.h>
 #include <OISInputManager.h>
 
-#include "../../Engine/Console.h"
-#include "../../Engine/World.h"
+#include <Console.h>
+#include <World.h>
+//#include "../../Engine/Console.h"
+//#include "../../Engine/World.h"
 
 class Game : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {

@@ -23,7 +23,7 @@ void BoidExtension::update(double elapsedSeconds)
 
   if(node)
   {
-    node->setPosition(position.x, position.y, position.z);
+    node->setPosition((float) position.x, (float) position.y, (float) position.z);
   }
 }
 

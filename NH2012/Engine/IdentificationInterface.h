@@ -1,7 +1,7 @@
 #pragma once
 
-#include <OgreQuaternion.h>
-#include <OgreVector3.h>
+#include "Quaternion.h"
+#include "Vector3.h"
 
 #include "Group.h"
 

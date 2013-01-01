@@ -2,10 +2,18 @@
 
 #include <vector>
 
-#include <OgreVector3.h>
+#include "Vector3.h"
 
 #include "NodeComponent.h"
 
+#include "PathfindManager.h"
+#include "DataManager.h"
+#include "Player.h"
+#include "Item.h"
+#include "Interactive.h"
+#include "Goal.h"
+
+class Monster;
 
 /* Artificial intelligence component.*/
 class IntelligenceComponent : public NodeComponent
@@ -14,34 +22,28 @@ public:
   IntelligenceComponent(float speed);
   ~IntelligenceComponent(void);
   
-  /*! Finds a path within a scene.*/
-  void setGoal(Ogre::Vector3 to);
+  void setPosition(Vector3 position);
+  Vector3 getPosition();
 
-  void patrol(Ogre::Vector3 from, Ogre::Vector3 to);
-
-  void wander(Ogre::Vector3 around, Ogre::Real distance);
-
-  void find();
-
-  void collect();
-
-  void attack();
-
-  void pickup();
-
-  void open();
-  
-  Ogre::Vector3 getNextPosition(double elapsedSeconds);
+  //Goals - component attempts to satisfy these goals. if they can not be achieved at the current time other goals will be attempted. 
+  //This component handles the destruction of all pointers given to it so it is safe, for example, to call setGoal(new Goal()) without deleting Goal.
+  void setGoal(Goal* goal);//removes all other goals adding only the given goal
+  void addGoal(Goal* goal);//adds this goal to the set of other goals
+  void removeGoal(Goal* goal);//removes the specified goal
+  Goal* getNextGoal();
+  void checkNextGoal();//set the nextGoal value to the highest priority goal
 
   void update(double elapsedSeconds);
 
 protected:
-  bool hasGoal;
-  Ogre::Vector3 goal;
-  std::vector<Ogre::Vector3> intermediates;
-
   float speed;
+  PathfindAgent* agent;
+
+  std::vector<Goal*> goals;
+  Goal* nextGoal;
 
   void hasNodeChange();
+  void removeAgent();
+  void addAgent();
 };
 

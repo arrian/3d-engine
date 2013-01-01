@@ -1,7 +1,7 @@
 #pragma once
 
 //Ogre
-#include <OgreVector3.h>
+#include "Vector3.h"
 #include <OgreSceneNode.h>
 
 //PhysX
@@ -33,7 +33,7 @@ public:
   physx::PxU32 getBehaviorFlags(const physx::PxShape& shape);
   physx::PxU32 getBehaviorFlags(const physx::PxController& controller);
   physx::PxU32 getBehaviorFlags(const physx::PxObstacle& obstacle);
-  Ogre::Vector3 getForwardPosition(Ogre::Real distance);/** Gets a position in front of the skeleton that is the given distance from it. */
+  Vector3 getForwardPosition(Ogre::Real distance);/** Gets a position in front of the skeleton that is the given distance from it. */
 
   //Setters
   void setLeftHand(bool state);
@@ -42,13 +42,14 @@ public:
   void setCrouch(bool crouch);
   void setUserData(void* userData);
   void setGroup(Group group);
+  //void setRagdoll(bool isRagdoll);
 
   //Movement
   void stop();
   void headRelative(Ogre::Degree x, Ogre::Degree y);
   void leftHandRelative(Ogre::Degree x, Ogre::Degree y);
   void rightHandRelative(Ogre::Degree x, Ogre::Degree y);
-  void lookAt(Ogre::Vector3 position);
+  void lookAt(Vector3 position);
 
   //Assertions
   bool isLeftHand();
@@ -79,10 +80,10 @@ protected:
   Item* headItem;
 
   //Relative Origins
-  Ogre::Vector3 headOrigin;
-  Ogre::Vector3 headCrouchOrigin;
-  Ogre::Vector3 leftHandOrigin;
-  Ogre::Vector3 rightHandOrigin;
+  Vector3 headOrigin;
+  Vector3 headCrouchOrigin;
+  Vector3 leftHandOrigin;
+  Vector3 rightHandOrigin;
 
   //Movement Flags
   bool moveLeftHand;
@@ -94,7 +95,7 @@ protected:
 
   //State Data
   bool collisionEnabled;
-  Ogre::Vector3 previousPosition;//previous update position
+  Vector3 previousPosition;//previous update position
   
   //PhysX Constants
   float radius;
@@ -103,5 +104,7 @@ protected:
   float scaleCoeff;
   float stepOffset;
   float minimumMoveDistance;
+
+  bool canStand();//determines if there is enough space above the skeleton to change from the crouching/lying position to standing
 };
 

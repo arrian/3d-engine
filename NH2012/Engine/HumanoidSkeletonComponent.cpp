@@ -28,7 +28,7 @@ HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
     userData(NULL),
     onGround(false),
     crouch(false),
-    previousPosition(Ogre::Vector3::ZERO)
+    previousPosition(Vector3::ZERO)
 {
 }
 
@@ -103,7 +103,7 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
   
   if(collisionEnabled)
   {
-    Ogre::Vector3 distance = node->_getDerivedPosition() - previousPosition;
+    Vector3 distance = node->_getDerivedPosition() - previousPosition;
     physx::PxU32 collisionFlags = controller->move(physx::PxVec3(distance.x, distance.y, distance.z), minimumMoveDistance, (float) elapsedSeconds, physx::PxControllerFilters());//moving character controller
     if((collisionFlags & physx::PxControllerFlag::eCOLLISION_DOWN) != 0) onGround = true;
     else onGround = false;
@@ -112,7 +112,7 @@ void HumanoidSkeletonComponent::update(double elapsedSeconds)
   }
   else //just move the controller ignoring all collisions
   {
-    Ogre::Vector3 position = node->_getDerivedPosition();
+    Vector3 position = node->_getDerivedPosition();
     controller->setPosition(physx::PxExtendedVec3(position.x, position.y, position.z));
   }
 
@@ -195,9 +195,9 @@ void HumanoidSkeletonComponent::setCollisionEnabled(bool enabled)
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 HumanoidSkeletonComponent::getForwardPosition(Ogre::Real distance)
+Vector3 HumanoidSkeletonComponent::getForwardPosition(Ogre::Real distance)
 {
-  Ogre::Vector3 position = node->getOrientation().zAxis();
+  Vector3 position = node->getOrientation().zAxis();
   position *= distance;
   position = node->getPosition() - position;
   return position;
@@ -263,7 +263,7 @@ bool HumanoidSkeletonComponent::isCrouched()
 }
 
 //-------------------------------------------------------------------------------------
-void HumanoidSkeletonComponent::lookAt(Ogre::Vector3 position)
+void HumanoidSkeletonComponent::lookAt(Vector3 position)
 {
   //head->lookAt(position);
 }

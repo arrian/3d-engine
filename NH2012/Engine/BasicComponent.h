@@ -1,6 +1,6 @@
 #pragma once
 
-#include <OgreFrameListener.h>
+#include "Vector3.h"
 
 class Scene;
 
@@ -13,6 +13,8 @@ public:
   virtual void update(double elapsedSeconds) = 0;
     
   void setScene(Scene* scene);
+
+  Scene* getScene();
 
 protected:
   Scene* scene;

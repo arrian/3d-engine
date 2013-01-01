@@ -1,7 +1,7 @@
 #pragma once
 
-#include <OgreVector3.h>
-#include <OgreQuaternion.h>
+#include "Vector3.h"
+#include "Quaternion.h"
 #include <OgreRenderWindow.h>
 #include <OgreCamera.h>
 
@@ -20,7 +20,7 @@ public:
 
   void update(double elapsedSeconds);
 
-  Ogre::Vector3 getDirection();
+  Vector3 getDirection();
 
   Ogre::Camera* getCamera();
   Ogre::Viewport* getViewport();

@@ -6,6 +6,7 @@
 #include "NodeComponent.h"
 #include "SoundManager.h"
 #include "NHException.h"
+#include "Vector3.h"
 
 class SoundManager;
 

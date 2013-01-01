@@ -82,8 +82,8 @@ physx::PxControllerManager* Scene::getControllerManager()
 void Scene::addPlayer(Player* player, int portalID)
 {
   active = true;
-  Ogre::Vector3 position;
-  Ogre::Vector3 lookAt;
+  Vector3 position;
+  Vector3 lookAt;
   if(defaultEntry != NULL && portalID == DEFAULT_PORTAL)//use default portal
   {
     position = defaultEntry->getPosition();
@@ -97,27 +97,30 @@ void Scene::addPlayer(Player* player, int portalID)
   }
   else//place the player at zero
   {
-    position = Ogre::Vector3::ZERO;
-    lookAt = Ogre::Vector3::ZERO;
+    position = Vector3::ZERO;
+    lookAt = Vector3::UNIT_Z;
   }
 
   Scene* old = player->getScene();
   if(old) old->removePlayer(player);//need to remove player from previous scene
-  player->setScene(this, position, lookAt);
+  player->setScene(this);
+  player->setPosition(position);
+  player->setLookAt(lookAt);
   this->player = player;
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addMonster(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
+void Scene::addMonster(int id, Vector3 position, Quaternion rotation)
 {
   Monster* monster = new Monster(world->getDataManager()->getMonster(id));
   monster->setScene(this);
   monster->setPosition(position);
+  monster->setGoal(new Go(getPathfindManager()->getRandomNavigablePoint(), Priority::HIGH));
   monsters.push_back(monster);
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
+void Scene::addItem(int id, Vector3 position, Quaternion rotation)
 {
   Item* item = new Item(world->getDataManager()->getItem(id));//this->getWorld()->createItem(id);
   item->setScene(this);
@@ -127,7 +130,7 @@ void Scene::addItem(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addInteractive(int id, Ogre::Vector3 position, Ogre::Quaternion rotation)
+void Scene::addInteractive(int id, Vector3 position, Quaternion rotation)
 {
   Interactive* interactive = NULL;
   if(id == 0) interactive = new Door();
@@ -141,14 +144,14 @@ void Scene::addInteractive(int id, Ogre::Vector3 position, Ogre::Quaternion rota
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addLight(Ogre::Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
+void Scene::addLight(Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
 {
   Light* light = new Light(this, position, castShadows, range, colour);
   lights.push_back(light);
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addParticles(Ogre::String name, Ogre::String templateName, Ogre::Vector3 position, Ogre::Real speed)
+void Scene::addParticles(Ogre::String name, Ogre::String templateName, Vector3 position, Ogre::Real speed)
 {
   Ogre::ParticleSystem* particle = sceneManager->createParticleSystem(name, templateName);//"Rain");//, "Examples/Rain");
   particle->setSpeedFactor(speed);
@@ -358,7 +361,9 @@ void Scene::load(std::string file)
   }
   catch (rapidxml::parse_error e)
   {
-    std::cout << "Could not load the xml scene file at " << file << ". " << e.what() << std::endl;
+    std::stringstream ss;
+    ss << "could not load the xml scene '" << file << "': " << e.what() << std::endl;
+    throw NHException(ss.str().c_str());
   }
 }
 
@@ -375,7 +380,7 @@ int Scene::getSceneID()
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Scene::getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third)
+Vector3 Scene::getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third)
 {
   float x = 0.0f;
   float y = 0.0f;
@@ -389,18 +394,18 @@ Ogre::Vector3 Scene::getXMLVector(rapidxml::xml_node<>* node, std::string first,
   if(yPosition) y = boost::lexical_cast<float>(yPosition->value());
   if(zPosition) z = boost::lexical_cast<float>(zPosition->value());
 
-  return Ogre::Vector3(x,y,z);
+  return Vector3(x,y,z);
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Quaternion Scene::getXMLRotation(rapidxml::xml_node<>* node)
+Quaternion Scene::getXMLRotation(rapidxml::xml_node<>* node)
 {
-  Ogre::Quaternion rotation = Ogre::Quaternion::IDENTITY;
-  Ogre::Vector3 components = getXMLVector(node, ROTATION_X_STRING, ROTATION_Y_STRING, ROTATION_Z_STRING);
+  Quaternion rotation = Quaternion::IDENTITY;
+  Vector3 components = getXMLVector(node, ROTATION_X_STRING, ROTATION_Y_STRING, ROTATION_Z_STRING);
   
-  rotation.FromAngleAxis(Ogre::Degree(components.x), Ogre::Vector3::UNIT_X);
-  rotation.FromAngleAxis(Ogre::Degree(components.y), Ogre::Vector3::UNIT_Y);
-  rotation.FromAngleAxis(Ogre::Degree(components.z), Ogre::Vector3::UNIT_Z);
+  rotation.FromAngleAxis(Ogre::Degree(components.x), Vector3::UNIT_X);
+  rotation.FromAngleAxis(Ogre::Degree(components.y), Vector3::UNIT_Y);
+  rotation.FromAngleAxis(Ogre::Degree(components.z), Vector3::UNIT_Z);
 
   return rotation;
 }
@@ -412,19 +417,19 @@ Ogre::ColourValue Scene::getXMLColour(rapidxml::xml_node<>* node, std::string fi
   rapidxml::xml_attribute<>* aColour = node->first_attribute(fourth.c_str());  
   if(aColour) a = boost::lexical_cast<float>(aColour->value());
 
-  Ogre::Vector3 components = getXMLVector(node, first, second, third);
+  Vector3 components = getXMLVector(node, first, second, third);
  
   return Ogre::ColourValue(components.x,components.y,components.z,a);
 }
   
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Scene::getXMLScale(rapidxml::xml_node<>* node)
+Vector3 Scene::getXMLScale(rapidxml::xml_node<>* node)
 {
   return getXMLVector(node, SCALE_X_STRING, SCALE_Y_STRING, SCALE_Z_STRING);//"sx", "sy", "sz");
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node)
+Vector3 Scene::getXMLPosition(rapidxml::xml_node<>* node)
 {
   return getXMLVector(node, TRANSLATION_X_STRING, TRANSLATION_Y_STRING, TRANSLATION_Z_STRING);//"tx", "ty", "tz");
 }
@@ -523,16 +528,16 @@ void Scene::setDebugDrawNavigationMesh(bool enabled)
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::setGravity(Ogre::Vector3 gravity)
+void Scene::setGravity(Vector3 gravity)
 {
   physicsManager->setGravity(physx::PxVec3(gravity.x, gravity.y, gravity.z));
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Scene::getGravity()
+Vector3 Scene::getGravity()
 {
   physx::PxVec3 gravity = physicsManager->getGravity();
-  return Ogre::Vector3(gravity.x, gravity.y, gravity.z);
+  return Vector3(gravity.x, gravity.y, gravity.z);
 }
 
 //-------------------------------------------------------------------------------------
@@ -569,13 +574,8 @@ void Scene::setup()
 
   setShadowsEnabled(world->isShadowsEnabled());
 
-  //sceneManager->setShowDebugShadows(world->isDebug());
-  //sceneManager->showBoundingBoxes(world->isDebug());
-  
   architecture = new Architecture(this, pathfinder);
 
-  //SceneDesc sceneDesc = world->getDataManager()->getScene(id);//getting scene information from the world data manager
-  
   load(desc.file);//loading the scene file
 
   sceneManager->setAmbientLight(desc.ambientLight);
@@ -592,10 +592,6 @@ void Scene::setup()
   light->setDiffuseColour(Ogre::ColourValue::White);
   light->setCastShadows(true);
   */
-
-  //sceneManager->getRootSceneNode()->attachObject(sceneManager->createEntity("theatre_ivy.mesh"));//static ivy mesh
-
-
 
   //flockTest.setScene(this);//boids flocking test
 
@@ -614,6 +610,13 @@ void Scene::release()
 
   if(architecture) delete architecture;
   architecture = NULL;
+
+  for(std::vector<Light*>::iterator it = lights.begin(); it != lights.end(); ++it)
+  {
+    if(*it) delete (*it);
+    (*it) = NULL;
+  }
+  lights.clear();
 
   for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
   {

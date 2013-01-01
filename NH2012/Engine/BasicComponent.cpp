@@ -20,5 +20,10 @@ void BasicComponent::setScene(Scene* scene)
   hasSceneChange();
 }
 
+//-------------------------------------------------------------------------------------
+Scene* BasicComponent::getScene()
+{
+  return scene;
+}
 
 

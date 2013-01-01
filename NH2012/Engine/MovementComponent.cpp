@@ -1,11 +1,11 @@
 #include "MovementComponent.h"
 
 
-MovementComponent::MovementComponent(Ogre::Vector3 gravity)
+MovementComponent::MovementComponent(Vector3 gravity)
   : NodeComponent(),
     speed(1.0f),
     gravity(gravity),
-    velocity(Ogre::Vector3::ZERO),
+    velocity(Vector3::ZERO),
     gravityEnabled(true),
     runScalar(1.8f),
     moveScalar(10.0f),
@@ -28,7 +28,7 @@ void MovementComponent::stop()
 {
   running = false;
   jumping = false;
-  velocity = Ogre::Vector3::ZERO;
+  velocity = Vector3::ZERO;
 }
 
 void MovementComponent::jump()
@@ -36,9 +36,14 @@ void MovementComponent::jump()
   if(gravityEnabled) velocity.y = jumpVelocity;//unpredictable behaviour at low frame rates??
 }
 
-Ogre::Vector3 MovementComponent::getVelocity()
+Vector3 MovementComponent::getVelocity()
 {
   return velocity;
+}
+
+Vector3 MovementComponent::getGravity()
+{
+  return gravity;
 }
 
 float MovementComponent::getSpeed()
@@ -51,7 +56,7 @@ void MovementComponent::setRun(bool run)
   running = run;
 }
 
-void MovementComponent::setGravity(Ogre::Vector3 gravity)
+void MovementComponent::setGravity(Vector3 gravity)
 {
   this->gravity = gravity;
 }

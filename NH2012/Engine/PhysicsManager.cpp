@@ -17,19 +17,19 @@ PhysicsManager::PhysicsManager(void)
   physx::PxAllocatorCallback* allocator = &allocatorCallback;
   physicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *allocator, errorCallback);//getErrorCallback());
   physicsFoundation->setErrorLevel(physx::PxErrorCode::eDEBUG_INFO);
-  if(!physicsFoundation) throw NHException("Physics foundation could not be created.");
+  if(!physicsFoundation) throw NHException("physics foundation could not be created");
 
   bool recordMemoryAllocations = true;
   physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations);
-  if(!physicsWorld) throw NHException("Physics world could not be created.");
+  if(!physicsWorld) throw NHException("physics world could not be created");
 
   PxInitExtensions(*physicsWorld);
 
   physicsCooking = PxCreateCooking(PX_PHYSICS_VERSION, physicsWorld->getFoundation(), physx::PxCookingParams());
-  if(!physicsCooking) throw NHException("Physics cooker could not be created.");
+  if(!physicsCooking) throw NHException("physics cooker could not be created");
 
   physicsMaterial = physicsWorld->createMaterial(defaultStaticFriction, defaultDynamicFriction, defaultRestitution);
-  if(!physicsMaterial) throw NHException("Default physics material could not be created.");
+  if(!physicsMaterial) throw NHException("default physics material could not be created");
 }
 
 //-------------------------------------------------------------------------------------

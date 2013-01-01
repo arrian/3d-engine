@@ -2,7 +2,7 @@
 
 #include <PxPhysics.h>
 #include "geometry/PxGeometry.h"
-#include <OgreVector3.h>
+#include "Vector3.h"
 
 #include "NodeComponent.h"
 #include "IdentificationInterface.h"
@@ -18,8 +18,8 @@ public:
 
   void update(double elapsedSeconds);
 
-  IdentificationInterface* rayQuery(Ogre::Vector3 direction, float distance, Group groups);//returns hit or null
-  bool sweepQuery(Ogre::Vector3 direction, float distance);
+  IdentificationInterface* rayQuery(Vector3 direction, float distance, Group groups);//returns hit or null
+  bool sweepQuery(Vector3 direction, float distance);
   bool overlapQuery();
 
 protected:

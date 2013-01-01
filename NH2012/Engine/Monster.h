@@ -2,10 +2,10 @@
 
 #include <OgreFrameListener.h>
 #include <OgreString.h>
-#include <OgreVector3.h>
+#include "Vector3.h"
 
 #include "PathfindManager.h"
-#include "BasicComponent.h"
+
 #include "HumanoidSkeletonComponent.h"
 #include "DynamicMovementComponent.h"
 #include "IntelligenceComponent.h"
@@ -15,35 +15,44 @@
 
 class Scene;
 
-class Monster : public BasicComponent, public IdentificationInterface
+class Monster : public Actor
 {
 public:
   Monster(MonsterDesc description);
   virtual ~Monster(void);
 
-  void update(double elapsedSeconds);
+  virtual void update(double elapsedSeconds);
 
-  void setPosition(Ogre::Vector3 position);
-  void setRotation(Ogre::Quaternion rotation);
-  void setTarget(Ogre::Vector3 target);
+  //Actions
+  virtual void stop();
+  virtual void stagger(Vector3 direction);
+  virtual void damage(double amount);
+  virtual void heal(double amount);
+  
+  //Setters
+  virtual void setPosition(Vector3 position);
+  virtual void setRotation(Quaternion rotation);
+  virtual void setLookAt(Vector3 lookAt);
+  virtual void setRunning(bool running);
+  virtual void setCrouching(bool crouching);
+  virtual void setGravity(Vector3);
+  void setGoal(Goal* goal);
 
-  friend bool operator==(const Monster& x, const Monster& y);
+  //Getters
+  virtual Vector3 getPosition();
+  virtual Quaternion getRotation();
+  virtual bool getCrouching();
+  virtual bool getRunning();
+  virtual Vector3 getGravity();
 
 protected:
   MonsterDesc description;
 
-  Ogre::SceneNode* node;
-  Ogre::Vector3 position;
-  Ogre::Vector3 target;
-
   IntelligenceComponent intelligence;
   HumanoidSkeletonComponent skeleton;
-  DynamicMovementComponent movement;
+  //DynamicMovementComponent movement;
   MeshComponent mesh;
 
-  void hasSceneChange();
-
-
-  
+  virtual void hasSceneChange();
 };
 

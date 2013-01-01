@@ -82,28 +82,28 @@ void Door::interact()
 }
 
 //-------------------------------------------------------------------------------------
-void Door::setPosition(Ogre::Vector3 position)
+void Door::setPosition(Vector3 position)
 {
   if(node) node->setPosition(position);
   else throw NHException("door must be inside a scene to set its position");
 }
 
 //-------------------------------------------------------------------------------------
-void Door::setRotation(Ogre::Quaternion rotation)
+void Door::setRotation(Quaternion rotation)
 {
   if(node) node->setOrientation(rotation);
   else throw NHException("door must be inside a scene to set its rotation");
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 Door::getPosition()
+Vector3 Door::getPosition()
 {
   if(node) return node->getPosition();
   throw NHException("door must be inside a scene to get its position");
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Quaternion Door::getRotation()
+Quaternion Door::getRotation()
 {
   if(node) return node->getOrientation();
   throw NHException("door must be inside a scene to get its rotation");

@@ -4,8 +4,11 @@
 
 PathfindManager::PathfindManager(Ogre::SceneManager* sceneManager)
   : recast(NULL),
+    detour(NULL),
     geometry(),
-    geom(NULL)
+    geom(NULL),
+    agents(),
+    built(false)
 {
   OgreRecastConfigParams params = OgreRecastConfigParams();
   //set required parameters here
@@ -17,12 +20,19 @@ PathfindManager::~PathfindManager(void)
 {
   if(geom) delete geom;
   if(recast) delete recast;
+
+  for(std::vector<PathfindAgent*>::iterator iter = agents.begin(); iter != agents.end(); ++iter)
+  {
+    if(*iter) delete *iter;
+  }
 }
 
 //-------------------------------------------------------------------------------------
 void PathfindManager::update(double elapsedSeconds)
 {
+  if(!built) return;
   recast->update();
+  detour->updateTick((float) elapsedSeconds);
 }
 
 //-------------------------------------------------------------------------------------
@@ -37,44 +47,48 @@ void PathfindManager::build()
   std::cout << "Building navigation... ";
   geom = new InputGeom(geometry);
   recast->NavMeshBuild(geom);
+  built = true;
+  detour = new OgreDetourCrowd(recast);
+  if(!detour) throw NHException("could not create detour crowd in pathfind manager");
   std::cout << "done." << std::endl;
-}
 
-//-------------------------------------------------------------------------------------
-std::vector<Ogre::Vector3> PathfindManager::getPath(Ogre::Vector3 start, Ogre::Vector3 end)
-{
-  int code = recast->FindPath(start, end, 0, 0);
-  switch(code)
-  {
-    case 0: break;
-    case -1: std::cout << "Monster Pathfind: No polygon near start point." << std::endl; break;
-    case -2: std::cout << "Monster Pathfind: No polygon near end point." << std::endl; break;
-    case -3: std::cout << "Monster Pathfind: Could not create a path." << std::endl; break;
-    case -4: std::cout << "Monster Pathfind: Could not find a path." << std::endl; break;
-    case -5: std::cout << "Monster Pathfind: Could not create a straight path." << std::endl; break;
-    case -6: std::cout << "Monster Pathfind: Could not find a straight path." << std::endl; break;
-    default: break;
+    /*
+  mDetourTileCache = new OgreDetourTileCache(mRecast);
+  if(mDetourTileCache->TileCacheBuild(mNavmeshEnts)) {
+  mDetourTileCache->drawNavMesh();
+  } else {
+  Ogre::LogManager::getSingletonPtr()->logMessage("ERROR: could not generate useable navmesh from mesh using detourTileCache.");
+  return;
   }
-  return recast->getPath(0);
+
+  if(EXTRACT_WALKABLE_AREAS) {
+  // Mark walkable area (where agents will be spawned)
+  OgreRecastNavmeshPruner *navMeshPruner = mRecast->getNavmeshPruner();
+  // Start tracing at the origin position on the navmesh, and include all areas that are reachable from there (there is no box in the center)
+  navMeshPruner->floodNavmesh(Vector3::ZERO);
+  navMeshPruner->pruneSelected();
+  }
+  
+  */
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 PathfindManager::getClosestNavigablePoint(Ogre::Vector3 point)
+Vector3 PathfindManager::getClosestNavigablePoint(Vector3 point)
 {
-  Ogre::Vector3 result;
+  Vector3 result;
   if(recast->findNearestPointOnNavmesh(point, result)) return result;
 
   throw NHException("failed to find the closest navigable point");
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 PathfindManager::getRandomNavigablePoint()
+Vector3 PathfindManager::getRandomNavigablePoint()
 {
   return recast->getRandomNavMeshPoint();
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Vector3 PathfindManager::getRandomNavigablePointInCircle(Ogre::Vector3 centre, double radius)
+Vector3 PathfindManager::getRandomNavigablePointInCircle(Vector3 centre, double radius)
 {
   return recast->getRandomNavMeshPointInCircle(centre, radius);
 }
@@ -84,6 +98,30 @@ void PathfindManager::setDrawNavigationMesh(bool enabled)
 {
   if(enabled) recast->drawNavMesh();
   else throw NHException("removing a navigation mesh is not implemented");
-  
 }
 
+//-------------------------------------------------------------------------------------
+PathfindAgent* PathfindManager::createAgent(Vector3 position)
+{
+  int id = detour->addAgent(position);
+  if(id < 0) throw NHException("could not create an agent because the maximum number of agents have been created");
+  PathfindAgent* agent = new PathfindAgent(id, detour);
+  agents.push_back(agent);
+  return agent;
+}
+
+//-------------------------------------------------------------------------------------
+void PathfindManager::removeAgent(PathfindAgent* agent)
+{
+  if(!agent) return;
+  detour->removeAgent(agent->getID());
+  agents.erase(std::remove(agents.begin(), agents.end(), agent), agents.end());
+  delete agent;
+}
+
+//-------------------------------------------------------------------------------------
+bool PathfindManager::isReachable(Vector3 start, Vector3 end)
+{
+  if(recast->FindPath(start, end, 0, 0) == 0) return true;
+  return false;
+}

@@ -1,13 +1,17 @@
 #include "DynamicMovementComponent.h"
 
 
-DynamicMovementComponent::DynamicMovementComponent(Ogre::Vector3 gravity)
-  : NodeComponent(),
-    gravity(gravity)
+DynamicMovementComponent::DynamicMovementComponent(Vector3 gravity)
+  : MovementComponent(gravity)
 {
 }
 
 
 DynamicMovementComponent::~DynamicMovementComponent(void)
 {
+}
+
+void DynamicMovementComponent::update(double elapsedSeconds)
+{
+
 }

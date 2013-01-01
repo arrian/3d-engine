@@ -9,7 +9,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <OgreColourValue.h>
-#include <OgreVector3.h>
+#include "Vector3.h"
 
 #include "NHException.h"
 
@@ -82,7 +82,7 @@ struct MonsterDesc
       speed(1.0f),
       health(100.0f),
       id(id),
-      gravity(GRAVITY)
+      gravity(0,0,0)//GRAVITY)//temp disable gravity while fixing artificial intelligence
   {
   }
 
@@ -92,7 +92,7 @@ struct MonsterDesc
   float speed;
   float height;
   float health;
-  Ogre::Vector3 gravity;
+  Vector3 gravity;
 
   int id;
 };
@@ -120,8 +120,8 @@ struct SceneDesc
 
   Ogre::ColourValue ambientLight;
   Ogre::ColourValue shadowColour;
-  Ogre::Vector3 gravity;
-  Ogre::Vector3 north;
+  Vector3 gravity;
+  Vector3 north;
   float fogStart;
   float fogEnd;
   Ogre::ColourValue fogColour;
@@ -154,7 +154,7 @@ struct PlayerDesc
   std::string mesh;
   std::string name;
 
-  Ogre::Vector3 gravity;
+  Vector3 gravity;
 
 };
 

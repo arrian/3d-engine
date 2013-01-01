@@ -1,7 +1,7 @@
 #include "Light.h"
 
 
-Light::Light(Scene* scene, Ogre::Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
+Light::Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
   : light(scene->getSceneManager()->createLight())
 {
   lightNode = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode(position);

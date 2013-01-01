@@ -1,7 +1,7 @@
 #include "KinematicMovementComponent.h"
 
 
-KinematicMovementComponent::KinematicMovementComponent(Ogre::Vector3 gravity)
+KinematicMovementComponent::KinematicMovementComponent(Vector3 gravity)
   : MovementComponent(gravity)
 {
   stop();
@@ -21,9 +21,9 @@ void KinematicMovementComponent::update(double elapsedSeconds)
   if(!node) return;
 
   //Calculating the acceleration vector
-  Ogre::Vector3 accel = Ogre::Vector3::ZERO;
-  Ogre::Vector3 zAxisOrientation = node->getOrientation().zAxis();
-  Ogre::Vector3 xAxisOrientation = node->getOrientation().xAxis();
+  Vector3 accel = Vector3::ZERO;
+  Vector3 zAxisOrientation = node->getOrientation().zAxis();
+  Vector3 xAxisOrientation = node->getOrientation().xAxis();
   if (moveForward) accel -= zAxisOrientation;
   if (moveBack) accel += zAxisOrientation;
   if (moveRight) accel += xAxisOrientation;
@@ -44,9 +44,9 @@ void KinematicMovementComponent::update(double elapsedSeconds)
   }
   else 
   {
-    Ogre::Vector3 reduce = velocity * (float) elapsedSeconds * moveScalar;
+    Vector3 reduce = velocity * (float) elapsedSeconds * moveScalar;
     if(velocity.squaredLength() > reduce.squaredLength()) velocity -= reduce;//comparing with reduction length reduces jitter at low frame rates
-    else velocity = Ogre::Vector3::ZERO;
+    else velocity = Vector3::ZERO;
   }
 
   Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
@@ -56,7 +56,7 @@ void KinematicMovementComponent::update(double elapsedSeconds)
     velocity.normalise();
     velocity *= topSpeed;
   }
-  else if (velocity.squaredLength() < tooSmall * tooSmall) velocity = Ogre::Vector3::ZERO;
+  else if (velocity.squaredLength() < tooSmall * tooSmall) velocity = Vector3::ZERO;
 
   if(gravityEnabled)//restoring saved up/down speed and adding gravity
   {
@@ -64,48 +64,16 @@ void KinematicMovementComponent::update(double elapsedSeconds)
     velocity.y += gravity.y * (float) elapsedSeconds;
   }
 
-  node->_setDerivedPosition(node->_getDerivedPosition() + velocity * elapsedSeconds * moveScalar);
+  node->_setDerivedPosition(node->_getDerivedPosition() + velocity * (float) elapsedSeconds * moveScalar);
 }
 
 void KinematicMovementComponent::stop()
 {
+  MovementComponent::stop();
   moveForward = false;
   moveBack = false;
   moveLeft = false;
   moveRight = false;
-  running = false;
-  jumping = false;
-  velocity = Ogre::Vector3::ZERO;
-}
-
-void KinematicMovementComponent::jump()
-{
-  if(gravityEnabled) velocity.y = jumpVelocity;//unpredictable behaviour at low frame rates??
-}
-
-Ogre::Vector3 KinematicMovementComponent::getVelocity()
-{
-  return velocity;
-}
-
-float KinematicMovementComponent::getSpeed()
-{
-  return speed;
-}
-
-void KinematicMovementComponent::setRun(bool run)
-{
-  running = run;
-}
-
-void KinematicMovementComponent::setGravity(Ogre::Vector3 gravity)
-{
-  this->gravity = gravity;
-}
-
-void KinematicMovementComponent::setGravityEnabled(bool enabled)
-{
-  gravityEnabled = enabled;
 }
 
 void KinematicMovementComponent::setMoveForward(bool state)
@@ -128,18 +96,4 @@ void KinematicMovementComponent::setMoveRight(bool state)
   moveRight = state;
 }
 
-bool KinematicMovementComponent::isRunning()
-{
-  return running;
-}
-
-bool KinematicMovementComponent::isJumping()
-{
-  return jumping;
-}
-
-void KinematicMovementComponent::hitGround()
-{
-  velocity.y = 0.0f;
-}
 
