@@ -13,7 +13,7 @@
 #include "Boids/Vector.h"
 
 class Scene;
-class BoidExtension;
+class BoidComponent;
 
 class Flock : public BasicComponent
 {
@@ -28,12 +28,12 @@ public:
 protected:
   Ogre::SceneNode* node;
 
-  std::vector<BoidExtension*> boids;
+  std::vector<BoidComponent*> boids;
 
   int worldRadius;//bounding radius of the world
 
   void hasSceneChange();
 
-  BoidExtension* makeBoid(Boids::Vector dimensions = Boids::Vector(1,.2,.75), double maximumVelocity = 40, double maxAcceleration = 3, double cruiseDistance = 0.4);
+  BoidComponent* makeBoid(Boids::Vector dimensions = Boids::Vector(1,.2,.75), double maximumVelocity = 40, double maxAcceleration = 3, double cruiseDistance = 0.4);//move construction to the BoidComponent
 };
 

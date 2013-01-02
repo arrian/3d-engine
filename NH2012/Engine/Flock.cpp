@@ -1,7 +1,7 @@
 #include "Flock.h"
 
 #include "Scene.h"
-#include "BoidExtension.h"
+#include "BoidComponent.h"
 
 //-------------------------------------------------------------------------------------
 Flock::Flock(int numBoids)
@@ -18,7 +18,7 @@ Flock::Flock(int numBoids)
 //-------------------------------------------------------------------------------------
 Flock::~Flock(void)
 {
-  for(std::vector<BoidExtension*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
+  for(std::vector<BoidComponent*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
   {
     if(*iter) delete (*iter);
   }
@@ -27,7 +27,7 @@ Flock::~Flock(void)
 //-------------------------------------------------------------------------------------
 void Flock::update(double elapsedSeconds)
 {
-  for(std::vector<BoidExtension*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
+  for(std::vector<BoidComponent*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
   {
     ++iter;
     if(iter >= boids.end()) iter = boids.begin();
@@ -36,7 +36,7 @@ void Flock::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-BoidExtension* Flock::makeBoid(Boids::Vector dimensions, double maximumVelocity, double maxAcceleration, double cruiseDistance)
+BoidComponent* Flock::makeBoid(Boids::Vector dimensions, double maximumVelocity, double maxAcceleration, double cruiseDistance)
 {
   Boids::Vector position;
   Boids::Vector attitude;//roll, pitch, yaw
@@ -47,7 +47,7 @@ BoidExtension* Flock::makeBoid(Boids::Vector dimensions, double maximumVelocity,
   velocity  = Direction(attitude) * (maximumVelocity) / 4.0;
   position = Boids::Vector(std::rand() % int(worldRadius) - 0.5 * worldRadius - worldRadius * 0.025, 0, std::rand() % int(worldRadius) - 0.5 * worldRadius - worldRadius * 0.025);
 
-  BoidExtension* boid = new BoidExtension(position, velocity, dimensions);
+  BoidComponent* boid = new BoidComponent(position, velocity, dimensions);
 
   boid->maxAcceleration = maxAcceleration;
   boid->cruiseDistance = cruiseDistance;
@@ -62,7 +62,7 @@ void Flock::hasSceneChange()
   if(oldScene && node) oldScene->getSceneManager()->destroySceneNode(node);
   node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
 
-  for(std::vector<BoidExtension*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
+  for(std::vector<BoidComponent*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
   {
     (*iter)->setNode(scene, node->createChildSceneNode());
   }

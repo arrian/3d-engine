@@ -1,23 +1,23 @@
-#include "BoidExtension.h"
+#include "BoidComponent.h"
 
 #include "Scene.h"
 #include "OgreVector3.h"
 #include "OgreQuaternion.h"
 
 //-------------------------------------------------------------------------------------
-BoidExtension::BoidExtension(Boids::Vector position, Boids::Vector velocity, Boids::Vector dimensions)
+BoidComponent::BoidComponent(Boids::Vector position, Boids::Vector velocity, Boids::Vector dimensions)
   : Boids::Boid(position, velocity, dimensions),
     entity(NULL)
 {
 }
 
 //-------------------------------------------------------------------------------------
-BoidExtension::~BoidExtension(void)
+BoidComponent::~BoidComponent(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-void BoidExtension::update(double elapsedSeconds)
+void BoidComponent::update(double elapsedSeconds)
 {
   Boids::Boid::update(elapsedSeconds);
 
@@ -28,7 +28,7 @@ void BoidExtension::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-void BoidExtension::hasNodeChange()
+void BoidComponent::hasNodeChange()
 {
   //Visual
   if(oldScene && entity) oldScene->getSceneManager()->destroyEntity(entity);

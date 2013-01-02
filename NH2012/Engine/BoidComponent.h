@@ -10,11 +10,11 @@
 
 class Scene;
 
-class BoidExtension : public Boids::Boid, public NodeComponent
+class BoidComponent : public Boids::Boid, public NodeComponent
 {
 public:
-  BoidExtension(Boids::Vector position, Boids::Vector velocity, Boids::Vector dimensions);
-  virtual ~BoidExtension(void);
+  BoidComponent(Boids::Vector position, Boids::Vector velocity, Boids::Vector dimensions);
+  virtual ~BoidComponent(void);
 
   void update(double elapsedSeconds);
 protected:
