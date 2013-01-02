@@ -443,8 +443,8 @@ void ScriptManager::setSceneLoaded(Options argv)
   }
   else
   {
-    if(world->destroyScene(boost::lexical_cast<int>(argv[1]))) display("scene unloaded");
-    else throw NHException("could not unload the scene");
+    world->destroyScene(boost::lexical_cast<int>(argv[1]));
+    display("scene unloaded");
   }
 }
 
