@@ -25,12 +25,12 @@ void DataManager::addData(std::string file)
 {
   for(std::vector<std::string>::iterator iter = files.begin(); iter < files.end(); ++iter)
   {
-    if(file == *iter) throw NHException("Attempting to load the same data file twice.");
+    if(file == *iter) throw NHException("attempting to load the same data file twice");
   }
   files.push_back(file);//record loading this file
 
   Ogre::FileInfoListPtr fileListPtr = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", file);
-  if(fileListPtr->size() < 1) throw NHException("Could not find the path to the specified data file.");
+  if(fileListPtr->size() < 1) throw NHException("could not find the path to the specified data file");
 
   std::ifstream ifs(fileListPtr->front().archive->getName() + "/" + fileListPtr->front().filename);
   std::string temp;
@@ -91,35 +91,35 @@ void DataManager::addData(std::string file)
 //-------------------------------------------------------------------------------------
 ItemDesc DataManager::getItem(int id)
 {
-  if(items.count(id) == 0) throw NHException("Could not find an item with the given id.");
+  if(items.count(id) == 0) throw NHException("could not find an item with the given id");
   return ((*(items.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
 MonsterDesc DataManager::getMonster(int id)
 {
-  if(monsters.count(id) == 0) throw NHException("Could not find a monster with the given id.");
+  if(monsters.count(id) == 0) throw NHException("could not find a monster with the given id");
   return ((*(monsters.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
 ArchitectureDesc DataManager::getArchitecture(int id)
 {
-  if(architecture.count(id) == 0) throw NHException("Could not find architecture with the given id.");
+  if(architecture.count(id) == 0) throw NHException("could not find architecture with the given id");
   return ((*(architecture.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
 SceneDesc DataManager::getScene(int id)
 {
-  if(scenes.count(id) == 0) throw NHException("Could not find a scene with the given id.");
+  if(scenes.count(id) == 0) throw NHException("could not find a scene with the given id");
   return ((*(scenes.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
 SoundDesc DataManager::getSound(int id)
 {
-  if(sounds.count(id) == 0) throw NHException("Could not find a sound with the given id.");
+  if(sounds.count(id) == 0) throw NHException("could not find a sound with the given id");
   return ((*(sounds.find(id))).second);
 }
 

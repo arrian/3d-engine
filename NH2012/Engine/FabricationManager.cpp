@@ -142,7 +142,6 @@ physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& m
 //-------------------------------------------------------------------------------------
 physx::PxTriangleMesh* FabricationManager::createTriangleMesh(Ogre::Entity* e) 
 {
-  std::cout << "Got triangle mesh cooking request." << std::endl;
 
   unsigned int mVertexCount = 0; 
   unsigned long mIndexCount = 0; 

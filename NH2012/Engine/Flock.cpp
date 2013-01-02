@@ -7,7 +7,8 @@
 Flock::Flock(int numBoids)
   : BasicComponent(),
     boids(),
-    worldRadius(20)
+    worldRadius(20),
+    totalElapsed(0.0f)
 {
   for(int i = 0; i < numBoids; i++) addBoid();
 
@@ -27,11 +28,12 @@ Flock::~Flock(void)
 //-------------------------------------------------------------------------------------
 void Flock::update(double elapsedSeconds)
 {
+  totalElapsed += elapsedSeconds;
   for(std::vector<BoidComponent*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
   {
     ++iter;
     if(iter >= boids.end()) iter = boids.begin();
-    (*iter)->update(elapsedSeconds);
+    (*iter)->update(totalElapsed);
   }
 }
 

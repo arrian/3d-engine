@@ -9,8 +9,7 @@
 #include "Group.h"
 
 
-class QueryComponent :
-  public NodeComponent
+class QueryComponent : public NodeComponent
 {
 public:
   QueryComponent(void);
@@ -24,8 +23,5 @@ public:
 
 protected:
   void hasNodeChange();
-
-  //Ogre::Entity* debugHitPosition;
-  //Ogre::SceneNode* hitNode;
 };
 

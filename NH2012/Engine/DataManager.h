@@ -164,15 +164,15 @@ typedef std::map<int, SceneDesc > SceneList;
 typedef std::map<int, SoundDesc > SoundList;
 typedef std::map<int, ItemDesc > ItemList;
 
-#define ARCHITECTURE_IDENTIFIER "#Architecture"
-#define MONSTERS_IDENTIFIER "#Monsters"
-#define SCENES_IDENTIFIER "#Scenes"
-#define SOUNDS_IDENTIFIER "#Sounds"
-#define ITEMS_IDENTIFIER "#Items"
+static const char ARCHITECTURE_IDENTIFIER[] = "#Architecture";
+static const char MONSTERS_IDENTIFIER[] = "#Monsters";
+static const char SCENES_IDENTIFIER[] = "#Scenes";
+static const char SOUNDS_IDENTIFIER[] = "#Sounds";
+static const char ITEMS_IDENTIFIER[] = "#Items";
 
-#define ID_INDEX 0
-#define NAME_INDEX 1
-#define MESH_INDEX 2
+static const int ID_INDEX = 0;
+static const int NAME_INDEX = 1;
+static const int MESH_INDEX = 2;
 
 /**
  * Handles the loading of all object information from the data files.

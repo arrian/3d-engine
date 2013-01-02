@@ -60,7 +60,7 @@ public:
   Scene* loadScene(int id);
 
   //Destruction
-  bool destroyScene(int id);
+  void destroyScene(int id);
 
   //Getters
   DataManager* getDataManager();
@@ -81,7 +81,7 @@ public:
   void setSceneManager(Ogre::SceneManager* sceneManager);
   void setPhysicsEnabled(bool enabled);
   
-  //Injection
+  //Input
   void keyPressed(const OIS::KeyEvent &arg);
   void keyReleased(const OIS::KeyEvent &arg);
   void mouseMoved(const OIS::MouseEvent &arg);
@@ -93,6 +93,7 @@ public:
   bool isPhysicsEnabled();
   bool isShadowsEnabled();
 
+  //Temp Flags
   bool enableBloom;
   bool enableSSAO;
   bool enableMotionBlur;

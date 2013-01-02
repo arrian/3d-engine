@@ -34,6 +34,8 @@ protected:
 
   void hasSceneChange();
 
+  double totalElapsed;
+
   BoidComponent* makeBoid(Boids::Vector dimensions = Boids::Vector(1,.2,.75), double maximumVelocity = 40, double maxAcceleration = 3, double cruiseDistance = 0.4);//move construction to the BoidComponent
 };
 

@@ -18,7 +18,7 @@
 //need to include this directory
 #include "../../RapidXml/rapidxml-1.13/rapidxml.hpp"
 
-#define DEFAULT_PORTAL -1
+static const int DEFAULT_PORTAL = -1;
 
 //forward declaring for circular dependency
 class World;
@@ -71,13 +71,13 @@ public:
   
   void update(double elapsedSeconds);
 
-  bool isActive();
-
   //utility to detroy a scene node and all child nodes and entities
   void destroyAllAttachedMoveables(Ogre::SceneNode* node);
   void destroySceneNode(Ogre::SceneNode* node);
 
   void reset();
+
+  bool hasPlayer();
   
 private:
   SceneDesc desc;
@@ -99,10 +99,6 @@ private:
   std::vector<Interactive*> interactives;
   std::vector<Portal*> portals;
   Player* player;
-  
-
-  /*Defines if the scene should receive frame updates.*/
-  bool active;
 
   void load(std::string file);
   Vector3 getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third);
@@ -116,9 +112,6 @@ private:
   double stepSize;
 
   physx::PxU32 numberPhysicsCPUThreads;
-
-  //Flock flockTest;
-  //double totalElapsed;
 
   void setup();
   void release();

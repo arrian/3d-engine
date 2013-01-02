@@ -29,10 +29,7 @@ Scene::Scene(SceneDesc desc, World* world)
     numberPhysicsCPUThreads(4),
     stepSize(1.0 / 60.0),
     accumulator(0.0),
-    active(false),
     pathfinder(NULL),
-    //flockTest(100),
-    //totalElapsed(0.0),
     particles(),
     monsters(),
     portals(),
@@ -46,12 +43,6 @@ Scene::Scene(SceneDesc desc, World* world)
 Scene::~Scene(void)
 {
   release();
-}
-
-//-------------------------------------------------------------------------------------
-bool Scene::isActive()
-{
-  return active;
 }
 
 //-------------------------------------------------------------------------------------
@@ -81,7 +72,6 @@ physx::PxControllerManager* Scene::getControllerManager()
 //-------------------------------------------------------------------------------------
 void Scene::addPlayer(Player* player, int portalID)
 {
-  active = true;
   Vector3 position;
   Vector3 lookAt;
   if(defaultEntry != NULL && portalID == DEFAULT_PORTAL)//use default portal
@@ -171,11 +161,7 @@ void Scene::addPortal(Portal* portal)
 //-------------------------------------------------------------------------------------
 void Scene::removePlayer(Player* player)
 {
-  if(this->player == player) 
-  {
-    this->player = NULL;
-    active = false;//when more than one player, will need to check all players before deactivating scene
-  }
+  if(this->player == player) this->player = NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -219,9 +205,6 @@ void Scene::update(double elapsedSeconds)
     if((*it)->isLoadRequired(player->getPosition())) world->loadScene((*it)->getID());
   }
 
-  //totalElapsed += elapsedSeconds;
-  //flockTest.update(totalElapsed);//evt.timeSinceLastFrame);
-
   if(world->isPhysicsEnabled()) advancePhysics(elapsedSeconds);
 }
 
@@ -238,37 +221,37 @@ bool Scene::advancePhysics(double elapsedSeconds)
 
 
 //XML scene file string constants
-#define SCENE_STRING "scene"
-#define AMBIENT_RED_STRING "ambient_r"
-#define AMBIENT_GREEN_STRING "ambient_g"
-#define AMBIENT_BLUE_STRING "ambient_b"
-#define NORTH_STRING "north"
-#define ARCHITECTURE_STRING "architecture"
-#define ID_STRING "id"
-#define LIGHT_STRING "light"
-#define CAST_SHADOWS_STRING "cast_shadows"
-#define RANGE_STRING "range"
-#define ITEM_STRING "item"
-#define MONSTER_STRING "monster"
-#define PORTAL_STRING "portal"
-#define TARGET_SCENE_ID_STRING "target_scene_id"
-#define TARGET_PORTAL_ID_STRING "target_portal_id"
-#define LOOK_AT_X_STRING "ltx"
-#define LOOK_AT_Y_STRING "lty"
-#define LOOK_AT_Z_STRING "ltz"
-#define PARTICLE_STRING "particle"
-#define NAME_STRING "name"
-#define TEMPLATE_NAME_STRING "template_name"
+static const char SCENE_STRING[] = "scene";
+static const char AMBIENT_RED_STRING[] = "ambient_r";
+static const char AMBIENT_GREEN_STRING[] = "ambient_g";
+static const char AMBIENT_BLUE_STRING[] = "ambient_b";
+static const char NORTH_STRING[] = "north";
+static const char ARCHITECTURE_STRING[] = "architecture";
+static const char ID_STRING[] = "id";
+static const char LIGHT_STRING[] = "light";
+static const char CAST_SHADOWS_STRING[] = "cast_shadows";
+static const char RANGE_STRING[] = "range";
+static const char ITEM_STRING[] = "item";
+static const char MONSTER_STRING[] = "monster";
+static const char PORTAL_STRING[] = "portal";
+static const char TARGET_SCENE_ID_STRING[] = "target_scene_id";
+static const char TARGET_PORTAL_ID_STRING[] = "target_portal_id";
+static const char LOOK_AT_X_STRING[] = "ltx";
+static const char LOOK_AT_Y_STRING[] = "lty";
+static const char LOOK_AT_Z_STRING[] = "ltz";
+static const char PARTICLE_STRING[] = "particle";
+static const char NAME_STRING[] = "name";
+static const char TEMPLATE_NAME_STRING[] = "template_name";
 
-#define TRANSLATION_X_STRING "tx"
-#define TRANSLATION_Y_STRING "ty"
-#define TRANSLATION_Z_STRING "tz"
-#define ROTATION_X_STRING "rx"
-#define ROTATION_Y_STRING "ry"
-#define ROTATION_Z_STRING "rz"
-#define SCALE_X_STRING "sx"
-#define SCALE_Y_STRING "sy"
-#define SCALE_Z_STRING "sz"
+static const char TRANSLATION_X_STRING[] = "tx";
+static const char TRANSLATION_Y_STRING[] = "ty";
+static const char TRANSLATION_Z_STRING[] = "tz";
+static const char ROTATION_X_STRING[] = "rx";
+static const char ROTATION_Y_STRING[] = "ry";
+static const char ROTATION_Z_STRING[] = "rz";
+static const char SCALE_X_STRING[] = "sx";
+static const char SCALE_Y_STRING[] = "sy";
+static const char SCALE_Z_STRING[] = "sz";
 
 //-------------------------------------------------------------------------------------
 void Scene::load(std::string file)
@@ -645,5 +628,11 @@ void Scene::release()
 
   if(sceneManager) world->getRoot()->destroySceneManager(sceneManager);
   sceneManager = NULL;
+}
+
+//-------------------------------------------------------------------------------------
+bool Scene::hasPlayer()
+{
+  return player != NULL;
 }
 

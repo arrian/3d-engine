@@ -1,6 +1,7 @@
 #include "SoundManager.h"
 
 #include <OgreResourceGroupManager.h>
+#include "NHException.h"
 
 SoundManager::SoundManager(void)
   : sounds2D(),
@@ -10,9 +11,9 @@ SoundManager::SoundManager(void)
     music(NULL),
     musicChannel(NULL)
 {
-  if(FMOD::System_Create(&system) != FMOD_OK) std::cout << "Could not create the sound manager." << std::endl;
+  if(FMOD::System_Create(&system) != FMOD_OK) throw NHException("could not create the sound manager");
 
-  if(system->init(100, FMOD_INIT_NORMAL, 0) != FMOD_OK) std::cout << "Could not initialise the sound manager." << std::endl;
+  if(system->init(100, FMOD_INIT_NORMAL, 0) != FMOD_OK) throw NHException("could not initialise the sound manager");
  
 
   //Testing sound
@@ -61,7 +62,7 @@ void SoundManager::playSound(FMOD::Sound* sound, FMOD::Channel* channel)
 //-------------------------------------------------------------------------------------
 void SoundManager::playMusic(int id)
 {
-  throw NHException("playMusic in SoundManager not yet implemented.");
+  throw NHException("not implemented");
   if(music != NULL) music->release();
   music = NULL;
   //get the song path from the id and create a sound
@@ -72,7 +73,7 @@ void SoundManager::playMusic(int id)
 void SoundManager::addSoundEmitter(SoundComponent* component)
 {
   sounds3D.push_back(component);
-  std::cout << "Note: addSoundEmitter in SoundManager does not yet take all the component arguments for sound creation. Needs to be fully implemented." << std::endl;
+  throw NHException("not implemented");
   //initialise the sound here
 }
 
@@ -91,7 +92,7 @@ void SoundManager::setMuteAll(bool mute)
 std::string SoundManager::getSoundPath(std::string filename)
 {
   Ogre::FileInfoListPtr fileListPtr = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", filename);
-  if(fileListPtr->size() < 1) throw NHException("Could not find the path to the specified sound file.");
+  if(fileListPtr->size() < 1) throw NHException("could not find the path to the specified sound file");
 
   return fileListPtr->front().archive->getName() + "/" + fileListPtr->front().filename;
 }

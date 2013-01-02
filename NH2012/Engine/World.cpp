@@ -143,14 +143,13 @@ bool World::hasScene(int id)
 }
 
 //-------------------------------------------------------------------------------------
-bool World::destroyScene(int id)
+void World::destroyScene(int id)
 {
-  if(!hasScene(id)) return false;
+  if(!hasScene(id)) throw NHException("there is no scene loaded with that id");
   Scene* scene = scenes.find(id)->second;
-  if(scene->isActive()) return false;
+  if(scene->hasPlayer()) throw NHException("unable to destroy a scene while it contains a player");
   delete scene;
   scenes.erase(scenes.find(id));
-  return true;
 }
 
 //-------------------------------------------------------------------------------------
