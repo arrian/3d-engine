@@ -35,7 +35,7 @@ public:
 
   void update(double elapsedSeconds)
   {
-
+    //implemet here
   }
 
 protected:
@@ -62,7 +62,7 @@ class ColourVariationDesc : public LightPlugin
 
   void update(double elapsedSeconds)
   {
-
+    //implemet here
   }
 
 protected:
@@ -72,17 +72,20 @@ protected:
   float interval;
 };
 
-class Light
+class Light : public BasicComponent
 {
 public:
   Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour);
-  ~Light(void);
+  virtual ~Light(void);
 
   void addPlugin(LightPlugin* plugin);
 
   void setOn(bool on);
 
-  void update(double elapsedSeconds);
+  virtual void update(double elapsedSeconds);
+
+protected:
+  virtual void hasSceneChange();
 
 private:
   Ogre::Light* light;

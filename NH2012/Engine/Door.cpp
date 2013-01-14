@@ -7,9 +7,8 @@ Door::Door(void)
   : Interactive("Door"),
     open(false),
     locked(false),
-    doorEntity(NULL),
-    doorShape(NULL),
-    doorActor(NULL),
+    doorPhysical(INTERACTIVE),
+    doorMesh("door.mesh"),
     hingeJoint(NULL)
 {
 }
@@ -31,24 +30,30 @@ void Door::hasSceneChange()
 
   if(!scene) return;
 
-  //define constraint positions here
-  //create door and frame here
-
   node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
 
-  doorActor = scene->getPhysicsManager()->getPhysics().createRigidDynamic(physx::PxTransform());
   ArchitectureDesc doorDesc = scene->getWorld()->getDataManager()->getArchitecture(200);//temp constants
-  doorEntity = scene->getSceneManager()->createEntity(doorDesc.mesh);
+  doorMesh.setMesh(doorDesc.mesh);
   physx::PxMaterial* doorMaterial = scene->getPhysicsManager()->getPhysics().createMaterial(doorDesc.friction, doorDesc.friction, doorDesc.restitution);
-  doorShape = doorActor->createShape(physx::PxConvexMeshGeometry(scene->getWorld()->getFabricationManager()->createConvexMesh(doorEntity->getMesh())), *doorMaterial);
+  doorPhysical.begin();
+  doorPhysical.addBoxMesh(1.5f, 3.0f, 0.2f, doorMaterial, Vector3(0.75f, 1.5f, 0.0f));
+  doorPhysical.end();
 
-  hingeJoint = physx::PxRevoluteJointCreate(scene->getPhysicsManager()->getPhysics(), doorActor, doorConstraint, NULL, frameConstraint);
+  doorPhysical.setNode(scene, node);
+  doorMesh.setNode(scene, node);
+
+  doorConstraint = physx::PxTransform(physx::PxVec3(1.5f, 0.0f, 0.0f));
+  frameConstraint = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f));
+  hingeJoint = physx::PxRevoluteJointCreate(scene->getPhysicsManager()->getPhysics(), doorPhysical.getActor(), doorConstraint, NULL, frameConstraint);
+  hingeJoint->setLimit(physx::PxJointLimitPair(-physx::PxPi / 4, physx::PxPi / 4, 0.01f));
+  hingeJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eLIMIT_ENABLED, true);
+
 }
 
 //-------------------------------------------------------------------------------------
 void Door::update(double elapsedSeconds)
 {
-
+  doorPhysical.update(elapsedSeconds);
 }
 
 //-------------------------------------------------------------------------------------

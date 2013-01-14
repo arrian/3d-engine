@@ -35,9 +35,8 @@ void QueryComponent::hasNodeChange()
 }
 
 //-------------------------------------------------------------------------------------
-IdentificationInterface* QueryComponent::rayQuery(Vector3 direction, float distance, Group groups)
+IdentificationInterface* QueryComponent::rayQuery(Vector3 position, Vector3 direction, float distance, Group groups)
 {
-  Vector3 position = node->_getDerivedPosition();
   Vector3 unitDirection = direction.normalisedCopy();
   physx::PxSceneQueryFlags outputFlags = physx::PxSceneQueryFlags();
   physx::PxSceneQueryFilterData filterData = physx::PxSceneQueryFilterData();
@@ -55,6 +54,12 @@ IdentificationInterface* QueryComponent::rayQuery(Vector3 direction, float dista
     }
   }
   return NULL;
+}
+
+//-------------------------------------------------------------------------------------
+IdentificationInterface* QueryComponent::rayQuery(Vector3 direction, float distance, Group groups)
+{
+  return rayQuery(node->_getDerivedPosition(), direction, distance, groups);
 }
 
 //-------------------------------------------------------------------------------------

@@ -34,19 +34,13 @@ public:
 
 protected:
   ItemDesc desc;
+  Ogre::SceneNode* node;
   Ogre::Entity* entity;
   Ogre::Entity* simplifiedEntity;
-
-  Ogre::SceneNode* node;
-
-  void hasSceneChange();
-
-  void loadPhysical();//loads a simplified collision mesh
-  void setUserData(void* target);
-  void setGroup(Group group);
-
+  PhysicalComponent physical;
   physx::PxMaterial* material;
-  physx::PxRigidDynamic* physical;
-  physx::PxShape* shape;
+  
+  void hasSceneChange();
+  void setUserData(void* target);
 };
 

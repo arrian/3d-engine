@@ -92,7 +92,7 @@ void Player::update(double elapsedSeconds)
   
   if(currentTarget)
   {
-    std::cout << currentTarget->getName() << "::" << currentTarget->getInstanceID() << std::endl;
+    //std::cout << currentTarget->getName() << "::" << currentTarget->getInstanceID() << std::endl;//display current targetted object
 
     if(interactPressed)
     {

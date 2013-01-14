@@ -1,12 +1,13 @@
-#include "IntelligenceComponent.h"
+#include "IntelligentMovementComponent.h"
 
 #include "Scene.h"
 #include "Monster.h"
 #include "Goal.h"
 
 //-------------------------------------------------------------------------------------
-IntelligenceComponent::IntelligenceComponent(float speed)
-  : goals(),
+IntelligentMovementComponent::IntelligentMovementComponent(float speed, Vector3 gravity)
+  : MovementComponent(gravity),
+    goals(),
     nextGoal(NULL),
     speed(speed),
     agent(NULL)
@@ -14,12 +15,12 @@ IntelligenceComponent::IntelligenceComponent(float speed)
 }
 
 //-------------------------------------------------------------------------------------
-IntelligenceComponent::~IntelligenceComponent(void)
+IntelligentMovementComponent::~IntelligentMovementComponent(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::setGoal(Goal* goal)
+void IntelligentMovementComponent::setGoal(Goal* goal)
 {
   goals.clear();//delete contents?
   goals.push_back(goal);
@@ -27,14 +28,14 @@ void IntelligenceComponent::setGoal(Goal* goal)
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::addGoal(Goal* goal)
+void IntelligentMovementComponent::addGoal(Goal* goal)
 {
   goals.push_back(goal);
   checkNextGoal();
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::removeGoal(Goal* goal)
+void IntelligentMovementComponent::removeGoal(Goal* goal)
 {
   goals.erase(std::find(goals.begin(), goals.end(), goal));
   if(nextGoal == goal)
@@ -45,14 +46,14 @@ void IntelligenceComponent::removeGoal(Goal* goal)
 }
 
 //-------------------------------------------------------------------------------------
-Goal* IntelligenceComponent::getNextGoal()
+Goal* IntelligentMovementComponent::getNextGoal()
 {
   checkNextGoal();
   return nextGoal;
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::checkNextGoal()
+void IntelligentMovementComponent::checkNextGoal()
 {
   if(goals.size() == 0) nextGoal = NULL;
 
@@ -75,7 +76,7 @@ void IntelligenceComponent::checkNextGoal()
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::setPosition(Vector3 position)
+void IntelligentMovementComponent::setPosition(Vector3 position)
 {
   if(!scene || !agent) return;
   removeAgent();
@@ -83,14 +84,14 @@ void IntelligenceComponent::setPosition(Vector3 position)
 }
 
 //-------------------------------------------------------------------------------------
-Vector3 IntelligenceComponent::getPosition()
+Vector3 IntelligentMovementComponent::getPosition()
 {
   if(agent) return agent->getPosition();
   else throw NHException("unable to generate an intelligent position because no pathfind agent has been created");
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::hasNodeChange()
+void IntelligentMovementComponent::hasNodeChange()
 {
   if(oldScene && agent) oldScene->getPathfindManager()->removeAgent(agent);
   agent = NULL;
@@ -100,7 +101,7 @@ void IntelligenceComponent::hasNodeChange()
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::update(double elapsedSeconds)
+void IntelligentMovementComponent::update(double elapsedSeconds)
 {
   if(!node) return;
   node->_setDerivedPosition(getPosition());
@@ -108,7 +109,7 @@ void IntelligenceComponent::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::addAgent()
+void IntelligentMovementComponent::addAgent()
 {
   if(!scene || !node) throw NHException("intelligence component must be inside a scene to create the pathfind agent");
   agent = scene->getPathfindManager()->createAgent(node->_getDerivedPosition());
@@ -116,7 +117,7 @@ void IntelligenceComponent::addAgent()
 }
 
 //-------------------------------------------------------------------------------------
-void IntelligenceComponent::removeAgent()
+void IntelligentMovementComponent::removeAgent()
 {
   if(!scene || !agent) throw NHException("intelligence component must be inside a scene to remove the pathfind agent");
   scene->getPathfindManager()->removeAgent(agent);

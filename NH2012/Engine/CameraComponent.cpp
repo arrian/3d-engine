@@ -30,7 +30,7 @@ CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom, bool enableM
 //-------------------------------------------------------------------------------------
 CameraComponent::~CameraComponent(void)
 {
-  if(ssao) delete ssao;
+  delete ssao;
   if(scene) scene->getSceneManager()->destroyCamera(camera);
 }
 

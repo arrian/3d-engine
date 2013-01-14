@@ -6,6 +6,8 @@
 #include <OgreEntity.h>
 
 #include "Interactive.h"
+#include "MeshComponent.h"
+#include "PhysicalComponent.h"
 
 class Door : public Interactive
 {
@@ -38,16 +40,15 @@ private:
   Ogre::SceneNode* node;
   Vector3 position;
   Quaternion rotation;
-
-  //Door
-  Ogre::Entity* doorEntity;
-  physx::PxShape* doorShape;
-  physx::PxRigidDynamic* doorActor;
-  physx::PxTransform doorConstraint;
   
+  //Door
+  PhysicalComponent doorPhysical;
+  MeshComponent doorMesh;
+  physx::PxTransform doorConstraint;
+
   //Frame
   physx::PxTransform frameConstraint;
-  
+
   //Hinge
   physx::PxRevoluteJoint* hingeJoint;
 };

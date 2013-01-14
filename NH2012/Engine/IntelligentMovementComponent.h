@@ -4,7 +4,7 @@
 
 #include "Vector3.h"
 
-#include "NodeComponent.h"
+#include "MovementComponent.h"
 
 #include "PathfindManager.h"
 #include "DataManager.h"
@@ -16,11 +16,11 @@
 class Monster;
 
 /* Artificial intelligence component.*/
-class IntelligenceComponent : public NodeComponent
+class IntelligentMovementComponent : public MovementComponent
 {
 public:
-  IntelligenceComponent(float speed);
-  ~IntelligenceComponent(void);
+  IntelligentMovementComponent(float speed, Vector3 gravity);
+  ~IntelligentMovementComponent(void);
   
   void setPosition(Vector3 position);
   Vector3 getPosition();

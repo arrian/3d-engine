@@ -6,30 +6,29 @@
 #include "World.h"
 
 //-------------------------------------------------------------------------------------
-PhysicalComponent::PhysicalComponent(Ogre::Real friction, Ogre::Real restitution, physx::PxMaterial* material)
+PhysicalComponent::PhysicalComponent(Group group, float density)
   : NodeComponent(),
-    friction(friction),
-    restitution(restitution),
-    material(material),
-    physical(NULL),
-    shape(NULL),
-    tempCollisionCubeSides(0.5f),
-    tempCollisionDensity(0.0005f)
+    group(group),
+    actor(NULL),
+    shapes(),
+    density(density),
+    addingShapes(false),
+    userData(NULL)
 {
- 
 }
 
 //-------------------------------------------------------------------------------------
 PhysicalComponent::~PhysicalComponent(void)
 {
+  for(std::vector<PhysicalShape*>::iterator iter = shapes.begin(); iter != shapes.end(); ++iter) delete *iter;
 }
 
 //-------------------------------------------------------------------------------------
 void PhysicalComponent::update(double elapsedSeconds)
 {
-  //if(!physical) throw NHException("Physical component missed frame rendering because it is not yet created.");
-  if(physical->isSleeping()) return;//no need to update the object if it has not moved
-  physx::PxTransform transform = physical->getGlobalPose();
+  //if(!actor) throw NHException("Physical component missed frame rendering because it is not yet created.");
+  if(actor->isSleeping()) return;//no need to update the object if it has not moved
+  physx::PxTransform transform = actor->getGlobalPose();
   node->setPosition(Vector3(transform.p.x, transform.p.y, transform.p.z));
   node->setOrientation(Quaternion(transform.q.w,transform.q.x,transform.q.y,transform.q.z));
 }
@@ -37,36 +36,73 @@ void PhysicalComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void PhysicalComponent::hasNodeChange()
 {
-  if(!material) material = scene->getWorld()->getPhysicsManager()->getDefaultMaterial();
-  if(physical) physical->release();//also releases shape
+  createActor();
+  actor->userData = userData;
 
-  loadPhysical();
+  for(std::vector<PhysicalShape*>::iterator iter = shapes.begin(); iter != shapes.end(); ++iter)
+  {
+    (*iter)->attach(actor);
+  }
+
+  scene->getPhysicsManager()->addActor(*actor);
+  physx::PxRigidBodyExt::updateMassAndInertia(*actor, density);
 }
 
 //-------------------------------------------------------------------------------------
-void PhysicalComponent::mapPhysical(void* target)
+void PhysicalComponent::setUserData(void* data)
 {
-  assert(physical && shape);
-  physical->userData = target;
-  shape->userData = target;
+  userData = data;
+  if(actor) actor->userData = data;
 }
 
 //-------------------------------------------------------------------------------------
-void PhysicalComponent::loadPhysical()
+void PhysicalComponent::createActor()
 {
-  float density = tempCollisionDensity;
-  float side = tempCollisionCubeSides;
-
+  if(actor) actor->release();
   Vector3 oPosition = node->getPosition();
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
-
-  physical = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidDynamic(physx::PxTransform(pPosition));
-  shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);//temporary simplified collision mesh
-  physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
-  scene->getPhysicsManager()->addActor(*physical);
-
-  physx::PxRigidBodyExt::updateMassAndInertia(*physical, density);
+  actor = scene->getPhysicsManager()->getPhysics().createRigidDynamic(physx::PxTransform(pPosition));
+  if(!actor) throw NHException("could not create physical component actor");
+  actor->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
 }
+
+//-------------------------------------------------------------------------------------
+physx::PxRigidDynamic* PhysicalComponent::getActor()
+{
+  return actor;
+}
+
+//-------------------------------------------------------------------------------------
+void PhysicalComponent::begin()
+{
+  addingShapes = true;
+}
+
+//-------------------------------------------------------------------------------------
+void PhysicalComponent::addConvexMesh(physx::PxConvexMesh* mesh, physx::PxMaterial* material, Vector3 offset)
+{
+  shapes.push_back(new ConvexShape(mesh, group, material, offset));
+}
+
+//-------------------------------------------------------------------------------------
+void PhysicalComponent::addBoxMesh(float length, float width, float height, physx::PxMaterial* material, Vector3 offset)
+{
+  shapes.push_back(new BoxShape(length, width, height, group, material, offset));
+}
+
+//-------------------------------------------------------------------------------------
+void PhysicalComponent::addSphereMesh(float radius, physx::PxMaterial* material, Vector3 offset)
+{
+  shapes.push_back(new SphereShape(radius, group, material, offset));
+}
+
+//-------------------------------------------------------------------------------------
+void PhysicalComponent::end()
+{
+  addingShapes = false;
+  if(node != NULL) hasNodeChange();
+}
+
 
 
 

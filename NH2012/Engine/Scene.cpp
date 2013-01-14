@@ -5,6 +5,7 @@
 #include "extensions/PxDefaultCpuDispatcher.h"
 #include "extensions/PxDefaultSimulationFilterShader.h"
 #include "extensions/PxSimpleFactory.h"
+#include "PxVisualizationParameter.h"
 
 #include "World.h"
 #include "Player.h."
@@ -16,6 +17,7 @@
 #include "Flock.h"
 #include "Door.h"
 #include "Chest.h"
+#include "Ivy.h"
 
 //-------------------------------------------------------------------------------------
 Scene::Scene(SceneDesc desc, World* world)
@@ -37,11 +39,15 @@ Scene::Scene(SceneDesc desc, World* world)
     items()
 {
   setup();
+  
+  ivy = new Ivy(this, Vector3(0,-2,5), Vector3(0,-1,0));
+  addInteractive(0);
 }
 
 //-------------------------------------------------------------------------------------
 Scene::~Scene(void)
 {
+  delete ivy;
   release();
 }
 
@@ -106,7 +112,7 @@ void Scene::addMonster(int id, Vector3 position, Quaternion rotation)
   monster->setScene(this);
   monster->setPosition(position);
   monster->setGoal(new Go(getPathfindManager()->getRandomNavigablePoint(), Priority::HIGH));
-  monsters.push_back(monster);
+  monsters.add(monster);
 }
 
 //-------------------------------------------------------------------------------------
@@ -116,7 +122,7 @@ void Scene::addItem(int id, Vector3 position, Quaternion rotation)
   item->setScene(this);
   item->setPosition(position);
   item->setRotation(rotation);
-  items.push_back(item);
+  items.add(item);
 }
 
 //-------------------------------------------------------------------------------------
@@ -130,14 +136,14 @@ void Scene::addInteractive(int id, Vector3 position, Quaternion rotation)
   interactive->setScene(this);
   interactive->setPosition(position);
   interactive->setRotation(rotation);
-  interactives.push_back(interactive);
+  interactives.add(interactive);
 }
 
 //-------------------------------------------------------------------------------------
 void Scene::addLight(Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
 {
   Light* light = new Light(this, position, castShadows, range, colour);
-  lights.push_back(light);
+  lights.add(light);
 }
 
 //-------------------------------------------------------------------------------------
@@ -167,37 +173,31 @@ void Scene::removePlayer(Player* player)
 //-------------------------------------------------------------------------------------
 void Scene::removeItem(Item* item)
 {
-  std::vector<Item*>::iterator itemIter = std::find(items.begin(), items.end(), item);
-  if(itemIter == items.end()) throw NHException("could not find the item");
-
-  delete item;
-  items.erase(itemIter);
+  items.destroy(item);
 }
 
 //-------------------------------------------------------------------------------------
 void Scene::removeMonster(Monster* monster)
 {
-  std::vector<Monster*>::iterator monsterIter = std::find(monsters.begin(), monsters.end(), monster);
-  if(monsterIter == monsters.end()) throw NHException("could not find the monster");
-
-  delete monster;
-  monsters.erase(monsterIter);  
+  monsters.destroy(monster);
 }
 
 //-------------------------------------------------------------------------------------
 void Scene::update(double elapsedSeconds)
 {
+
+  //ivy->update(elapsedSeconds);
+
   if(!physicsManager) throw NHException("no physics found in Scene::update()");
-  
-  physicsManager->fetchResults(true);
   
   pathfinder->update(elapsedSeconds);
   architecture->update(elapsedSeconds);//only really needed for pathfinding debug display... not needed anymore?
 
-  for(std::vector<Light*>::iterator it = lights.begin(); it != lights.end(); ++it) (*it)->update(elapsedSeconds);//iterate lights
-  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it) (*it)->update(elapsedSeconds);//iterate monsters
-  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it) (*it)->update(elapsedSeconds);//iterate items
-  
+  lights.update(elapsedSeconds);
+  monsters.update(elapsedSeconds);
+  items.update(elapsedSeconds);
+  interactives.update(elapsedSeconds);
+
   if(player) player->update(elapsedSeconds);
   
   for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it) 
@@ -205,7 +205,11 @@ void Scene::update(double elapsedSeconds)
     if((*it)->isLoadRequired(player->getPosition())) world->loadScene((*it)->getID());
   }
 
+  //pre simulation updates
+
   if(world->isPhysicsEnabled()) advancePhysics(elapsedSeconds);
+
+  //post simulation events
 }
 
 //-------------------------------------------------------------------------------------
@@ -215,6 +219,7 @@ bool Scene::advancePhysics(double elapsedSeconds)
   if(accumulator < stepSize) return false;
   accumulator -= stepSize;
   physicsManager->simulate((float) stepSize);
+  physicsManager->fetchResults(true);
 
   return true;
 }
@@ -270,7 +275,7 @@ void Scene::load(std::string file)
 
     buffer.push_back('\0');//null terminating the buffer
 
-    //std::cout << &buffer[0] << std::endl; /*test the buffer */
+    //std::cout << &buffer[0] << std::endl; //test the buffer
 
     doc.parse<0>(&buffer[0]);
     rapidxml::xml_node<>* root = doc.first_node(SCENE_STRING);//"scene");
@@ -290,9 +295,7 @@ void Scene::load(std::string file)
       architectureNode = architectureNode->next_sibling(ARCHITECTURE_STRING);
     }
 
-    //building static geometry - must do here else monster placement suffers
-    pathfinder->build();//note that this needs to be done before building architecture because architecture->build destroys the required scenenode
-    architecture->build();
+    build();//building static geometry - must do here else we can't use the navigation mesh for monster placement
    
     //Lights
     rapidxml::xml_node<>* lightNode = root->first_node(LIGHT_STRING);//"light");
@@ -348,6 +351,13 @@ void Scene::load(std::string file)
     ss << "could not load the xml scene '" << file << "': " << e.what() << std::endl;
     throw NHException(ss.str().c_str());
   }
+}
+
+//-------------------------------------------------------------------------------------
+void Scene::build()
+{
+  pathfinder->build();//note that this needs to be done before building architecture because architecture->build destroys the required scenenode
+  architecture->build();
 }
 
 //-------------------------------------------------------------------------------------
@@ -563,19 +573,6 @@ void Scene::setup()
 
   sceneManager->setAmbientLight(desc.ambientLight);
 
-  /*
-  //static spotlight
-  Ogre::Light* light = sceneManager->createLight();
-  light->setType(Ogre::Light::LT_SPOTLIGHT);
-  light->setPosition(0,1,0);
-  light->setDirection(0,-1,0);
-  light->setSpotlightInnerAngle(Ogre::Degree(25));
-  light->setSpotlightOuterAngle(Ogre::Degree(45));
-  light->setAttenuation(30,0,0,0);
-  light->setDiffuseColour(Ogre::ColourValue::White);
-  light->setCastShadows(true);
-  */
-
   //flockTest.setScene(this);//boids flocking test
 
   if(player) addPlayer(player);
@@ -588,41 +585,23 @@ void Scene::release()
 
   defaultEntry = NULL;
 
-  if(pathfinder) delete pathfinder;
+  delete pathfinder;
   pathfinder = NULL;
 
-  if(architecture) delete architecture;
+  delete architecture;
   architecture = NULL;
 
-  for(std::vector<Light*>::iterator it = lights.begin(); it != lights.end(); ++it)
-  {
-    if(*it) delete (*it);
-    (*it) = NULL;
-  }
-  lights.clear();
-
-  for(std::vector<Monster*>::iterator it = monsters.begin(); it != monsters.end(); ++it)  
-  {
-    if(*it) delete (*it);
-    (*it) = NULL;
-  }
-  monsters.clear();
-
-  for(std::vector<Item*>::iterator it = items.begin(); it != items.end(); ++it)
-  {
-    if(*it) delete (*it);
-    (*it) = NULL;
-  }
-  items.clear();
+  lights.destroyAll();
+  monsters.destroyAll();
+  items.destroyAll();
+  interactives.destroyAll();
 
   for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
   {
-    if(*it) delete (*it);
-    (*it) = NULL;
+    delete (*it);
   }
   portals.clear();
   
-
   if(physicsManager) physicsManager->release();
   physicsManager = NULL;
 

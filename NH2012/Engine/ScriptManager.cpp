@@ -52,7 +52,7 @@ ScriptManager::~ScriptManager(void)
 {
   for(std::map<std::string, Command<ScriptManager>* >::iterator iter = commands.begin(); iter != commands.end(); ++iter)
   {
-    if(iter->second) delete iter->second;//deallocate commands
+    delete iter->second;
   }
 }
 

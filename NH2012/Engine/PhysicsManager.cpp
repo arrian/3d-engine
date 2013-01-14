@@ -46,6 +46,7 @@ PhysicsManager::~PhysicsManager(void)
 void PhysicsManager::initialiseVisualDebugger(std::string ip, int port, int timeoutMilliseconds)
 {
   physx::PxExtensionVisualDebugger::connect(physicsWorld->getPvdConnectionManager(), ip.c_str(), port, timeoutMilliseconds);
+  physicsWorld->getVisualDebugger()->setVisualizeConstraints(true);
 }
 
 //-------------------------------------------------------------------------------------

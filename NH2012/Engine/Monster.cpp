@@ -6,9 +6,8 @@
 Monster::Monster(MonsterDesc desc)
   : Actor(this, desc.name, MONSTER),
     description(desc),
-    intelligence(desc.speed),
+    intelligence(desc.speed, desc.gravity),
     mesh(desc.mesh),
-    //movement(desc.gravity),
     skeleton()
 {
   skeleton.setUserData((IdentificationInterface*) this);
@@ -25,7 +24,6 @@ Monster::~Monster(void)
 void Monster::update(double elapsedSeconds)
 {
   intelligence.update(elapsedSeconds);
-  //movement.update(elapsedSeconds);
   skeleton.update(elapsedSeconds);
 }
 
@@ -104,55 +102,55 @@ void Monster::heal(double amount)
 //-------------------------------------------------------------------------------------
 void Monster::setLookAt(Vector3 lookAt)
 {
-  throw NHException("not implemented");
+  skeleton.lookAt(lookAt);
 }
 
 //-------------------------------------------------------------------------------------
 void Monster::setRunning(bool running)
 {
-  throw NHException("not implemented");
+  intelligence.setRun(running);
 }
 
 //-------------------------------------------------------------------------------------
 void Monster::setCrouching(bool crouching)
 {
-  throw NHException("not implemented");
+  skeleton.setCrouch(crouching);
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::setGravity(Vector3)
+void Monster::setGravity(Vector3 gravity)
 {
-  throw NHException("not implemented");
+  intelligence.setGravity(gravity);
 }
 
 //-------------------------------------------------------------------------------------
 Vector3 Monster::getPosition()
 {
-  throw NHException("not implemented");
+  return node->getPosition();
 }
 
 //-------------------------------------------------------------------------------------
 Quaternion Monster::getRotation()
 {
-  throw NHException("not implemented");
+  return node->getOrientation();
 }
 
 //-------------------------------------------------------------------------------------
 bool Monster::getCrouching()
 {
-  throw NHException("not implemented");
+  return skeleton.isCrouched();
 }
 
 //-------------------------------------------------------------------------------------
 bool Monster::getRunning()
 {
-  throw NHException("not implemented");
+  return intelligence.isRunning();
 }
 
 //-------------------------------------------------------------------------------------
 Vector3 Monster::getGravity()
 {
-  throw NHException("not implemented");
+  return intelligence.getGravity();
 }
 
 

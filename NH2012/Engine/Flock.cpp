@@ -21,7 +21,7 @@ Flock::~Flock(void)
 {
   for(std::vector<BoidComponent*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
   {
-    if(*iter) delete (*iter);
+    delete (*iter);
   }
 }
 

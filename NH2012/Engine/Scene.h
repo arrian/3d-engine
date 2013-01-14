@@ -8,6 +8,7 @@
 
 #include "DataManager.h"
 #include "PathfindManager.h"
+#include "SceneContainer.h"
 #include "Flock.h"
 #include "Vector3.h"
 #include "Quaternion.h"
@@ -31,6 +32,7 @@ class Item;
 class Light;
 class Architecture;
 class Interactive;
+class Ivy;
 
 class Scene
 {
@@ -92,15 +94,18 @@ private:
   PathfindManager* pathfinder;
   
   Architecture* architecture;
-  std::vector<Light*> lights;
-  std::vector<Ogre::ParticleSystem*> particles;
-  std::vector<Monster*> monsters;
-  std::vector<Item*> items;
-  std::vector<Interactive*> interactives;
+  SceneContainer lights;
+  SceneContainer interactives;
+  SceneContainer monsters;
+  SceneContainer items;
+
   std::vector<Portal*> portals;
+  std::vector<Ogre::ParticleSystem*> particles;
+
   Player* player;
 
   void load(std::string file);
+  void build();
   Vector3 getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third);
   Quaternion getXMLRotation(rapidxml::xml_node<>* node);
   Ogre::ColourValue getXMLColour(rapidxml::xml_node<>* node, std::string first = "cr", std::string second = "cg", std::string third = "cb", std::string fourth = "ca");
@@ -115,6 +120,9 @@ private:
 
   void setup();
   void release();
+
+  //temp ivy test
+  Ivy* ivy;
   
 };
 

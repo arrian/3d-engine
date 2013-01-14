@@ -18,12 +18,12 @@ PathfindManager::PathfindManager(Ogre::SceneManager* sceneManager)
 //-------------------------------------------------------------------------------------
 PathfindManager::~PathfindManager(void)
 {
-  if(geom) delete geom;
-  if(recast) delete recast;
+  delete geom;
+  delete recast;
 
   for(std::vector<PathfindAgent*>::iterator iter = agents.begin(); iter != agents.end(); ++iter)
   {
-    if(*iter) delete *iter;
+    delete *iter;
   }
 }
 

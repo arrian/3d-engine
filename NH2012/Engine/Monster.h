@@ -7,8 +7,7 @@
 #include "PathfindManager.h"
 
 #include "HumanoidSkeletonComponent.h"
-#include "DynamicMovementComponent.h"
-#include "IntelligenceComponent.h"
+#include "IntelligentMovementComponent.h"
 #include "MeshComponent.h"
 #include "Bar.h"
 #include "Group.h"
@@ -35,7 +34,7 @@ public:
   virtual void setLookAt(Vector3 lookAt);
   virtual void setRunning(bool running);
   virtual void setCrouching(bool crouching);
-  virtual void setGravity(Vector3);
+  virtual void setGravity(Vector3 gravity);
   void setGoal(Goal* goal);
 
   //Getters
@@ -48,9 +47,8 @@ public:
 protected:
   MonsterDesc description;
 
-  IntelligenceComponent intelligence;
+  IntelligentMovementComponent intelligence;
   HumanoidSkeletonComponent skeleton;
-  //DynamicMovementComponent movement;
   MeshComponent mesh;
 
   virtual void hasSceneChange();

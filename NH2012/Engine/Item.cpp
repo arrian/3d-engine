@@ -14,64 +14,72 @@ Item::Item(ItemDesc desc)
     entity(NULL),
     simplifiedEntity(NULL),
     node(NULL),
-    material(),
-    physical(NULL),
-    shape(NULL)
+    material(NULL),
+    physical(ITEM)
 {
 }
 
 //-------------------------------------------------------------------------------------
 void Item::hasSceneChange()
 {
-  if(oldScene && node) oldScene->getSceneManager()->destroySceneNode(node);
-  node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+  if(oldScene)
+  {
+    if(node) oldScene->getSceneManager()->destroySceneNode(node);
+    if(entity) oldScene->getSceneManager()->destroyEntity(entity);
+  }
 
-  //Visual
-  if(oldScene && entity) oldScene->getSceneManager()->destroyEntity(entity);
+  node = NULL;
   entity = NULL;
-  entity = scene->getSceneManager()->createEntity(desc.mesh);
-  node->attachObject(entity);
-  node->setVisible(true);
 
-  //Physical
-  simplifiedEntity = scene->getSceneManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
-  if(physical) physical->release();//also releases shape
-  loadPhysical();
+  if(scene)
+  {
+    node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
 
-  setUserData((IdentificationInterface*) this);
-  setGroup(ITEM);
+    entity = scene->getSceneManager()->createEntity(desc.mesh);
+    node->attachObject(entity);
+    node->setVisible(true);
+
+    //Physical
+    simplifiedEntity = scene->getSceneManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
+    if(!material) material = scene->getPhysicsManager()->getPhysics().createMaterial(desc.staticFriction, desc.dynamicFriction, desc.restitution);
+    physical.begin();
+    physical.addConvexMesh(scene->getWorld()->getFabricationManager()->createConvexMesh(simplifiedEntity->getMesh()), material);
+    physical.end();
+
+    setUserData((IdentificationInterface*) this);
+
+    physical.setNode(scene, node);
+  }
 }
 
 //-------------------------------------------------------------------------------------
 Item::~Item(void)
 {
-  if(physical) physical->release();
+  //if(physical) physical->release();
 
   if(scene)
   {
     if(entity) scene->getSceneManager()->destroyEntity(entity);
-
     if(node) scene->getSceneManager()->destroySceneNode(node);
-    node = NULL;
   }
+
+  node = NULL;
+  entity = NULL;
 }
 
 //-------------------------------------------------------------------------------------
 void Item::update(double elapsedSeconds)
 {
-  if(physical->isSleeping()) return;//no need to update the object if it has not moved
-  physx::PxTransform transform = physical->getGlobalPose();
-  node->setPosition(Vector3(transform.p.x, transform.p.y, transform.p.z));
-  node->setOrientation(Quaternion(transform.q.w,transform.q.x,transform.q.y,transform.q.z));
+  physical.update(elapsedSeconds);
 }
 
 //-------------------------------------------------------------------------------------
 void Item::setPosition(Vector3 position)
 {
-  if(node && physical) 
+  if(node) 
   {
     node->setPosition(position);
-    physical->setGlobalPose(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physical->getGlobalPose().q));
+    physical.getActor()->setGlobalPose(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physical.getActor()->getGlobalPose().q));
   }
   else throw NHException("item must be inside a scene to set its position");
 }
@@ -79,10 +87,10 @@ void Item::setPosition(Vector3 position)
 //-------------------------------------------------------------------------------------
 void Item::setRotation(Quaternion rotation)
 {
-  if(node && physical) 
+  if(node) 
   {
     node->setOrientation(rotation);
-    physical->setGlobalPose(physx::PxTransform(physical->getGlobalPose().p, physx::PxQuat(rotation.x, rotation.y, rotation.z, rotation.w)));
+    physical.getActor()->setGlobalPose(physx::PxTransform(physical.getActor()->getGlobalPose().p, physx::PxQuat(rotation.x, rotation.y, rotation.z, rotation.w)));
   }
   else throw NHException("item must be inside a scene to set its rotation");
 }
@@ -90,8 +98,7 @@ void Item::setRotation(Quaternion rotation)
 //-------------------------------------------------------------------------------------
 void Item::setVelocity(Vector3 velocity)
 {
-  if(physical) physical->setLinearVelocity(physx::PxVec3(velocity.x, velocity.y, velocity.z));
-  else throw NHException("item must be inside a scene to set its velocity");
+  physical.getActor()->setLinearVelocity(physx::PxVec3(velocity.x, velocity.y, velocity.z));
 }
 
 //-------------------------------------------------------------------------------------
@@ -111,12 +118,8 @@ Quaternion Item::getRotation()
 //-------------------------------------------------------------------------------------
 Vector3 Item::getVelocity()
 {
-  if(physical)
-  {
-    physx::PxVec3 vel = physical->getLinearVelocity();
-    return Vector3(vel.x, vel.y, vel.z);
-  }
-  throw NHException("item must be inside a scene to get its velocity");
+  physx::PxVec3 vel = physical.getActor()->getLinearVelocity();
+  return Vector3(vel.x, vel.y, vel.z);
 }
 
 //-------------------------------------------------------------------------------------
@@ -128,30 +131,22 @@ ItemDesc Item::getDescription()
 //-------------------------------------------------------------------------------------
 void Item::setUserData(void* target)
 {
-  if(physical) physical->userData = target;
+  physical.setUserData(target);
 }
 
-//-------------------------------------------------------------------------------------
-void Item::setGroup(Group group)
-{
-  if(!shape) return;
-  physx::PxFilterData filter;
-  filter.word0 = group;
-  shape->setQueryFilterData(filter);
-}
-
+/*
 //-------------------------------------------------------------------------------------
 void Item::loadPhysical()//move to meshcomponent
 {
   physical = scene->getPhysicsManager()->getPhysics().createRigidDynamic(physx::PxTransform(physx::PxVec3(0.0f,0.0f,0.0f)));
   if(!physical) throw NHException("could not create item physics actor");
-  if(!material) material = scene->getPhysicsManager()->getPhysics().createMaterial(desc.staticFriction, desc.dynamicFriction, desc.restitution);//need to index materials so i'm not creating them for every item instance  //scene->getWorld()->getDefaultPhysicsMaterial();
+  //need to index materials so i'm not creating them for every item instance  //scene->getWorld()->getDefaultPhysicsMaterial();
   //shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);//temporary simplified collision mesh
   shape = physical->createShape(physx::PxConvexMeshGeometry(scene->getWorld()->getFabricationManager()->createConvexMesh(entity->getMesh())), *material);//temporary complex collision mesh
   physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
   scene->getPhysicsManager()->addActor(*physical);
   physx::PxRigidBodyExt::updateMassAndInertia(*physical, desc.density);
 }
-
+*/
 
 

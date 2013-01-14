@@ -17,7 +17,7 @@ Light::~Light(void)
 {
   for(std::vector<LightPlugin*>::iterator iter = plugins.begin(); iter != plugins.end(); ++iter)
   {
-    if(*iter) delete (*iter);
+    delete (*iter);
     (*iter) = NULL;
   }
 }
@@ -44,5 +44,9 @@ void Light::update(double elapsedSeconds)
   }
 }
 
-
+//-------------------------------------------------------------------------------------
+void Light::hasSceneChange()
+{
+  throw NHException("light basic component base class not implemented");
+}
 

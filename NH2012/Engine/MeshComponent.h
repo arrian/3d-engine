@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
 
@@ -8,18 +9,22 @@
 class MeshComponent : public NodeComponent
 {
 public:
-  MeshComponent(Ogre::String mesh);
+  MeshComponent(std::string mesh);
   ~MeshComponent(void);
 
   void update(double elapsedSeconds);
 
   Ogre::Entity* getEntity();
 
+  void setMesh(std::string mesh);
+
 protected:
   void hasNodeChange();
 
 private:
-  Ogre::String mesh;
+  std::string mesh;
   Ogre::Entity* entity;
+
+  void updateEntity();
 };
 

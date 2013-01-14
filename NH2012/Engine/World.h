@@ -43,8 +43,7 @@ class Scene;
 class ScriptManager;
 
 /************************************************************************/
-/* Contains the entire game world. Multiple scenes can be loaded at once*/
-/* (lazy loading between scenes will be implemented in the future)      */
+/* Contains the entire game world.                                      */
 /************************************************************************/
 class World
 {
@@ -99,13 +98,19 @@ public:
   bool enableMotionBlur;
 
 private:
+  Ogre::Root* root;
+  
+  Player* player;
+
   int defaultScene;
+  std::map<int, Scene*> scenes;
+
+  //PhysX Visual Debugger
   std::string physXVisualDebuggerIP;
   int physXVisualDebuggerPort;
   int physXVisualDebuggerTimeoutMilliseconds;
 
-  Ogre::Root* root;
-
+  //Managers
   DataManager dataManager;
   TimeManager timeManager;
   SoundManager soundManager;
@@ -114,9 +119,7 @@ private:
   ControlManager controlManager;
   FabricationManager fabricationManager;
   
-  Player* player;
-  std::map<int, Scene*> scenes;
-
+  //Initialisation
   void parseIni(std::string filename);
   std::string getIniString(std::string iniLabel, boost::property_tree::ptree* pt);
   bool getIniBool(std::string iniLabel, boost::property_tree::ptree* pt);

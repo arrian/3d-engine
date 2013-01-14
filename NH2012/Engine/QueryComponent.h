@@ -18,6 +18,7 @@ public:
   void update(double elapsedSeconds);
 
   IdentificationInterface* rayQuery(Vector3 direction, float distance, Group groups);//returns hit or null
+  IdentificationInterface* rayQuery(Vector3 from, Vector3 direction, float distance, Group groups);//returns hit or null
   bool sweepQuery(Vector3 direction, float distance);
   bool overlapQuery();
 

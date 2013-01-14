@@ -31,14 +31,15 @@ World::~World(void)
 {
   for(std::map<int, Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
-    if(it->second) delete (it->second);
+    delete (it->second);
     it->second = NULL;
   }
 
-  if(player) delete player;
+  delete player;
   player = NULL;
 
-  if(scriptManager) delete scriptManager;
+  delete scriptManager;
+  scriptManager = NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -62,7 +63,6 @@ void World::initialise(std::string iniFile)
   PlayerDesc playerDesc = PlayerDesc();
   playerDesc.gravity = scene->getGravity();
   player = new Player(playerDesc, this);
-  if(!player) throw NHException("initial player creation failed");
   scene->addPlayer(player);
 
   Console::getInstance().setWorld(this);
