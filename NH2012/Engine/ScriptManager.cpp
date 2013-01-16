@@ -236,7 +236,7 @@ void ScriptManager::setSceneAmbientLight(Options argv)
 {
   if(argv.size() < 5) throw NHException("too few arguments");
   Scene* target = world->getPlayer()->getScene();
-  if(target) target->getSceneManager()->setAmbientLight(Ogre::ColourValue(boost::lexical_cast<float>(argv[1]), 
+  if(target) target->setAmbientColour(Ogre::ColourValue(boost::lexical_cast<float>(argv[1]), 
     boost::lexical_cast<float>(argv[2]), 
     boost::lexical_cast<float>(argv[3]), 
     boost::lexical_cast<float>(argv[4])));
@@ -375,7 +375,7 @@ void ScriptManager::getGameInfo(Options argv)
 void ScriptManager::getSceneInfo(Options argv)
 {
   display("name", world->getPlayer()->getScene()->getName());
-  display("ogre internal name", world->getPlayer()->getScene()->getSceneManager()->getName());
+  display("ogre internal name", world->getPlayer()->getScene()->getGraphicsManager()->getName());
 }
 
 //-------------------------------------------------------------------------------------

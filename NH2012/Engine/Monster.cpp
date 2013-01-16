@@ -33,14 +33,14 @@ void Monster::hasSceneChange()
   //pulling down
   if(oldScene)
   {
-    if(node) oldScene->getSceneManager()->destroySceneNode(node);
+    if(node) oldScene->getGraphicsManager()->destroySceneNode(node);
     node = NULL;
   }
   
   //setting up
   if(scene)
   {
-    node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+    node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
 
     setPosition(position);
 

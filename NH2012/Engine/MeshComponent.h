@@ -9,7 +9,7 @@
 class MeshComponent : public NodeComponent
 {
 public:
-  MeshComponent(std::string mesh);
+  MeshComponent(std::string mesh = "");
   ~MeshComponent(void);
 
   void update(double elapsedSeconds);

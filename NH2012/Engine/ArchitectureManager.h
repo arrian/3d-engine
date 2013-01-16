@@ -14,32 +14,17 @@
 
 class Scene;
 
-/*
-struct StaticEntity
-{
-  Ogre::Entity* entity;
-  physx::PxTriangleMesh* mesh;
-
-  StaticEntity(Ogre::Entity* entity, physx::PxTriangleMesh* mesh)
-    : entity(entity),
-      mesh(mesh)
-  {
-  }
-};*/
-
-class Architecture : public IdentificationInterface
+class ArchitectureManager : public IdentificationInterface
 {
 public:
-  Architecture(Scene* scene, PathfindManager* pathfinder = NULL);
+  ArchitectureManager(Scene* scene, PathfindManager* pathfinder = NULL);
 
-  ~Architecture(void);
+  ~ArchitectureManager(void);
 
-  /*! Adds a static mesh to the current dungeon architecture.*/
-  void add(ArchitectureDesc description, Vector3 position = Vector3(0,0,0), Quaternion quaternion = Quaternion::IDENTITY, Vector3 scale = Vector3::UNIT_SCALE);
+  void add(ArchitectureDesc description, Vector3 position = Vector3(0,0,0), Quaternion quaternion = Quaternion::IDENTITY, Vector3 scale = Vector3::UNIT_SCALE);//adds a static mesh to the current dungeon architecture
 
   void build();
 
-  void update(double elapsedSeconds);
 private:
   Scene* scene;
 
@@ -47,8 +32,7 @@ private:
 
   bool isBuilt;//true if build has been called
   
-  /*! Current number of physics items.*/
-  int instanceNumber;
+  int instanceNumber;//current number of physics items
 
   std::vector<Ogre::SceneNode*> nodes;
   std::map<Ogre::String, physx::PxTriangleMesh*> statics;

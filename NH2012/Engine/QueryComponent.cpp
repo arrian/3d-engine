@@ -27,7 +27,7 @@ void QueryComponent::hasNodeChange()
 {
   if(!scene || !node) return;
 
-  //debugHitPosition = scene->getSceneManager()->createEntity("1mBox.mesh");
+  //debugHitPosition = scene->getGraphicsManager()->createEntity("1mBox.mesh");
   //hitNode = node->createChildSceneNode();
   //hitNode->attachObject(debugHitPosition);
   

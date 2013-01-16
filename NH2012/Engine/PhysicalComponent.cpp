@@ -26,7 +26,7 @@ PhysicalComponent::~PhysicalComponent(void)
 //-------------------------------------------------------------------------------------
 void PhysicalComponent::update(double elapsedSeconds)
 {
-  //if(!actor) throw NHException("Physical component missed frame rendering because it is not yet created.");
+  assert(actor);
   if(actor->isSleeping()) return;//no need to update the object if it has not moved
   physx::PxTransform transform = actor->getGlobalPose();
   node->setPosition(Vector3(transform.p.x, transform.p.y, transform.p.z));
@@ -37,8 +37,7 @@ void PhysicalComponent::update(double elapsedSeconds)
 void PhysicalComponent::hasNodeChange()
 {
   createActor();
-  actor->userData = userData;
-
+  
   for(std::vector<PhysicalShape*>::iterator iter = shapes.begin(); iter != shapes.end(); ++iter)
   {
     (*iter)->attach(actor);
@@ -64,6 +63,7 @@ void PhysicalComponent::createActor()
   actor = scene->getPhysicsManager()->getPhysics().createRigidDynamic(physx::PxTransform(pPosition));
   if(!actor) throw NHException("could not create physical component actor");
   actor->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
+  actor->userData = userData;
 }
 
 //-------------------------------------------------------------------------------------

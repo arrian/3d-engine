@@ -42,9 +42,9 @@ void HumanoidSkeletonComponent::hasNodeChange()
 {
   if(oldScene)
   {
-    if(head) oldScene->getSceneManager()->destroySceneNode(head);
-    if(rightHand) oldScene->getSceneManager()->destroySceneNode(rightHand);
-    if(leftHand) oldScene->getSceneManager()->destroySceneNode(leftHand);
+    if(head) oldScene->getGraphicsManager()->destroySceneNode(head);
+    if(rightHand) oldScene->getGraphicsManager()->destroySceneNode(rightHand);
+    if(leftHand) oldScene->getGraphicsManager()->destroySceneNode(leftHand);
 
     head = NULL;
     rightHand = NULL;

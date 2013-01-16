@@ -1,26 +1,41 @@
 #include "PhysicsManager.h"
 
+#include "physxprofilesdk/PxProfileZoneManager.h"
 
 PhysicsManager::PhysicsManager(void)
   : errorCallback(),
-    allocatorCallback()
+    allocatorCallback(),
+    physicsWorld(NULL),
+    physicsCooking(NULL),
+    physicsMaterial(NULL),
+    physicsFoundation(NULL),
+    defaultRestitution(0.2f),
+    defaultStaticFriction(0.3f),
+    defaultDynamicFriction(0.4f)
 {
-  physicsWorld = NULL;
-  physicsMaterial = NULL;
-  physicsFoundation = NULL;
-
-  defaultRestitution = 0.2f;
-  defaultStaticFriction = 0.3f;
-  defaultDynamicFriction = 0.4f;
-
   //Creating physics
   physx::PxAllocatorCallback* allocator = &allocatorCallback;
   physicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *allocator, errorCallback);//getErrorCallback());
-  physicsFoundation->setErrorLevel(physx::PxErrorCode::eDEBUG_INFO);
   if(!physicsFoundation) throw NHException("physics foundation could not be created");
 
+#ifdef _DEBUG //error level
+  physicsFoundation->setErrorLevel(physx::PxErrorCode::eMASK_ALL);
+#else
+  physicsFoundation->setErrorLevel(physx::PxErrorCode::eABORT | physx::PxErrorCode::eINTERNAL_ERROR 
+                                  |physx::PxErrorCode::eINVALID_OPERATION | physx::PxErrorCode::eINVALID_PARAMETER 
+                                  |physx::PxErrorCode::eOUT_OF_MEMORY);
+#endif
+
+#ifdef _DEBUG //profile zone manager
   bool recordMemoryAllocations = true;
-  physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations);
+  physx::PxProfileZoneManager* profileZoneManager = &physx::PxProfileZoneManager::createProfileZoneManager(physicsFoundation);
+  if(!profileZoneManager) throw NHException("physics profile zone manager could not be created");
+#else
+  bool recordMemoryAllocations = false;
+  physx::PxProfileZoneManager* profileZoneManager = NULL;
+#endif
+
+  physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations, profileZoneManager);
   if(!physicsWorld) throw NHException("physics world could not be created");
 
   PxInitExtensions(*physicsWorld);
@@ -35,6 +50,10 @@ PhysicsManager::PhysicsManager(void)
 //-------------------------------------------------------------------------------------
 PhysicsManager::~PhysicsManager(void)
 {
+
+  physicsCooking->release();
+  physicsCooking = NULL;
+  
   physicsWorld->release();
   physicsWorld = NULL;
 

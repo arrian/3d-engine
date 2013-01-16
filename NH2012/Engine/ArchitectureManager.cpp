@@ -1,4 +1,4 @@
-#include "Architecture.h"
+#include "ArchitectureManager.h"
 
 #include "Scene.h"
 #include "World.h"
@@ -6,12 +6,12 @@
 #include "OgreStaticGeometry.h"
 
 //-------------------------------------------------------------------------------------
-Architecture::Architecture(Scene* scene, PathfindManager* pathfinder)
+ArchitectureManager::ArchitectureManager(Scene* scene, PathfindManager* pathfinder)
   : IdentificationInterface(this, "Main", ARCHITECTURE),
     scene(scene),
-    rootNode(scene->getSceneManager()->getRootSceneNode()->createChildSceneNode()),
+    rootNode(scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode()),
     instanceNumber(0),
-    geometry(scene->getSceneManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getscenemanager have been constructed
+    geometry(scene->getGraphicsManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getGraphicsManager have been constructed
     nodes(),
     actors(),
     statics(),
@@ -22,7 +22,7 @@ Architecture::Architecture(Scene* scene, PathfindManager* pathfinder)
 }
 
 //-------------------------------------------------------------------------------------
-Architecture::~Architecture(void)
+ArchitectureManager::~ArchitectureManager(void)
 {
   for(std::vector<physx::PxRigidStatic*>::iterator it = actors.begin(); it != actors.end(); ++it) 
   {
@@ -32,21 +32,21 @@ Architecture::~Architecture(void)
   
   for(std::vector<Ogre::SceneNode*>::iterator it = nodes.begin(); it != nodes.end(); ++it) 
   {
-    if(*it) scene->getSceneManager()->destroySceneNode(*it);
+    if(*it) scene->getGraphicsManager()->destroySceneNode(*it);
     (*it) = NULL;
   }
 }
 
 //-------------------------------------------------------------------------------------
-void Architecture::add(ArchitectureDesc description, Vector3 position, Quaternion quaternion, Vector3 scale)
+void ArchitectureManager::add(ArchitectureDesc description, Vector3 position, Quaternion quaternion, Vector3 scale)
 {
   addStaticTrimesh(description.mesh, description.restitution, description.friction, position, quaternion);
 }
 
 //-------------------------------------------------------------------------------------
-void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Vector3 position, Quaternion quaternion, Vector3 scale)
+void ArchitectureManager::addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Vector3 position, Quaternion quaternion, Vector3 scale)
 {
-  Ogre::Entity* entity = scene->getSceneManager()->createEntity(meshName);
+  Ogre::Entity* entity = scene->getGraphicsManager()->createEntity(meshName);
   if(!entity) throw NHException("could not create architecture entity");
 
   physx::PxTriangleMesh* mesh = NULL;
@@ -62,7 +62,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
 
   if(!mesh) throw NHException("could not create architecture triangle mesh");
 
-  /*Construct architecture actor.*/
+  //construct architecture actor
   physx::PxRigidStatic* actor = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidStatic(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physx::PxQuat(quaternion.x,quaternion.y,quaternion.z,quaternion.w)));
   actor->userData = (IdentificationInterface*) this;
   physx::PxShape* shape = actor->createShape(physx::PxTriangleMeshGeometry(mesh), *scene->getWorld()->getPhysicsManager()->getDefaultMaterial());
@@ -86,7 +86,7 @@ void Architecture::addStaticTrimesh(Ogre::String meshName, float restitution, fl
 }
 
 //-------------------------------------------------------------------------------------
-void Architecture::build()
+void ArchitectureManager::build()
 {
   if(isBuilt) throw NHException("attempting to build the architecture multiple times");
   isBuilt = true;
@@ -98,9 +98,5 @@ void Architecture::build()
   //is there anything leftover here?
 }
 
-//-------------------------------------------------------------------------------------
-void Architecture::update(double elapsedSeconds)
-{
-  //if(pathfinder) pathfinder->update(elapsedSeconds);
-}
+
 

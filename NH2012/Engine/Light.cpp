@@ -2,9 +2,9 @@
 
 
 Light::Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
-  : light(scene->getSceneManager()->createLight())
+  : light(scene->getGraphicsManager()->createLight())
 {
-  lightNode = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode(position);
+  lightNode = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode(position);
   lightNode->attachObject(light);
   light->setAttenuation(range, 0.95f, 0.05f, 0.0f);
   light->setDiffuseColour(colour);

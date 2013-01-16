@@ -268,9 +268,11 @@ void World::parseIni(std::string filename)
   showShadowDebug = getIniBool("Debug.ShowShadowDebug", &pt);
   defaultScene = getIniInt("Debug.DefaultScene", &pt);
 
+#ifdef _DEBUG
   physXVisualDebuggerIP = getIniString("Debug.PhysXVisualDebuggerIP", &pt);
   physXVisualDebuggerPort = getIniInt("Debug.PhysXVisualDebuggerPort", &pt);
   physXVisualDebuggerTimeoutMilliseconds = getIniInt("Debug.PhysXVisualDebuggerTimeoutMilliseconds", &pt);
+#endif
 }
 
 //-------------------------------------------------------------------------------------

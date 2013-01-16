@@ -169,10 +169,10 @@ Ivy::Ivy(Scene* scene, Vector3 position, Vector3 direction)
     root(NULL)
 {
 
-  node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+  node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
   //node->setPosition(position);
 
-  mesh = scene->getSceneManager()->createManualObject();
+  mesh = scene->getGraphicsManager()->createManualObject();
   node->attachObject(mesh);
 
   root = new IvyStem(this, position, direction.normalisedCopy(), -direction, false);
@@ -184,8 +184,8 @@ Ivy::Ivy(Scene* scene, Vector3 position, Vector3 direction)
 Ivy::~Ivy(void) 
 {
   delete root;
-  scene->getSceneManager()->destroyManualObject(mesh);
-  scene->getSceneManager()->destroySceneNode(node);
+  scene->getGraphicsManager()->destroyManualObject(mesh);
+  scene->getGraphicsManager()->destroySceneNode(node);
 }
 
 void Ivy::update(double elapsedSeconds)

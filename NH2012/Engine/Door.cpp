@@ -8,7 +8,7 @@ Door::Door(void)
     open(false),
     locked(false),
     doorPhysical(INTERACTIVE),
-    doorMesh("door.mesh"),
+    doorMesh(),
     hingeJoint(NULL)
 {
 }
@@ -25,12 +25,12 @@ void Door::hasSceneChange()
   //remove stuff from old scene here
   if(oldScene && node)
   {
-    oldScene->getSceneManager()->destroySceneNode(node);
+    oldScene->getGraphicsManager()->destroySceneNode(node);
   }
 
   if(!scene) return;
 
-  node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+  node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
 
   ArchitectureDesc doorDesc = scene->getWorld()->getDataManager()->getArchitecture(200);//temp constants
   doorMesh.setMesh(doorDesc.mesh);
@@ -42,11 +42,12 @@ void Door::hasSceneChange()
   doorPhysical.setNode(scene, node);
   doorMesh.setNode(scene, node);
 
-  doorConstraint = physx::PxTransform(physx::PxVec3(1.5f, 0.0f, 0.0f));
+  doorConstraint = physx::PxTransform(physx::PxVec3(0.0f, 1.5f, 0.0f));//, physx::PxQuat(physx::PxPi / 2, physx::PxVec3(-1.0f,0.0f,0.0f)));
   frameConstraint = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f));
   hingeJoint = physx::PxRevoluteJointCreate(scene->getPhysicsManager()->getPhysics(), doorPhysical.getActor(), doorConstraint, NULL, frameConstraint);
   hingeJoint->setLimit(physx::PxJointLimitPair(-physx::PxPi / 4, physx::PxPi / 4, 0.01f));
   hingeJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eLIMIT_ENABLED, true);
+  hingeJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eDRIVE_FREESPIN, true);
 
 }
 

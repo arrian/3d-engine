@@ -29,7 +29,7 @@ Player::Player(PlayerDesc description, World* world)
 //-------------------------------------------------------------------------------------
 Player::~Player(void)
 {
-  if(node) scene->getSceneManager()->destroySceneNode(node);
+  if(node) scene->getGraphicsManager()->destroySceneNode(node);
   node = NULL;
 }
 
@@ -45,17 +45,17 @@ void Player::hasSceneChange()
     skeleton.removeNode();
     query.removeNode();
     
-    if(node) oldScene->getSceneManager()->destroySceneNode(node);
+    if(node) oldScene->getGraphicsManager()->destroySceneNode(node);
     node = NULL;
 
-    if(freeCameraNode) oldScene->getSceneManager()->destroySceneNode(freeCameraNode);
+    if(freeCameraNode) oldScene->getGraphicsManager()->destroySceneNode(freeCameraNode);
     freeCameraNode = NULL;
   }
 
   //setting up
   if(scene)
   {
-    node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+    node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
     
     setPosition(position);
 
@@ -240,7 +240,7 @@ void Player::setFreeCamera(bool enabled)
 
   if(enabled)
   {
-    if(!freeCameraNode) freeCameraNode = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+    if(!freeCameraNode) freeCameraNode = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
     freeCameraNode->setPosition(skeleton.getHead()->_getDerivedPosition());
     freeCameraNode->_setDerivedOrientation(skeleton.getHead()->_getDerivedOrientation());
 
@@ -254,7 +254,7 @@ void Player::setFreeCamera(bool enabled)
     movement.setGravityEnabled(true);
     movement.setNode(scene, skeleton.getHead());
 
-    if(freeCameraNode) scene->getSceneManager()->destroySceneNode(freeCameraNode);
+    if(freeCameraNode) scene->getGraphicsManager()->destroySceneNode(freeCameraNode);
     freeCameraNode = NULL;
   }
 }

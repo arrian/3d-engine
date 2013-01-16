@@ -100,15 +100,17 @@ public:
 private:
   Ogre::Root* root;
   
-  Player* player;
+  Player* player;//the local player
 
   int defaultScene;
   std::map<int, Scene*> scenes;
-
+  
+#ifdef _DEBUG
   //PhysX Visual Debugger
   std::string physXVisualDebuggerIP;
   int physXVisualDebuggerPort;
   int physXVisualDebuggerTimeoutMilliseconds;
+#endif
 
   //Managers
   DataManager dataManager;

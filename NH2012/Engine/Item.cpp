@@ -24,8 +24,8 @@ void Item::hasSceneChange()
 {
   if(oldScene)
   {
-    if(node) oldScene->getSceneManager()->destroySceneNode(node);
-    if(entity) oldScene->getSceneManager()->destroyEntity(entity);
+    if(node) oldScene->getGraphicsManager()->destroySceneNode(node);
+    if(entity) oldScene->getGraphicsManager()->destroyEntity(entity);
   }
 
   node = NULL;
@@ -33,14 +33,14 @@ void Item::hasSceneChange()
 
   if(scene)
   {
-    node = scene->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+    node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
 
-    entity = scene->getSceneManager()->createEntity(desc.mesh);
+    entity = scene->getGraphicsManager()->createEntity(desc.mesh);
     node->attachObject(entity);
     node->setVisible(true);
 
     //Physical
-    simplifiedEntity = scene->getSceneManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
+    simplifiedEntity = scene->getGraphicsManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
     if(!material) material = scene->getPhysicsManager()->getPhysics().createMaterial(desc.staticFriction, desc.dynamicFriction, desc.restitution);
     physical.begin();
     physical.addConvexMesh(scene->getWorld()->getFabricationManager()->createConvexMesh(simplifiedEntity->getMesh()), material);
@@ -59,8 +59,8 @@ Item::~Item(void)
 
   if(scene)
   {
-    if(entity) scene->getSceneManager()->destroyEntity(entity);
-    if(node) scene->getSceneManager()->destroySceneNode(node);
+    if(entity) scene->getGraphicsManager()->destroyEntity(entity);
+    if(node) scene->getGraphicsManager()->destroySceneNode(node);
   }
 
   node = NULL;
@@ -134,19 +134,5 @@ void Item::setUserData(void* target)
   physical.setUserData(target);
 }
 
-/*
-//-------------------------------------------------------------------------------------
-void Item::loadPhysical()//move to meshcomponent
-{
-  physical = scene->getPhysicsManager()->getPhysics().createRigidDynamic(physx::PxTransform(physx::PxVec3(0.0f,0.0f,0.0f)));
-  if(!physical) throw NHException("could not create item physics actor");
-  //need to index materials so i'm not creating them for every item instance  //scene->getWorld()->getDefaultPhysicsMaterial();
-  //shape = physical->createShape(physx::PxBoxGeometry(side, side, side), *material);//temporary simplified collision mesh
-  shape = physical->createShape(physx::PxConvexMeshGeometry(scene->getWorld()->getFabricationManager()->createConvexMesh(entity->getMesh())), *material);//temporary complex collision mesh
-  physical->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
-  scene->getPhysicsManager()->addActor(*physical);
-  physx::PxRigidBodyExt::updateMassAndInertia(*physical, desc.density);
-}
-*/
 
 

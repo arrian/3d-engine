@@ -25,7 +25,7 @@ void MeshComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void MeshComponent::hasNodeChange()
 {
-  if(oldScene && entity) oldScene->getSceneManager()->destroyEntity(entity);
+  if(oldScene && entity) oldScene->getGraphicsManager()->destroyEntity(entity);
   entity = NULL;
 
   updateEntity();
@@ -41,7 +41,7 @@ Ogre::Entity* MeshComponent::getEntity()
 void MeshComponent::setMesh(std::string mesh)
 {
   this->mesh = mesh;
-  if(scene && entity) scene->getSceneManager()->destroyEntity(entity);
+  if(scene && entity) scene->getGraphicsManager()->destroyEntity(entity);
   entity = NULL;
   updateEntity();
 }
@@ -50,7 +50,7 @@ void MeshComponent::setMesh(std::string mesh)
 void MeshComponent::updateEntity()
 {
   if(!scene || !node || mesh == "") return;
-  entity = scene->getSceneManager()->createEntity(mesh);
+  entity = scene->getGraphicsManager()->createEntity(mesh);
   node->attachObject(entity);
   node->setVisible(true);
 }

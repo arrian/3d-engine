@@ -31,7 +31,7 @@ CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom, bool enableM
 CameraComponent::~CameraComponent(void)
 {
   delete ssao;
-  if(scene) scene->getSceneManager()->destroyCamera(camera);
+  if(scene) scene->getGraphicsManager()->destroyCamera(camera);
 }
 
 //-------------------------------------------------------------------------------------
@@ -97,9 +97,9 @@ void CameraComponent::hasNodeChange()
   }
   else
   {
-    if(oldScene && camera) oldScene->getSceneManager()->destroyCamera(camera);//cleaning up previous scene
+    if(oldScene && camera) oldScene->getGraphicsManager()->destroyCamera(camera);//cleaning up previous scene
     if(!scene) return;
-    camera = scene->getSceneManager()->createCamera("CameraComponent");
+    camera = scene->getGraphicsManager()->createCamera("CameraComponent");
   }
 
   camera->setNearClipDistance(nearClipDefault);//can see some triangle clipping but no z-fighting
