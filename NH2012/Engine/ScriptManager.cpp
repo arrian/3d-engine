@@ -9,19 +9,18 @@
 ScriptManager::ScriptManager(void)
   : world(NULL),
     done(false),
-    outputStandardOut(true),
-    outputGameConsole(true)
+    outputs()
 {
   addCommand("help", "", "shows the help list", &ScriptManager::help);
-  addCommand("clear", "", "clears the console", &ScriptManager::clear);
-  addCommand("refresh", "", "re-hooks the console to the render window", &ScriptManager::refresh);
+  //addCommand("clear", "", "clears the console", &ScriptManager::clear);
+  //addCommand("refresh", "", "re-hooks the console to the render window", &ScriptManager::refresh);
   addCommand("about", "", "show game info", &ScriptManager::about);
   addCommand("reset", "", "resets the scene", &ScriptManager::reset);
   addCommand("exit", "", "exits the game", &ScriptManager::exit);
   addCommand("screenshot", "", "takes a screenshot and outputs to the executable directory", &ScriptManager::screenshot);
   addCommand("setPhysicsEnabled", "(true | false)", "enables and disables collision", &ScriptManager::setPhysicsEnabled);
   addCommand("setCameraFree", "(true | false)", "frees or attaches the camera from/to the player", &ScriptManager::setCameraFree);
-  addCommand("setConsoleVisible", "(true | false)", "shows or hides the console", &ScriptManager::setConsoleVisible);
+  //addCommand("setConsoleVisible", "(true | false)", "shows or hides the console", &ScriptManager::setConsoleVisible);
   addCommand("setFullscreen", "width height", "sets the display to fullscreen", &ScriptManager::setFullscreen);
   addCommand("setWindowed", "width height", "set the display to windowed", &ScriptManager::setWindowed);
   addCommand("setPlayerScene", "id", "sets the player scene", &ScriptManager::setPlayerScene);
@@ -124,17 +123,21 @@ bool ScriptManager::stringToBool(std::string string)
   return (string == "1" || boost::algorithm::to_lower_copy(string) == "true");
 }
 
+/*
 //-------------------------------------------------------------------------------------
 void ScriptManager::clear(Options argv)
 {
   Console::getInstance().clear();
 }
+*/
 
+/*
 //-------------------------------------------------------------------------------------
 void ScriptManager::refresh(Options argv)
 {
   Console::getInstance().rehookWindow();
 }
+*/
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::about(Options argv)
@@ -171,9 +174,9 @@ void ScriptManager::help(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::screenshot(Options argv)
 {
-  Console::getInstance().setVisible(false);
+  //Console::getInstance().setVisible(false);
   if(world->getPlayer()->getWindow())display("Screenshot saved to '" + world->getPlayer()->getWindow()->writeContentsToTimestampedFile("screenshot", ".png") + "'.");
-  Console::getInstance().setVisible(true);
+  //Console::getInstance().setVisible(true);
 }
 
 //-------------------------------------------------------------------------------------
@@ -190,13 +193,14 @@ void ScriptManager::setCameraFree(Options argv)
   world->getPlayer()->setFreeCamera(stringToBool(argv[1]));
 }
 
+/*
 //-------------------------------------------------------------------------------------
 void ScriptManager::setConsoleVisible(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
   bool visible = stringToBool(argv[1]);
   Console::getInstance().setVisible(!visible);
-}
+}*/
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::setFullscreen(Options argv)
@@ -479,16 +483,33 @@ void ScriptManager::reset(Options argv)
 }
 
 //-------------------------------------------------------------------------------------
+void ScriptManager::addOutputTarget(OutputCallback* target)
+{
+  outputs.push_back(target);
+}
+
+//-------------------------------------------------------------------------------------
 void ScriptManager::display(std::string comment)
 {
-  if(outputStandardOut) std::cout << comment << std::endl;
-  if(outputGameConsole) Console::getInstance().print(comment);
+  for(std::vector<OutputCallback*>::iterator iter = outputs.begin(); iter != outputs.end(); ++iter)
+  {
+    (*iter)->print(comment);
+  }
+
+  //if(outputStandardOut) std::cout << comment << std::endl;
+  //if(outputGameConsole) Console::getInstance().print(comment);
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::display(std::string highlight, std::string comment)
 {
-  if(outputStandardOut) std::cout << highlight << " - " << comment << std::endl;
-  if(outputGameConsole) Console::getInstance().print(highlight, comment);
+  for(std::vector<OutputCallback*>::iterator iter = outputs.begin(); iter != outputs.end(); ++iter)
+  {
+    (*iter)->print(highlight, comment);
+  }
+
+  //if(outputStandardOut) std::cout << highlight << " - " << comment << std::endl;
+  //if(outputGameConsole) Console::getInstance().print(highlight, comment);
 }
+
 

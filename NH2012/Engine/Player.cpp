@@ -8,7 +8,7 @@
 Player::Player(PlayerDesc description, World* world)
   : Actor(this, "Player", PLAYER_SELF),
     world(world),
-    camera(world->enableSSAO, world->enableBloom, world->enableMotionBlur),
+    camera(world->isSSAOEnabled(), world->isBloomEnabled()),
     mesh(description.mesh),
     query(),
     addItem(false),
@@ -59,7 +59,7 @@ void Player::hasSceneChange()
     
     setPosition(position);
 
-    skeleton.setUserData((IdentificationInterface*) this);
+    skeleton.setUserData((Identifiable*) this);
     skeleton.setGroup(PLAYER_SELF);//add ability to have other player groups
 
     mesh.setNode(scene, node);

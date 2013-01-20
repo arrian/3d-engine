@@ -2,11 +2,11 @@
 
 #include "Packet.h"
 
-class PacketInterface
+class Packetable
 {
 public:
-  PacketInterface(void);
-  ~PacketInterface(void);
+  Packetable(void);
+  ~Packetable(void);
 
   virtual Packet extractPacket() = 0;
   virtual void integratePacket(Packet packet) = 0;

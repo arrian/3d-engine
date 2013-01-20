@@ -1,11 +1,11 @@
-#include "SaveInterface.h"
+#include "Savable.h"
 
 
-SaveInterface::SaveInterface(void)
+Savable::Savable(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-SaveInterface::~SaveInterface(void)
+Savable::~Savable(void)
 {
 }

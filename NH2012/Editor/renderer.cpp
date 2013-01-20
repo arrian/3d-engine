@@ -4,6 +4,8 @@
 
 void Renderer::init()
 {
+  hasPrevious = false;
+  //previous;
   hasMouseClick = false;
   this->world = world;
 
@@ -150,16 +152,25 @@ void Renderer::mouseMoveEvent(QMouseEvent* e)
 {
   if(hasMouseClick)
   {
-    OIS::MouseState state;
-    state.X.rel = e->x();
-    state.Y.rel = e->y();
-    state.X.abs = e->globalX();
-    state.Y.abs = e->globalY();
-    state.height = window->getHeight();
-    state.width = window->getWidth();
+    if(hasPrevious)
+    {
+      
+      OIS::MouseState state;
+      state.X.rel = e->pos().x() - previous.x();
+      state.Y.rel = e->pos().y() - previous.y();
+      state.X.abs = e->globalX();
+      state.Y.abs = e->globalY();
+      state.height = window->getHeight();
+      state.width = window->getWidth();
 
-    world->mouseMoved(OIS::MouseEvent(NULL, state));
+      world->mouseMoved(OIS::MouseEvent(NULL, state)); 
+    }
+
+    hasPrevious = true;
+    previous = e->pos();
+
   }
+  else hasPrevious = false;
 }
 
 void Renderer::keyPressEvent(QKeyEvent* e) 
@@ -167,6 +178,9 @@ void Renderer::keyPressEvent(QKeyEvent* e)
   if(hasMouseClick)
   {
     if(e->key() == Qt::Key_W) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_W, 0));
+    else if(e->key() == Qt::Key_A) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_A, 0));
+    else if(e->key() == Qt::Key_S) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_S, 0));
+    else if(e->key() == Qt::Key_D) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_D, 0));
   }
 }
 
@@ -175,6 +189,9 @@ void Renderer::keyReleaseEvent(QKeyEvent* e)
   if(hasMouseClick)
   {
     if(e->key() == Qt::Key_W) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_W, 0));
+    else if(e->key() == Qt::Key_A) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_A, 0));
+    else if(e->key() == Qt::Key_S) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_S, 0));
+    else if(e->key() == Qt::Key_D) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_D, 0));
   }
 }
 

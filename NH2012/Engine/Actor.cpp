@@ -2,7 +2,7 @@
 
 
 Actor::Actor(void* instancePointer, std::string name, Group group)
-  : IdentificationInterface(instancePointer, name, group),
+  : Identifiable(instancePointer, name, group),
     node(NULL),
     position(Vector3::ZERO)
 {

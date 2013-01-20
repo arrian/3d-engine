@@ -9,6 +9,28 @@ class World;
 
 typedef std::vector<std::string> Options;
 
+/*Defines an output target for all text produced by the ScriptManager.*/
+class OutputCallback
+{
+public:
+  virtual void print(std::string comment) = 0;
+  virtual void print(std::string highlight, std::string comment) = 0;
+};
+
+class StandardOutput : public OutputCallback
+{
+public:
+  virtual void print(std::string comment)
+  {
+    std::cout << comment << std::endl;
+  }
+
+  virtual void print(std::string highlight, std::string comment)
+  {
+    std::cout << highlight << " - " << comment << std::endl;
+  }
+};
+
 /**
 * Defines a command that can be run.
 */
@@ -58,12 +80,12 @@ public:
 
   void run(std::string file);//executes the specified file
 
+  void addOutputTarget(OutputCallback* target);
 private:
   World* world;
   bool done;
 
-  bool outputStandardOut;
-  bool outputGameConsole;
+  std::vector<OutputCallback*> outputs;
 
   std::map<std::string, Command<ScriptManager>*> commands;//list of all possible commands
 
@@ -74,15 +96,15 @@ private:
   void addCommand(std::string name, std::string arguments, std::string help, void (ScriptManager::*run) (Options));
 
   //Set of executable commands
-  void clear                     (Options);
-  void refresh                   (Options);
+  //void clear                     (Options);
+  //void refresh                   (Options);
   void about                     (Options);
   void help                      (Options);
   void exit                      (Options);
   void screenshot                (Options);
   void setPhysicsEnabled         (Options);
   void setCameraFree             (Options);
-  void setConsoleVisible         (Options);
+  //void setConsoleVisible         (Options);
   void setFullscreen             (Options);
   void setWindowed               (Options);
   void setPlayerScene            (Options);

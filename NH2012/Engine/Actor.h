@@ -3,14 +3,14 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "BasicComponent.h"
-#include "IdentificationInterface.h"
+#include "Identifiable.h"
 
 class Scene;
 
 /**
  * Defines an intelligent agent in the world.
  **/
-class Actor : public BasicComponent, public IdentificationInterface
+class Actor : public BasicComponent, public Identifiable
 {
 public:
   Actor(void* instancePointer, std::string name, Group group);

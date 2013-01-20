@@ -2,14 +2,14 @@
 
 #include "Scene.h"
 #include "NHException.h"
-#include "IdentificationInterface.h"
+#include "Identifiable.h"
 
 #include "Console.h"
 
 #include "OgreCompositorManager.h"
 
 //-------------------------------------------------------------------------------------
-CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom, bool enableMotionBlur)
+CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom)
   : NodeComponent(),
     camera(NULL),
     window(NULL),
@@ -21,8 +21,7 @@ CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom, bool enableM
     rayCastDistance(10.0f),
     ssao(NULL),
     enableSSAO(enableSSAO),
-    enableBloom(enableBloom),
-    enableMotionBlur(enableMotionBlur)
+    enableBloom(enableBloom)
 {
 
 }
@@ -51,11 +50,13 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
   }
   if(enableSSAO) ssao = new PFXSSAO(window, camera);//enables screen space ambient occlusion
 
+  /*
   if(enableMotionBlur)//not working??
   {
     Ogre::CompositorManager::getSingleton().addCompositor(viewport, "Motion Blur");
     Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Motion Blur", true);
   }
+  */
 
   if(enableBloom)
   {
@@ -66,7 +67,7 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
   //Ogre::CompositorManager::getSingleton().addCompositor(viewport, "B&W");
   //Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "B&W", true);
 
-  Console::getInstance().hookWindow(window);
+  //Console::getInstance().hookWindow(window);
 }
 
 //-------------------------------------------------------------------------------------

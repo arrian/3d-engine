@@ -15,8 +15,9 @@
 #include <OISKeyboard.h>
 #include <OISInputManager.h>
 
-#include <Console.h>
+#include <Interface.h>
 #include <World.h>
+
 
 class Game : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {
@@ -28,6 +29,7 @@ public:
 protected:
   bool done;
   World* world;
+  Interface* userInterface;
 
   Ogre::Root *root;
   Ogre::RenderWindow* window;

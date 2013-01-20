@@ -9,11 +9,11 @@
  * A generic physical interface.
  * Will be used for scripting and the console as a generic interface to anything that exists in the world.
  */
-class IdentificationInterface
+class Identifiable
 {
 public:
-  IdentificationInterface(void* instancePointer, std::string name, Group group);
-  virtual ~IdentificationInterface(void);
+  Identifiable(void* instancePointer, std::string name, Group group);
+  virtual ~Identifiable(void);
 
   void* getInstancePointer();
   int getInstanceID();

@@ -16,14 +16,14 @@ World::World(Ogre::Root* root)
     timeManager(),
     dataManager(),
     soundManager(),
-    scriptManager(new ScriptManager()),
+    scriptManager(),
     physicsManager(),
     controlManager(),
     fabricationManager(),
     player(NULL),
     defaultScene(0)
 {
-  scriptManager->setWorld(this);
+  scriptManager.setWorld(this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -37,9 +37,6 @@ World::~World(void)
 
   delete player;
   player = NULL;
-
-  delete scriptManager;
-  scriptManager = NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -65,7 +62,7 @@ void World::initialise(std::string iniFile)
   player = new Player(playerDesc, this);
   scene->addPlayer(player);
 
-  Console::getInstance().setWorld(this);
+  //Console::getInstance().setWorld(this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -115,7 +112,7 @@ ControlManager* World::getControlManager()
 //-------------------------------------------------------------------------------------
 ScriptManager* World::getScriptManager()
 {
-  return scriptManager;
+  return &scriptManager;
 }
 
 //-------------------------------------------------------------------------------------
@@ -155,7 +152,7 @@ void World::destroyScene(int id)
 //-------------------------------------------------------------------------------------
 bool World::update(double elapsedSeconds)
 {
-  if(!scriptManager->update(elapsedSeconds)) return false;
+  if(!scriptManager.update(elapsedSeconds)) return false;
   timeManager.update(elapsedSeconds);
 
   if(player)
@@ -241,17 +238,19 @@ void World::parseIni(std::string filename)
   controlManager.addMonster = OIS::KC_2;
     
   //Environment
-  enableHDR = getIniBool("Environment.HDR", &pt);
+  enableShadows = getIniBool("Environment.Shadows", &pt);
   enableBloom = getIniBool("Environment.Bloom", &pt);
   enableSSAO = getIniBool("Environment.SSAO", &pt);
+  /*
+  enableHDR = getIniBool("Environment.HDR", &pt);
   enableMotionBlur = getIniBool("Environment.MotionBlur", &pt);
-  enableShadows = getIniBool("Environment.Shadows", &pt);
   enableLights = getIniBool("Environment.Lights", &pt);
   enableParticles = getIniBool("Environment.Particles", &pt);
   enableDecals = getIniBool("Environment.Decals", &pt);
   enableSprites = getIniBool("Environment.Sprites", &pt);
   enableWater = getIniBool("Environment.Water", &pt);
   enableSky = getIniBool("Environment.Sky", &pt);
+  */
 
   //Data
   dataManager.addData(getIniString("Data.Scenes", &pt));
@@ -261,11 +260,13 @@ void World::parseIni(std::string filename)
   dataManager.addData(getIniString("Data.Sounds", &pt));
 
   //Debug
+  /*
+  freezeCollisionDebug = getIniBool("Debug.FreezeCollision", &pt);
   freeCameraDebug = getIniBool("Debug.FreeCamera", &pt);
   wireframeDebug = getIniBool("Debug.Wireframe", &pt);
-  freezeCollisionDebug = getIniBool("Debug.FreezeCollision", &pt);
   showCollisionDebug = getIniBool("Debug.ShowCollisionsDebug", &pt);
   showShadowDebug = getIniBool("Debug.ShowShadowDebug", &pt);
+  */
   defaultScene = getIniInt("Debug.DefaultScene", &pt);
 
 #ifdef _DEBUG
@@ -344,13 +345,13 @@ TimeManager* World::getTimeManager()
 //-------------------------------------------------------------------------------------
 void World::setPhysicsEnabled(bool enabled)
 {
-  freezeCollisionDebug = !enabled;
+  enablePhysics = enabled;
 }
 
 //-------------------------------------------------------------------------------------
 bool World::isPhysicsEnabled()
 {
-  return !freezeCollisionDebug;
+  return enablePhysics;
 }
 
 //-------------------------------------------------------------------------------------
@@ -358,3 +359,17 @@ bool World::isShadowsEnabled()
 {
   return enableShadows;
 }
+
+//-------------------------------------------------------------------------------------
+bool World::isBloomEnabled()
+{
+  return enableBloom;
+}
+
+//-------------------------------------------------------------------------------------
+bool World::isSSAOEnabled()
+{
+  return enableSSAO;
+}
+
+

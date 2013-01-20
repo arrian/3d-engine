@@ -1,9 +1,9 @@
-#include "IdentificationInterface.h"
+#include "Identifiable.h"
 
 #include "NHException.h"
 
 //-------------------------------------------------------------------------------------
-IdentificationInterface::IdentificationInterface(void* instancePointer, std::string name, Group group)
+Identifiable::Identifiable(void* instancePointer, std::string name, Group group)
   : instancePointer(instancePointer),
     instanceID(-1),
     name(name),
@@ -12,42 +12,42 @@ IdentificationInterface::IdentificationInterface(void* instancePointer, std::str
 }
 
 //-------------------------------------------------------------------------------------
-IdentificationInterface::~IdentificationInterface(void)
+Identifiable::~Identifiable(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-int IdentificationInterface::getInstanceID()
+int Identifiable::getInstanceID()
 {
   return instanceID;
 }
 
 //-------------------------------------------------------------------------------------
-void IdentificationInterface::setInstanceID(int instanceID)
+void Identifiable::setInstanceID(int instanceID)
 {
   this->instanceID = instanceID;
 }
 
 //-------------------------------------------------------------------------------------
-Group IdentificationInterface::getGroup()
+Group Identifiable::getGroup()
 {
   return group;
 }
 
 //-------------------------------------------------------------------------------------
-bool IdentificationInterface::isInGroup(Group group)
+bool Identifiable::isInGroup(Group group)
 {
   return (group & this->group) == group;//is this correct?
 }
 
 //-------------------------------------------------------------------------------------
-std::string IdentificationInterface::getName()
+std::string Identifiable::getName()
 {
   return name;
 }
 
 //-------------------------------------------------------------------------------------
-void* IdentificationInterface::getInstancePointer()
+void* Identifiable::getInstancePointer()
 {
   return instancePointer;
 }

@@ -11,7 +11,7 @@
 class CameraComponent : public NodeComponent
 {
 public:
-  CameraComponent(bool enableSSAO, bool enableBloom, bool enableMotionBlur);
+  CameraComponent(bool enableSSAO, bool enableBloom);
   ~CameraComponent(void);
 
   void hookWindow(Ogre::RenderWindow* window);
@@ -33,7 +33,6 @@ protected:
   Ogre::Viewport* viewport;
 
   bool enableBloom;
-  bool enableMotionBlur;
   bool enableSSAO;
   PFXSSAO* ssao;
 

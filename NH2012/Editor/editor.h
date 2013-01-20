@@ -17,6 +17,9 @@ public:
 
 private:
   Ui::EditorClass ui;
+
+  virtual void keyPressEvent(QKeyEvent* e);
+  virtual void keyReleaseEvent(QKeyEvent* e);
 };
 
 #endif // EDITOR_H

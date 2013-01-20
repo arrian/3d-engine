@@ -1,9 +1,9 @@
 #pragma once
 
 #include "BasicComponent.h"
-#include "IdentificationInterface.h"
+#include "Identifiable.h"
 
-class Interactive : public BasicComponent, public IdentificationInterface
+class Interactive : public BasicComponent, public Identifiable
 {
 public:
   Interactive(std::string name);

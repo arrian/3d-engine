@@ -2,7 +2,7 @@
 
 
 Interactive::Interactive(std::string name)
-  : IdentificationInterface(this, name, INTERACTIVE)
+  : Identifiable(this, name, INTERACTIVE)
 {
 }
 

@@ -89,6 +89,9 @@ bool Game::run()
   world->initialise("game.ini");
   world->hookWindow(window);
 
+  userInterface = new Interface(world);
+  userInterface->hookWindow(window);
+
   mouse->setEventCallback(this);
   keyboard->setEventCallback(this);
 
@@ -110,7 +113,7 @@ bool Game::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
   if(done) return false;
 
-  Console::getInstance().update(evt.timeSinceLastFrame);
+  userInterface->update(evt.timeSinceLastFrame);
   if(!world->update(evt.timeSinceLastFrame)) return false;
 
   return !done;//should update is not of done
@@ -119,11 +122,10 @@ bool Game::frameRenderingQueued(const Ogre::FrameEvent& evt)
 //-------------------------------------------------------------------------------------
 bool Game::keyPressed(const OIS::KeyEvent &arg)
 {
-  if (arg.key == OIS::KC_ESCAPE) done = true;
+  if (arg.key == OIS::KC_ESCAPE) done = true;//temp fast exit
 
-  Console::getInstance().keyPressed(arg);
-  if(Console::getInstance().isVisible()) return true;//ignore other key notifications while console visible
-
+  userInterface->keyPressed(arg);
+  if(userInterface->capturedInput()) return true;
   world->keyPressed(arg);
 
   return true;
@@ -132,9 +134,9 @@ bool Game::keyPressed(const OIS::KeyEvent &arg)
 //-------------------------------------------------------------------------------------
 bool Game::keyReleased(const OIS::KeyEvent &arg)
 {
-  if(arg.key == world->getControlManager()->console) Console::getInstance().setVisible(!Console::getInstance().isVisible());
-  Console::getInstance().keyReleased(arg);
-  if(Console::getInstance().isVisible()) return true;//ignore other key notifications while console visible
+  //if(arg.key == world->getControlManager()->console) Console::getInstance().setVisible(!Console::getInstance().isVisible());//move into userInterface
+  userInterface->keyReleased(arg);
+  if(userInterface->capturedInput()) return true;
 
   world->keyReleased(arg);
 
@@ -144,6 +146,8 @@ bool Game::keyReleased(const OIS::KeyEvent &arg)
 //-------------------------------------------------------------------------------------
 bool Game::mouseMoved(const OIS::MouseEvent &arg)
 {
+  userInterface->mouseMoved(arg);
+  if(userInterface->capturedInput()) return true;
   world->mouseMoved(arg);
 
   return true;
@@ -152,6 +156,8 @@ bool Game::mouseMoved(const OIS::MouseEvent &arg)
 //-------------------------------------------------------------------------------------
 bool Game::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
+  userInterface->mousePressed(arg, id);
+  if(userInterface->capturedInput()) return true;
   world->mousePressed(arg,id);
 
   return true;
@@ -160,6 +166,8 @@ bool Game::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 //-------------------------------------------------------------------------------------
 bool Game::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
+  userInterface->mouseReleased(arg, id);
+  if(userInterface->capturedInput()) return true;
   world->mouseReleased(arg,id);
   
   return true;

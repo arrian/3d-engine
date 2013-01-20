@@ -10,7 +10,7 @@
 Item::Item(ItemDesc desc)
   : desc(desc),
     BasicComponent(),
-    IdentificationInterface(this, desc.name, ITEM),
+    Identifiable(this, desc.name, ITEM),
     entity(NULL),
     simplifiedEntity(NULL),
     node(NULL),
@@ -46,7 +46,7 @@ void Item::hasSceneChange()
     physical.addConvexMesh(scene->getWorld()->getFabricationManager()->createConvexMesh(simplifiedEntity->getMesh()), material);
     physical.end();
 
-    setUserData((IdentificationInterface*) this);
+    setUserData((Identifiable*) this);
 
     physical.setNode(scene, node);
   }

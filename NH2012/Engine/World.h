@@ -31,6 +31,7 @@
 #include "SoundManager.h"
 #include "ControlManager.h"
 #include "PhysicsManager.h"
+#include "ScriptManager.h"
 #include "FabricationManager.h"
 #include "PhysicsErrorCallback.h"
 #include "NHException.h"
@@ -40,7 +41,6 @@
 //Forward Declarations
 class Player;
 class Scene;
-class ScriptManager;
 
 /************************************************************************/
 /* Contains the entire game world.                                      */
@@ -77,9 +77,23 @@ public:
 
   //Setters
   void setRoot(Ogre::Root* root);
-  void setSceneManager(Ogre::SceneManager* sceneManager);
   void setPhysicsEnabled(bool enabled);
-  
+  void setBloomEnabled(bool enabled);
+  void setSSAOEnabled(bool enabled);
+  void setAIEnabled(bool enabled);
+  void setAudioEnabled(bool enabled);
+  /*
+  void setHDREnabled(bool enabled);
+  void setShadowsEnabled(bool enabled);
+  void setLightingEnabled(bool enabled);
+  void setEffectsEnabled(bool enabled);
+  void setDecalsEnabled(bool enabled);
+  void setWaterEnabled(bool enabled);
+  void setSkyEnabled(bool enabled);
+  void setFreeCameraEnabled(bool enabled);
+  void setWireframeEnabled(bool enabled);
+  */
+
   //Input
   void keyPressed(const OIS::KeyEvent &arg);
   void keyReleased(const OIS::KeyEvent &arg);
@@ -91,32 +105,36 @@ public:
   bool hasScene(int id);
   bool isPhysicsEnabled();
   bool isShadowsEnabled();
-
-  //Temp Flags
-  bool enableBloom;
-  bool enableSSAO;
-  bool enableMotionBlur;
+  bool isBloomEnabled();
+  bool isSSAOEnabled();
+  bool isAIEnabled();
+  bool isAudioEnabled();
+  /*
+  bool isHDREnabled();
+  bool isLightingEnabled();
+  bool isEffectsEnabled();
+  bool isDecalsEnabled();
+  bool isWaterEnabled();
+  bool isSkyEnabled();
+  bool isFreeCameraEnabled();
+  bool isWireframeEnabled();
+  */
 
 private:
   Ogre::Root* root;
   
-  Player* player;//the local player
+  //Local Player
+  Player* player;
 
+  //Scenes
   int defaultScene;
   std::map<int, Scene*> scenes;
   
-#ifdef _DEBUG
-  //PhysX Visual Debugger
-  std::string physXVisualDebuggerIP;
-  int physXVisualDebuggerPort;
-  int physXVisualDebuggerTimeoutMilliseconds;
-#endif
-
   //Managers
   DataManager dataManager;
   TimeManager timeManager;
   SoundManager soundManager;
-  ScriptManager* scriptManager;
+  ScriptManager scriptManager;
   PhysicsManager physicsManager;
   ControlManager controlManager;
   FabricationManager fabricationManager;
@@ -127,22 +145,20 @@ private:
   bool getIniBool(std::string iniLabel, boost::property_tree::ptree* pt);
   int getIniInt(std::string iniLabel, boost::property_tree::ptree* pt);
 
-  //Flags... eventually remove
+  //Flags
+  bool enableShadows;
   bool enablePhysics;
+  bool enableBloom;
+  bool enableSSAO;
   bool enableAI;
   bool enableAudio;
-  bool enableHDR;
-  bool enableShadows;
-  bool enableLights;
-  bool enableParticles;
-  bool enableDecals;
-  bool enableSprites;
-  bool enableWater;
-  bool enableSky;
-  bool freeCameraDebug;
-  bool wireframeDebug;
-  bool freezeCollisionDebug;
-  bool showCollisionDebug;
-  bool showShadowDebug;
+
+#ifdef _DEBUG
+  //PhysX Visual Debugger
+  std::string physXVisualDebuggerIP;
+  int physXVisualDebuggerPort;
+  int physXVisualDebuggerTimeoutMilliseconds;
+#endif
+
 };
 

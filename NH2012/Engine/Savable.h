@@ -2,11 +2,11 @@
 
 #include <string>
 
-class SaveInterface
+class Savable
 {
 public:
-  SaveInterface(void);
-  virtual ~SaveInterface(void);
+  Savable(void);
+  virtual ~Savable(void);
 
   virtual std::string save() = 0;
   virtual void load(std::string state) = 0;

@@ -7,7 +7,7 @@
 
 //-------------------------------------------------------------------------------------
 ArchitectureManager::ArchitectureManager(Scene* scene, PathfindManager* pathfinder)
-  : IdentificationInterface(this, "Main", ARCHITECTURE),
+  : Identifiable(this, "Main", ARCHITECTURE),
     scene(scene),
     rootNode(scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode()),
     instanceNumber(0),
@@ -64,7 +64,7 @@ void ArchitectureManager::addStaticTrimesh(Ogre::String meshName, float restitut
 
   //construct architecture actor
   physx::PxRigidStatic* actor = scene->getWorld()->getPhysicsManager()->getPhysics()->createRigidStatic(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z), physx::PxQuat(quaternion.x,quaternion.y,quaternion.z,quaternion.w)));
-  actor->userData = (IdentificationInterface*) this;
+  actor->userData = (Identifiable*) this;
   physx::PxShape* shape = actor->createShape(physx::PxTriangleMeshGeometry(mesh), *scene->getWorld()->getPhysicsManager()->getDefaultMaterial());
   if(!shape) throw NHException("could not create architecture physics shape");
   physx::PxFilterData filter;

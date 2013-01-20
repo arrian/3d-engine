@@ -10,7 +10,7 @@
 
 #include "Bar.h"
 #include "Actor.h"
-#include "IdentificationInterface.h"
+#include "Identifiable.h"
 #include "HumanoidSkeletonComponent.h"
 #include "KinematicMovementComponent.h"
 #include "CameraComponent.h"
@@ -29,7 +29,7 @@ public:
   ~Player(void);
 
   void update(double elapsedSeconds);
-  void hookWindow(Ogre::RenderWindow* window);/*! Hooks the player camera to a render window.*/
+  void hookWindow(Ogre::RenderWindow* window);//hooks the player camera to a render window
   
   //Actions
   virtual void stop();
@@ -69,7 +69,7 @@ private:
   World* world;
 
   Ogre::SceneNode* freeCameraNode;//node for free camera
-  IdentificationInterface* currentTarget;
+  Identifiable* currentTarget;
 
   CameraComponent camera;//the player camera generally attached to the head node
   HumanoidSkeletonComponent skeleton;

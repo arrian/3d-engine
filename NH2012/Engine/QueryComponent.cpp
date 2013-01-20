@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "Item.h"
 #include "Interactive.h"
-#include "IdentificationInterface.h"
+#include "Identifiable.h"
 
 
 QueryComponent::QueryComponent(void)
@@ -35,7 +35,7 @@ void QueryComponent::hasNodeChange()
 }
 
 //-------------------------------------------------------------------------------------
-IdentificationInterface* QueryComponent::rayQuery(Vector3 position, Vector3 direction, float distance, Group groups)
+Identifiable* QueryComponent::rayQuery(Vector3 position, Vector3 direction, float distance, Group groups)
 {
   Vector3 unitDirection = direction.normalisedCopy();
   physx::PxSceneQueryFlags outputFlags = physx::PxSceneQueryFlags();
@@ -48,7 +48,7 @@ IdentificationInterface* QueryComponent::rayQuery(Vector3 position, Vector3 dire
     
     if(hit.shape->getActor().userData)
     {      
-      IdentificationInterface* target = static_cast<IdentificationInterface*>(hit.shape->getActor().userData);//Unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
+      Identifiable* target = static_cast<Identifiable*>(hit.shape->getActor().userData);//Unsafe operation. Have to make certain that the void pointer has been cast to PhysicalInterface initially
 
       return target;
     }
@@ -57,7 +57,7 @@ IdentificationInterface* QueryComponent::rayQuery(Vector3 position, Vector3 dire
 }
 
 //-------------------------------------------------------------------------------------
-IdentificationInterface* QueryComponent::rayQuery(Vector3 direction, float distance, Group groups)
+Identifiable* QueryComponent::rayQuery(Vector3 direction, float distance, Group groups)
 {
   return rayQuery(node->_getDerivedPosition(), direction, distance, groups);
 }

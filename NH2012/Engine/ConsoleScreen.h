@@ -7,43 +7,34 @@
 #include <OISKeyboard.h>
 #include <OgreString.h>
 
-#include "Gorilla.h"
+#include "Screen.h"
+#include "ScriptManager.h"
 
 class World;
+class Gorilla::MarkupText;
 
 
-/**
- * In-game command console singleton.
- */
-class Console
+class ConsoleScreen : public Screen, public OutputCallback
 {
 public:
-  Console();
-  ~Console(void);
+  ConsoleScreen(World* world);
+  virtual ~ConsoleScreen(void);
 
-  void setWorld(World* world);
-
-  void hookWindow(Ogre::RenderWindow* window);//hooks the console to a render window
-  void rehookWindow();
-  bool isVisible();//returns the visibility of the console
-  void setVisible(bool visible);//sets the visibility of the console
   void update(double elapsedSeconds);
-  void keyPressed(const OIS::KeyEvent &arg);//key down
-  void keyReleased(const OIS::KeyEvent &arg);//key up
+  virtual void keyPressed(const OIS::KeyEvent &arg);//key down
+  virtual void keyReleased(const OIS::KeyEvent &arg);//key up
 
-  void print(std::string highlight, std::string comment);
-  void print(std::string comment);
+  virtual void print(std::string highlight, std::string comment);
+  virtual void print(std::string comment);
   void clear();
-  
+
+protected:
+  virtual void hasLayerChange();
+
 private:
   bool isShift;//True if shift is pressed.
   bool isControl;//True if control is pressed.
   bool showCursor;
-  Ogre::RenderWindow* window;//Game render window.
-  World* world;//Game world.
-  Gorilla::Silverback* overlay;//Console renderer.
-  Gorilla::Screen* screen;//Console screen.
-  Gorilla::Layer* layer;//Console layer.
   Gorilla::MarkupText* view;//Console display text.
   std::vector<std::string> lines;
   int displayLines;//number of lines to display at a time

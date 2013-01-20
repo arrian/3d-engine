@@ -7,7 +7,7 @@ Editor::Editor(QWidget *parent, Qt::WFlags flags)
 {
   ui.setupUi(this);
   ui.renderer->init();
-
+ 
   //Gathering Data
   //model = new DataModel(world->getDataManager());
   //ui.data->setModel(model);
@@ -17,6 +17,16 @@ Editor::Editor(QWidget *parent, Qt::WFlags flags)
 Editor::~Editor()
 {
 
+}
+
+void Editor::keyPressEvent(QKeyEvent* e) 
+{
+  //send event to renderer
+}
+
+void Editor::keyReleaseEvent(QKeyEvent* e) 
+{
+  //send event to renderer
 }
 
 int main(int argc, char *argv[])

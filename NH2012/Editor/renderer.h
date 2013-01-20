@@ -57,6 +57,9 @@ protected:
 
 private:
   bool hasMouseClick;
+
+  bool hasPrevious;
+  QPoint previous;
 };
 
 #endif // RENDERER_H

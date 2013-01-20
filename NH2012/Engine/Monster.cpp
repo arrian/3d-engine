@@ -10,7 +10,7 @@ Monster::Monster(MonsterDesc desc)
     mesh(desc.mesh),
     skeleton()
 {
-  skeleton.setUserData((IdentificationInterface*) this);
+  skeleton.setUserData((Identifiable*) this);
   skeleton.setGroup(MONSTER);
 }
 

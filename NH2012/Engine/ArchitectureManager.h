@@ -6,7 +6,7 @@
 #include "Vector3.h"
 #include <OgreSceneNode.h>
 
-#include "IdentificationInterface.h"
+#include "Identifiable.h"
 #include "PathfindManager.h"
 #include "DataManager.h"
 
@@ -14,7 +14,7 @@
 
 class Scene;
 
-class ArchitectureManager : public IdentificationInterface
+class ArchitectureManager : public Identifiable
 {
 public:
   ArchitectureManager(Scene* scene, PathfindManager* pathfinder = NULL);

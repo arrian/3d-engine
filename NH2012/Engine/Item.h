@@ -3,7 +3,7 @@
 #include <OgreString.h>
 #include "Quaternion.h"
 
-#include "IdentificationInterface.h"
+#include "Identifiable.h"
 #include "MeshComponent.h"
 #include "PhysicalComponent.h"
 #include "BasicComponent.h"
@@ -14,7 +14,7 @@
 
 class Scene;
 
-class Item : public BasicComponent, public IdentificationInterface
+class Item : public BasicComponent, public Identifiable
 {
 public:
   Item(ItemDesc description);
