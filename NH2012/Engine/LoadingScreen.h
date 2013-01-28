@@ -7,7 +7,7 @@
 class LoadingScreen : public Screen
 {
 public:
-  LoadingScreen(World* world);
+  LoadingScreen();
   virtual ~LoadingScreen(void);
 
 private:

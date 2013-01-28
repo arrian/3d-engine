@@ -1,10 +1,9 @@
 #include "Screen.h"
 
 
-Screen::Screen(World* world)
+Screen::Screen()
   : layer(NULL),
-    visible(false),
-    world(world)
+    visible(false)
 {
 }
 
@@ -29,11 +28,6 @@ void Screen::setVisible(bool visible)
 bool Screen::isVisible() 
 {
   return visible;
-}
-
-void Screen::setWorld(World* world)
-{
-  this->world = world;
 }
 
 void Screen::setSize(Ogre::Vector2 dimensions)

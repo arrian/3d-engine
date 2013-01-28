@@ -43,6 +43,9 @@ public:
   void mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
   void mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
+  //Setters
+  void setWorld(World* world);
+
 protected:
   void setDisplay(Screen* display);
 

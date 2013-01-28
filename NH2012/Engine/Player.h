@@ -21,6 +21,7 @@
 #include "Packetable.h"
 #include "Item.h"
 #include "Apparel.h"
+#include "Button.h"
 
 class Scene;
 class World;
@@ -67,7 +68,7 @@ public:
   void mouseMoved(const OIS::MouseEvent &evt);
   void mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
   void mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
-
+  
   //Network
   virtual PlayerPacket extractPacket();
   virtual void integratePacket(PlayerPacket packet);
@@ -105,7 +106,8 @@ private:
   float lookResponsiveness;
   float handMoveScalar;
 
-  void keyEvent(const OIS::KeyEvent &evt, bool isDown);
+  void buttonEvent(Button button, bool isDown);
+  //void keyEvent(const OIS::KeyEvent &evt, bool isDown);
   virtual void hasSceneChange();
 };
 

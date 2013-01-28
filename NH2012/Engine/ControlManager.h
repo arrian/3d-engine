@@ -3,9 +3,8 @@
 //Standard
 #include <vector>
 
-//OIS
-#include <OISKeyboard.h>
-#include <OISMouse.h>
+//Local
+#include "Button.h"
 
 //Keyboard and Mouse Controls
 class ControlManager
@@ -15,27 +14,27 @@ public:
   virtual ~ControlManager() {}
 
   //Move
-  OIS::KeyCode moveForward;
-  OIS::KeyCode moveLeft;
-  OIS::KeyCode moveBack;
-  OIS::KeyCode moveRight;
+  Button moveForward;
+  Button moveLeft;
+  Button moveBack;
+  Button moveRight;
 
   //Actions
-  OIS::KeyCode jump;
-  OIS::KeyCode run;
-  OIS::KeyCode crouch;
+  Button jump;
+  Button run;
+  Button crouch;
 
   //Hands
-  OIS::MouseButtonID leftHand;
-  OIS::MouseButtonID rightHand;
-  OIS::KeyCode interact;
+  Button leftHand;
+  Button rightHand;
+  Button interact;
 
   //Miscellaneous
-  std::vector<OIS::KeyCode> quickslots;
-  OIS::KeyCode exit;
+  std::vector<Button> quickslots;
+  Button exit;
 
   //Debug
-  OIS::KeyCode addItem;
-  OIS::KeyCode addMonster;
-  OIS::KeyCode console;
+  Button addItem;
+  Button addMonster;
+  Button console;
 };

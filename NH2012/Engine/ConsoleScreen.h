@@ -17,7 +17,7 @@ class Gorilla::MarkupText;
 class ConsoleScreen : public Screen, public OutputCallback
 {
 public:
-  ConsoleScreen(World* world);
+  ConsoleScreen(ScriptManager* scriptManager);
   virtual ~ConsoleScreen(void);
 
   void update(double elapsedSeconds);
@@ -28,10 +28,13 @@ public:
   virtual void print(std::string comment);
   void clear();
 
+  void setScriptManager(ScriptManager* scriptManager);
+
 protected:
   virtual void hasLayerChange();
 
 private:
+  ScriptManager* scriptManager;
   bool isShift;//True if shift is pressed.
   bool isControl;//True if control is pressed.
   bool showCursor;

@@ -2,8 +2,8 @@
 
 #include "InterfaceButton.h"
 
-MenuScreen::MenuScreen(World* world)
-  : Screen(world),
+MenuScreen::MenuScreen()
+  : Screen(),
     buttons()
 {
   //buttons.push_back(new InterfaceButton<MenuScreen>("Resume", Ogre::Vector2(0,0), Ogre::Vector2(200,75), this, &resume));

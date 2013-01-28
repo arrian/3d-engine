@@ -6,7 +6,7 @@
 class CursorScreen : public Screen
 {
 public:
-  CursorScreen(World* world);
+  CursorScreen();
   virtual ~CursorScreen(void);
 
   virtual void mouseMoved(const OIS::MouseEvent &arg);

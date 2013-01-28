@@ -6,11 +6,11 @@ Interface::Interface(World* world)
   : overlay(new Gorilla::Silverback),
     world(world),
     screen(NULL),
-    menuScreen(world),
-    consoleScreen(world),
-    loadingScreen(world),
-    playerScreen(world),
-    cursorScreen(world),
+    menuScreen(),
+    consoleScreen(world->getScriptManager()),
+    loadingScreen(),
+    playerScreen(),
+    cursorScreen(),
     display(NULL)
 {
   displayPlayerScreen();//displayMenuScreen();
@@ -98,7 +98,7 @@ void Interface::keyPressed(const OIS::KeyEvent &arg)
 //-------------------------------------------------------------------------------------
 void Interface::keyReleased(const OIS::KeyEvent &arg) 
 {
-  if(arg.key == world->getControlManager()->console)//display or hide the console
+  if(world->getControlManager()->console.isKeyboardButton(arg.key))//display or hide the console
   {
     if(consoleScreen.isVisible()) displayPlayerScreen();
     else displayConsoleScreen();
@@ -132,6 +132,13 @@ void Interface::setDisplay(Screen* display)
   this->display = display;
   if(!display) return;
   this->display->setVisible(true);
+}
+
+//-------------------------------------------------------------------------------------
+void Interface::setWorld(World* world)
+{
+  this->world = world;
+  consoleScreen.setScriptManager(world->getScriptManager());
 }
 
 

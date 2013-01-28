@@ -115,28 +115,34 @@ void Player::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void Player::keyPressed(const OIS::KeyEvent &evt)
 {
-  if (evt.key == world->getControlManager()->jump) movement.jump();
-  else if(evt.key == world->getControlManager()->interact) interactPressed = true;
-  else keyEvent(evt, true);
+  buttonEvent(Button(evt.key), true);
 }
 
 //-------------------------------------------------------------------------------------
 void Player::keyReleased(const OIS::KeyEvent &evt)
 {
-  keyEvent(evt, false);
+  buttonEvent(Button(evt.key), false);
 }
 
 //-------------------------------------------------------------------------------------
-void Player::keyEvent(const OIS::KeyEvent &evt, bool isDown)
+void Player::buttonEvent(Button button, bool isDown)
 {
-  if(evt.key == world->getControlManager()->moveForward) movement.setMoveForward(isDown);
-  else if(evt.key == world->getControlManager()->moveBack) movement.setMoveBackward(isDown);
-  else if(evt.key == world->getControlManager()->moveLeft) movement.setMoveLeft(isDown);
-  else if(evt.key == world->getControlManager()->moveRight) movement.setMoveRight(isDown);
-  else if(evt.key == world->getControlManager()->run) movement.setRun(isDown);
-  else if(evt.key == world->getControlManager()->crouch) skeleton.setCrouch(isDown);
-  else if(evt.key == world->getControlManager()->addItem) addItem = isDown;
-  else if(evt.key == world->getControlManager()->addMonster) addMonster = isDown;
+  if(isDown)
+  {
+    if(button == world->getControlManager()->jump) movement.jump();
+    else if(button == world->getControlManager()->interact) interactPressed = true;
+  }
+
+  if(button == world->getControlManager()->moveForward) movement.setMoveForward(isDown);
+  else if(button == world->getControlManager()->moveBack) movement.setMoveBackward(isDown);
+  else if(button == world->getControlManager()->moveLeft) movement.setMoveLeft(isDown);
+  else if(button == world->getControlManager()->moveRight) movement.setMoveRight(isDown);
+  else if(button == world->getControlManager()->run) movement.setRun(isDown);
+  else if(button == world->getControlManager()->crouch) skeleton.setCrouch(isDown);
+  else if(button == world->getControlManager()->addItem) addItem = isDown;
+  else if(button == world->getControlManager()->addMonster) addMonster = isDown;
+  else if(button == world->getControlManager()->leftHand) skeleton.setLeftHand(isDown);
+  else if(button == world->getControlManager()->rightHand) skeleton.setRightHand(isDown);
 }
 
 //-------------------------------------------------------------------------------------
@@ -165,15 +171,13 @@ void Player::mouseMoved(const OIS::MouseEvent &evt)
 //-------------------------------------------------------------------------------------
 void Player::mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  if(id == world->getControlManager()->leftHand) skeleton.setLeftHand(true);
-  if(id == world->getControlManager()->rightHand) skeleton.setRightHand(true);
+  buttonEvent(Button(id), true);
 }
 
 //-------------------------------------------------------------------------------------
 void Player::mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-  if(id == world->getControlManager()->leftHand) skeleton.setLeftHand(false);
-  if(id == world->getControlManager()->rightHand) skeleton.setRightHand(false);
+  buttonEvent(Button(id), false);
 }
 
 //-------------------------------------------------------------------------------------

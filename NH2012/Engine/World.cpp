@@ -1,13 +1,16 @@
 
 #include "World.h"
 
+//Boost
+#include <boost/lexical_cast.hpp>
+
 //Local
 #include "Scene.h"
 #include "Player.h"
 #include "Item.h"
 #include "Monster.h"
 #include "ScriptManager.h"
-#include "KeyboardMap.h"
+#include "ControlMap.h"
 #include "NHException.h"
 #include "Vector3.h"
 #include "Quaternion.h"
@@ -218,24 +221,25 @@ void World::parseInitialisation(std::string filename)
 
   //General
   enablePhysics = ini.get<bool>("General.EnablePhysics");
-  enableAI = ini.get<bool>("General.EnableAI");
   enableAudio = ini.get<bool>("General.EnableAudio");
+  enableAI = ini.get<bool>("General.EnableAI");
 
   //Controls
-  controlManager.moveForward = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Forward"));
-  controlManager.moveLeft = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Left"));
-  controlManager.moveBack = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Back"));
-  controlManager.moveRight = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Right"));
-  controlManager.jump = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Jump"));
-  controlManager.run = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Run"));
-  controlManager.crouch = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Crouch"));
-  controlManager.interact = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Interact"));
-  controlManager.quickslots.push_back(KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.QuickSlot1")));
-  controlManager.quickslots.push_back(KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.QuickSlot2")));
-  controlManager.console = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Console"));
-  controlManager.exit = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Exit"));
-  controlManager.leftHand = OIS::MB_Left;
-  controlManager.rightHand = OIS::MB_Right;
+  controlManager.moveForward = Button(ini.get<std::string>("Controls.Forward"));
+  controlManager.moveLeft = Button(ini.get<std::string>("Controls.Left"));
+  controlManager.moveBack = Button(ini.get<std::string>("Controls.Back"));
+  controlManager.moveRight = Button(ini.get<std::string>("Controls.Right"));
+  controlManager.jump = Button(ini.get<std::string>("Controls.Jump"));
+  controlManager.run = Button(ini.get<std::string>("Controls.Run"));
+  controlManager.crouch = Button(ini.get<std::string>("Controls.Crouch"));
+  controlManager.interact = Button(ini.get<std::string>("Controls.Interact"));
+  for(int i = 1; i < 10; i++) controlManager.quickslots.push_back(Button(ini.get<std::string>("Controls.QuickSlot" + boost::lexical_cast<std::string>(i))));
+  controlManager.console = Button(ini.get<std::string>("Controls.Console"));
+  controlManager.exit = Button(ini.get<std::string>("Controls.Exit"));
+  controlManager.leftHand = Button(ini.get<std::string>("Controls.LeftHand"));//OIS::MB_Left;
+  controlManager.rightHand = Button(ini.get<std::string>("Controls.RightHand"));//OIS::MB_Right;
+
+  //Temp Controls
   controlManager.addItem = OIS::KC_1;
   controlManager.addMonster = OIS::KC_2;
   

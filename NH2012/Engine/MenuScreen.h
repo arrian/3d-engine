@@ -8,7 +8,7 @@ class InterfaceButton;
 class MenuScreen : public Screen
 {
 public:
-  MenuScreen(World* world);
+  MenuScreen();
   virtual ~MenuScreen(void);
 
   virtual void mouseMoved(const OIS::MouseEvent &arg);

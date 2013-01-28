@@ -7,10 +7,11 @@
 #include "Scene.h"
 #include "Player.h"
 #include "ScriptManager.h"
-#include "KeyboardMap.h"
+#include "ControlMap.h"
 
-ConsoleScreen::ConsoleScreen(World* world)
-  : Screen(world),
+ConsoleScreen::ConsoleScreen(ScriptManager* scriptManager)
+  : Screen(),
+    scriptManager(scriptManager),
     isShift(false),
     isControl(false),
     showCursor(true),
@@ -30,12 +31,18 @@ ConsoleScreen::ConsoleScreen(World* world)
     cursorAccumulator(0.0),
     previousKey(OIS::KC_UNASSIGNED)
 {
-  world->getScriptManager()->addOutputTarget(this);
+  scriptManager->addOutputTarget(this);
 }
 
 //-------------------------------------------------------------------------------------
 ConsoleScreen::~ConsoleScreen(void)
 {
+}
+
+//-------------------------------------------------------------------------------------
+void ConsoleScreen::setScriptManager(ScriptManager* scriptManager)
+{
+  this->scriptManager = scriptManager;
 }
 
 //-------------------------------------------------------------------------------------
@@ -124,7 +131,7 @@ void ConsoleScreen::keyPressed(const OIS::KeyEvent &arg)
   {
     try
     {
-      command += KeyboardMap::getInstance().getAsString(arg.key, isShift);
+      command += ControlMap::getInstance().getAsString(arg.key, isShift);
     }
     catch(NHException e)
     {
@@ -159,7 +166,7 @@ void ConsoleScreen::enter()
   try
   {
     if(command == "clear") clear();
-    world->getScriptManager()->execute(command);
+    scriptManager->execute(command);
   }
   catch(NHException e)
   {

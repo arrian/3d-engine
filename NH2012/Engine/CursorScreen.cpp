@@ -1,8 +1,8 @@
 #include "CursorScreen.h"
 
 
-CursorScreen::CursorScreen(World* world)
-  : Screen(world)
+CursorScreen::CursorScreen()
+  : Screen()
 {
 }
 

@@ -8,7 +8,7 @@ class World;
 class Screen
 {
 public:
-  Screen(World* world);
+  Screen();
   ~Screen(void);
 
   //Override
@@ -19,8 +19,6 @@ public:
   virtual void mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id) {}
   virtual void mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id) {}
 
-
-  void setWorld(World* world);
   void setLayer(Gorilla::Layer* layer);
   void setSize(Ogre::Vector2 dimensions);
   void setVisible(bool visible);
@@ -31,7 +29,6 @@ public:
 
 protected:
   Gorilla::Layer* layer;
-  World* world;
 
   //Override
   virtual void hasLayerChange() {}
