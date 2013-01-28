@@ -1,19 +1,9 @@
 #pragma once
 
 //Standard
-#include <vector>
 #include <ctime>
 #include <iostream>
 #include <string>
-
-//Boost
-#include <boost/lexical_cast.hpp>
-
-//Ogre
-#include <Ogre.h>
-
-//Local
-#include "NHException.h"
 
 
 enum MoonPhase

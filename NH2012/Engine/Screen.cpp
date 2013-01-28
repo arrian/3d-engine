@@ -35,3 +35,14 @@ void Screen::setWorld(World* world)
 {
   this->world = world;
 }
+
+void Screen::setSize(Ogre::Vector2 dimensions)
+{
+  this->dimensions = dimensions;
+  hasSizeChange();
+}
+
+Ogre::Vector2 Screen::getSize()
+{
+  return dimensions;
+}

@@ -43,7 +43,7 @@ void Item::hasSceneChange()
     simplifiedEntity = scene->getGraphicsManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
     if(!material) material = scene->getPhysicsManager()->getPhysics().createMaterial(desc.staticFriction, desc.dynamicFriction, desc.restitution);
     physical.begin();
-    physical.addConvexMesh(scene->getWorld()->getFabricationManager()->createConvexMesh(simplifiedEntity->getMesh()), material);
+    physical.addConvexMesh(scene->getWorld()->getPhysicsManager()->getFabrication()->createConvexMesh(simplifiedEntity->getMesh()), material);
     physical.end();
 
     setUserData((Identifiable*) this);
@@ -56,6 +56,8 @@ void Item::hasSceneChange()
 Item::~Item(void)
 {
   //if(physical) physical->release();
+
+  material->release();
 
   if(scene)
   {
@@ -134,5 +136,17 @@ void Item::setUserData(void* target)
   physical.setUserData(target);
 }
 
+//-------------------------------------------------------------------------------------
+void Item::integratePacket(ItemPacket packet)
+{
+  setPosition(packet.position);
+}
 
+//-------------------------------------------------------------------------------------
+ItemPacket Item::extractPacket()
+{
+  ItemPacket packet = ItemPacket();
+  packet.position = getPosition();
+  return packet;
+}
 

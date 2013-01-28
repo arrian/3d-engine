@@ -18,11 +18,14 @@
 #include "QueryComponent.h"
 #include "Vector3.h"
 #include "Quaternion.h"
+#include "Packetable.h"
+#include "Item.h"
+#include "Apparel.h"
 
 class Scene;
 class World;
 
-class Player : public Actor
+class Player : public Actor, public Packetable<PlayerPacket>
 {
 public:
   Player(PlayerDesc description, World* world);
@@ -65,6 +68,10 @@ public:
   void mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
   void mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID id);
 
+  //Network
+  virtual PlayerPacket extractPacket();
+  virtual void integratePacket(PlayerPacket packet);
+
 private:
   World* world;
 
@@ -76,6 +83,18 @@ private:
   KinematicMovementComponent movement;
   MeshComponent mesh;
   QueryComponent query;
+
+  std::vector<Item*> inventory;
+  Item* leftHand;
+  Item* rightHand;
+  Apparel* clothes;
+  Apparel* shoes;
+  Apparel* hat;
+  std::vector<Item*> quickSlots;
+
+  Bar life;
+  Bar experience;
+  int level;
 
   bool addItem;
   bool addMonster;

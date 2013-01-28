@@ -1,12 +1,12 @@
 #include "CameraComponent.h"
 
+//Ogre
+#include "OgreCompositorManager.h"
+
+//Local
 #include "Scene.h"
 #include "NHException.h"
 #include "Identifiable.h"
-
-#include "Console.h"
-
-#include "OgreCompositorManager.h"
 
 //-------------------------------------------------------------------------------------
 CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom)

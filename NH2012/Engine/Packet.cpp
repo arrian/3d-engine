@@ -9,3 +9,11 @@ Packet::Packet(void)
 Packet::~Packet(void)
 {
 }
+
+//-------------------------------------------------------------------------------------
+void* Packet::getDataPointer()
+{
+  return &data;
+}
+
+

@@ -55,7 +55,7 @@ void ArchitectureManager::addStaticTrimesh(Ogre::String meshName, float restitut
   else
   {
     std::cout << "Building " << meshName << "... ";
-    mesh = scene->getWorld()->getFabricationManager()->createTriangleMeshV2(entity);
+    mesh = scene->getWorld()->getPhysicsManager()->getFabrication()->createTriangleMeshV2(entity);
     statics.insert(std::pair<Ogre::String,physx::PxTriangleMesh*>(meshName, mesh));
     std::cout << "done." << std::endl;
   }

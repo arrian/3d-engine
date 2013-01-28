@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Monster.h"
 #include "Goal.h"
+#include "NHException.h"
 
 //-------------------------------------------------------------------------------------
 IntelligentMovementComponent::IntelligentMovementComponent(float speed, Vector3 gravity)

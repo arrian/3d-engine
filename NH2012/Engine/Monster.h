@@ -11,10 +11,11 @@
 #include "MeshComponent.h"
 #include "Bar.h"
 #include "Group.h"
+#include "Packetable.h"
 
 class Scene;
 
-class Monster : public Actor
+class Monster : public Actor, public Packetable<MonsterPacket>
 {
 public:
   Monster(MonsterDesc description);
@@ -43,6 +44,10 @@ public:
   virtual bool getCrouching();
   virtual bool getRunning();
   virtual Vector3 getGravity();
+
+  //Network
+  virtual void integratePacket(MonsterPacket packet);
+  virtual MonsterPacket extractPacket();
 
 protected:
   MonsterDesc description;

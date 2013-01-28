@@ -1,7 +1,11 @@
+//Standard
 #include <string>
 
+//Boost
 #include <boost/bimap.hpp>
+#include <boost/assign/list_of.hpp>
 
+//OIS
 #include "OIS.h"
 
 typedef boost::bimap<OIS::KeyCode, std::string> Mapper;

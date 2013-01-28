@@ -1,13 +1,17 @@
 
-//Local
 #include "World.h"
+
+//Local
 #include "Scene.h"
 #include "Player.h"
 #include "Item.h"
 #include "Monster.h"
 #include "ScriptManager.h"
-#include "Console.h"
 #include "KeyboardMap.h"
+#include "NHException.h"
+#include "Vector3.h"
+#include "Quaternion.h"
+#include "InitialisationParser.h"
 
 //-------------------------------------------------------------------------------------
 World::World(Ogre::Root* root)
@@ -19,7 +23,7 @@ World::World(Ogre::Root* root)
     scriptManager(),
     physicsManager(),
     controlManager(),
-    fabricationManager(),
+    networkManager(),
     player(NULL),
     defaultScene(0)
 {
@@ -42,27 +46,32 @@ World::~World(void)
 //-------------------------------------------------------------------------------------
 void World::initialise(std::string iniFile)
 {
-  parseIni(iniFile);
+  parseInitialisation(iniFile);
 
-  fabricationManager.setPhysics(physicsManager.getPhysics());
-  fabricationManager.setCooking(physicsManager.getCooking());
-  fabricationManager.setDefaultPhysicsMaterial(physicsManager.getDefaultMaterial());//move all material stuff to the fabrication manager
-
-#ifdef _DEBUG
-  physicsManager.initialiseVisualDebugger(physXVisualDebuggerIP, physXVisualDebuggerPort, physXVisualDebuggerTimeoutMilliseconds);
-#endif
-
-  //creating default scene
+  //Create default scene
   Scene* scene = loadScene(defaultScene);
   if(!scene) throw NHException("default scene creation failed");
   
-  //creating player
+  //Create default player
   PlayerDesc playerDesc = PlayerDesc();
   playerDesc.gravity = scene->getGravity();
   player = new Player(playerDesc, this);
   scene->addPlayer(player);
+}
 
-  //Console::getInstance().setWorld(this);
+//-------------------------------------------------------------------------------------
+bool World::update(double elapsedSeconds)
+{
+  if(!scriptManager.update(elapsedSeconds)) return false;
+  timeManager.update(elapsedSeconds);
+
+  if(player)
+  {
+    Scene* scene = player->getScene();
+    if(scene) scene->update(elapsedSeconds);
+  }
+
+  return true;
 }
 
 //-------------------------------------------------------------------------------------
@@ -76,19 +85,6 @@ void World::hookWindow(Ogre::RenderWindow* window)
 Player* World::getPlayer()
 {
   return player;
-}
-
-//-------------------------------------------------------------------------------------
-Scene* World::getScene(int id)
-{
-  if(!hasScene(id)) return NULL;
-  return scenes.find(id)->second;
-}
-
-//-------------------------------------------------------------------------------------
-int World::getNumberScenes()
-{
-  return scenes.size();
 }
 
 //-------------------------------------------------------------------------------------
@@ -116,6 +112,43 @@ ScriptManager* World::getScriptManager()
 }
 
 //-------------------------------------------------------------------------------------
+NetworkManager* World::getNetworkManager()
+{
+  return &networkManager;
+}
+
+//-------------------------------------------------------------------------------------
+DataManager* World::getDataManager()
+{
+  return &dataManager;
+}
+
+//-------------------------------------------------------------------------------------
+TimeManager* World::getTimeManager()
+{
+  return &timeManager;
+}
+
+//-------------------------------------------------------------------------------------
+Scene* World::getScene(int id)
+{
+  if(!hasScene(id)) return NULL;
+  return scenes.find(id)->second;
+}
+
+//-------------------------------------------------------------------------------------
+bool World::hasScene(int id)
+{
+  return scenes.count(id) > 0;
+}
+
+//-------------------------------------------------------------------------------------
+int World::getNumberScenes()
+{
+  return scenes.size();
+}
+
+//-------------------------------------------------------------------------------------
 void World::getSceneNames(std::map<int, std::string> &names)
 {
   for(std::map<int, Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
@@ -134,12 +167,6 @@ Scene* World::loadScene(int id)
 }
 
 //-------------------------------------------------------------------------------------
-bool World::hasScene(int id)
-{
-  return scenes.count(id) > 0;
-}
-
-//-------------------------------------------------------------------------------------
 void World::destroyScene(int id)
 {
   if(!hasScene(id)) throw NHException("there is no scene loaded with that id");
@@ -150,196 +177,113 @@ void World::destroyScene(int id)
 }
 
 //-------------------------------------------------------------------------------------
-bool World::update(double elapsedSeconds)
-{
-  if(!scriptManager.update(elapsedSeconds)) return false;
-  timeManager.update(elapsedSeconds);
-
-  if(player)
-  {
-    Scene* scene = player->getScene();
-    if(scene) scene->update(elapsedSeconds);
-  }
-
-  return true;
-}
-
-//-------------------------------------------------------------------------------------
 void World::keyPressed(const OIS::KeyEvent &arg)
 {
+  assert(player);
   player->keyPressed(arg);
 }
 
 //-------------------------------------------------------------------------------------
 void World::keyReleased(const OIS::KeyEvent &arg)
 {
+  assert(player);
   player->keyReleased(arg);
 }
 
 //-------------------------------------------------------------------------------------
 void World::mouseMoved(const OIS::MouseEvent &arg)
 {
+  assert(player);
   player->mouseMoved(arg);
 }
 
 //-------------------------------------------------------------------------------------
 void World::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
+  assert(player);
   player->mousePressed(arg, id);
 }
 
 //-------------------------------------------------------------------------------------
 void World::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
+  assert(player);
   player->mouseReleased(arg, id);
 }
 
 //-------------------------------------------------------------------------------------
-void World::parseIni(std::string filename)
+void World::parseInitialisation(std::string filename)
 {
-  boost::property_tree::ptree pt;
-  try
-  {
-    Ogre::FileInfoListPtr fileListPtr = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", filename);
-    if(fileListPtr->size() < 1) throw NHException("could not find the path to the specified initialisation file");
-
-    boost::property_tree::ini_parser::read_ini(fileListPtr->front().archive->getName() + "/" + fileListPtr->front().filename, pt);
-  }
-  catch(boost::property_tree::ini_parser::ini_parser_error e)//need to provide default values
-  {
-    throw NHException("could not parse the initialisation file");
-  }
-  catch(boost::property_tree::ptree_bad_path e)
-  {
-    throw NHException("the initialisation file is malformed");
-  }
+  InitialisationParser ini(filename);
 
   //General
-  enablePhysics = getIniBool("General.EnablePhysics", &pt);
-  enableAI = getIniBool("General.EnableAI", &pt);
-  enableAudio = getIniBool("General.EnableAudio", &pt);
+  enablePhysics = ini.get<bool>("General.EnablePhysics");
+  enableAI = ini.get<bool>("General.EnableAI");
+  enableAudio = ini.get<bool>("General.EnableAudio");
 
   //Controls
-  controlManager.moveForward = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Forward", &pt));
-  controlManager.moveLeft = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Left", &pt));
-  controlManager.moveBack = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Back", &pt));
-  controlManager.moveRight = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Right", &pt));
-  controlManager.jump = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Jump", &pt));
-  controlManager.run = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Run", &pt));
-  controlManager.crouch = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Crouch", &pt));
-  controlManager.interact = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Interact", &pt));
-  controlManager.quickslots.push_back(KeyboardMap::getInstance().getAsKey(getIniString("Controls.QuickSlot1", &pt)));
-  controlManager.quickslots.push_back(KeyboardMap::getInstance().getAsKey(getIniString("Controls.QuickSlot2", &pt)));
-  controlManager.console = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Console", &pt));
-  controlManager.exit = KeyboardMap::getInstance().getAsKey(getIniString("Controls.Exit", &pt));
+  controlManager.moveForward = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Forward"));
+  controlManager.moveLeft = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Left"));
+  controlManager.moveBack = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Back"));
+  controlManager.moveRight = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Right"));
+  controlManager.jump = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Jump"));
+  controlManager.run = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Run"));
+  controlManager.crouch = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Crouch"));
+  controlManager.interact = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Interact"));
+  controlManager.quickslots.push_back(KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.QuickSlot1")));
+  controlManager.quickslots.push_back(KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.QuickSlot2")));
+  controlManager.console = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Console"));
+  controlManager.exit = KeyboardMap::getInstance().getAsKey(ini.get<std::string>("Controls.Exit"));
   controlManager.leftHand = OIS::MB_Left;
   controlManager.rightHand = OIS::MB_Right;
   controlManager.addItem = OIS::KC_1;
   controlManager.addMonster = OIS::KC_2;
-    
+  
   //Environment
-  enableShadows = getIniBool("Environment.Shadows", &pt);
-  enableBloom = getIniBool("Environment.Bloom", &pt);
-  enableSSAO = getIniBool("Environment.SSAO", &pt);
+  enableShadows = ini.get<bool>("Environment.Shadows");
+  enableBloom = ini.get<bool>("Environment.Bloom");
+  enableSSAO = ini.get<bool>("Environment.SSAO");
   /*
-  enableHDR = getIniBool("Environment.HDR", &pt);
-  enableMotionBlur = getIniBool("Environment.MotionBlur", &pt);
-  enableLights = getIniBool("Environment.Lights", &pt);
-  enableParticles = getIniBool("Environment.Particles", &pt);
-  enableDecals = getIniBool("Environment.Decals", &pt);
-  enableSprites = getIniBool("Environment.Sprites", &pt);
-  enableWater = getIniBool("Environment.Water", &pt);
-  enableSky = getIniBool("Environment.Sky", &pt);
+  enableHDR = ini.get<bool>("Environment.HDR");
+  enableMotionBlur = ini.get<bool>("Environment.MotionBlur");
+  enableLights = ini.get<bool>("Environment.Lights");
+  enableParticles = ini.get<bool>("Environment.Particles");
+  enableDecals = ini.get<bool>("Environment.Decals");
+  enableSprites = ini.get<bool>("Environment.Sprites");
+  enableWater = ini.get<bool>("Environment.Water");
+  enableSky = ini.get<bool>("Environment.Sky");
   */
 
   //Data
-  dataManager.addData(getIniString("Data.Scenes", &pt));
-  dataManager.addData(getIniString("Data.Architecture", &pt));
-  dataManager.addData(getIniString("Data.Monsters", &pt));
-  dataManager.addData(getIniString("Data.Items", &pt));
-  dataManager.addData(getIniString("Data.Sounds", &pt));
+  dataManager.addData(ini.get<std::string>("Data.Scenes"));
+  dataManager.addData(ini.get<std::string>("Data.Architecture"));
+  dataManager.addData(ini.get<std::string>("Data.Monsters"));
+  dataManager.addData(ini.get<std::string>("Data.Items"));
+  dataManager.addData(ini.get<std::string>("Data.Sounds"));
 
   //Debug
   /*
-  freezeCollisionDebug = getIniBool("Debug.FreezeCollision", &pt);
-  freeCameraDebug = getIniBool("Debug.FreeCamera", &pt);
-  wireframeDebug = getIniBool("Debug.Wireframe", &pt);
-  showCollisionDebug = getIniBool("Debug.ShowCollisionsDebug", &pt);
-  showShadowDebug = getIniBool("Debug.ShowShadowDebug", &pt);
+  freezeCollisionDebug = ini.get<bool>("Debug.FreezeCollision");
+  freeCameraDebug = ini.get<bool>("Debug.FreeCamera");
+  wireframeDebug = ini.get<bool>("Debug.Wireframe");
+  showCollisionDebug = ini.get<bool>("Debug.ShowCollisionsDebug");
+  showShadowDebug = ini.get<bool>("Debug.ShowShadowDebug");
   */
-  defaultScene = getIniInt("Debug.DefaultScene", &pt);
+  defaultScene = ini.get<int>("Debug.DefaultScene");
 
 #ifdef _DEBUG
-  physXVisualDebuggerIP = getIniString("Debug.PhysXVisualDebuggerIP", &pt);
-  physXVisualDebuggerPort = getIniInt("Debug.PhysXVisualDebuggerPort", &pt);
-  physXVisualDebuggerTimeoutMilliseconds = getIniInt("Debug.PhysXVisualDebuggerTimeoutMilliseconds", &pt);
+  std::string physXVisualDebuggerIP = ini.get<std::string>("Debug.PhysXVisualDebuggerIP");
+  int physXVisualDebuggerPort = ini.get<int>("Debug.PhysXVisualDebuggerPort");
+  int physXVisualDebuggerTimeoutMilliseconds = ini.get<int>("Debug.PhysXVisualDebuggerTimeoutMilliseconds");
+
+  physicsManager.initialiseVisualDebugger(physXVisualDebuggerIP, physXVisualDebuggerPort, physXVisualDebuggerTimeoutMilliseconds);
 #endif
-}
-
-//-------------------------------------------------------------------------------------
-std::string World::getIniString(std::string iniLabel, boost::property_tree::ptree* pt)
-{
-  try
-  {
-    return pt->get<std::string>(iniLabel);
-  }
-  catch(boost::property_tree::ini_parser::ini_parser_error e)//need to provide default values
-  {
-    std::cerr << "failed to parse the ini file for the label " << iniLabel << std::endl;
-  }
-  catch(boost::property_tree::ptree_bad_path e)
-  {
-    std::cerr << "failed to parse the ini file for the label " << iniLabel << std::endl;
-  }
-  return "";
-}
-
-//-------------------------------------------------------------------------------------
-int World::getIniInt(std::string iniLabel, boost::property_tree::ptree* pt)
-{
-  try
-  {
-    return pt->get<int>(iniLabel);
-  }
-  catch(boost::property_tree::ini_parser::ini_parser_error e)//need to provide default values
-  {
-    std::cerr << "failed to parse the ini file for the label " << iniLabel << std::endl;
-  }
-  catch(boost::property_tree::ptree_bad_path e)
-  {
-    std::cerr << "failed to parse the ini file for the label " << iniLabel << std::endl;
-  }
-  return 0;
-}
-
-//-------------------------------------------------------------------------------------
-bool World::getIniBool(std::string iniLabel, boost::property_tree::ptree* pt)
-{
-  return (getIniString(iniLabel, pt) == "true");
-}
-
-//-------------------------------------------------------------------------------------
-DataManager* World::getDataManager()
-{
-  return &dataManager;
 }
 
 //-------------------------------------------------------------------------------------
 void World::setRoot(Ogre::Root* root)
 {
   this->root = root;
-}
-
-//-------------------------------------------------------------------------------------
-FabricationManager* World::getFabricationManager()
-{
-  return &fabricationManager;
-}
-
-//-------------------------------------------------------------------------------------
-TimeManager* World::getTimeManager()
-{
-  return &timeManager;
 }
 
 //-------------------------------------------------------------------------------------

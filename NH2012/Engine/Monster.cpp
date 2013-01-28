@@ -1,6 +1,7 @@
 #include "Monster.h"
 
 #include "Scene.h"
+#include "NHException.h"
 
 //-------------------------------------------------------------------------------------
 Monster::Monster(MonsterDesc desc)
@@ -153,4 +154,16 @@ Vector3 Monster::getGravity()
   return intelligence.getGravity();
 }
 
+//-------------------------------------------------------------------------------------
+void Monster::integratePacket(MonsterPacket packet)
+{
+  setPosition(packet.position);//TODO: interpolate with old position
+}
 
+//-------------------------------------------------------------------------------------
+MonsterPacket Monster::extractPacket()
+{
+  MonsterPacket packet = MonsterPacket();
+  packet.position = getPosition();
+  return packet;
+}

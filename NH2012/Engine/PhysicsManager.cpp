@@ -2,9 +2,12 @@
 
 #include "physxprofilesdk/PxProfileZoneManager.h"
 
+#include "NHException.h"
+
 PhysicsManager::PhysicsManager(void)
   : errorCallback(),
     allocatorCallback(),
+    fabrication(),
     physicsWorld(NULL),
     physicsCooking(NULL),
     physicsMaterial(NULL),
@@ -45,11 +48,19 @@ PhysicsManager::PhysicsManager(void)
 
   physicsMaterial = physicsWorld->createMaterial(defaultStaticFriction, defaultDynamicFriction, defaultRestitution);
   if(!physicsMaterial) throw NHException("default physics material could not be created");
+
+
+  fabrication.setPhysics(getPhysics());
+  fabrication.setCooking(getCooking());
+  fabrication.setDefaultPhysicsMaterial(getDefaultMaterial());//move all material stuff to the fabrication manager
+
 }
 
 //-------------------------------------------------------------------------------------
 PhysicsManager::~PhysicsManager(void)
 {
+
+  physicsMaterial->release();
 
   physicsCooking->release();
   physicsCooking = NULL;
@@ -90,6 +101,12 @@ physx::PxMaterial* PhysicsManager::getDefaultMaterial()
 physx::PxFoundation* PhysicsManager::getFoundation()
 {
   return physicsFoundation;
+}
+
+//-------------------------------------------------------------------------------------
+FabricationManager* PhysicsManager::getFabrication()
+{
+  return &fabrication;
 }
 
 //-------------------------------------------------------------------------------------

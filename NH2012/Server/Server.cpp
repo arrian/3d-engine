@@ -63,6 +63,8 @@ Server::Server(boost::asio::io_service& io_service, short port)
   world = new World(root);
   world->initialise("game.ini");
 
+  world->getNetworkManager()->setBroadcast(true);//broadcasts network availability
+
   //start threads
   game = new boost::thread(&Server::update, this);
   communication = new boost::thread(&Server::serve, this);

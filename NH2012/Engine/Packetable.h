@@ -2,13 +2,14 @@
 
 #include "Packet.h"
 
+template<typename PacketStruct>
 class Packetable
 {
 public:
-  Packetable(void);
-  ~Packetable(void);
+  Packetable(void) {}
+  virtual ~Packetable(void) {}
 
-  virtual Packet extractPacket() = 0;
-  virtual void integratePacket(Packet packet) = 0;
+  virtual PacketStruct extractPacket() = 0;
+  virtual void integratePacket(PacketStruct packet) = 0;
 };
 

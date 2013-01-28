@@ -17,7 +17,7 @@ class SoundManager
 {
 public:
   SoundManager(void);
-  ~SoundManager(void);
+  virtual ~SoundManager(void);
 
   void addSoundEmitter(SoundComponent* component);//adds a sound attached to a node for 3d sound
   void playSound(FMOD::Sound* sound, FMOD::Channel* channel);//play a 2d sound

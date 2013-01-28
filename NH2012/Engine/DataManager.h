@@ -1,17 +1,18 @@
 #pragma once
 
+//Standard
 #include <map>
 #include <string>
 #include <vector>
-#include <iostream>
-#include <fstream>
 
+//Boost
 #include <boost/algorithm/string.hpp>
 
+//Ogre
 #include <OgreColourValue.h>
-#include "Vector3.h"
 
-#include "NHException.h"
+//Local
+#include "Vector3.h"
 
 #define GRAVITY 0.0f, -9.81f, 0.0f
 

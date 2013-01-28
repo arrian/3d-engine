@@ -134,10 +134,8 @@ bool Game::keyPressed(const OIS::KeyEvent &arg)
 //-------------------------------------------------------------------------------------
 bool Game::keyReleased(const OIS::KeyEvent &arg)
 {
-  //if(arg.key == world->getControlManager()->console) Console::getInstance().setVisible(!Console::getInstance().isVisible());//move into userInterface
   userInterface->keyReleased(arg);
   if(userInterface->capturedInput()) return true;
-
   world->keyReleased(arg);
 
   return true;

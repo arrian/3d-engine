@@ -1,5 +1,11 @@
 #include "TimeManager.h"
 
+//Boost
+#include <boost/lexical_cast.hpp>
+
+//Local
+#include "NHException.h"
+
 
 TimeManager::TimeManager(void)
   : ticks(0)

@@ -2,20 +2,7 @@
 
 //Standard
 #include <map>
-#include <ctime>
-#include <iostream>
 #include <string>
-
-//Boost
-#include <boost/config.hpp>
-#include <boost/program_options/detail/config_file.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
-#include <boost/asio/ip/address.hpp>
 
 //Controls
 #include <OISKeyboard.h>
@@ -23,7 +10,6 @@
 
 //Ogre
 #include <OgreRoot.h>
-#include <OgreSceneManager.h>
 
 //Local
 #include "DataManager.h"
@@ -32,11 +18,7 @@
 #include "ControlManager.h"
 #include "PhysicsManager.h"
 #include "ScriptManager.h"
-#include "FabricationManager.h"
-#include "PhysicsErrorCallback.h"
-#include "NHException.h"
-#include "Vector3.h"
-#include "Quaternion.h"
+#include "NetworkManager.h"
 
 //Forward Declarations
 class Player;
@@ -68,11 +50,11 @@ public:
   ScriptManager* getScriptManager();
   PhysicsManager* getPhysicsManager();
   ControlManager* getControlManager();
-  FabricationManager* getFabricationManager();
-  Player* getPlayer();
+  NetworkManager* getNetworkManager();
   Ogre::Root* getRoot();
-  int getNumberScenes();
+  Player* getPlayer();
   Scene* getScene(int id);
+  int getNumberScenes();
   void getSceneNames(std::map<int, std::string> &names);
 
   //Setters
@@ -137,13 +119,10 @@ private:
   ScriptManager scriptManager;
   PhysicsManager physicsManager;
   ControlManager controlManager;
-  FabricationManager fabricationManager;
+  NetworkManager networkManager;
   
   //Initialisation
-  void parseIni(std::string filename);
-  std::string getIniString(std::string iniLabel, boost::property_tree::ptree* pt);
-  bool getIniBool(std::string iniLabel, boost::property_tree::ptree* pt);
-  int getIniInt(std::string iniLabel, boost::property_tree::ptree* pt);
+  void parseInitialisation(std::string filename);
 
   //Flags
   bool enableShadows;
@@ -152,13 +131,6 @@ private:
   bool enableSSAO;
   bool enableAI;
   bool enableAudio;
-
-#ifdef _DEBUG
-  //PhysX Visual Debugger
-  std::string physXVisualDebuggerIP;
-  int physXVisualDebuggerPort;
-  int physXVisualDebuggerTimeoutMilliseconds;
-#endif
 
 };
 

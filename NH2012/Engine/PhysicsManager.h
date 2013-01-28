@@ -1,9 +1,7 @@
 #pragma once
 
+//Standard
 #include <string>
-
-#include "PhysicsErrorCallback.h"
-#include "NHException.h"
 
 //PhysX
 #include "PxPhysicsAPI.h"
@@ -14,6 +12,9 @@
 #include "extensions/PxVisualDebuggerExt.h"
 #include "PxTkStream.h"
 
+//Local
+#include "PhysicsErrorCallback.h"
+#include "FabricationManager.h"
 
 class PhysicsManager
 {
@@ -25,6 +26,7 @@ public:
   physx::PxPhysics* getPhysics();
   physx::PxMaterial* getDefaultMaterial();
   physx::PxFoundation* getFoundation();
+  FabricationManager* getFabrication();
   const physx::PxTolerancesScale& getTolerancesScale();
 
   void initialiseVisualDebugger(std::string ip, int port, int timeoutMilliseconds);
@@ -42,5 +44,7 @@ private:
   physx::PxReal defaultStaticFriction;
   physx::PxReal defaultDynamicFriction;
   physx::PxReal defaultRestitution;
+
+  FabricationManager fabrication;
 };
 

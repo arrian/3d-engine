@@ -1,9 +1,10 @@
 #pragma once
 
+//Standard
+#include <iostream>
 #include <vector>
 #include <string>
-
-#include <OgreRenderWindow.h>
+#include <map>
 
 class World;
 
@@ -84,9 +85,7 @@ public:
 private:
   World* world;
   bool done;
-
   std::vector<OutputCallback*> outputs;
-
   std::map<std::string, Command<ScriptManager>*> commands;//list of all possible commands
 
   bool stringToBool(std::string string);
@@ -96,15 +95,12 @@ private:
   void addCommand(std::string name, std::string arguments, std::string help, void (ScriptManager::*run) (Options));
 
   //Set of executable commands
-  //void clear                     (Options);
-  //void refresh                   (Options);
   void about                     (Options);
   void help                      (Options);
   void exit                      (Options);
   void screenshot                (Options);
   void setPhysicsEnabled         (Options);
   void setCameraFree             (Options);
-  //void setConsoleVisible         (Options);
   void setFullscreen             (Options);
   void setWindowed               (Options);
   void setPlayerScene            (Options);

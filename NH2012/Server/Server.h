@@ -10,9 +10,7 @@
 
 #include <OgreDefaultHardwareBufferManager.h>
 
-#include "../Engine/Console.h"
 #include "../Engine/Packet.h"
-#include "../Engine/SceneChangeListener.h"
 #include "../Engine/World.h"
 
 using boost::asio::ip::udp;

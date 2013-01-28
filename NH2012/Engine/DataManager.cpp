@@ -1,7 +1,17 @@
 #include "DataManager.h"
 
+//Standard
+#include <iostream>
+#include <fstream>
+
+//Boost
 #include <boost/lexical_cast.hpp>
+
+//Ogre
 #include <OgreResourceGroupManager.h>
+
+//Local
+#include "NHException.h"
 
 
 //-------------------------------------------------------------------------------------

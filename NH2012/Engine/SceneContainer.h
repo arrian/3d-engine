@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "BasicComponent.h"
+#include "NHException.h"
 
 class SceneContainer
 {

@@ -10,6 +10,7 @@
 #include "MenuScreen.h"
 #include "PlayerScreen.h"
 #include "LoadingScreen.h"
+#include "CursorScreen.h"
 
 class World;
 
@@ -21,6 +22,7 @@ public:
 
   void update(double elapsedSeconds);
   void hookWindow(Ogre::RenderWindow* window);//need to create new screens and layers
+  void resizeWindow(Ogre::Vector2 dimensions);
 
   //Dialogs
   //void displayMessageDialog(std::string message);
@@ -41,6 +43,9 @@ public:
   void mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
   void mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
+protected:
+  void setDisplay(Screen* display);
+
 private:
   World* world;
   Screen* display;//currently displayed screen
@@ -49,10 +54,12 @@ private:
   MenuScreen menuScreen;
   PlayerScreen playerScreen;
   LoadingScreen loadingScreen;
+  CursorScreen cursorScreen;
 
   Ogre::RenderWindow* window;
   Gorilla::Silverback* overlay;
   Gorilla::Screen* screen;
 
+  Gorilla::Rectangle* cursor;
 };
 

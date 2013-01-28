@@ -1,21 +1,18 @@
-
 #pragma once
 
-#include <map>
-#include <boost/assign/list_of.hpp>
+//Standard
+#include <vector>
 
 //OIS
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
-#include "NHException.h"
-
 //Keyboard and Mouse Controls
 class ControlManager
 {
 public:
-  ControlManager();
-  virtual ~ControlManager();
+  ControlManager() {}
+  virtual ~ControlManager() {}
 
   //Move
   OIS::KeyCode moveForward;

@@ -335,3 +335,22 @@ Vector3 Player::getGravity()
   return movement.getGravity();
 }
 
+//-------------------------------------------------------------------------------------
+PlayerPacket Player::extractPacket()
+{
+  PlayerPacket packet = PlayerPacket();
+  packet.position = getPosition();
+  packet.velocity = getVelocity();
+  packet.isCrouching = getCrouching();
+  packet.isRunning = getRunning();
+  return packet;
+}
+
+//-------------------------------------------------------------------------------------
+void Player::integratePacket(PlayerPacket packet)
+{
+  setPosition(packet.position);//should interpolate
+  setCrouching(packet.isCrouching);
+  setRunning(packet.isRunning);
+  //set velocity
+}

@@ -6,12 +6,14 @@ Interface::Interface(World* world)
   : overlay(new Gorilla::Silverback),
     world(world),
     screen(NULL),
-    consoleScreen(world),
     menuScreen(world),
+    consoleScreen(world),
     loadingScreen(world),
     playerScreen(world),
-    display(&playerScreen)
+    cursorScreen(world),
+    display(NULL)
 {
+  displayPlayerScreen();//displayMenuScreen();
   overlay->loadAtlas("dejavu");
 }
 
@@ -25,6 +27,7 @@ Interface::~Interface(void)
 void Interface::update(double elapsedSeconds) 
 {
   display->update(elapsedSeconds);
+  if(cursorScreen.isVisible()) cursorScreen.update(elapsedSeconds);
 }
 
 //-------------------------------------------------------------------------------------
@@ -39,32 +42,45 @@ void Interface::hookWindow(Ogre::RenderWindow* window)
   menuScreen.setLayer(screen->createLayer(1U));
   loadingScreen.setLayer(screen->createLayer(2U));
   consoleScreen.setLayer(screen->createLayer(3U));
+  cursorScreen.setLayer(screen->createLayer(4U));
+}
+
+//-------------------------------------------------------------------------------------
+void Interface::resizeWindow(Ogre::Vector2 dimensions)
+{
+  playerScreen.setSize(dimensions);
+  menuScreen.setSize(dimensions);
+  loadingScreen.setSize(dimensions);
+  consoleScreen.setSize(dimensions);
+  cursorScreen.setSize(dimensions);
 }
 
 //-------------------------------------------------------------------------------------
 void Interface::displayMenuScreen() 
 {
-  display = &menuScreen;
+  setDisplay(&menuScreen);
+  cursorScreen.setVisible(true);
 }
 
 //-------------------------------------------------------------------------------------
 void Interface::displayPlayerScreen() 
 {
-  display = &playerScreen;
-  consoleScreen.setVisible(false);
+  setDisplay(&playerScreen);
+  cursorScreen.setVisible(false);
 }
 
 //-------------------------------------------------------------------------------------
 void Interface::displayLoadingScreen() 
 {
-  display = &loadingScreen;
+  setDisplay(&loadingScreen);
+  cursorScreen.setVisible(false);
 }
 
 //-------------------------------------------------------------------------------------
 void Interface::displayConsoleScreen() 
 {
-  display = &consoleScreen;
-  consoleScreen.setVisible(true);
+  setDisplay(&consoleScreen);
+  cursorScreen.setVisible(true);
 }
 
 //-------------------------------------------------------------------------------------
@@ -94,6 +110,7 @@ void Interface::keyReleased(const OIS::KeyEvent &arg)
 void Interface::mouseMoved(const OIS::MouseEvent &arg) 
 {
   display->mouseMoved(arg);
+  if(cursorScreen.isVisible()) cursorScreen.mouseMoved(arg);
 }
 
 //-------------------------------------------------------------------------------------
@@ -106,6 +123,15 @@ void Interface::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 void Interface::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id) 
 {
   display->mouseReleased(arg, id);
+}
+
+//-------------------------------------------------------------------------------------
+void Interface::setDisplay(Screen* display)
+{
+  if(this->display) this->display->setVisible(false);
+  this->display = display;
+  if(!display) return;
+  this->display->setVisible(true);
 }
 
 

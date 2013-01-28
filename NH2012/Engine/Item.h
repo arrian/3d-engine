@@ -11,10 +11,11 @@
 #include "Group.h"
 
 #include "PxPhysicsAPI.h"
+#include "Packetable.h"
 
 class Scene;
 
-class Item : public BasicComponent, public Identifiable
+class Item : public BasicComponent, public Identifiable, public Packetable<ItemPacket>
 {
 public:
   Item(ItemDesc description);
@@ -22,15 +23,20 @@ public:
 
   void update(double elapsedSeconds);
 
+  //Setters
   virtual void setPosition(Vector3 position);
   virtual void setRotation(Quaternion rotation);
   virtual void setVelocity(Vector3 velocity);
 
+  //Getters
   virtual Vector3 getPosition();
   virtual Quaternion getRotation();
   virtual Vector3 getVelocity();
-
   ItemDesc getDescription();
+
+  //Network
+  virtual void integratePacket(ItemPacket packet);
+  virtual ItemPacket extractPacket();
 
 protected:
   ItemDesc desc;
