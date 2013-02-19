@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "NHException.h"
 
+#include "SceneGraphicsManager.h"
+
 //-------------------------------------------------------------------------------------
 Monster::Monster(MonsterDesc desc)
   : Actor(this, desc.name, MONSTER),
@@ -34,14 +36,14 @@ void Monster::hasSceneChange()
   //pulling down
   if(oldScene)
   {
-    if(node) oldScene->getGraphicsManager()->destroySceneNode(node);
+    if(node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
     node = NULL;
   }
   
   //setting up
   if(scene)
   {
-    node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
+    node = scene->getSceneGraphicsManager()->createSceneNode();
 
     setPosition(position);
 

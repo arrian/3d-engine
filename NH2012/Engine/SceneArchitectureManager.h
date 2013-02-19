@@ -7,19 +7,18 @@
 #include <OgreSceneNode.h>
 
 #include "Identifiable.h"
-#include "PathfindManager.h"
 #include "DataManager.h"
 
 #include "PxPhysicsAPI.h"
 
 class Scene;
 
-class ArchitectureManager : public Identifiable
+class SceneArchitectureManager : public Identifiable
 {
 public:
-  ArchitectureManager(Scene* scene, PathfindManager* pathfinder = NULL);
+  SceneArchitectureManager(Scene* scene);
 
-  ~ArchitectureManager(void);
+  ~SceneArchitectureManager(void);
 
   void add(ArchitectureDesc description, Vector3 position = Vector3(0,0,0), Quaternion quaternion = Quaternion::IDENTITY, Vector3 scale = Vector3::UNIT_SCALE);//adds a static mesh to the current dungeon architecture
 
@@ -40,11 +39,9 @@ private:
 
   Ogre::StaticGeometry* geometry;
 
-  void addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Vector3 position, Quaternion quaternion, Vector3 scale = Vector3::UNIT_SCALE);
+  void addStaticTrimesh(std::string meshName, float restitution, float friction, Vector3 position, Quaternion quaternion, Vector3 scale = Vector3::UNIT_SCALE);
 
   float defaultFriction;
   float defaultRestitution;
-  
-  PathfindManager* pathfinder;
 };
 

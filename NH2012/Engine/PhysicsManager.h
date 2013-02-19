@@ -30,6 +30,10 @@ public:
   const physx::PxTolerancesScale& getTolerancesScale();
 
   void initialiseVisualDebugger(std::string ip, int port, int timeoutMilliseconds);
+
+  void setEnabled(bool enabled);
+  bool isEnabled();
+
 private:
   
   //PhysX
@@ -46,5 +50,7 @@ private:
   physx::PxReal defaultRestitution;
 
   FabricationManager fabrication;
+
+  bool enabled;
 };
 

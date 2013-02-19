@@ -6,6 +6,8 @@
 #include "Scene.h"
 #include <OgreSceneManager.h>
 
+#include "PxPhysicsAPI.h"
+
 class IvyStem;
 class Ivy;
 

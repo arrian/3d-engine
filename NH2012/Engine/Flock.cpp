@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "BoidComponent.h"
 
+#include "SceneGraphicsManager.h"
+
 //-------------------------------------------------------------------------------------
 Flock::Flock(int numBoids)
   : BasicComponent(),
@@ -61,8 +63,8 @@ BoidComponent* Flock::makeBoid(Boids::Vector dimensions, double maximumVelocity,
 //-------------------------------------------------------------------------------------
 void Flock::hasSceneChange()
 {
-  if(oldScene && node) oldScene->getGraphicsManager()->destroySceneNode(node);
-  node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
+  if(oldScene && node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
+  node = scene->getSceneGraphicsManager()->createSceneNode();
 
   for(std::vector<BoidComponent*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
   {

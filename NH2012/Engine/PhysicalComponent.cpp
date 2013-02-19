@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "World.h"
 
+#include "ScenePhysicsManager.h"
+
 //-------------------------------------------------------------------------------------
 PhysicalComponent::PhysicalComponent(Group group, float density)
   : NodeComponent(),
@@ -43,7 +45,7 @@ void PhysicalComponent::hasNodeChange()
     (*iter)->attach(actor);
   }
 
-  scene->getPhysicsManager()->addActor(*actor);
+  scene->getScenePhysicsManager()->addActor(*actor);
   physx::PxRigidBodyExt::updateMassAndInertia(*actor, density);
 }
 
@@ -60,7 +62,7 @@ void PhysicalComponent::createActor()
   if(actor) actor->release();
   Vector3 oPosition = node->getPosition();
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
-  actor = scene->getPhysicsManager()->getPhysics().createRigidDynamic(physx::PxTransform(pPosition));
+  actor = scene->getScenePhysicsManager()->getScenePhysics()->getPhysics().createRigidDynamic(physx::PxTransform(pPosition));
   if(!actor) throw NHException("could not create physical component actor");
   actor->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
   actor->userData = userData;

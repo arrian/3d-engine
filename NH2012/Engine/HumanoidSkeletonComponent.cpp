@@ -4,6 +4,9 @@
 #include "Scene.h"
 #include "extensions/PxRigidBodyExt.h"
 
+#include "SceneGraphicsManager.h"
+#include "ScenePhysicsManager.h"
+
 //-------------------------------------------------------------------------------------
 HumanoidSkeletonComponent::HumanoidSkeletonComponent(void)
   : NodeComponent(),
@@ -42,9 +45,9 @@ void HumanoidSkeletonComponent::hasNodeChange()
 {
   if(oldScene)
   {
-    if(head) oldScene->getGraphicsManager()->destroySceneNode(head);
-    if(rightHand) oldScene->getGraphicsManager()->destroySceneNode(rightHand);
-    if(leftHand) oldScene->getGraphicsManager()->destroySceneNode(leftHand);
+    if(head) oldScene->getSceneGraphicsManager()->destroySceneNode(head);
+    if(rightHand) oldScene->getSceneGraphicsManager()->destroySceneNode(rightHand);
+    if(leftHand) oldScene->getSceneGraphicsManager()->destroySceneNode(leftHand);
 
     head = NULL;
     rightHand = NULL;
@@ -75,7 +78,8 @@ void HumanoidSkeletonComponent::hasNodeChange()
   desc.userData = userData;
  
   //creating the controller//make sure casting to correct controller type
-  controller = (physx::PxCapsuleController*) scene->getControllerManager()->createController(scene->getPhysicsManager()->getPhysics(), scene->getPhysicsManager(), desc);
+  physx::PxScene* physxScene = scene->getScenePhysicsManager()->getScenePhysics();
+  controller = (physx::PxCapsuleController*) scene->getScenePhysicsManager()->getSceneControllerManager()->createController(physxScene->getPhysics(), physxScene, desc);
   if(!controller) throw NHException("could not create physics character controller");
   controller->getActor()->userData = userData;
 

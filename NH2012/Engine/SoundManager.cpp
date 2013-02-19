@@ -96,3 +96,17 @@ std::string SoundManager::getSoundPath(std::string filename)
 
   return fileListPtr->front().archive->getName() + "/" + fileListPtr->front().filename;
 }
+
+//-------------------------------------------------------------------------------------
+void SoundManager::setEnabled(bool enabled)
+{
+  this->enabled = enabled;
+  setMuteAll(!enabled);
+  //disable updates
+}
+
+//-------------------------------------------------------------------------------------
+bool SoundManager::isEnabled()
+{
+  return enabled;
+}

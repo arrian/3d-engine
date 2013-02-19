@@ -11,6 +11,10 @@
 #include "Player.h"
 #include "Scene.h"
 
+#include "ScenePhysicsManager.h"
+#include "SceneGraphicsManager.h"
+#include "ScenePathfindManager.h"
+
 
 ScriptManager::ScriptManager(void)
   : world(NULL),
@@ -170,7 +174,7 @@ void ScriptManager::screenshot(Options argv)
 void ScriptManager::setPhysicsEnabled(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  world->setPhysicsEnabled(stringToBool(argv[1]));
+  world->getPhysicsManager()->setEnabled(stringToBool(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
@@ -218,7 +222,7 @@ void ScriptManager::setSceneAmbientLight(Options argv)
 {
   if(argv.size() < 5) throw NHException("too few arguments");
   Scene* target = world->getPlayer()->getScene();
-  if(target) target->setAmbientColour(Ogre::ColourValue(boost::lexical_cast<float>(argv[1]), 
+  if(target) target->getSceneGraphicsManager()->setAmbientLight(Ogre::ColourValue(boost::lexical_cast<float>(argv[1]), 
     boost::lexical_cast<float>(argv[2]), 
     boost::lexical_cast<float>(argv[3]), 
     boost::lexical_cast<float>(argv[4])));
@@ -313,10 +317,10 @@ void ScriptManager::getPhysicsInfo(Options argv)
   Scene* target = world->getPlayer()->getScene();
   if(target) 
   {
-    physx::PxScene* physics = target->getPhysicsManager();
+    physx::PxScene* physics = target->getScenePhysicsManager()->getScenePhysics();
     if(physics)
     {
-      display("gravity", boost::lexical_cast<std::string>(target->getGravity().length()));
+      display("gravity", boost::lexical_cast<std::string>(target->getScenePhysicsManager()->getGravity().length()));
       display("current timestamp", boost::lexical_cast<std::string>(physics->getTimestamp()));
       display("number of rigid static actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_STATIC))));
       display("number of rigid dynamic actors", boost::lexical_cast<std::string>(physics->getNbActors(physx::PxActorTypeSelectionFlags(physx::PxActorTypeSelectionFlag::eRIGID_DYNAMIC))));
@@ -357,7 +361,7 @@ void ScriptManager::getGameInfo(Options argv)
 void ScriptManager::getSceneInfo(Options argv)
 {
   display("name", world->getPlayer()->getScene()->getName());
-  display("ogre internal name", world->getPlayer()->getScene()->getGraphicsManager()->getName());
+  display("ogre internal name", world->getPlayer()->getScene()->getName());
 }
 
 //-------------------------------------------------------------------------------------
@@ -434,21 +438,21 @@ void ScriptManager::setSceneLoaded(Options argv)
 void ScriptManager::setSceneDrawDebugNavMesh(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  world->getPlayer()->getScene()->setDebugDrawNavigationMesh(stringToBool(argv[1]));
+  world->getPlayer()->getScene()->getScenePathfindManager()->setDrawNavigationMesh(stringToBool(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::setSceneShadowsEnabled(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  world->getPlayer()->getScene()->setShadowsEnabled(stringToBool(argv[1]));
+  world->getPlayer()->getScene()->getSceneGraphicsManager()->setShadowsEnabled(stringToBool(argv[1]));
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::setSceneGravity(Options argv)
 {
   if(argv.size() < 4) throw NHException("too few arguments");
-  world->getPlayer()->getScene()->setGravity(Vector3(boost::lexical_cast<float>(argv[1]), boost::lexical_cast<float>(argv[2]), boost::lexical_cast<float>(argv[3])));
+  world->getPlayer()->getScene()->getScenePhysicsManager()->setGravity(Vector3(boost::lexical_cast<float>(argv[1]), boost::lexical_cast<float>(argv[2]), boost::lexical_cast<float>(argv[3])));
 }
 
 //-------------------------------------------------------------------------------------

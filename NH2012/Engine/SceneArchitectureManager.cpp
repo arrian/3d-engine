@@ -1,28 +1,31 @@
-#include "ArchitectureManager.h"
+#include "SceneArchitectureManager.h"
 
 #include "Scene.h"
 #include "World.h"
 
+#include "SceneGraphicsManager.h"
+#include "ScenePhysicsManager.h"
+#include "ScenePathfindManager.h"
+
 #include "OgreStaticGeometry.h"
 
 //-------------------------------------------------------------------------------------
-ArchitectureManager::ArchitectureManager(Scene* scene, PathfindManager* pathfinder)
+SceneArchitectureManager::SceneArchitectureManager(Scene* scene)
   : Identifiable(this, "Main", ARCHITECTURE),
     scene(scene),
-    rootNode(scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode()),
+    rootNode(scene->getSceneGraphicsManager()->createSceneNode()),
     instanceNumber(0),
-    geometry(scene->getGraphicsManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getGraphicsManager have been constructed
+    geometry(scene->getSceneGraphicsManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getGraphicsManager have been constructed
     nodes(),
     actors(),
     statics(),
-    pathfinder(pathfinder),
     isBuilt(false)
 {
   //geometry->setCastShadows(true);//produces no shadows at all?
 }
 
 //-------------------------------------------------------------------------------------
-ArchitectureManager::~ArchitectureManager(void)
+SceneArchitectureManager::~SceneArchitectureManager(void)
 {
   for(std::vector<physx::PxRigidStatic*>::iterator it = actors.begin(); it != actors.end(); ++it) 
   {
@@ -32,21 +35,21 @@ ArchitectureManager::~ArchitectureManager(void)
   
   for(std::vector<Ogre::SceneNode*>::iterator it = nodes.begin(); it != nodes.end(); ++it) 
   {
-    if(*it) scene->getGraphicsManager()->destroySceneNode(*it);
+    if(*it) scene->getSceneGraphicsManager()->destroySceneNode(*it);
     (*it) = NULL;
   }
 }
 
 //-------------------------------------------------------------------------------------
-void ArchitectureManager::add(ArchitectureDesc description, Vector3 position, Quaternion quaternion, Vector3 scale)
+void SceneArchitectureManager::add(ArchitectureDesc description, Vector3 position, Quaternion quaternion, Vector3 scale)
 {
   addStaticTrimesh(description.mesh, description.restitution, description.friction, position, quaternion);
 }
 
 //-------------------------------------------------------------------------------------
-void ArchitectureManager::addStaticTrimesh(Ogre::String meshName, float restitution, float friction, Vector3 position, Quaternion quaternion, Vector3 scale)
+void SceneArchitectureManager::addStaticTrimesh(std::string meshName, float restitution, float friction, Vector3 position, Quaternion quaternion, Vector3 scale)
 {
-  Ogre::Entity* entity = scene->getGraphicsManager()->createEntity(meshName);
+  Ogre::Entity* entity = scene->getSceneGraphicsManager()->createEntity(meshName);
   if(!entity) throw NHException("could not create architecture entity");
 
   physx::PxTriangleMesh* mesh = NULL;
@@ -71,7 +74,7 @@ void ArchitectureManager::addStaticTrimesh(Ogre::String meshName, float restitut
   filter.word0 = ARCHITECTURE;
   shape->setQueryFilterData(filter);
 
-  scene->getPhysicsManager()->addActor(*actor);
+  scene->getScenePhysicsManager()->addActor(*actor);
 
   actors.push_back(actor);
   instanceNumber++;
@@ -82,11 +85,11 @@ void ArchitectureManager::addStaticTrimesh(Ogre::String meshName, float restitut
   child->setScale(scale);
   child->attachObject(entity);
 
-  if(pathfinder) pathfinder->addGeometry(entity);
+  if(scene->getScenePathfindManager()) scene->getScenePathfindManager()->addGeometry(entity);
 }
 
 //-------------------------------------------------------------------------------------
-void ArchitectureManager::build()
+void SceneArchitectureManager::build()
 {
   if(isBuilt) throw NHException("attempting to build the architecture multiple times");
   isBuilt = true;
@@ -94,7 +97,7 @@ void ArchitectureManager::build()
   geometry->addSceneNode(rootNode);
   geometry->build();
 
-  scene->destroySceneNode(rootNode);
+  scene->getSceneGraphicsManager()->destroySceneNode(rootNode);
   //is there anything leftover here?
 }
 

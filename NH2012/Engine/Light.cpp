@@ -1,10 +1,11 @@
 #include "Light.h"
 
+#include "SceneGraphicsManager.h"
 
 Light::Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
-  : light(scene->getGraphicsManager()->createLight())
+  : light(scene->getSceneGraphicsManager()->createLight())
 {
-  lightNode = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode(position);
+  lightNode = scene->getSceneGraphicsManager()->createSceneNode(position);
   lightNode->attachObject(light);
   light->setAttenuation(range, 0.95f, 0.05f, 0.0f);
   light->setDiffuseColour(colour);

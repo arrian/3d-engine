@@ -1,0 +1,755 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{0f390cf8-5021-43fd-9040-d0b0ff0734dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{69c308ba-14f3-4e1d-bcd9-b5f304554d83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{47fb5c1c-47d7-4c1b-ad4b-d0835c834745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{552d10ee-5c15-40f6-8ca3-d3ecd5d15fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{c5c1dc92-1b60-4f19-92fe-53c63fe990cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{a295972a-f40e-4790-ae47-18ba6a479875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World">
+      <UniqueIdentifier>{774835f1-069a-416f-8d91-191252ac67fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\World">
+      <UniqueIdentifier>{1f496781-a0ac-42aa-83bf-42e301482e1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\3rd Party">
+      <UniqueIdentifier>{793ab9bc-f2dc-4279-8f6b-ee0a581d24d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\3rd Party">
+      <UniqueIdentifier>{ce562b2d-2ed0-4e8c-a018-8237ee38a4cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\3rd Party\Boids">
+      <UniqueIdentifier>{7f9e2e9b-74a3-4747-b5e0-ccbf20d30542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\3rd Party\Crowd">
+      <UniqueIdentifier>{e9a53b59-649a-4d1a-96ab-9d434edee0c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\3rd Party\Boids">
+      <UniqueIdentifier>{d961ff5c-e8f7-4b21-b36a-39db9525fa12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\3rd Party\Crowd">
+      <UniqueIdentifier>{d9f25c50-c5d1-4a6b-8205-15179715ac66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World\Scene">
+      <UniqueIdentifier>{fc69fa0e-ed73-4dc1-b10e-e3bf472e2776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World\Scene\Actor">
+      <UniqueIdentifier>{37dbe43d-882c-41ef-8440-7e08cd444d52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World\Scene\Miscellaneous">
+      <UniqueIdentifier>{92687b78-35cd-4ac6-b223-4472f41563e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World\Scene\Item">
+      <UniqueIdentifier>{0715d774-fdd6-4ed9-b150-3ea053f8178b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World\Scene\Interactive">
+      <UniqueIdentifier>{da71d23d-c1ba-426d-ba45-f149eeaa44e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\World\Scene">
+      <UniqueIdentifier>{3bf833e5-6c10-47b4-9030-52e4efcc1fe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\World\Scene\Actor">
+      <UniqueIdentifier>{94548a1d-5b50-46c6-9fe8-6605ea27ac71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\World\Scene\Miscellaneous">
+      <UniqueIdentifier>{46c81f06-5fe8-44e6-945b-d3ec76be6843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\World\Scene\Interactive">
+      <UniqueIdentifier>{be83319a-abbc-437b-9104-59cdd9b3ce45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\World\Scene\Item">
+      <UniqueIdentifier>{1bb6b154-017c-4245-a4c1-2d969673bae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\World\Scene\Effect">
+      <UniqueIdentifier>{8f6bd378-b244-4baa-838e-631a73be9c21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World\Scene\Effect">
+      <UniqueIdentifier>{1c983546-248a-4906-b796-9a94179e5733}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Interface">
+      <UniqueIdentifier>{14b0b256-da85-44fe-8e2f-5769455b303d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Interface">
+      <UniqueIdentifier>{3c83ef7b-d91b-4365-a8e2-32d3b0b814f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Interface\Screen">
+      <UniqueIdentifier>{d8b1d051-1f2c-49cb-8e58-37b94d51ccf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Interface\Screen">
+      <UniqueIdentifier>{89d13ffc-6308-4f55-88e9-1309f507db6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers\SceneManagers">
+      <UniqueIdentifier>{cc9a898c-52cd-44f2-834a-20e99a308045}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers\SceneManagers">
+      <UniqueIdentifier>{7621ee55-1672-4ef2-a0a5-2263c56354a9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanoidSkeletonComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicalComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsErrorCallback.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="NHException.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DataManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\Boid.h">
+      <Filter>Header Files\Utility\3rd Party\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\NamedObject.h">
+      <Filter>Header Files\Utility\3rd Party\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\Obstacle.h">
+      <Filter>Header Files\Utility\3rd Party\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\SimObject.h">
+      <Filter>Header Files\Utility\3rd Party\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Boids\Vector.h">
+      <Filter>Header Files\Utility\3rd Party\Boids</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="FabricationManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\AnimateableCharacter.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\TestCharacter.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Character.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\ConvexShapeObstacle.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\CrowdManager.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\CylinderObstacle.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Detour\DetourAlloc.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Detour\DetourAssert.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Detour\DetourCommon.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\DetourCrowd\DetourCrowd.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\DetourCrowd\DetourLocalBoundary.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Detour\DetourNavMesh.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Detour\DetourNavMeshBuilder.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Detour\DetourNavMeshQuery.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Detour\DetourNode.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\DetourCrowd\DetourObstacleAvoidance.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\DetourCrowd\DetourPathCorridor.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\DetourCrowd\DetourPathQueue.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\DetourCrowd\DetourProximityGrid.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Detour\DetourStatus.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\DetourTileCache\DetourTileCache.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\DetourTileCache\DetourTileCacheBuilder.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\RecastContrib\fastlz\fastlz.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\InstancedCharacter.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Obstacle.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\OgreDetourCrowd.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\OgreDetourTileCache.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\OgreRecast.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\OgreRecastDefinitions.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\OgreRecastNavmeshPruner.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Recast\Recast.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Recast\RecastAlloc.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\Recast\RecastAssert.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\RecastConvexHull.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\RecastInputGeom.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Crowd\QueryFlags.h">
+      <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Group.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Gorilla.h">
+      <Filter>Header Files\Utility\3rd Party</Filter>
+    </ClInclude>
+    <ClInclude Include="PFXSSAO.h">
+      <Filter>Header Files\Utility\3rd Party</Filter>
+    </ClInclude>
+    <ClInclude Include="KinematicMovementComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Priority.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="BoidComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IntelligentMovementComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Chest.h">
+      <Filter>Header Files\World\Scene\Interactive</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Header Files\World\Scene\Interactive</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactive.h">
+      <Filter>Header Files\World\Scene\Interactive</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\World\Scene\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Header Files\World\Scene\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Apparel.h">
+      <Filter>Header Files\World\Scene\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\World\Scene\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Ivy.h">
+      <Filter>Header Files\World\Scene\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Flock.h">
+      <Filter>Header Files\World\Scene\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files\World\Scene\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Header Files\World\Scene\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\World\Scene\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Header Files\World\Scene\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\World\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Header Files\World\Scene\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Header Files\World\Scene\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Savable.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Identifiable.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Packetable.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="InterfaceButton.h">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleScreen.h">
+      <Filter>Header Files\Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScreen.h">
+      <Filter>Header Files\Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScreen.h">
+      <Filter>Header Files\Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerScreen.h">
+      <Filter>Header Files\Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>Header Files\Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="CursorScreen.h">
+      <Filter>Header Files\Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="InitialisationParser.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlMap.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentContainer.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenePathfindManager.h">
+      <Filter>Header Files\Managers\SceneManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraphicsManager.h">
+      <Filter>Header Files\Managers\SceneManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenePhysicsManager.h">
+      <Filter>Header Files\Managers\SceneManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneArchitectureManager.h">
+      <Filter>Header Files\Managers\SceneManagers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanoidSkeletonComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicalComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsErrorCallback.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="NHException.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="DataManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Bar.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Boids\Vector.cpp">
+      <Filter>Source Files\Utility\3rd Party\Boids</Filter>
+    </ClCompile>
+    <ClCompile Include="Boids\Boid.cpp">
+      <Filter>Source Files\Utility\3rd Party\Boids</Filter>
+    </ClCompile>
+    <ClCompile Include="Boids\NamedObject.cpp">
+      <Filter>Source Files\Utility\3rd Party\Boids</Filter>
+    </ClCompile>
+    <ClCompile Include="Boids\Obstacle.cpp">
+      <Filter>Source Files\Utility\3rd Party\Boids</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="FabricationManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\AnimateableCharacter.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\TestCharacter.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Character.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\ConvexShapeObstacle.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\CrowdManager.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\CylinderObstacle.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Detour\DetourAlloc.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Detour\DetourCommon.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\DetourCrowd\DetourCrowd.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\DetourCrowd\DetourLocalBoundary.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Detour\DetourNavMesh.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Detour\DetourNavMeshBuilder.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Detour\DetourNavMeshQuery.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Detour\DetourNode.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\DetourCrowd\DetourObstacleAvoidance.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\DetourCrowd\DetourPathCorridor.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\DetourCrowd\DetourPathQueue.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\DetourCrowd\DetourProximityGrid.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\DetourTileCache\DetourTileCache.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\DetourTileCache\DetourTileCacheBuilder.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\RecastContrib\fastlz\fastlz.c">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\InstancedCharacter.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Obstacle.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\OgreDetourCrowd.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\OgreDetourTileCache.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\OgreRecast.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\OgreRecastNavmeshPruner.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\Recast.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastAlloc.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastArea.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastContour.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\RecastConvexHull.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastFilter.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\RecastInputGeom.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastLayers.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastMesh.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastMeshDetail.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastRasterization.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crowd\Recast\RecastRegion.cpp">
+      <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Gorilla.cpp">
+      <Filter>Source Files\Utility\3rd Party</Filter>
+    </ClCompile>
+    <ClCompile Include="KinematicMovementComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Priority.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="BoidComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="IntelligentMovementComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Source Files\World\Scene\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Chest.cpp">
+      <Filter>Source Files\World\Scene\Interactive</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Source Files\World\Scene\Interactive</Filter>
+    </ClCompile>
+    <ClCompile Include="Flock.cpp">
+      <Filter>Source Files\World\Scene\Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactive.cpp">
+      <Filter>Source Files\World\Scene\Interactive</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files\World\Scene\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Ivy.cpp">
+      <Filter>Source Files\World\Scene\Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\World\Scene\Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Source Files\World\Scene\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\World\Scene\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Source Files\World\Scene\Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\World\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Source Files\World\Scene\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Apparel.cpp">
+      <Filter>Source Files\World\Scene\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneLoader.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Source Files\World\Scene\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Source Files\World\Scene\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Savable.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Identifiable.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Packetable.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleScreen.cpp">
+      <Filter>Source Files\Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScreen.cpp">
+      <Filter>Source Files\Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScreen.cpp">
+      <Filter>Source Files\Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerScreen.cpp">
+      <Filter>Source Files\Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Source Files\Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="InterfaceButton.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorScreen.cpp">
+      <Filter>Source Files\Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="InitialisationParser.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraphicsManager.cpp">
+      <Filter>Source Files\Managers\SceneManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenePhysicsManager.cpp">
+      <Filter>Source Files\Managers\SceneManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenePathfindManager.cpp">
+      <Filter>Source Files\Managers\SceneManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneArchitectureManager.cpp">
+      <Filter>Source Files\Managers\SceneManagers</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

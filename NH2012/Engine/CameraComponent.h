@@ -20,11 +20,42 @@ public:
 
   void update(double elapsedSeconds);
 
+  //Getters
   Vector3 getDirection();
-
   Ogre::Camera* getCamera();
   Ogre::Viewport* getViewport();
   Ogre::RenderWindow* getWindow();
+
+  //Setters
+  void setBloomEnabled(bool enabled);
+  void setSSAOEnabled(bool enabled);
+  void setShadowsEnabled(bool enabled);
+  /*
+  void setHDREnabled(bool enabled);
+  void setShadowsEnabled(bool enabled);
+  void setLightingEnabled(bool enabled);
+  void setEffectsEnabled(bool enabled);
+  void setDecalsEnabled(bool enabled);
+  void setWaterEnabled(bool enabled);
+  void setSkyEnabled(bool enabled);
+  void setFreeCameraEnabled(bool enabled);
+  void setWireframeEnabled(bool enabled);
+  */
+
+  //Assertions
+  bool isShadowsEnabled() {return enableShadows;}
+  bool isBloomEnabled() {return enableBloom;}
+  bool isSSAOEnabled() {return enableSSAO;}
+  /*
+  bool isHDREnabled();
+  bool isLightingEnabled();
+  bool isEffectsEnabled();
+  bool isDecalsEnabled();
+  bool isWaterEnabled();
+  bool isSkyEnabled();
+  bool isFreeCameraEnabled();
+  bool isWireframeEnabled();
+  */
 
 protected:
   Ogre::Camera* camera;
@@ -32,6 +63,8 @@ protected:
   Ogre::RenderWindow* window;
   Ogre::Viewport* viewport;
 
+  //Flags
+  bool enableShadows;
   bool enableBloom;
   bool enableSSAO;
   PFXSSAO* ssao;

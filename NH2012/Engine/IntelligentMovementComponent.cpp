@@ -5,6 +5,8 @@
 #include "Goal.h"
 #include "NHException.h"
 
+#include "ScenePathfindManager.h"
+
 //-------------------------------------------------------------------------------------
 IntelligentMovementComponent::IntelligentMovementComponent(float speed, Vector3 gravity)
   : MovementComponent(gravity),
@@ -94,7 +96,7 @@ Vector3 IntelligentMovementComponent::getPosition()
 //-------------------------------------------------------------------------------------
 void IntelligentMovementComponent::hasNodeChange()
 {
-  if(oldScene && agent) oldScene->getPathfindManager()->removeAgent(agent);
+  if(oldScene && agent) oldScene->getScenePathfindManager()->removeAgent(agent);
   agent = NULL;
   
   if(!scene || !node) return;
@@ -113,7 +115,7 @@ void IntelligentMovementComponent::update(double elapsedSeconds)
 void IntelligentMovementComponent::addAgent()
 {
   if(!scene || !node) throw NHException("intelligence component must be inside a scene to create the pathfind agent");
-  agent = scene->getPathfindManager()->createAgent(node->_getDerivedPosition());
+  agent = scene->getScenePathfindManager()->createAgent(node->_getDerivedPosition());
   if(!agent) throw NHException("could not create intelligence component pathfind agent");
 }
 
@@ -121,7 +123,7 @@ void IntelligentMovementComponent::addAgent()
 void IntelligentMovementComponent::removeAgent()
 {
   if(!scene || !agent) throw NHException("intelligence component must be inside a scene to remove the pathfind agent");
-  scene->getPathfindManager()->removeAgent(agent);
+  scene->getScenePathfindManager()->removeAgent(agent);
   agent = NULL;
 }
 

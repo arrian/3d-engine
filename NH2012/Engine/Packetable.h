@@ -2,6 +2,10 @@
 
 #include "Packet.h"
 
+/**
+ * Defines an object that can be converted to a network packet.
+ * The template argument defines the target packet struct.
+ */
 template<typename PacketStruct>
 class Packetable
 {

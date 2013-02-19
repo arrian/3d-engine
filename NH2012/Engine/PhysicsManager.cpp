@@ -114,3 +114,16 @@ const physx::PxTolerancesScale& PhysicsManager::getTolerancesScale()
 {
   return physicsWorld->getTolerancesScale();
 }
+
+//-------------------------------------------------------------------------------------
+void PhysicsManager::setEnabled(bool enabled)
+{
+  this->enabled = enabled;
+}
+
+//-------------------------------------------------------------------------------------
+bool PhysicsManager::isEnabled()
+{
+  return enabled;
+}
+

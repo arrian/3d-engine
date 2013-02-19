@@ -4,11 +4,14 @@
 #include "Scene.h"
 #include "Interactive.h"
 
+#include "SceneGraphicsManager.h"
+#include "ScenePathfindManager.h"
+
 //-------------------------------------------------------------------------------------
 Player::Player(PlayerDesc description, World* world)
   : Actor(this, "Player", PLAYER_SELF),
     world(world),
-    camera(world->isSSAOEnabled(), world->isBloomEnabled()),
+    camera(world->getGraphicsManager()->isSSAOEnabled(), world->getGraphicsManager()->isBloomEnabled()),
     mesh(description.mesh),
     query(),
     addItem(false),
@@ -29,7 +32,7 @@ Player::Player(PlayerDesc description, World* world)
 //-------------------------------------------------------------------------------------
 Player::~Player(void)
 {
-  if(node) scene->getGraphicsManager()->destroySceneNode(node);
+  if(node) scene->getSceneGraphicsManager()->destroySceneNode(node);
   node = NULL;
 }
 
@@ -45,17 +48,17 @@ void Player::hasSceneChange()
     skeleton.removeNode();
     query.removeNode();
     
-    if(node) oldScene->getGraphicsManager()->destroySceneNode(node);
+    if(node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
     node = NULL;
 
-    if(freeCameraNode) oldScene->getGraphicsManager()->destroySceneNode(freeCameraNode);
+    if(freeCameraNode) oldScene->getSceneGraphicsManager()->destroySceneNode(freeCameraNode);
     freeCameraNode = NULL;
   }
 
   //setting up
   if(scene)
   {
-    node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
+    node = scene->getSceneGraphicsManager()->createSceneNode();
     
     setPosition(position);
 
@@ -86,7 +89,7 @@ void Player::update(double elapsedSeconds)
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
-  if(addMonster) scene->addMonster(monsterGenerationID, scene->getPathfindManager()->getRandomNavigablePoint());//create a monster at an arbitrary location
+  if(addMonster) scene->addMonster(monsterGenerationID, scene->getScenePathfindManager()->getRandomNavigablePoint());//create a monster at an arbitrary location
 
   currentTarget = query.rayQuery(camera.getDirection(), 20.0f, EXCLUDE_SELF);
   
@@ -99,7 +102,7 @@ void Player::update(double elapsedSeconds)
       if(currentTarget->isInGroup(ITEM))
       {
         Item* item = static_cast<Item*>(currentTarget->getInstancePointer());
-        item->getDescription();
+        inventory.add(item);//inventory now becomes responsible for the life of the item
         scene->removeItem(item);
       }
       else if(currentTarget->isInGroup(INTERACTIVE))
@@ -244,7 +247,7 @@ void Player::setFreeCamera(bool enabled)
 
   if(enabled)
   {
-    if(!freeCameraNode) freeCameraNode = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
+    if(!freeCameraNode) freeCameraNode = scene->getSceneGraphicsManager()->createSceneNode();
     freeCameraNode->setPosition(skeleton.getHead()->_getDerivedPosition());
     freeCameraNode->_setDerivedOrientation(skeleton.getHead()->_getDerivedOrientation());
 
@@ -258,7 +261,7 @@ void Player::setFreeCamera(bool enabled)
     movement.setGravityEnabled(true);
     movement.setNode(scene, skeleton.getHead());
 
-    if(freeCameraNode) scene->getGraphicsManager()->destroySceneNode(freeCameraNode);
+    if(freeCameraNode) scene->getSceneGraphicsManager()->destroySceneNode(freeCameraNode);
     freeCameraNode = NULL;
   }
 }
@@ -270,9 +273,9 @@ void Player::setItemGenerationID(int itemGenerationID)
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::Camera* Player::getCamera()
+CameraComponent* Player::getCamera()
 {
-  return camera.getCamera();
+  return &camera;
 }
 
 //-------------------------------------------------------------------------------------

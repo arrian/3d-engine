@@ -5,6 +5,7 @@
 #include "Interactive.h"
 #include "Identifiable.h"
 
+#include "ScenePhysicsManager.h"
 
 QueryComponent::QueryComponent(void)
   : NodeComponent()
@@ -42,7 +43,7 @@ Identifiable* QueryComponent::rayQuery(Vector3 position, Vector3 direction, floa
   physx::PxSceneQueryFilterData filterData = physx::PxSceneQueryFilterData();
   filterData.data.word0 = groups;
   physx::PxRaycastHit hit;
-  if(scene->getPhysicsManager()->raycastSingle(physx::PxVec3(position.x, position.y, position.z), physx::PxVec3(unitDirection.x, unitDirection.y, unitDirection.z), distance, outputFlags, hit, filterData))
+  if(scene->getScenePhysicsManager()->getScenePhysics()->raycastSingle(physx::PxVec3(position.x, position.y, position.z), physx::PxVec3(unitDirection.x, unitDirection.y, unitDirection.z), distance, outputFlags, hit, filterData))
   {
     //hitNode->_setDerivedPosition(Vector3(hit.impact.x, hit.impact.y, hit.impact.z));
     

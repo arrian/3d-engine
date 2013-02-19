@@ -1,8 +1,8 @@
-#include "PathfindManager.h"
+#include "ScenePathfindManager.h"
 
 #include "NHException.h"
 
-PathfindManager::PathfindManager(Ogre::SceneManager* sceneManager)
+ScenePathfindManager::ScenePathfindManager(Ogre::SceneManager* sceneManager)
   : recast(NULL),
     detour(NULL),
     geometry(),
@@ -16,7 +16,7 @@ PathfindManager::PathfindManager(Ogre::SceneManager* sceneManager)
 }
 
 //-------------------------------------------------------------------------------------
-PathfindManager::~PathfindManager(void)
+ScenePathfindManager::~ScenePathfindManager(void)
 {
   delete geom;
   delete recast;
@@ -28,7 +28,7 @@ PathfindManager::~PathfindManager(void)
 }
 
 //-------------------------------------------------------------------------------------
-void PathfindManager::update(double elapsedSeconds)
+void ScenePathfindManager::update(double elapsedSeconds)
 {
   if(!built) return;
   recast->update();
@@ -36,13 +36,13 @@ void PathfindManager::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-void PathfindManager::addGeometry(Ogre::Entity* geometry)
+void ScenePathfindManager::addGeometry(Ogre::Entity* geometry)
 {
   this->geometry.push_back(geometry);
 }
 
 //-------------------------------------------------------------------------------------
-void PathfindManager::build()
+void ScenePathfindManager::build()
 {
   std::cout << "Building navigation... ";
   geom = new InputGeom(geometry);
@@ -73,7 +73,7 @@ void PathfindManager::build()
 }
 
 //-------------------------------------------------------------------------------------
-Vector3 PathfindManager::getClosestNavigablePoint(Vector3 point)
+Vector3 ScenePathfindManager::getClosestNavigablePoint(Vector3 point)
 {
   Vector3 result;
   if(recast->findNearestPointOnNavmesh(point, result)) return result;
@@ -82,26 +82,26 @@ Vector3 PathfindManager::getClosestNavigablePoint(Vector3 point)
 }
 
 //-------------------------------------------------------------------------------------
-Vector3 PathfindManager::getRandomNavigablePoint()
+Vector3 ScenePathfindManager::getRandomNavigablePoint()
 {
   return recast->getRandomNavMeshPoint();
 }
 
 //-------------------------------------------------------------------------------------
-Vector3 PathfindManager::getRandomNavigablePointInCircle(Vector3 centre, double radius)
+Vector3 ScenePathfindManager::getRandomNavigablePointInCircle(Vector3 centre, double radius)
 {
   return recast->getRandomNavMeshPointInCircle(centre, radius);
 }
 
 //-------------------------------------------------------------------------------------
-void PathfindManager::setDrawNavigationMesh(bool enabled)
+void ScenePathfindManager::setDrawNavigationMesh(bool enabled)
 {
   if(enabled) recast->drawNavMesh();
   else throw NHException("removing a navigation mesh is not implemented");
 }
 
 //-------------------------------------------------------------------------------------
-PathfindAgent* PathfindManager::createAgent(Vector3 position)
+PathfindAgent* ScenePathfindManager::createAgent(Vector3 position)
 {
   int id = detour->addAgent(position);
   if(id < 0) throw NHException("could not create an agent because the maximum number of agents have been created");
@@ -111,7 +111,7 @@ PathfindAgent* PathfindManager::createAgent(Vector3 position)
 }
 
 //-------------------------------------------------------------------------------------
-void PathfindManager::removeAgent(PathfindAgent* agent)
+void ScenePathfindManager::removeAgent(PathfindAgent* agent)
 {
   if(!agent) return;
   detour->removeAgent(agent->getID());
@@ -120,7 +120,7 @@ void PathfindManager::removeAgent(PathfindAgent* agent)
 }
 
 //-------------------------------------------------------------------------------------
-bool PathfindManager::isReachable(Vector3 start, Vector3 end)
+bool ScenePathfindManager::isReachable(Vector3 start, Vector3 end)
 {
   if(recast->FindPath(start, end, 0, 0) == 0) return true;
   return false;

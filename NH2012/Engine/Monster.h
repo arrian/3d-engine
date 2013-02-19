@@ -4,7 +4,7 @@
 #include <OgreString.h>
 #include "Vector3.h"
 
-#include "PathfindManager.h"
+#include "ScenePathfindManager.h"
 
 #include "HumanoidSkeletonComponent.h"
 #include "IntelligentMovementComponent.h"

@@ -40,7 +40,7 @@
 
 [Electrics]
 32,TV,tv.mesh
-33,Macintosh,mac.mesh
+33,Laptop,laptop.mesh
 34,Lightbulb,lightbulb.mesh
 
 [Containers]
@@ -91,10 +91,11 @@
 71,Candle,candle.mesh
 72,Lantern,lantern.mesh
 
-[Misc]
-73,Palm,Palm.mesh
+[Trees]
+73,Palm,palm.mesh
 
-
-
-
-
+[Conversion Test]
+74,Plank,plank.mesh
+75,Metal Strips,metal_strips.mesh
+76,Nails,nails.mesh
+77,Hammer,hammer.mesh

@@ -15,11 +15,11 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "InitialisationParser.h"
+#include "ScenePhysicsManager.h"
 
 //-------------------------------------------------------------------------------------
-World::World(Ogre::Root* root)
-  : root(root),
-    scenes(),
+World::World()
+  : scenes(),
     timeManager(),
     dataManager(),
     soundManager(),
@@ -57,9 +57,10 @@ void World::initialise(std::string iniFile)
   
   //Create default player
   PlayerDesc playerDesc = PlayerDesc();
-  playerDesc.gravity = scene->getGravity();
+  playerDesc.gravity = scene->getScenePhysicsManager()->getGravity();
   player = new Player(playerDesc, this);
   scene->addPlayer(player);
+  graphicsManager.setCamera(player->getCamera());
 }
 
 //-------------------------------------------------------------------------------------
@@ -78,22 +79,9 @@ bool World::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-void World::hookWindow(Ogre::RenderWindow* window)
-{
-  assert(player);
-  player->hookWindow(window);
-}
-
-//-------------------------------------------------------------------------------------
 Player* World::getPlayer()
 {
   return player;
-}
-
-//-------------------------------------------------------------------------------------
-Ogre::Root* World::getRoot()
-{
-  return root;
 }
 
 //-------------------------------------------------------------------------------------
@@ -130,6 +118,12 @@ DataManager* World::getDataManager()
 TimeManager* World::getTimeManager()
 {
   return &timeManager;
+}
+
+//-------------------------------------------------------------------------------------
+GraphicsManager* World::getGraphicsManager()
+{
+  return &graphicsManager;
 }
 
 //-------------------------------------------------------------------------------------
@@ -220,9 +214,9 @@ void World::parseInitialisation(std::string filename)
   InitialisationParser ini(filename);
 
   //General
-  enablePhysics = ini.get<bool>("General.EnablePhysics");
-  enableAudio = ini.get<bool>("General.EnableAudio");
-  enableAI = ini.get<bool>("General.EnableAI");
+  physicsManager.setEnabled(ini.get<bool>("General.EnablePhysics"));
+  soundManager.setEnabled(ini.get<bool>("General.EnableAudio"));
+  //enableAI = ini.get<bool>("General.EnableAI");
 
   //Controls
   controlManager.moveForward = Button(ini.get<std::string>("Controls.Forward"));
@@ -244,9 +238,10 @@ void World::parseInitialisation(std::string filename)
   controlManager.addMonster = OIS::KC_2;
   
   //Environment
-  enableShadows = ini.get<bool>("Environment.Shadows");
-  enableBloom = ini.get<bool>("Environment.Bloom");
-  enableSSAO = ini.get<bool>("Environment.SSAO");
+  //graphicsManager.setShadowsEnabled(ini.get<bool>("Environment.Shadows"));
+  //graphicsManager.setBloomEnabled(ini.get<bool>("Environment.Bloom"));
+  //graphicsManager.setSSAOEnabled(ini.get<bool>("Environment.SSAO"));
+  
   /*
   enableHDR = ini.get<bool>("Environment.HDR");
   enableMotionBlur = ini.get<bool>("Environment.MotionBlur");
@@ -284,40 +279,5 @@ void World::parseInitialisation(std::string filename)
 #endif
 }
 
-//-------------------------------------------------------------------------------------
-void World::setRoot(Ogre::Root* root)
-{
-  this->root = root;
-}
-
-//-------------------------------------------------------------------------------------
-void World::setPhysicsEnabled(bool enabled)
-{
-  enablePhysics = enabled;
-}
-
-//-------------------------------------------------------------------------------------
-bool World::isPhysicsEnabled()
-{
-  return enablePhysics;
-}
-
-//-------------------------------------------------------------------------------------
-bool World::isShadowsEnabled()
-{
-  return enableShadows;
-}
-
-//-------------------------------------------------------------------------------------
-bool World::isBloomEnabled()
-{
-  return enableBloom;
-}
-
-//-------------------------------------------------------------------------------------
-bool World::isSSAOEnabled()
-{
-  return enableSSAO;
-}
 
 

@@ -2,6 +2,9 @@
 
 #include <boost/random.hpp>
 
+#include "OgreManualObject.h"
+#include "SceneGraphicsManager.h"
+#include "ScenePhysicsManager.h"
 
 IvyLeaf::IvyLeaf()
 {
@@ -169,10 +172,10 @@ Ivy::Ivy(Scene* scene, Vector3 position, Vector3 direction)
     root(NULL)
 {
 
-  node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
+  node = scene->getSceneGraphicsManager()->createSceneNode();
   //node->setPosition(position);
 
-  mesh = scene->getGraphicsManager()->createManualObject();
+  mesh = scene->getSceneGraphicsManager()->createManualObject();
   node->attachObject(mesh);
 
   root = new IvyStem(this, position, direction.normalisedCopy(), -direction, false);
@@ -184,8 +187,8 @@ Ivy::Ivy(Scene* scene, Vector3 position, Vector3 direction)
 Ivy::~Ivy(void) 
 {
   delete root;
-  scene->getGraphicsManager()->destroyManualObject(mesh);
-  scene->getGraphicsManager()->destroySceneNode(node);
+  scene->getSceneGraphicsManager()->destroyManualObject(mesh);
+  scene->getSceneGraphicsManager()->destroySceneNode(node);
 }
 
 void Ivy::update(double elapsedSeconds)
@@ -249,7 +252,7 @@ bool Ivy::raycast(Vector3 position, Vector3 unitDirection, float distance, physx
   physx::PxSceneQueryFlags outputFlags = physx::PxSceneQueryFlag::eDISTANCE | physx::PxSceneQueryFlag::eNORMAL | physx::PxSceneQueryFlag::eIMPACT;
   physx::PxSceneQueryFilterData filterData = physx::PxSceneQueryFilterData();
   filterData.data.word0 = ALL;
-  return scene->getPhysicsManager()->raycastSingle(physx::PxVec3(position.x, position.y, position.z), physx::PxVec3(unitDirection.x, unitDirection.y, unitDirection.z), distance, outputFlags, hit, filterData);
+  return scene->getScenePhysicsManager()->getScenePhysics()->raycastSingle(physx::PxVec3(position.x, position.y, position.z), physx::PxVec3(unitDirection.x, unitDirection.y, unitDirection.z), distance, outputFlags, hit, filterData);
 }
 
 Vector3 Ivy::project(Vector3 vector, Vector3 normal)

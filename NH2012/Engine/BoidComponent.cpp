@@ -4,6 +4,8 @@
 #include "OgreVector3.h"
 #include "OgreQuaternion.h"
 
+#include "SceneGraphicsManager.h"
+
 //-------------------------------------------------------------------------------------
 BoidComponent::BoidComponent(Boids::Vector position, Boids::Vector velocity, Boids::Vector dimensions)
   : Boids::Boid(position, velocity, dimensions),
@@ -31,14 +33,14 @@ void BoidComponent::update(double elapsedSeconds)
 void BoidComponent::hasNodeChange()
 {
   //Visual
-  if(oldScene && entity) oldScene->getGraphicsManager()->destroyEntity(entity);
+  if(oldScene && entity) oldScene->getSceneGraphicsManager()->destroyEntity(entity);
   entity = NULL;
   //entity = scene->getGraphicsManager()->createEntity("watermelon.mesh");//use temp debug mesh
   //node->attachObject(entity);
   node->setVisible(true);
 
   //do I have to destroy old billboards?
-  billboardSet = scene->getGraphicsManager()->createBillboardSet(1);
+  billboardSet = scene->getSceneGraphicsManager()->createBillboardSet(1);
   billboardSet->setMaterialName("Examples/Flare");
   billboard = billboardSet->createBillboard(0, 0, 0);
   billboard->setDimensions(2,2);

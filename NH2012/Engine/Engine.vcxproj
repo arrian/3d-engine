@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Actor.h" />
+    <ClInclude Include="Apparel.h" />
+    <ClInclude Include="BasicComponent.h" />
+    <ClInclude Include="BoidComponent.h" />
+    <ClInclude Include="Boids\Boid.h" />
+    <ClInclude Include="Boids\NamedObject.h" />
+    <ClInclude Include="Boids\Obstacle.h" />
+    <ClInclude Include="Boids\SimObject.h" />
+    <ClInclude Include="Boids\Vector.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="Chest.h" />
+    <ClInclude Include="ConsoleScreen.h" />
+    <ClInclude Include="ControlManager.h" />
+    <ClInclude Include="Crowd\AnimateableCharacter.h" />
+    <ClInclude Include="Crowd\Character.h" />
+    <ClInclude Include="Crowd\ConvexShapeObstacle.h" />
+    <ClInclude Include="Crowd\CrowdManager.h" />
+    <ClInclude Include="Crowd\CylinderObstacle.h" />
+    <ClInclude Include="Crowd\DetourCrowd\DetourCrowd.h" />
+    <ClInclude Include="Crowd\DetourCrowd\DetourLocalBoundary.h" />
+    <ClInclude Include="Crowd\DetourCrowd\DetourObstacleAvoidance.h" />
+    <ClInclude Include="Crowd\DetourCrowd\DetourPathCorridor.h" />
+    <ClInclude Include="Crowd\DetourCrowd\DetourPathQueue.h" />
+    <ClInclude Include="Crowd\DetourCrowd\DetourProximityGrid.h" />
+    <ClInclude Include="Crowd\DetourTileCache\DetourTileCache.h" />
+    <ClInclude Include="Crowd\DetourTileCache\DetourTileCacheBuilder.h" />
+    <ClInclude Include="Crowd\Detour\DetourAlloc.h" />
+    <ClInclude Include="Crowd\Detour\DetourAssert.h" />
+    <ClInclude Include="Crowd\Detour\DetourCommon.h" />
+    <ClInclude Include="Crowd\Detour\DetourNavMesh.h" />
+    <ClInclude Include="Crowd\Detour\DetourNavMeshBuilder.h" />
+    <ClInclude Include="Crowd\Detour\DetourNavMeshQuery.h" />
+    <ClInclude Include="Crowd\Detour\DetourNode.h" />
+    <ClInclude Include="Crowd\Detour\DetourStatus.h" />
+    <ClInclude Include="Crowd\InstancedCharacter.h" />
+    <ClInclude Include="Crowd\Obstacle.h" />
+    <ClInclude Include="Crowd\OgreDetourCrowd.h" />
+    <ClInclude Include="Crowd\OgreDetourTileCache.h" />
+    <ClInclude Include="Crowd\OgreRecast.h" />
+    <ClInclude Include="Crowd\OgreRecastDefinitions.h" />
+    <ClInclude Include="Crowd\OgreRecastNavmeshPruner.h" />
+    <ClInclude Include="Crowd\QueryFlags.h" />
+    <ClInclude Include="Crowd\RecastContrib\fastlz\fastlz.h" />
+    <ClInclude Include="Crowd\RecastConvexHull.h" />
+    <ClInclude Include="Crowd\RecastInputGeom.h" />
+    <ClInclude Include="Crowd\Recast\Recast.h" />
+    <ClInclude Include="Crowd\Recast\RecastAlloc.h" />
+    <ClInclude Include="Crowd\Recast\RecastAssert.h" />
+    <ClInclude Include="Crowd\TestCharacter.h" />
+    <ClInclude Include="CursorScreen.h" />
+    <ClInclude Include="Door.h" />
+    <ClInclude Include="Explosion.h" />
+    <ClInclude Include="FabricationManager.h" />
+    <ClInclude Include="Goal.h" />
+    <ClInclude Include="GraphicsManager.h" />
+    <ClInclude Include="Group.h" />
+    <ClInclude Include="Flock.h" />
+    <ClInclude Include="HumanoidSkeletonComponent.h" />
+    <ClInclude Include="IntelligentMovementComponent.h" />
+    <ClInclude Include="SceneArchitectureManager.h" />
+    <ClInclude Include="Bar.h" />
+    <ClInclude Include="Interactive.h" />
+    <ClInclude Include="Interface.h" />
+    <ClInclude Include="InterfaceButton.h" />
+    <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="SceneGraphicsManager.h" />
+    <ClInclude Include="ScenePhysicsManager.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="Ivy.h" />
+    <ClInclude Include="ControlMap.h" />
+    <ClInclude Include="KinematicMovementComponent.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="LoadingScreen.h" />
+    <ClInclude Include="MenuScreen.h" />
+    <ClInclude Include="MovementComponent.h" />
+    <ClInclude Include="NHException.h" />
+    <ClInclude Include="NodeComponent.h" />
+    <ClInclude Include="Packet.h" />
+    <ClInclude Include="Packetable.h" />
+    <ClInclude Include="ScenePathfindManager.h" />
+    <ClInclude Include="PFXSSAO.h" />
+    <ClInclude Include="PhysicalComponent.h" />
+    <ClInclude Include="Identifiable.h" />
+    <ClInclude Include="PhysicsManager.h" />
+    <ClInclude Include="PlayerScreen.h" />
+    <ClInclude Include="Portal.h" />
+    <ClInclude Include="Priority.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="QueryComponent.h" />
+    <ClInclude Include="Savable.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Gorilla.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="DataManager.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="ComponentContainer.h" />
+    <ClInclude Include="SceneLoader.h" />
+    <ClInclude Include="ScriptManager.h" />
+    <ClInclude Include="SoundComponent.h" />
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="MeshComponent.h" />
+    <ClInclude Include="PhysicsErrorCallback.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Effect.h" />
+    <ClInclude Include="Weapon.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="InitialisationParser.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Apparel.cpp" />
+    <ClCompile Include="BasicComponent.cpp" />
+    <ClCompile Include="BoidComponent.cpp" />
+    <ClCompile Include="Boids\Boid.cpp" />
+    <ClCompile Include="Boids\NamedObject.cpp" />
+    <ClCompile Include="Boids\Obstacle.cpp" />
+    <ClCompile Include="Boids\Vector.cpp" />
+    <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="Chest.cpp" />
+    <ClCompile Include="ConsoleScreen.cpp" />
+    <ClCompile Include="ControlManager.cpp" />
+    <ClCompile Include="Crowd\AnimateableCharacter.cpp" />
+    <ClCompile Include="Crowd\Character.cpp" />
+    <ClCompile Include="Crowd\ConvexShapeObstacle.cpp" />
+    <ClCompile Include="Crowd\CrowdManager.cpp" />
+    <ClCompile Include="Crowd\CylinderObstacle.cpp" />
+    <ClCompile Include="Crowd\DetourCrowd\DetourCrowd.cpp" />
+    <ClCompile Include="Crowd\DetourCrowd\DetourLocalBoundary.cpp" />
+    <ClCompile Include="Crowd\DetourCrowd\DetourObstacleAvoidance.cpp" />
+    <ClCompile Include="Crowd\DetourCrowd\DetourPathCorridor.cpp" />
+    <ClCompile Include="Crowd\DetourCrowd\DetourPathQueue.cpp" />
+    <ClCompile Include="Crowd\DetourCrowd\DetourProximityGrid.cpp" />
+    <ClCompile Include="Crowd\DetourTileCache\DetourTileCache.cpp" />
+    <ClCompile Include="Crowd\DetourTileCache\DetourTileCacheBuilder.cpp" />
+    <ClCompile Include="Crowd\Detour\DetourAlloc.cpp" />
+    <ClCompile Include="Crowd\Detour\DetourCommon.cpp" />
+    <ClCompile Include="Crowd\Detour\DetourNavMesh.cpp" />
+    <ClCompile Include="Crowd\Detour\DetourNavMeshBuilder.cpp" />
+    <ClCompile Include="Crowd\Detour\DetourNavMeshQuery.cpp" />
+    <ClCompile Include="Crowd\Detour\DetourNode.cpp" />
+    <ClCompile Include="Crowd\InstancedCharacter.cpp" />
+    <ClCompile Include="Crowd\Obstacle.cpp" />
+    <ClCompile Include="Crowd\OgreDetourCrowd.cpp" />
+    <ClCompile Include="Crowd\OgreDetourTileCache.cpp" />
+    <ClCompile Include="Crowd\OgreRecast.cpp" />
+    <ClCompile Include="Crowd\OgreRecastNavmeshPruner.cpp" />
+    <ClCompile Include="Crowd\RecastContrib\fastlz\fastlz.c" />
+    <ClCompile Include="Crowd\RecastConvexHull.cpp" />
+    <ClCompile Include="Crowd\RecastInputGeom.cpp" />
+    <ClCompile Include="Crowd\Recast\Recast.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastAlloc.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastArea.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastContour.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastFilter.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastLayers.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastMesh.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastMeshDetail.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastRasterization.cpp" />
+    <ClCompile Include="Crowd\Recast\RecastRegion.cpp" />
+    <ClCompile Include="Crowd\TestCharacter.cpp" />
+    <ClCompile Include="CursorScreen.cpp" />
+    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="FabricationManager.cpp" />
+    <ClCompile Include="Flock.cpp" />
+    <ClCompile Include="GraphicsManager.cpp" />
+    <ClCompile Include="HumanoidSkeletonComponent.cpp" />
+    <ClCompile Include="IntelligentMovementComponent.cpp" />
+    <ClCompile Include="SceneArchitectureManager.cpp" />
+    <ClCompile Include="Bar.cpp" />
+    <ClCompile Include="Interactive.cpp" />
+    <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="InterfaceButton.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="SceneGraphicsManager.cpp" />
+    <ClCompile Include="ScenePhysicsManager.cpp" />
+    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="Ivy.cpp" />
+    <ClCompile Include="KinematicMovementComponent.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LoadingScreen.cpp" />
+    <ClCompile Include="MenuScreen.cpp" />
+    <ClCompile Include="MovementComponent.cpp" />
+    <ClCompile Include="NHException.cpp" />
+    <ClCompile Include="NodeComponent.cpp" />
+    <ClCompile Include="Packet.cpp" />
+    <ClCompile Include="Packetable.cpp" />
+    <ClCompile Include="ScenePathfindManager.cpp" />
+    <ClCompile Include="PhysicalComponent.cpp" />
+    <ClCompile Include="Identifiable.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
+    <ClCompile Include="PlayerScreen.cpp" />
+    <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="Priority.cpp" />
+    <ClCompile Include="QueryComponent.cpp" />
+    <ClCompile Include="Savable.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Gorilla.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="DataManager.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="SceneLoader.cpp" />
+    <ClCompile Include="ScriptManager.cpp" />
+    <ClCompile Include="SoundComponent.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
+    <ClCompile Include="PhysicsErrorCallback.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="InitialisationParser.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{73AA2BBC-22D7-44A1-9222-A1BD72F36105}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0501;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Dev\Nethack2012\NH2012\Engine;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;C:\Dev\PhysX\Samples\PxToolkit\include;C:\Dev\Ogre3D\Components\Terrain\include;C:\Dev\OgreHydrax\libhydrax-0.5.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Dev\libtcod\libtcod\include;C:\Dev\Bullet\bullet-2.79\src;C:\Dev\OgreBullet\ogrebullet\Dynamics\include;C:\Dev\OgreBullet\ogrebullet\Collisions\include;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;C:\Dev\PhysX\Samples\PxToolkit\include;C:\Dev\Ogre3D\Components\Terrain\include;C:\Dev\OgreHydrax\libhydrax-0.5.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

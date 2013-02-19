@@ -85,9 +85,10 @@ bool Game::run()
   keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject(OIS::OISKeyboard, true));
   mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject(OIS::OISMouse, true));
 
-  world = new World(root);
+  world = new World();
   world->initialise("game.ini");
-  world->hookWindow(window);
+  world->getGraphicsManager()->setRoot(root);
+  world->getGraphicsManager()->hookWindow(window);
 
   userInterface = new Interface(world);
   userInterface->hookWindow(window);

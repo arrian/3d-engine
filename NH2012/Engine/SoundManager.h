@@ -25,6 +25,9 @@ public:
 
   void setMuteAll(bool mute);
 
+  void setEnabled(bool enabled);
+  bool isEnabled();
+
 private:
   FMOD::System* system;
   FMOD::Sound* music;
@@ -34,5 +37,7 @@ private:
   std::vector<FMOD::Channel*> channels;
 
   std::string getSoundPath(std::string filename);
+
+  bool enabled;
 };
 

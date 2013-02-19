@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "Portal.h"
 
+#include "SceneGraphicsManager.h"
+
 #include "boost/lexical_cast.hpp"
 
 
@@ -70,7 +72,7 @@ void SceneLoader::load(std::string filename, Scene* scene)
     doc.parse<0>(&buffer[0]);
     rapidxml::xml_node<>* root = doc.first_node(SCENE_STRING);//"scene");
 
-    scene->setAmbientColour(getXMLColour(root, AMBIENT_RED_STRING, AMBIENT_GREEN_STRING, AMBIENT_BLUE_STRING));
+    scene->getSceneGraphicsManager()->setAmbientLight(getXMLColour(root, AMBIENT_RED_STRING, AMBIENT_GREEN_STRING, AMBIENT_BLUE_STRING));
 
     //description attributes
     //north = boost::lexical_cast<float>(root->first_attribute(NORTH_STRING)->value());

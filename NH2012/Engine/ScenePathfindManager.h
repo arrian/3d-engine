@@ -55,11 +55,11 @@ private:
 };
 
 
-class PathfindManager
+class ScenePathfindManager
 {
 public:
-  PathfindManager(Ogre::SceneManager* sceneManager);
-  virtual ~PathfindManager(void);
+  ScenePathfindManager(Ogre::SceneManager* sceneManager);
+  virtual ~ScenePathfindManager(void);
 
   void update(double elapsedSeconds);
 

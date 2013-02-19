@@ -3,6 +3,9 @@
 #include "Scene.h"
 #include "World.h"
 
+#include "ScenePhysicsManager.h"
+#include "SceneGraphicsManager.h"
+
 Door::Door(void)
   : Interactive("Door"),
     open(false),
@@ -25,16 +28,16 @@ void Door::hasSceneChange()
   //remove stuff from old scene here
   if(oldScene && node)
   {
-    oldScene->getGraphicsManager()->destroySceneNode(node);
+    oldScene->getSceneGraphicsManager()->destroySceneNode(node);
   }
 
   if(!scene) return;
 
-  node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
+  node = scene->getSceneGraphicsManager()->createSceneNode();
 
   ArchitectureDesc doorDesc = scene->getWorld()->getDataManager()->getArchitecture(200);//temp constants
   doorMesh.setMesh(doorDesc.mesh);
-  physx::PxMaterial* doorMaterial = scene->getPhysicsManager()->getPhysics().createMaterial(doorDesc.friction, doorDesc.friction, doorDesc.restitution);
+  physx::PxMaterial* doorMaterial = scene->getScenePhysicsManager()->getScenePhysics()->getPhysics().createMaterial(doorDesc.friction, doorDesc.friction, doorDesc.restitution);
   doorPhysical.begin();
   doorPhysical.addBoxMesh(1.5f, 3.0f, 0.2f, doorMaterial, Vector3(0.75f, 1.5f, 0.0f));
   doorPhysical.end();
@@ -44,7 +47,7 @@ void Door::hasSceneChange()
 
   doorConstraint = physx::PxTransform(physx::PxVec3(0.0f, 1.5f, 0.0f));//, physx::PxQuat(physx::PxPi / 2, physx::PxVec3(-1.0f,0.0f,0.0f)));
   frameConstraint = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f));
-  hingeJoint = physx::PxRevoluteJointCreate(scene->getPhysicsManager()->getPhysics(), doorPhysical.getActor(), doorConstraint, NULL, frameConstraint);
+  hingeJoint = physx::PxRevoluteJointCreate(scene->getScenePhysicsManager()->getScenePhysics()->getPhysics(), doorPhysical.getActor(), doorConstraint, NULL, frameConstraint);
   hingeJoint->setLimit(physx::PxJointLimitPair(-physx::PxPi / 4, physx::PxPi / 4, 0.01f));
   hingeJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eLIMIT_ENABLED, true);
   hingeJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eDRIVE_FREESPIN, true);

@@ -17,23 +17,23 @@
 #include "Door.h"
 #include "Chest.h"
 #include "Ivy.h"
-
 #include "SceneLoader.h"
-#include "ArchitectureManager.h"
+
+#include "SceneArchitectureManager.h"
+#include "ScenePathfindManager.h"
+#include "SceneGraphicsManager.h"
+#include "ScenePhysicsManager.h"
 
 //-------------------------------------------------------------------------------------
 Scene::Scene(SceneDesc desc, World* world)
   : world(world),
     desc(desc),
+    scenePathfindManager(NULL),
     sceneGraphicsManager(NULL),
-    sceneControllerManager(NULL),
     scenePhysicsManager(NULL),
+    sceneArchitectureManager(NULL),
     defaultEntry(NULL),
     localPlayer(NULL),
-    numberPhysicsCPUThreads(4),
-    stepSize(1.0 / 60.0),
-    accumulator(0.0),
-    scenePathfindManager(NULL),
     particles(),
     monsters(),
     portals(),
@@ -42,40 +42,101 @@ Scene::Scene(SceneDesc desc, World* world)
     players()
 {
   setup();
-  
-  ivy = new Ivy(this, Vector3(0,-2,5), Vector3(0,-1,0));
-  addInteractive(0);//temp door
 }
 
 //-------------------------------------------------------------------------------------
 Scene::~Scene(void)
 {
-  delete ivy;
   release();
 }
 
 //-------------------------------------------------------------------------------------
-std::string Scene::getName()
+void Scene::setup()
 {
-  return desc.name;
+  scenePhysicsManager = new ScenePhysicsManager(world->getPhysicsManager(), desc.gravity);
+  sceneGraphicsManager = new SceneGraphicsManager(world->getGraphicsManager(), desc.ambientLight, desc.shadowColour);//world->getGraphicsManager()->createSceneGraphicsManager();//->getRoot()->createSceneManager(Ogre::ST_GENERIC);
+  scenePathfindManager = new ScenePathfindManager(sceneGraphicsManager->getSceneManager());
+  sceneArchitectureManager = new SceneArchitectureManager(this);
+
+  SceneLoader().load(desc.file, this);//load an xml scene
+  if(localPlayer) addPlayer(localPlayer);
+
+  //Dev
+  //flockTest.setScene(this);//boids flocking test
+  //ivy = new Ivy(this, Vector3(0,-2,5), Vector3(0,-1,0));
+  addInteractive(0);//temp door
 }
 
 //-------------------------------------------------------------------------------------
-Ogre::SceneManager* Scene::getGraphicsManager()
+void Scene::release()
 {
-  return sceneGraphicsManager;
+  //delete ivy;
+
+  if(localPlayer) localPlayer->setScene(NULL);//detach player from this scene
+  //localplayer to NULL?
+
+  defaultEntry = NULL;
+
+  lights.destroyAll();
+  monsters.destroyAll();
+  items.destroyAll();
+  interactives.destroyAll();
+  players.destroyAll();
+
+  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
+  {
+    delete (*it);
+  }
+  portals.clear();
+
+  delete scenePathfindManager;
+  scenePathfindManager = NULL;
+
+  delete sceneArchitectureManager;
+  sceneArchitectureManager = NULL;
+
+  delete sceneGraphicsManager;
+  sceneGraphicsManager = NULL;
+
+  delete scenePhysicsManager;
+  scenePhysicsManager = NULL;
 }
 
 //-------------------------------------------------------------------------------------
-physx::PxScene* Scene::getPhysicsManager()
+void Scene::reset()
 {
-  return scenePhysicsManager;
+  release();
+  setup();
 }
 
 //-------------------------------------------------------------------------------------
-physx::PxControllerManager* Scene::getControllerManager()
+void Scene::update(double elapsedSeconds)
 {
-  return sceneControllerManager;
+
+  //ivy->update(elapsedSeconds);
+
+  scenePathfindManager->update(elapsedSeconds);//for nav mesh updates
+
+  lights.update(elapsedSeconds);
+  monsters.update(elapsedSeconds);
+  items.update(elapsedSeconds);
+  interactives.update(elapsedSeconds);
+  players.update(elapsedSeconds);
+
+  if(localPlayer) localPlayer->update(elapsedSeconds);
+
+  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it) 
+  {
+    if((*it)->isLoadRequired(localPlayer->getPosition())) world->loadScene((*it)->getID());
+  }
+
+  //pre simulation updates
+
+  scenePhysicsManager->update(elapsedSeconds);
+
+  //if(world->getPhysicsManager()->isEnabled()) advancePhysics(elapsedSeconds);
+
+  //post simulation events
 }
 
 //-------------------------------------------------------------------------------------
@@ -114,7 +175,7 @@ void Scene::addMonster(int id, Vector3 position, Quaternion rotation)
   Monster* monster = new Monster(world->getDataManager()->getMonster(id));
   monster->setScene(this);
   monster->setPosition(position);
-  monster->setGoal(new Go(getPathfindManager()->getRandomNavigablePoint(), Priority::HIGH));
+  monster->setGoal(new Go(scenePathfindManager->getRandomNavigablePoint(), Priority::HIGH));
   monsters.add(monster);
 }
 
@@ -156,11 +217,11 @@ void Scene::addArchitecture(int id, Vector3 position, Quaternion quaternion, Vec
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addParticles(Ogre::String name, Ogre::String templateName, Vector3 position, Ogre::Real speed)
+void Scene::addParticles(std::string name, std::string templateName, Vector3 position, Ogre::Real speed)
 {
   Ogre::ParticleSystem* particle = sceneGraphicsManager->createParticleSystem(name, templateName);//"Rain");//, "Examples/Rain");
   particle->setSpeedFactor(speed);
-  Ogre::SceneNode* particleNode = sceneGraphicsManager->getRootSceneNode()->createChildSceneNode();//"particle" + Ogre::StringConverter::toString(getNewInstanceNumber()));
+  Ogre::SceneNode* particleNode = sceneGraphicsManager->createSceneNode();//"particle" + Ogre::StringConverter::toString(getNewInstanceNumber()));
   particleNode->setPosition(position);
   particleNode->attachObject(particle);
   particles.push_back(particle);
@@ -180,55 +241,27 @@ void Scene::removePlayer(Player* player)
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::removeItem(Item* item)
+void Scene::destroyItem(Item* item)
 {
   items.destroy(item);
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::removeMonster(Monster* monster)
+void Scene::destroyMonster(Monster* monster)
 {
   monsters.destroy(monster);
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::update(double elapsedSeconds)
+void Scene::removeItem(Item* item)
 {
-
-  //ivy->update(elapsedSeconds);
-  
-  scenePathfindManager->update(elapsedSeconds);//for nav mesh updates
-
-  lights.update(elapsedSeconds);
-  monsters.update(elapsedSeconds);
-  items.update(elapsedSeconds);
-  interactives.update(elapsedSeconds);
-  players.update(elapsedSeconds);
-
-  if(localPlayer) localPlayer->update(elapsedSeconds);
-  
-  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it) 
-  {
-    if((*it)->isLoadRequired(localPlayer->getPosition())) world->loadScene((*it)->getID());
-  }
-
-  //pre simulation updates
-
-  if(world->isPhysicsEnabled()) advancePhysics(elapsedSeconds);
-
-  //post simulation events
+  items.remove(item);
 }
 
 //-------------------------------------------------------------------------------------
-bool Scene::advancePhysics(double elapsedSeconds)
+void Scene::removeMonster(Monster* monster)
 {
-  accumulator += elapsedSeconds;
-  if(accumulator < stepSize) return false;
-  accumulator -= stepSize;
-  scenePhysicsManager->simulate((float) stepSize);
-  scenePhysicsManager->fetchResults(true);
-
-  return true;
+  monsters.remove(monster);
 }
 
 //-------------------------------------------------------------------------------------
@@ -242,6 +275,12 @@ void Scene::build()
 World* Scene::getWorld()
 {
   return world;
+}
+
+//-------------------------------------------------------------------------------------
+std::string Scene::getName()
+{
+  return desc.name;
 }
 
 //-------------------------------------------------------------------------------------
@@ -263,191 +302,8 @@ Portal* Scene::getPortal(int id)
 }
 
 //-------------------------------------------------------------------------------------
-Portal* Scene::getDefaultPortal()
-{
-  return getPortal(0);//could make more intelligent
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::destroyAllAttachedMoveables(Ogre::SceneNode* node)
-{
-  if(!node) return;
-
-  // Destroy all the attached objects
-  Ogre::SceneNode::ObjectIterator itObject = node->getAttachedObjectIterator();
-
-  while (itObject.hasMoreElements()) node->getCreator()->destroyMovableObject(itObject.getNext());
-
-  // Recurse to child SceneNodes
-  Ogre::SceneNode::ChildNodeIterator itChild = node->getChildIterator();
-
-  while (itChild.hasMoreElements())
-  {
-    Ogre::SceneNode* pChildNode = static_cast<Ogre::SceneNode*>(itChild.getNext());
-    destroyAllAttachedMoveables(pChildNode);
-  }
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::destroySceneNode(Ogre::SceneNode* node)
-{
-  if(!node) return;
-  destroyAllAttachedMoveables(node);
-  node->removeAndDestroyAllChildren();
-  node->getCreator()->destroySceneNode(node);
-}
-
-//-------------------------------------------------------------------------------------
-ArchitectureManager* Scene::getArchitectureManager()
-{
-  return sceneArchitectureManager;
-}
-
-//-------------------------------------------------------------------------------------
-PathfindManager* Scene::getPathfindManager()
-{
-  return scenePathfindManager;
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::setShadowsEnabled(bool enabled)
-{
-  if(enabled) 
-  {
-    sceneGraphicsManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
-    sceneGraphicsManager->setShadowColour(desc.shadowColour);
-    sceneGraphicsManager->setShadowTextureSize(4096);//1024 seems very pixelated
-    sceneGraphicsManager->setShadowTextureCount(5);
-  }
-  else
-  {
-    sceneGraphicsManager->setShadowTechnique(Ogre::SHADOWTYPE_NONE);
-  }
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::setDebugDrawShadows(bool enabled)
-{
-  sceneGraphicsManager->setShowDebugShadows(enabled);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::setDebugDrawBoundingBoxes(bool enabled)
-{
-  sceneGraphicsManager->showBoundingBoxes(enabled);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::setDebugDrawNavigationMesh(bool enabled)
-{
-  scenePathfindManager->setDrawNavigationMesh(enabled);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::setGravity(Vector3 gravity)
-{
-  scenePhysicsManager->setGravity(physx::PxVec3(gravity.x, gravity.y, gravity.z));
-}
-
-//-------------------------------------------------------------------------------------
-Vector3 Scene::getGravity()
-{
-  physx::PxVec3 gravity = scenePhysicsManager->getGravity();
-  return Vector3(gravity.x, gravity.y, gravity.z);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::reset()
-{
-  release();
-  setup();
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::setup()
-{
-  //static physx::PxDefaultSimulationFilterShader defaultFilterShader;//??
-
-  //scene physics
-  physx::PxSceneDesc physicsDesc(world->getPhysicsManager()->getTolerancesScale());
-  physicsDesc.gravity = physx::PxVec3(desc.gravity.x, desc.gravity.y, desc.gravity.z);
-
-  physicsDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(numberPhysicsCPUThreads);
-  if(!physicsDesc.cpuDispatcher) throw NHException("could not create scene CPU dispatcher");
-
-  physicsDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
-  if(!physicsDesc.filterShader) throw NHException("filter shader creation failed");
-
-  scenePhysicsManager = world->getPhysicsManager()->getPhysics()->createScene(physicsDesc);
-  if(!scenePhysicsManager) throw NHException("could not create scene physics manager");
-
-  sceneControllerManager = PxCreateControllerManager(*world->getPhysicsManager()->getFoundation());
-  if(!sceneControllerManager) throw NHException("could not create scene controller manager");
-
-  sceneGraphicsManager = world->getRoot()->createSceneManager(Ogre::ST_GENERIC);
-
-  scenePathfindManager = new PathfindManager(sceneGraphicsManager);
-
-  setShadowsEnabled(world->isShadowsEnabled());
-
-  sceneArchitectureManager = new ArchitectureManager(this, scenePathfindManager);
-
-  setAmbientColour(desc.ambientLight);
-
-  SceneLoader().load(desc.file, this);//load an xml scene
-
-  //flockTest.setScene(this);//boids flocking test
-
-  if(localPlayer) addPlayer(localPlayer);
-
-
-#ifdef _DEBUG
-  scenePhysicsManager->setVisualizationParameter(physx::PxVisualizationParameter::eJOINT_LOCAL_FRAMES, 1.0f);
-  scenePhysicsManager->setVisualizationParameter(physx::PxVisualizationParameter::eJOINT_LIMITS, 1.0f);
-#endif
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::release()
-{
-  if(localPlayer) localPlayer->setScene(NULL);//detach player from this scene
-  //localplayer to NULL?
-
-  defaultEntry = NULL;
-
-  delete scenePathfindManager;
-  scenePathfindManager = NULL;
-
-  delete sceneArchitectureManager;
-  sceneArchitectureManager = NULL;
-
-  lights.destroyAll();
-  monsters.destroyAll();
-  items.destroyAll();
-  interactives.destroyAll();
-  players.destroyAll();
-
-  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
-  {
-    delete (*it);
-  }
-  portals.clear();
-  
-  if(scenePhysicsManager) scenePhysicsManager->release();
-  scenePhysicsManager = NULL;
-
-  if(sceneGraphicsManager) world->getRoot()->destroySceneManager(sceneGraphicsManager);
-  sceneGraphicsManager = NULL;
-}
-
-//-------------------------------------------------------------------------------------
 bool Scene::hasPlayer()
 {
   return localPlayer != NULL;
 }
 
-//-------------------------------------------------------------------------------------
-void Scene::setAmbientColour(Ogre::ColourValue colour)
-{
-  sceneGraphicsManager->setAmbientLight(colour);
-}

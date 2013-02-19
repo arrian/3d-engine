@@ -6,6 +6,9 @@
 #include "OgreSceneNode.h"
 #include "geometry/PxConvexMeshGeometry.h"
 
+#include "SceneGraphicsManager.h"
+#include "ScenePhysicsManager.h"
+
 //-------------------------------------------------------------------------------------
 Item::Item(ItemDesc desc)
   : desc(desc),
@@ -24,8 +27,8 @@ void Item::hasSceneChange()
 {
   if(oldScene)
   {
-    if(node) oldScene->getGraphicsManager()->destroySceneNode(node);
-    if(entity) oldScene->getGraphicsManager()->destroyEntity(entity);
+    if(node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
+    if(entity) oldScene->getSceneGraphicsManager()->destroyEntity(entity);
   }
 
   node = NULL;
@@ -33,15 +36,15 @@ void Item::hasSceneChange()
 
   if(scene)
   {
-    node = scene->getGraphicsManager()->getRootSceneNode()->createChildSceneNode();
+    node = scene->getSceneGraphicsManager()->createSceneNode();
 
-    entity = scene->getGraphicsManager()->createEntity(desc.mesh);
+    entity = scene->getSceneGraphicsManager()->createEntity(desc.mesh);
     node->attachObject(entity);
     node->setVisible(true);
 
     //Physical
-    simplifiedEntity = scene->getGraphicsManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
-    if(!material) material = scene->getPhysicsManager()->getPhysics().createMaterial(desc.staticFriction, desc.dynamicFriction, desc.restitution);
+    simplifiedEntity = scene->getSceneGraphicsManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
+    if(!material) material = scene->getScenePhysicsManager()->getScenePhysics()->getPhysics().createMaterial(desc.staticFriction, desc.dynamicFriction, desc.restitution);
     physical.begin();
     physical.addConvexMesh(scene->getWorld()->getPhysicsManager()->getFabrication()->createConvexMesh(simplifiedEntity->getMesh()), material);
     physical.end();
@@ -61,8 +64,8 @@ Item::~Item(void)
 
   if(scene)
   {
-    if(entity) scene->getGraphicsManager()->destroyEntity(entity);
-    if(node) scene->getGraphicsManager()->destroySceneNode(node);
+    if(entity) scene->getSceneGraphicsManager()->destroyEntity(entity);
+    if(node) scene->getSceneGraphicsManager()->destroySceneNode(node);
   }
 
   node = NULL;

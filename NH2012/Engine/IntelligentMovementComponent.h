@@ -6,7 +6,7 @@
 
 #include "MovementComponent.h"
 
-#include "PathfindManager.h"
+#include "ScenePathfindManager.h"
 #include "DataManager.h"
 #include "Player.h"
 #include "Item.h"

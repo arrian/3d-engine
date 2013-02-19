@@ -5,15 +5,15 @@
 #include "BasicComponent.h"
 #include "NHException.h"
 
-class SceneContainer
+class ComponentContainer
 {
 public:
-  SceneContainer()
+  ComponentContainer()
     : components()
   {
   }
 
-  virtual ~SceneContainer()
+  virtual ~ComponentContainer()
   {
     destroyAll();
   }
@@ -51,16 +51,16 @@ public:
     return components.size();
   }
 
-private:
-
-  std::vector<BasicComponent*> components;
-
   void remove(BasicComponent* object)//remove from set without destroying object
   {
     std::vector<BasicComponent*>::iterator iter = std::find(components.begin(), components.end(), object);
     if(iter == components.end()) throw NHException("could not remove the object because it is not in the collection");
     components.erase(iter);
   }
+
+private:
+  std::vector<BasicComponent*> components;
+
 };
 
 

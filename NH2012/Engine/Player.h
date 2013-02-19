@@ -22,6 +22,7 @@
 #include "Item.h"
 #include "Apparel.h"
 #include "Button.h"
+#include "ComponentContainer.h"
 
 class Scene;
 class World;
@@ -55,7 +56,7 @@ public:
   virtual Vector3 getPosition();
   virtual Quaternion getRotation();
   Vector3 getVelocity();
-  Ogre::Camera* getCamera();
+  CameraComponent* getCamera();
   Ogre::Viewport* getViewport();
   Ogre::RenderWindow* getWindow();
   virtual bool getCrouching();
@@ -85,13 +86,13 @@ private:
   MeshComponent mesh;
   QueryComponent query;
 
-  std::vector<Item*> inventory;
+  ComponentContainer inventory;//make inventory class
   Item* leftHand;
   Item* rightHand;
   Apparel* clothes;
   Apparel* shoes;
   Apparel* hat;
-  std::vector<Item*> quickSlots;
+  ComponentContainer quickSlots;
 
   Bar life;
   Bar experience;

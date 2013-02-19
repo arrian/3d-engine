@@ -8,6 +8,8 @@
 #include "NHException.h"
 #include "Identifiable.h"
 
+#include "SceneGraphicsManager.h"
+
 //-------------------------------------------------------------------------------------
 CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom)
   : NodeComponent(),
@@ -30,7 +32,7 @@ CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom)
 CameraComponent::~CameraComponent(void)
 {
   delete ssao;
-  if(scene) scene->getGraphicsManager()->destroyCamera(camera);
+  if(scene) scene->getSceneGraphicsManager()->destroyCamera(camera);
 }
 
 //-------------------------------------------------------------------------------------
@@ -98,9 +100,9 @@ void CameraComponent::hasNodeChange()
   }
   else
   {
-    if(oldScene && camera) oldScene->getGraphicsManager()->destroyCamera(camera);//cleaning up previous scene
+    if(oldScene && camera) oldScene->getSceneGraphicsManager()->destroyCamera(camera);//cleaning up previous scene
     if(!scene) return;
-    camera = scene->getGraphicsManager()->createCamera("CameraComponent");
+    camera = scene->getSceneGraphicsManager()->createCamera("CameraComponent");
   }
 
   camera->setNearClipDistance(nearClipDefault);//can see some triangle clipping but no z-fighting
@@ -142,3 +144,36 @@ Vector3 CameraComponent::getDirection()
   return camera->getRealDirection();//am i using the correct direction function?
 }
 
+//-------------------------------------------------------------------------------------
+void CameraComponent::setBloomEnabled(bool enabled)
+{
+  if(enabled)
+  {
+    Ogre::CompositorManager::getSingleton().addCompositor(viewport, "Bloom");
+    Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Bloom", true);
+  }
+  else
+  {
+    if(enableBloom) Ogre::CompositorManager::getSingleton().removeCompositor(viewport, "Bloom");//remove compositor if it was previously created
+  }
+
+  enableBloom = enabled;
+}
+
+//-------------------------------------------------------------------------------------
+void CameraComponent::setSSAOEnabled(bool enabled)
+{
+  enableSSAO = enabled;
+
+  delete ssao;
+  ssao = NULL;
+
+  if(enableSSAO) ssao = new PFXSSAO(window, camera);//enables screen space ambient occlusion
+}
+
+//-------------------------------------------------------------------------------------
+void CameraComponent::setShadowsEnabled(bool enabled)
+{
+  enableShadows = enabled;
+  throw NHException("setting shadows enabled is not fully implemented");
+}
