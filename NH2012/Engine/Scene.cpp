@@ -2,11 +2,6 @@
 
 #include <algorithm>
 
-#include "extensions/PxDefaultCpuDispatcher.h"
-#include "extensions/PxDefaultSimulationFilterShader.h"
-#include "extensions/PxSimpleFactory.h"
-#include "PxVisualizationParameter.h"
-
 #include "World.h"
 #include "Player.h."
 #include "Monster.h"

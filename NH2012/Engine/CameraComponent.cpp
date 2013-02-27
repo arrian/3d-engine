@@ -20,10 +20,10 @@ CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom)
     oldCameraHeight(0),
     nearClipDefault(0.4f),
     farClipDefault(400.0f),//recommended to keep ratio of far to near at or below 1000:1
-    rayCastDistance(10.0f),
-    ssao(NULL),
-    enableSSAO(enableSSAO),
-    enableBloom(enableBloom)
+    rayCastDistance(10.0f)//,
+    //ssao(NULL),
+    //enableSSAO(enableSSAO),
+    //enableBloom(enableBloom)
 {
 
 }
@@ -31,7 +31,7 @@ CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom)
 //-------------------------------------------------------------------------------------
 CameraComponent::~CameraComponent(void)
 {
-  delete ssao;
+  //delete ssao;
   if(scene) scene->getSceneGraphicsManager()->destroyCamera(camera);
 }
 
@@ -45,13 +45,14 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
   viewport = window->addViewport(camera);
   viewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
 
+  /*
   if(ssao)//remove previously created ssao
   {
     delete ssao;
     ssao = NULL;
   }
   if(enableSSAO) ssao = new PFXSSAO(window, camera);//enables screen space ambient occlusion
-
+  */
   /*
   if(enableMotionBlur)//not working??
   {
@@ -59,13 +60,13 @@ void CameraComponent::hookWindow(Ogre::RenderWindow* window)
     Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Motion Blur", true);
   }
   */
-
+  /*
   if(enableBloom)
   {
     Ogre::CompositorManager::getSingleton().addCompositor(viewport, "Bloom");
     Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Bloom", true);
   }
-
+  */
   //Ogre::CompositorManager::getSingleton().addCompositor(viewport, "B&W");
   //Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "B&W", true);
 
@@ -144,36 +145,3 @@ Vector3 CameraComponent::getDirection()
   return camera->getRealDirection();//am i using the correct direction function?
 }
 
-//-------------------------------------------------------------------------------------
-void CameraComponent::setBloomEnabled(bool enabled)
-{
-  if(enabled)
-  {
-    Ogre::CompositorManager::getSingleton().addCompositor(viewport, "Bloom");
-    Ogre::CompositorManager::getSingleton().setCompositorEnabled(viewport, "Bloom", true);
-  }
-  else
-  {
-    if(enableBloom) Ogre::CompositorManager::getSingleton().removeCompositor(viewport, "Bloom");//remove compositor if it was previously created
-  }
-
-  enableBloom = enabled;
-}
-
-//-------------------------------------------------------------------------------------
-void CameraComponent::setSSAOEnabled(bool enabled)
-{
-  enableSSAO = enabled;
-
-  delete ssao;
-  ssao = NULL;
-
-  if(enableSSAO) ssao = new PFXSSAO(window, camera);//enables screen space ambient occlusion
-}
-
-//-------------------------------------------------------------------------------------
-void CameraComponent::setShadowsEnabled(bool enabled)
-{
-  enableShadows = enabled;
-  throw NHException("setting shadows enabled is not fully implemented");
-}

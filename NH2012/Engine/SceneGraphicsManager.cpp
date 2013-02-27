@@ -5,9 +5,11 @@
 
 SceneGraphicsManager::SceneGraphicsManager(GraphicsManager* graphicsManager, Ogre::ColourValue ambientLight, Ogre::ColourValue shadowColour)
   : graphicsManager(graphicsManager),
-    shadowColour(shadowColour)
+    shadowColour(shadowColour),
+    sceneManager(NULL)
 {
-  sceneManager = graphicsManager->getRoot()->createSceneManager(Ogre::ST_GENERIC);
+  sceneManager = graphicsManager->createSceneGraphicsManager();
+  if(!sceneManager) return;
 
   setShadowsEnabled(graphicsManager->isShadowsEnabled());
   setAmbientLight(ambientLight);
@@ -16,7 +18,7 @@ SceneGraphicsManager::SceneGraphicsManager(GraphicsManager* graphicsManager, Ogr
 //-------------------------------------------------------------------------------------
 SceneGraphicsManager::~SceneGraphicsManager(void)
 {
-  graphicsManager->getRoot()->destroySceneManager(sceneManager);
+  graphicsManager->destroySceneGraphicsManager(sceneManager);
 }
 
 //-------------------------------------------------------------------------------------

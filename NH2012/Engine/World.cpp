@@ -27,10 +27,30 @@ World::World()
     physicsManager(),
     controlManager(),
     networkManager(),
+    graphicsManager(),
     player(NULL),
     defaultScene(0)
 {
   scriptManager.setWorld(this);
+}
+
+//-------------------------------------------------------------------------------------
+World::World(Ogre::Root* root, Ogre::RenderWindow* window)
+  : scenes(),
+    timeManager(),
+    dataManager(),
+    soundManager(),
+    scriptManager(),
+    physicsManager(),
+    controlManager(),
+    networkManager(),
+    graphicsManager(),
+    player(NULL),
+    defaultScene(0)
+{
+  scriptManager.setWorld(this);
+  graphicsManager.setRoot(root);
+  graphicsManager.hookWindow(window);
 }
 
 //-------------------------------------------------------------------------------------

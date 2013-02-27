@@ -34,8 +34,7 @@ public:
   ~Player(void);
 
   void update(double elapsedSeconds);
-  void hookWindow(Ogre::RenderWindow* window);//hooks the player camera to a render window
-  
+
   //Actions
   virtual void stop();
   virtual void stagger(Vector3 direction);

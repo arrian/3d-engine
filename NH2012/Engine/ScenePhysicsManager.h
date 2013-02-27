@@ -5,6 +5,10 @@
 
 #include "PxPhysicsAPI.h"
 #include "characterkinematic/PxControllerManager.h"
+#include "extensions/PxDefaultCpuDispatcher.h"
+#include "extensions/PxDefaultSimulationFilterShader.h"
+#include "extensions/PxSimpleFactory.h"
+#include "PxVisualizationParameter.h"
 
 class ScenePhysicsManager
 {

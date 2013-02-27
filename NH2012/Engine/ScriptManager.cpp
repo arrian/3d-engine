@@ -166,7 +166,7 @@ void ScriptManager::help(Options argv)
 void ScriptManager::screenshot(Options argv)
 {
   //Console::getInstance().setVisible(false);
-  if(world->getPlayer()->getWindow())display("Screenshot saved to '" + world->getPlayer()->getWindow()->writeContentsToTimestampedFile("screenshot", ".png") + "'.");
+  if(world->getGraphicsManager()->getWindow())display("Screenshot saved to '" + world->getGraphicsManager()->getWindow()->writeContentsToTimestampedFile("screenshot", ".png") + "'.");
   //Console::getInstance().setVisible(true);
 }
 
@@ -192,7 +192,7 @@ void ScriptManager::setFullscreen(Options argv)
   int heightNum = boost::lexical_cast<int>(argv[2]);
 
   if(widthNum <= 0 || heightNum <= 0) throw NHException("bad screen dimensions");
-  else if(world->getPlayer()->getWindow()) world->getPlayer()->getWindow()->setFullscreen(true, widthNum, heightNum);
+  else if(world->getPlayer()->getWindow()) world->getGraphicsManager()->getWindow()->setFullscreen(true, widthNum, heightNum);
   else throw NHException("no window to set to fullscreen mode");
 }
 
@@ -204,7 +204,7 @@ void ScriptManager::setWindowed(Options argv)
   int heightNum = boost::lexical_cast<int>(argv[2]);
 
   if(widthNum <= 0 || heightNum <= 0) throw NHException("bad screen dimensions");
-  else if(world->getPlayer()->getWindow()) world->getPlayer()->getWindow()->setFullscreen(false, widthNum, heightNum);
+  else if(world->getGraphicsManager()->getWindow()) world->getGraphicsManager()->getWindow()->setFullscreen(false, widthNum, heightNum);
   else throw NHException("no window to set to windowed mode");
 }
 

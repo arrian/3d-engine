@@ -25,6 +25,7 @@ class World
 {
 public:
   World();
+  World(Ogre::Root* root, Ogre::RenderWindow* window);
   ~World(void);
 
   bool update(double elapsedSeconds);
@@ -45,8 +46,6 @@ public:
   ControlManager* getControlManager();
   NetworkManager* getNetworkManager();
   GraphicsManager* getGraphicsManager();
-
-  //Ogre::Root* getRoot();
   Player* getPlayer();
   Scene* getScene(int id);
   int getNumberScenes();

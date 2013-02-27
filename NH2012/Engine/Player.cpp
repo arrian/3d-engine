@@ -184,18 +184,6 @@ void Player::mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 }
 
 //-------------------------------------------------------------------------------------
-void Player::hookWindow(Ogre::RenderWindow* window)
-{
-  if(window) camera.hookWindow(window);
-}
-
-//-------------------------------------------------------------------------------------
-Ogre::RenderWindow* Player::getWindow()
-{
-  return camera.getWindow();
-}
-
-//-------------------------------------------------------------------------------------
 void Player::stop()
 {
   movement.stop();
