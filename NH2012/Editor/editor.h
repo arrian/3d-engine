@@ -15,11 +15,14 @@ public:
   Editor(QWidget *parent = 0, Qt::WFlags flags = 0);
   ~Editor();
 
+protected:
+  virtual void keyPressEvent(QKeyEvent* e);
+  virtual void keyReleaseEvent(QKeyEvent* e);
+
 private:
   Ui::EditorClass ui;
 
-  virtual void keyPressEvent(QKeyEvent* e);
-  virtual void keyReleaseEvent(QKeyEvent* e);
+
 };
 
 #endif // EDITOR_H

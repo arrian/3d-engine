@@ -4,6 +4,9 @@
 
 void Renderer::init()
 {
+  setFocusPolicy(Qt::StrongFocus);
+
+
   hasPrevious = false;
   //previous;
   hasMouseClick = false;
@@ -110,9 +113,8 @@ void Renderer::initializeGL()
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();/////////////////////test
   
   //Preparing World
-  world = new World(root);
+  world = new World(root, window);
   world->initialise("game.ini");
-  world->hookWindow(window);
 }
  
 void Renderer::paintGL()
@@ -175,23 +177,25 @@ void Renderer::mouseMoveEvent(QMouseEvent* e)
 
 void Renderer::keyPressEvent(QKeyEvent* e) 
 {
-  if(hasMouseClick)
+  try
   {
-    if(e->key() == Qt::Key_W) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_W, 0));
-    else if(e->key() == Qt::Key_A) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_A, 0));
-    else if(e->key() == Qt::Key_S) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_S, 0));
-    else if(e->key() == Qt::Key_D) world->keyPressed(OIS::KeyEvent(NULL, OIS::KC_D, 0));
+    if(hasMouseClick) world->keyPressed(OIS::KeyEvent(NULL, keyConversion.get(e->key()), 0));
+  }
+  catch(NHException e)
+  {
+
   }
 }
 
 void Renderer::keyReleaseEvent(QKeyEvent* e) 
 {
-  if(hasMouseClick)
+  try
   {
-    if(e->key() == Qt::Key_W) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_W, 0));
-    else if(e->key() == Qt::Key_A) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_A, 0));
-    else if(e->key() == Qt::Key_S) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_S, 0));
-    else if(e->key() == Qt::Key_D) world->keyReleased(OIS::KeyEvent(NULL, OIS::KC_D, 0));
+    if(hasMouseClick) world->keyReleased(OIS::KeyEvent(NULL, keyConversion.get(e->key()), 0));
+  }
+  catch(NHException e)
+  {
+
   }
 }
 

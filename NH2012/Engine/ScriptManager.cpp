@@ -192,7 +192,7 @@ void ScriptManager::setFullscreen(Options argv)
   int heightNum = boost::lexical_cast<int>(argv[2]);
 
   if(widthNum <= 0 || heightNum <= 0) throw NHException("bad screen dimensions");
-  else if(world->getPlayer()->getWindow()) world->getGraphicsManager()->getWindow()->setFullscreen(true, widthNum, heightNum);
+  else if(world->getGraphicsManager()->getWindow()) world->getGraphicsManager()->getWindow()->setFullscreen(true, widthNum, heightNum);
   else throw NHException("no window to set to fullscreen mode");
 }
 
@@ -339,7 +339,7 @@ void ScriptManager::getPhysicsInfo(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::getGameInfo(Options argv)
 {
-  Ogre::RenderWindow* window = world->getPlayer()->getWindow();
+  Ogre::RenderWindow* window = world->getGraphicsManager()->getWindow();
   if(!window) throw NHException("no render window found");
   display("average fps", boost::lexical_cast<std::string>(int(window->getAverageFPS())));
   display("best fps", boost::lexical_cast<std::string>(window->getBestFPS()));

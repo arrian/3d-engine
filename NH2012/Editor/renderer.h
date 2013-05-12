@@ -10,6 +10,8 @@
 
 #include <QWidget>
 #include <QMouseEvent>
+
+#include "QtOISConversion.h"
  
 class Renderer : public QGLWidget
 {
@@ -35,6 +37,8 @@ public:
   }
 
   void init();
+
+
  
 protected:
   virtual void initializeGL();
@@ -46,6 +50,7 @@ protected:
   virtual void mouseMoveEvent(QMouseEvent* e);
   virtual void keyPressEvent(QKeyEvent* e);
   virtual void keyReleaseEvent(QKeyEvent* e);
+
   //virtual void wheelEvent(QWheelEvent* e);
  
   virtual Ogre::RenderSystem* chooseRenderer(Ogre::RenderSystemList* rsl);
@@ -56,6 +61,8 @@ protected:
   Ogre::RenderWindow *window;
 
 private:
+  QtOISConversion keyConversion;
+  
   bool hasMouseClick;
 
   bool hasPrevious;
