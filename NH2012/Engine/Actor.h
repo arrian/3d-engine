@@ -10,7 +10,7 @@ class Scene;
 /**
  * Defines an intelligent agent in the world.
  **/
-class Actor : public BasicComponent, public Identifiable
+class Actor : public BasicComponent, public Physical, public Identifiable
 {
 public:
   Actor(void* instancePointer, std::string name, Group group);

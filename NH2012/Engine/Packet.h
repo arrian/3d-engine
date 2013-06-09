@@ -15,9 +15,9 @@ enum PacketType
   ITEM_CREATE,
   ITEM_REMOVE,
   ITEM_UPDATE,
-  MONSTER_CREATE,
-  MONSTER_REMOVE,
-  MONSTER_UPDATE,
+  CREATURE_CREATE,
+  CREATURE_REMOVE,
+  CREATURE_UPDATE,
   ACKNOWLEDGE,//acknowledge a create or remove event
   PING//maintain connection or get round trip time
 };
@@ -44,7 +44,7 @@ struct ItemPacket
   Vector3 position;
 };
 
-struct MonsterPacket
+struct CreaturePacket
 {
   PacketHeader header;
   Vector3 position;

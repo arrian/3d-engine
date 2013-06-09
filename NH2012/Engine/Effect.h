@@ -2,7 +2,7 @@
 
 #include "BasicComponent.h"
 
-class Effect : public BasicComponent
+class Effect : public BasicComponent, public Physical
 {
 public:
   Effect(void);

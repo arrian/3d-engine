@@ -3,7 +3,7 @@
 #include "BasicComponent.h"
 #include "Identifiable.h"
 
-class Interactive : public BasicComponent, public Identifiable
+class Interactive : public BasicComponent, public Physical, public Identifiable
 {
 public:
   Interactive(std::string name);

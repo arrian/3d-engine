@@ -31,7 +31,7 @@ PhysicsManager::PhysicsManager(void)
 
 #ifdef _DEBUG //profile zone manager
   bool recordMemoryAllocations = true;
-  physx::PxProfileZoneManager* profileZoneManager = &physx::PxProfileZoneManager::createProfileZoneManager(physicsFoundation);
+  profileZoneManager = &physx::PxProfileZoneManager::createProfileZoneManager(physicsFoundation);
   if(!profileZoneManager) throw NHException("physics profile zone manager could not be created");
 #else
   bool recordMemoryAllocations = false;
@@ -59,6 +59,9 @@ PhysicsManager::PhysicsManager(void)
 //-------------------------------------------------------------------------------------
 PhysicsManager::~PhysicsManager(void)
 {
+#ifdef _DEBUG
+  profileZoneManager->release();
+#endif
 
   physicsMaterial->release();
 

@@ -4,7 +4,7 @@
 
 #include "World.h"
 #include "Player.h."
-#include "Monster.h"
+#include "Creature.h"
 #include "Item.h"
 #include "Light.h"
 #include "Portal.h"
@@ -12,6 +12,7 @@
 #include "Door.h"
 #include "Chest.h"
 #include "Ivy.h"
+#include "Effect.h"
 #include "SceneLoader.h"
 
 #include "SceneArchitectureManager.h"
@@ -23,18 +24,22 @@
 Scene::Scene(SceneDesc desc, World* world)
   : world(world),
     desc(desc),
+    id(Id<Scene>()),
     scenePathfindManager(NULL),
     sceneGraphicsManager(NULL),
     scenePhysicsManager(NULL),
     sceneArchitectureManager(NULL),
     defaultEntry(NULL),
-    localPlayer(NULL),
-    particles(),
-    monsters(),
+    //localPlayer(NULL),
+    //particles(),
+
+    creatures(),
     portals(),
     lights(),
     items(),
-    players()
+    players(),
+    effects(),
+    interactives()
 {
   setup();
 }
@@ -73,7 +78,7 @@ void Scene::release()
   defaultEntry = NULL;
 
   lights.destroyAll();
-  monsters.destroyAll();
+  creatures.destroyAll();
   items.destroyAll();
   interactives.destroyAll();
   players.destroyAll();
@@ -113,7 +118,7 @@ void Scene::update(double elapsedSeconds)
   scenePathfindManager->update(elapsedSeconds);//for nav mesh updates
 
   lights.update(elapsedSeconds);
-  monsters.update(elapsedSeconds);
+  creatures.update(elapsedSeconds);
   items.update(elapsedSeconds);
   interactives.update(elapsedSeconds);
   players.update(elapsedSeconds);
@@ -165,13 +170,13 @@ void Scene::addPlayer(Player* player, int portalID)
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::addMonster(int id, Vector3 position, Quaternion rotation)
+void Scene::addCreature(int id, Vector3 position, Quaternion rotation)
 {
-  Monster* monster = new Monster(world->getDataManager()->getMonster(id));
-  monster->setScene(this);
-  monster->setPosition(position);
-  monster->setGoal(new Go(scenePathfindManager->getRandomNavigablePoint(), Priority::HIGH));
-  monsters.add(monster);
+  Creature* creature = new Creature(world->getDataManager()->getCreature(id));
+  creature->setScene(this);
+  creature->setPosition(position);
+  creature->setGoal(new Go(scenePathfindManager->getRandomNavigablePoint(), Priority::HIGH));
+  creatures.add(creature);
 }
 
 //-------------------------------------------------------------------------------------
@@ -242,9 +247,9 @@ void Scene::destroyItem(Item* item)
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::destroyMonster(Monster* monster)
+void Scene::destroyCreature(Creature* creature)
 {
-  monsters.destroy(monster);
+  creatures.destroy(creature);
 }
 
 //-------------------------------------------------------------------------------------
@@ -254,9 +259,9 @@ void Scene::removeItem(Item* item)
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::removeMonster(Monster* monster)
+void Scene::removeCreature(Creature* creature)
 {
-  monsters.remove(monster);
+  creatures.remove(creature);
 }
 
 //-------------------------------------------------------------------------------------
@@ -264,24 +269,6 @@ void Scene::build()
 {
   scenePathfindManager->build();//note that this needs to be done before building architecture because architecture->build destroys the required scenenode
   sceneArchitectureManager->build();
-}
-
-//-------------------------------------------------------------------------------------
-World* Scene::getWorld()
-{
-  return world;
-}
-
-//-------------------------------------------------------------------------------------
-std::string Scene::getName()
-{
-  return desc.name;
-}
-
-//-------------------------------------------------------------------------------------
-int Scene::getSceneID()
-{
-  return desc.id;
 }
 
 //-------------------------------------------------------------------------------------
@@ -301,4 +288,5 @@ bool Scene::hasPlayer()
 {
   return localPlayer != NULL;
 }
+
 

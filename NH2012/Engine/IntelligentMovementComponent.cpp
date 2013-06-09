@@ -1,7 +1,7 @@
 #include "IntelligentMovementComponent.h"
 
 #include "Scene.h"
-#include "Monster.h"
+#include "Creature.h"
 #include "Goal.h"
 #include "NHException.h"
 

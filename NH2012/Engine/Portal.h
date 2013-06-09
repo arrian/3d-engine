@@ -7,7 +7,7 @@
 #include "Scene.h"
 
 /** 
- * A portal to transport the player or monsters.
+ * A portal to transport the player or creatures.
  */
 class Portal
 {

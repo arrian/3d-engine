@@ -1,4 +1,4 @@
-#include "Monster.h"
+#include "Creature.h"
 
 #include "Scene.h"
 #include "NHException.h"
@@ -6,32 +6,32 @@
 #include "SceneGraphicsManager.h"
 
 //-------------------------------------------------------------------------------------
-Monster::Monster(MonsterDesc desc)
-  : Actor(this, desc.name, MONSTER),
+Creature::Creature(CreatureDesc desc)
+  : Actor(this, desc.name, CREATURE),
     description(desc),
     intelligence(desc.speed, desc.gravity),
     mesh(desc.mesh),
     skeleton()
 {
   skeleton.setUserData((Identifiable*) this);
-  skeleton.setGroup(MONSTER);
+  skeleton.setGroup(CREATURE);
 }
 
 //-------------------------------------------------------------------------------------
-Monster::~Monster(void)
+Creature::~Creature(void)
 {
 
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::update(double elapsedSeconds)
+void Creature::update(double elapsedSeconds)
 {
   intelligence.update(elapsedSeconds);
   skeleton.update(elapsedSeconds);
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::hasSceneChange()
+void Creature::hasSceneChange()
 {
   //pulling down
   if(oldScene)
@@ -54,7 +54,7 @@ void Monster::hasSceneChange()
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::setPosition(Vector3 position)
+void Creature::setPosition(Vector3 position)
 {
   this->position = position;
   if(node) 
@@ -65,107 +65,107 @@ void Monster::setPosition(Vector3 position)
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::setRotation(Quaternion rotation)
+void Creature::setRotation(Quaternion rotation)
 {
   //set node horizontal direction here
-  throw NHException("setting the rotation of a monster has not been implemented");
+  throw NHException("setting the rotation of a creature has not been implemented");
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::setGoal(Goal* goal)
+void Creature::setGoal(Goal* goal)
 {
   intelligence.setGoal(goal);
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::stop()
+void Creature::stop()
 {
   skeleton.stop();
   intelligence.setGoal(NULL);
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::stagger(Vector3 direction)
+void Creature::stagger(Vector3 direction)
 {
   throw NHException("not implemented");
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::damage(double amount)
+void Creature::damage(double amount)
 {
   throw NHException("not implemented");
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::heal(double amount)
+void Creature::heal(double amount)
 {
   throw NHException("not implemented");
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::setLookAt(Vector3 lookAt)
+void Creature::setLookAt(Vector3 lookAt)
 {
   skeleton.lookAt(lookAt);
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::setRunning(bool running)
+void Creature::setRunning(bool running)
 {
   intelligence.setRun(running);
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::setCrouching(bool crouching)
+void Creature::setCrouching(bool crouching)
 {
   skeleton.setCrouch(crouching);
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::setGravity(Vector3 gravity)
+void Creature::setGravity(Vector3 gravity)
 {
   intelligence.setGravity(gravity);
 }
 
 //-------------------------------------------------------------------------------------
-Vector3 Monster::getPosition()
+Vector3 Creature::getPosition()
 {
   return node->getPosition();
 }
 
 //-------------------------------------------------------------------------------------
-Quaternion Monster::getRotation()
+Quaternion Creature::getRotation()
 {
   return node->getOrientation();
 }
 
 //-------------------------------------------------------------------------------------
-bool Monster::getCrouching()
+bool Creature::getCrouching()
 {
   return skeleton.isCrouched();
 }
 
 //-------------------------------------------------------------------------------------
-bool Monster::getRunning()
+bool Creature::getRunning()
 {
   return intelligence.isRunning();
 }
 
 //-------------------------------------------------------------------------------------
-Vector3 Monster::getGravity()
+Vector3 Creature::getGravity()
 {
   return intelligence.getGravity();
 }
 
 //-------------------------------------------------------------------------------------
-void Monster::integratePacket(MonsterPacket packet)
+void Creature::integratePacket(CreaturePacket packet)
 {
   setPosition(packet.position);//TODO: interpolate with old position
 }
 
 //-------------------------------------------------------------------------------------
-MonsterPacket Monster::extractPacket()
+CreaturePacket Creature::extractPacket()
 {
-  MonsterPacket packet = MonsterPacket();
+  CreaturePacket packet = CreaturePacket();
   packet.position = getPosition();
   return packet;
 }

@@ -78,6 +78,7 @@
     <ClInclude Include="Group.h" />
     <ClInclude Include="Flock.h" />
     <ClInclude Include="HumanoidSkeletonComponent.h" />
+    <ClInclude Include="Id.h" />
     <ClInclude Include="IntelligentMovementComponent.h" />
     <ClInclude Include="SceneArchitectureManager.h" />
     <ClInclude Include="Bar.h" />
@@ -114,7 +115,7 @@
     <ClInclude Include="Gorilla.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="DataManager.h" />
-    <ClInclude Include="Monster.h" />
+    <ClInclude Include="Creature.h" />
     <ClInclude Include="ComponentContainer.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="ScriptManager.h" />
@@ -222,7 +223,7 @@
     <ClCompile Include="Gorilla.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="DataManager.cpp" />
-    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Creature.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="ScriptManager.cpp" />
     <ClCompile Include="SoundComponent.cpp" />

@@ -74,9 +74,9 @@ struct ItemDesc
   int id;
 };
 
-struct MonsterDesc
+struct CreatureDesc
 {
-  MonsterDesc(int id, std::string name, std::string mesh)
+  CreatureDesc(int id, std::string name, std::string mesh)
     : name(name),
       mesh(mesh),
       height(1.75f),
@@ -160,13 +160,13 @@ struct PlayerDesc
 };
 
 typedef std::map<int, ArchitectureDesc > ArchitectureList;
-typedef std::map<int, MonsterDesc > MonsterList;
+typedef std::map<int, CreatureDesc > CreatureList;
 typedef std::map<int, SceneDesc > SceneList;
 typedef std::map<int, SoundDesc > SoundList;
 typedef std::map<int, ItemDesc > ItemList;
 
 static const char ARCHITECTURE_IDENTIFIER[] = "#Architecture";
-static const char MONSTERS_IDENTIFIER[] = "#Monsters";
+static const char CREATURES_IDENTIFIER[] = "#Creatures";
 static const char SCENES_IDENTIFIER[] = "#Scenes";
 static const char SOUNDS_IDENTIFIER[] = "#Sounds";
 static const char ITEMS_IDENTIFIER[] = "#Items";
@@ -188,7 +188,7 @@ public:
 
   //Data getters
   ArchitectureDesc getArchitecture(int id);
-  MonsterDesc getMonster(int id);
+  CreatureDesc getCreature(int id);
   SceneDesc getScene(int id);
   SoundDesc getSound(int id);
   ItemDesc getItem(int id);
@@ -199,7 +199,7 @@ private:
   std::vector<std::string> files;
 
   ArchitectureList architecture;
-  MonsterList monsters;
+  CreatureList creatures;
   SceneList scenes;
   SoundList sounds;
   ItemList items;

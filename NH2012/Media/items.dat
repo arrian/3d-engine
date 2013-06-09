@@ -69,7 +69,7 @@
 53,10 Metre Sphere,10mSphere.mesh
 54,100 Metre Sphere,100mSphere.mesh
 55,Default Item Symbol,item_default.mesh
-56,Default Monster Symbol,monster_default.mesh
+56,Default Creature Symbol,creature_default.mesh
 57,Default Player Symbol,player_default.mesh
 58,Default Light Symbol,light_default.mesh
 59,Default Sound Symbol,sound_default.mesh

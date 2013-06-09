@@ -1,7 +1,7 @@
-#Monsters
+#Creatures
 #Id,Name,Mesh,Height,Speed,Health
 
 [Debug]
-1,Default Monster,actor.mesh,1.75,1,100
+1,Default Creature,actor.mesh,1.75,1,100
 2,Boid,boid.mesh,0.4,2,100
 3,Climber,climber.mesh,0.4,1,100

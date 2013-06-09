@@ -44,6 +44,10 @@ private:
   physx::PxPhysics* physicsWorld;
   physx::PxMaterial* physicsMaterial;//default material
 
+#ifdef _DEBUG
+  physx::PxProfileZoneManager* profileZoneManager;
+#endif
+
   //Defaults
   physx::PxReal defaultStaticFriction;
   physx::PxReal defaultDynamicFriction;

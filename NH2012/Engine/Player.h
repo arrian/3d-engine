@@ -98,9 +98,9 @@ private:
   int level;
 
   bool addItem;
-  bool addMonster;
+  bool addCreature;
   int itemGenerationID;//for debug item generation
-  int monsterGenerationID;//for debug monster generation
+  int creatureGenerationID;//for debug creature generation
   float placementDistance;
   bool interactPressed;
   float lookResponsiveness;

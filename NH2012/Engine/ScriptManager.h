@@ -108,7 +108,7 @@ private:
   void setPlayerPosition         (Options);
   void setPlayerItemGenerationID (Options);
   void getItemData               (Options);
-  void getMonsterData            (Options);
+  void getCreatureData            (Options);
   void getArchitectureData       (Options);
   void getSoundData              (Options);
   void getSceneData              (Options);
@@ -119,7 +119,7 @@ private:
   void getWorldInfo              (Options);
   void getPlayerPosition         (Options);
   void addItem                   (Options);
-  void addMonster                (Options);
+  void addCreature                (Options);
   void setSceneLoaded            (Options);
   void setSceneDrawDebugNavMesh  (Options);
   void setSceneShadowsEnabled    (Options);

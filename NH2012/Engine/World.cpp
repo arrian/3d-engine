@@ -8,7 +8,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Item.h"
-#include "Monster.h"
+#include "Creature.h"
 #include "ScriptManager.h"
 #include "ControlMap.h"
 #include "NHException.h"
@@ -179,7 +179,7 @@ Scene* World::loadScene(int id)
 {
   if(hasScene(id)) return getScene(id);//check that the scene has not been loaded already
   Scene* scene = new Scene(dataManager.getScene(id), this);
-  scenes.insert(std::pair<int, Scene*>(scene->getSceneID(), scene));
+  scenes.insert(std::pair<int, Scene*>(scene->getId(), scene));
   return scene;
 }
 
@@ -255,7 +255,7 @@ void World::parseInitialisation(std::string filename)
 
   //Temp Controls
   controlManager.addItem = OIS::KC_1;
-  controlManager.addMonster = OIS::KC_2;
+  controlManager.addCreature = OIS::KC_2;
   
   //Environment
   //graphicsManager.setShadowsEnabled(ini.get<bool>("Environment.Shadows"));
@@ -276,7 +276,7 @@ void World::parseInitialisation(std::string filename)
   //Data
   dataManager.addData(ini.get<std::string>("Data.Scenes"));
   dataManager.addData(ini.get<std::string>("Data.Architecture"));
-  dataManager.addData(ini.get<std::string>("Data.Monsters"));
+  dataManager.addData(ini.get<std::string>("Data.Creatures"));
   dataManager.addData(ini.get<std::string>("Data.Items"));
   dataManager.addData(ini.get<std::string>("Data.Sounds"));
 

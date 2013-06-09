@@ -13,7 +13,7 @@
 #include "Interactive.h"
 #include "Goal.h"
 
-class Monster;
+class Creature;
 
 /* Artificial intelligence component.*/
 class IntelligentMovementComponent : public MovementComponent

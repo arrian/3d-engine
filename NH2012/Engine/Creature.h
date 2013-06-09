@@ -15,11 +15,11 @@
 
 class Scene;
 
-class Monster : public Actor, public Packetable<MonsterPacket>
+class Creature : public Actor, public Packetable<CreaturePacket>
 {
 public:
-  Monster(MonsterDesc description);
-  virtual ~Monster(void);
+  Creature(CreatureDesc description);
+  virtual ~Creature(void);
 
   virtual void update(double elapsedSeconds);
 
@@ -46,11 +46,11 @@ public:
   virtual Vector3 getGravity();
 
   //Network
-  virtual void integratePacket(MonsterPacket packet);
-  virtual MonsterPacket extractPacket();
+  virtual void integratePacket(CreaturePacket packet);
+  virtual CreaturePacket extractPacket();
 
 protected:
-  MonsterDesc description;
+  CreatureDesc description;
 
   IntelligentMovementComponent intelligence;
   HumanoidSkeletonComponent skeleton;

@@ -15,14 +15,14 @@ Player::Player(PlayerDesc description, World* world)
     mesh(description.mesh),
     query(),
     addItem(false),
-    addMonster(false),
+    addCreature(false),
     placementDistance(3.0f),
     lookResponsiveness(0.15f),
     handMoveScalar(0.1f),
     skeleton(),
     movement(description.gravity),
     itemGenerationID(3),//temporarily generating a watermelon when the 1 key is pressed
-    monsterGenerationID(1),
+    creatureGenerationID(1),
     currentTarget(NULL),
     interactPressed(false),
     freeCameraNode(NULL)
@@ -89,7 +89,7 @@ void Player::update(double elapsedSeconds)
   {
     for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
-  if(addMonster) scene->addMonster(monsterGenerationID, scene->getScenePathfindManager()->getRandomNavigablePoint());//create a monster at an arbitrary location
+  if(addCreature) scene->addCreature(creatureGenerationID, scene->getScenePathfindManager()->getRandomNavigablePoint());//create a creature at an arbitrary location
 
   currentTarget = query.rayQuery(camera.getDirection(), 20.0f, EXCLUDE_SELF);
   
@@ -143,7 +143,7 @@ void Player::buttonEvent(Button button, bool isDown)
   else if(button == world->getControlManager()->run) movement.setRun(isDown);
   else if(button == world->getControlManager()->crouch) skeleton.setCrouch(isDown);
   else if(button == world->getControlManager()->addItem) addItem = isDown;
-  else if(button == world->getControlManager()->addMonster) addMonster = isDown;
+  else if(button == world->getControlManager()->addCreature) addCreature = isDown;
   else if(button == world->getControlManager()->leftHand) skeleton.setLeftHand(isDown);
   else if(button == world->getControlManager()->rightHand) skeleton.setRightHand(isDown);
 }

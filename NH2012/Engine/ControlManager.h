@@ -35,6 +35,6 @@ public:
 
   //Debug
   Button addItem;
-  Button addMonster;
+  Button addCreature;
   Button console;
 };

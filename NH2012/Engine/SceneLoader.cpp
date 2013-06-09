@@ -29,7 +29,7 @@ static const char LIGHT_STRING[] = "light";
 static const char CAST_SHADOWS_STRING[] = "cast_shadows";
 static const char RANGE_STRING[] = "range";
 static const char ITEM_STRING[] = "item";
-static const char MONSTER_STRING[] = "monster";
+static const char CREATURE_STRING[] = "creature";
 static const char PORTAL_STRING[] = "portal";
 static const char TARGET_SCENE_ID_STRING[] = "target_scene_id";
 static const char TARGET_PORTAL_ID_STRING[] = "target_portal_id";
@@ -86,7 +86,7 @@ void SceneLoader::load(std::string filename, Scene* scene)
       architectureNode = architectureNode->next_sibling(ARCHITECTURE_STRING);
     }
 
-    scene->build();//building static geometry - must do here else we can't use the navigation mesh for monster placement
+    scene->build();//building static geometry - must do here else we can't use the navigation mesh for creature placement
 
     //Lights
     rapidxml::xml_node<>* lightNode = root->first_node(LIGHT_STRING);//"light");
@@ -108,13 +108,13 @@ void SceneLoader::load(std::string filename, Scene* scene)
       itemNode = itemNode->next_sibling(ITEM_STRING);
     }
 
-    //Monsters
-    rapidxml::xml_node<>* monsterNode = root->first_node(MONSTER_STRING);
-    while(monsterNode != NULL)
+    //Creatures
+    rapidxml::xml_node<>* creatureNode = root->first_node(CREATURE_STRING);
+    while(creatureNode != NULL)
     {
-      int id = boost::lexical_cast<int>(monsterNode->first_attribute(ID_STRING)->value());
-      scene->addMonster(id, getXMLPosition(monsterNode), getXMLRotation(monsterNode));
-      monsterNode = monsterNode->next_sibling(MONSTER_STRING);
+      int id = boost::lexical_cast<int>(creatureNode->first_attribute(ID_STRING)->value());
+      scene->addCreature(id, getXMLPosition(creatureNode), getXMLRotation(creatureNode));
+      creatureNode = creatureNode->next_sibling(CREATURE_STRING);
     }
 
     //Portals

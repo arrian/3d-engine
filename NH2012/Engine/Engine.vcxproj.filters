@@ -353,9 +353,6 @@
     <ClInclude Include="Actor.h">
       <Filter>Header Files\World\Scene\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>Header Files\World\Scene\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files\World\Scene\Actor</Filter>
     </ClInclude>
@@ -436,6 +433,12 @@
     </ClInclude>
     <ClInclude Include="SceneArchitectureManager.h">
       <Filter>Header Files\Managers\SceneManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="Creature.h">
+      <Filter>Header Files\World\Scene\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Id.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -670,9 +673,6 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\World\Scene\Miscellaneous</Filter>
     </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>Source Files\World\Scene\Actor</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\World\Scene\Actor</Filter>
     </ClCompile>
@@ -750,6 +750,9 @@
     </ClCompile>
     <ClCompile Include="SceneArchitectureManager.cpp">
       <Filter>Source Files\Managers\SceneManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="Creature.cpp">
+      <Filter>Source Files\World\Scene\Actor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

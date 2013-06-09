@@ -20,7 +20,7 @@ DataManager::DataManager(void)
     items(ItemList()),
     scenes(SceneList()),
     sounds(SoundList()),
-    monsters(MonsterList()),
+    creatures(CreatureList()),
     architecture(ArchitectureList())
 {
 }
@@ -91,7 +91,7 @@ void DataManager::addData(std::string file)
 
     //Need to extend for other data options
     if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(std::pair<int, ArchitectureDesc>(id, ArchitectureDesc(id, name, file)));
-    else if(type == MONSTERS_IDENTIFIER) monsters.insert(std::pair<int, MonsterDesc>(id, MonsterDesc(id, name, file)));
+    else if(type == CREATURES_IDENTIFIER) creatures.insert(std::pair<int, CreatureDesc>(id, CreatureDesc(id, name, file)));
     else if(type == ITEMS_IDENTIFIER) items.insert(std::pair<int, ItemDesc>(id, ItemDesc(id, name, file, file)));//change second mesh argument to the simplified mesh
     else if(type == SCENES_IDENTIFIER) scenes.insert(std::pair<int, SceneDesc>(id, SceneDesc(id, name, file)));
     else if(type == SOUNDS_IDENTIFIER) sounds.insert(std::pair<int, SoundDesc>(id, SoundDesc(id, name, file)));
@@ -106,10 +106,10 @@ ItemDesc DataManager::getItem(int id)
 }
 
 //-------------------------------------------------------------------------------------
-MonsterDesc DataManager::getMonster(int id)
+CreatureDesc DataManager::getCreature(int id)
 {
-  if(monsters.count(id) == 0) throw NHException("could not find a monster with the given id");
-  return ((*(monsters.find(id))).second);
+  if(creatures.count(id) == 0) throw NHException("could not find a creature with the given id");
+  return ((*(creatures.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------
