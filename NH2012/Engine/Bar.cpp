@@ -80,4 +80,19 @@ void Bar::setFull()
   current = max;
 }
 
+//-------------------------------------------------------------------------------------
+void Bar::add(float amount)
+{
+  current += amount;
+  if(current > max) current = max;
+}
+
+//-------------------------------------------------------------------------------------
+void Bar::remove(float amount)
+{
+  current -= amount;
+  if(current < 0.0f) current = 0.0f;
+}
+
+
 

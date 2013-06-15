@@ -2,6 +2,10 @@
 
 #include <algorithm>
 
+#include <OgreEntity.h>
+#include <OgreColourValue.h>
+#include <OgreSceneManager.h>
+
 #include "World.h"
 #include "Player.h."
 #include "Creature.h"
@@ -24,22 +28,18 @@
 Scene::Scene(SceneDesc desc, World* world)
   : world(world),
     desc(desc),
-    id(Id<Scene>()),
-    scenePathfindManager(NULL),
-    sceneGraphicsManager(NULL),
-    scenePhysicsManager(NULL),
-    sceneArchitectureManager(NULL),
-    defaultEntry(NULL),
-    //localPlayer(NULL),
-    //particles(),
-
+    scenePathfindManager(),
+    sceneGraphicsManager(),
+    scenePhysicsManager(),
+    sceneArchitectureManager(),
     creatures(),
     portals(),
-    lights(),
     items(),
     players(),
     effects(),
-    interactives()
+    interactives(),
+    localPlayer(0),
+    defaultPortal(0)
 {
   setup();
 }
@@ -47,221 +47,41 @@ Scene::Scene(SceneDesc desc, World* world)
 //-------------------------------------------------------------------------------------
 Scene::~Scene(void)
 {
-  release();
 }
 
 //-------------------------------------------------------------------------------------
 void Scene::setup()
 {
-  scenePhysicsManager = new ScenePhysicsManager(world->getPhysicsManager(), desc.gravity);
-  sceneGraphicsManager = new SceneGraphicsManager(world->getGraphicsManager(), desc.ambientLight, desc.shadowColour);//world->getGraphicsManager()->createSceneGraphicsManager();//->getRoot()->createSceneManager(Ogre::ST_GENERIC);
-  scenePathfindManager = new ScenePathfindManager(sceneGraphicsManager->getSceneManager());
-  sceneArchitectureManager = new SceneArchitectureManager(this);
+  scenePhysicsManager = std::shared_ptr<ScenePhysicsManager>(new ScenePhysicsManager(world->getPhysicsManager(), desc.gravity));
+  sceneGraphicsManager = std::shared_ptr<SceneGraphicsManager>(new SceneGraphicsManager(world->getGraphicsManager(), desc.ambientLight, desc.shadowColour));
+  scenePathfindManager = std::shared_ptr<ScenePathfindManager>(new ScenePathfindManager(sceneGraphicsManager->getSceneManager()));
+  sceneArchitectureManager = std::shared_ptr<SceneArchitectureManager>(new SceneArchitectureManager(this));
 
-  SceneLoader().load(desc.file, this);//load an xml scene
-  if(localPlayer) addPlayer(localPlayer);
+  SceneLoader::load(desc.file, this);//load an xml scene
 
   //Dev
   //flockTest.setScene(this);//boids flocking test
   //ivy = new Ivy(this, Vector3(0,-2,5), Vector3(0,-1,0));
-  addInteractive(0);//temp door
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::release()
-{
-  //delete ivy;
-
-  if(localPlayer) localPlayer->setScene(NULL);//detach player from this scene
-  //localplayer to NULL?
-
-  defaultEntry = NULL;
-
-  lights.destroyAll();
-  creatures.destroyAll();
-  items.destroyAll();
-  interactives.destroyAll();
-  players.destroyAll();
-
-  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
-  {
-    delete (*it);
-  }
-  portals.clear();
-
-  delete scenePathfindManager;
-  scenePathfindManager = NULL;
-
-  delete sceneArchitectureManager;
-  sceneArchitectureManager = NULL;
-
-  delete sceneGraphicsManager;
-  sceneGraphicsManager = NULL;
-
-  delete scenePhysicsManager;
-  scenePhysicsManager = NULL;
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::reset()
-{
-  release();
-  setup();
+  //add(std::shared_ptr<Interactive>(new Door()));//temp door
 }
 
 //-------------------------------------------------------------------------------------
 void Scene::update(double elapsedSeconds)
 {
-
-  //ivy->update(elapsedSeconds);
-
   scenePathfindManager->update(elapsedSeconds);//for nav mesh updates
 
-  lights.update(elapsedSeconds);
-  creatures.update(elapsedSeconds);
-  items.update(elapsedSeconds);
-  interactives.update(elapsedSeconds);
-  players.update(elapsedSeconds);
+  for(Container<Item>::Iterator it = items.begin(); it != items.end(); ++it) it->second->update(elapsedSeconds);
+  for(Container<Creature>::Iterator it = creatures.begin(); it != creatures.end(); ++it) it->second->update(elapsedSeconds);
+  for(Container<Player>::Iterator it = players.begin(); it != players.end(); ++it) it->second->update(elapsedSeconds);
+  for(Container<Interactive>::Iterator it = interactives.begin(); it != interactives.end(); ++it) it->second->update(elapsedSeconds);
+  for(Container<Portal>::Iterator it = portals.begin(); it != portals.end(); ++it) it->second->update(elapsedSeconds);
+  for(Container<Effect>::Iterator it = effects.begin(); it != effects.end(); ++it) it->second->update(elapsedSeconds);
 
-  if(localPlayer) localPlayer->update(elapsedSeconds);
-
-  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it) 
-  {
-    if((*it)->isLoadRequired(localPlayer->getPosition())) world->loadScene((*it)->getID());
-  }
-
-  //pre simulation updates
+  //Pre-simulation updates
 
   scenePhysicsManager->update(elapsedSeconds);
 
-  //if(world->getPhysicsManager()->isEnabled()) advancePhysics(elapsedSeconds);
-
-  //post simulation events
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::addPlayer(Player* player, int portalID)
-{
-  Vector3 position;
-  Vector3 lookAt;
-  if(defaultEntry != NULL && portalID == DEFAULT_PORTAL)//use default portal
-  {
-    position = defaultEntry->getPosition();
-    lookAt = defaultEntry->getLookAt();
-  }
-  else if(portalID >= 0)//use specified portal
-  {
-    Portal* portal = getPortal(portalID);
-    position = portal->getPosition();
-    lookAt = portal->getLookAt();
-  }
-  else//place the player at zero
-  {
-    position = Vector3::ZERO;
-    lookAt = Vector3::UNIT_Z;
-  }
-
-  Scene* old = player->getScene();
-  if(old) old->removePlayer(player);//need to remove player from previous scene
-  player->setScene(this);
-  player->setPosition(position);
-  player->setLookAt(lookAt);
-  this->localPlayer = player;
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::addCreature(int id, Vector3 position, Quaternion rotation)
-{
-  Creature* creature = new Creature(world->getDataManager()->getCreature(id));
-  creature->setScene(this);
-  creature->setPosition(position);
-  creature->setGoal(new Go(scenePathfindManager->getRandomNavigablePoint(), Priority::HIGH));
-  creatures.add(creature);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::addItem(int id, Vector3 position, Quaternion rotation)
-{
-  Item* item = new Item(world->getDataManager()->getItem(id));//this->getWorld()->createItem(id);
-  item->setScene(this);
-  item->setPosition(position);
-  item->setRotation(rotation);
-  items.add(item);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::addInteractive(int id, Vector3 position, Quaternion rotation)
-{
-  Interactive* interactive = NULL;
-  if(id == 0) interactive = new Door();
-  else if(id == 1) interactive = new Chest();
-  else throw NHException("the specified interactive object id has not been implemented");
-
-  interactive->setScene(this);
-  interactive->setPosition(position);
-  interactive->setRotation(rotation);
-  interactives.add(interactive);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::addLight(Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
-{
-  Light* light = new Light(this, position, castShadows, range, colour);
-  lights.add(light);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::addArchitecture(int id, Vector3 position, Quaternion quaternion, Vector3 scale)
-{
-  sceneArchitectureManager->add(world->getDataManager()->getArchitecture(id), position, quaternion, scale);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::addParticles(std::string name, std::string templateName, Vector3 position, Ogre::Real speed)
-{
-  Ogre::ParticleSystem* particle = sceneGraphicsManager->createParticleSystem(name, templateName);//"Rain");//, "Examples/Rain");
-  particle->setSpeedFactor(speed);
-  Ogre::SceneNode* particleNode = sceneGraphicsManager->createSceneNode();//"particle" + Ogre::StringConverter::toString(getNewInstanceNumber()));
-  particleNode->setPosition(position);
-  particleNode->attachObject(particle);
-  particles.push_back(particle);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::addPortal(Portal* portal)
-{
-  portals.push_back(portal);
-  if(defaultEntry == NULL) defaultEntry = portals[0];//creating a default entry point
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::removePlayer(Player* player)
-{
-  if(this->localPlayer == player) this->localPlayer = NULL;
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::destroyItem(Item* item)
-{
-  items.destroy(item);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::destroyCreature(Creature* creature)
-{
-  creatures.destroy(creature);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::removeItem(Item* item)
-{
-  items.remove(item);
-}
-
-//-------------------------------------------------------------------------------------
-void Scene::removeCreature(Creature* creature)
-{
-  creatures.remove(creature);
+  //Post-simulation events
 }
 
 //-------------------------------------------------------------------------------------
@@ -272,21 +92,84 @@ void Scene::build()
 }
 
 //-------------------------------------------------------------------------------------
-Portal* Scene::getPortal(int id)
+Id<Item> Scene::addItem(int dataId, Vector3 position, Quaternion rotation = Quaternion::IDENTITY, Id<Item> instanceId)//add an object to the scene
 {
-  for(std::vector<Portal*>::iterator it = portals.begin(); it != portals.end(); ++it)
-  {
-    if((*it)->getID() == id) return (*it);
-  }
-
-  throw NHException("no portal was found with the given id in Scene::getPortal()");//temporarily throw exception
-  return NULL;
+  std::shared_ptr<Item> item(new Item(world->getDataManager()->getItem(dataId)));
+  item->setScene(this);
+  item->setPosition(position);
+  item->setRotation(rotation);
+  items.insert(instanceId, item);
+  return instanceId;
 }
 
 //-------------------------------------------------------------------------------------
-bool Scene::hasPlayer()
+Id<Creature> Scene::addCreature(int dataId, Vector3 position, Vector3 lookAt = Vector3::ZERO, Id<Creature> instanceId)//add an object to the scene
 {
-  return localPlayer != NULL;
+  std::shared_ptr<Creature> creature(new Creature(world->getDataManager()->getCreature(dataId)));
+  creature->setScene(this);
+  creature->setPosition(position);
+  creature->setLookAt(lookAt);
+  creatures.insert(instanceId, creature);
+  return instanceId;
 }
+
+//-------------------------------------------------------------------------------------
+Id<Effect> Scene::addLight(int dataId, Vector3 position, Id<Effect> instanceId)//add an object to the scene
+{
+  Light* light(new Light(world->getDataManager()->getLight(dataId)));
+  light->setScene(this);
+  light->setPosition(position);
+  effects.insert(instanceId, std::shared_ptr<Effect>(light));
+  return instanceId;
+}
+
+//-------------------------------------------------------------------------------------
+Id<Interactive> Scene::addInteractive(int dataId, Vector3 position, Id<Interactive> instanceId)//add an object to the scene
+{
+  std::shared_ptr<Interactive> interactive(new Interactive(world->getDataManager()->getInteractive(dataId)));
+  interactive->setScene(this);
+  interactive->setPosition(position);
+  interactives.insert(instanceId, interactive);
+  return instanceId;
+}
+
+//-------------------------------------------------------------------------------------
+Id<Portal> Scene::addPortal(int dataId, Vector3 position, Vector3 lookAt, Id<Scene> targetScene, Id<Portal> targetPortal, Id<Portal> instanceId)//add an object to the scene
+{
+  std::shared_ptr<Portal> portal(new Portal(world->getDataManager()->getPortal(dataId), targetScene, targetPortal));
+  portal->setScene(this);
+  portal->setPosition(position);
+  portal->setLookAt(lookAt);
+  portals.insert(instanceId, portal);
+  return instanceId;
+}
+
+//-------------------------------------------------------------------------------------
+Id<Player> Scene::addPlayer(std::shared_ptr<Player> player, Vector3 position, Vector3 lookAt, Id<Player> instanceId)//add an object to the scene
+{
+  Vector3 lookAt = Vector3::UNIT_Z;
+
+  Scene* old = player->getScene();
+  if(old) old->remove<Player>(player.get());//need to remove player from previous scene
+  player->setScene(this);
+  player->setGravity(getScenePhysicsManager()->getGravity());
+  player->setLookAt(lookAt);
+
+  if(player->isLocalPlayer())
+  {
+    world->getGraphicsManager()->setCamera(player->getCamera());
+    this->localPlayer = instanceId;
+  }
+  players.insert(instanceId, player);
+  return instanceId;
+}
+
+//-------------------------------------------------------------------------------------
+Id<Architecture> Scene::addArchitecture(int dataId, Vector3 position, Quaternion rotation, Vector3 scale, Id<Architecture> instanceId)
+{
+  sceneArchitectureManager->add(instanceId, std::shared_ptr<Architecture>(new Architecture(world->getDataManager()->getArchitecture(dataId), position, rotation, scale)));
+  return instanceId;
+}
+
 
 

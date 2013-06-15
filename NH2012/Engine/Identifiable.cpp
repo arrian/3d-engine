@@ -46,11 +46,6 @@ std::string Identifiable::getName()
   return name;
 }
 
-//-------------------------------------------------------------------------------------
-void* Identifiable::getInstancePointer()
-{
-  return instancePointer;
-}
 
 
 

@@ -1,10 +1,9 @@
 #include "Portal.h"
 
 //-------------------------------------------------------------------------------------
-Portal::Portal(int id, int targetSceneID, int targetPortalID, Vector3 position, Vector3 lookAt)
-  : id(id),
-    targetSceneID(targetSceneID),
-    targetPortalID(targetPortalID),
+Portal::Portal(Id<Scene> targetSceneID, Id<Portal> targetPortalID, Vector3 position, Vector3 lookAt)
+  : targetSceneId(targetSceneId),
+    targetPortalId(targetPortalId),
     position(position),
     lookAt(lookAt),
     loadArea(),
@@ -18,15 +17,15 @@ Portal::~Portal(void)
 }
 
 //-------------------------------------------------------------------------------------
-int Portal::getTargetScene()
+Id<Scene> Portal::getTargetScene()
 {
-  return targetSceneID;
+  return targetSceneId;
 }
 
 //-------------------------------------------------------------------------------------
-int Portal::getTargetPortal()
+Id<Portal> Portal::getTargetPortal()
 {
-  return targetPortalID;
+  return targetPortalId;
 }
 
 //-------------------------------------------------------------------------------------
@@ -39,12 +38,6 @@ Vector3 Portal::getPosition()
 Vector3 Portal::getLookAt()
 {
   return lookAt;
-}
-
-//-------------------------------------------------------------------------------------
-int Portal::getID()
-{
-  return id;
 }
 
 //-------------------------------------------------------------------------------------

@@ -13,16 +13,16 @@ class Scene;
 class SceneLoader
 {
 public:
-  SceneLoader(void);
-  virtual ~SceneLoader(void);
-
-  void load(std::string filename, Scene* scene);//loads the specified file into the specified scene
+  static void load(std::string filename, Scene* scene);//loads the specified file into the specified scene
 
 private:
-  Vector3 getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third);
-  Quaternion getXMLRotation(rapidxml::xml_node<>* node);
-  Ogre::ColourValue getXMLColour(rapidxml::xml_node<>* node, std::string first = "cr", std::string second = "cg", std::string third = "cb", std::string fourth = "ca");
-  Vector3 getXMLScale(rapidxml::xml_node<>* node);
-  Vector3 getXMLPosition(rapidxml::xml_node<>* node);
+  SceneLoader(void) {}
+  virtual ~SceneLoader(void) {}
+
+  static Vector3 getXMLVector(rapidxml::xml_node<>* node, std::string first, std::string second, std::string third);
+  static Quaternion getXMLRotation(rapidxml::xml_node<>* node);
+  static Ogre::ColourValue getXMLColour(rapidxml::xml_node<>* node, std::string first = "cr", std::string second = "cg", std::string third = "cb", std::string fourth = "ca");
+  static Vector3 getXMLScale(rapidxml::xml_node<>* node);
+  static Vector3 getXMLPosition(rapidxml::xml_node<>* node);
 };
 

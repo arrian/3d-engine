@@ -22,7 +22,7 @@
 #include "Item.h"
 #include "Apparel.h"
 #include "Button.h"
-#include "ComponentContainer.h"
+#include "Container.h"
 
 class Scene;
 class World;
@@ -73,8 +73,12 @@ public:
   virtual PlayerPacket extractPacket();
   virtual void integratePacket(PlayerPacket packet);
 
+  bool isLocalPlayer() { return localPlayer; }
+
 private:
   World* world;
+
+  bool localPlayer;
 
   Ogre::SceneNode* freeCameraNode;//node for free camera
   Identifiable* currentTarget;
@@ -85,15 +89,17 @@ private:
   MeshComponent mesh;
   QueryComponent query;
 
-  ComponentContainer inventory;//make inventory class
+  //Inventory
+  Container<Item> inventory;//make inventory class
+  std::vector<Item*> quickSlots;
   Item* leftHand;
   Item* rightHand;
   Apparel* clothes;
   Apparel* shoes;
   Apparel* hat;
-  ComponentContainer quickSlots;
 
-  Bar life;
+  //
+  Bar health;
   Bar experience;
   int level;
 
@@ -105,6 +111,7 @@ private:
   bool interactPressed;
   float lookResponsiveness;
   float handMoveScalar;
+  float reachDistance;
 
   void buttonEvent(Button button, bool isDown);
   //void keyEvent(const OIS::KeyEvent &evt, bool isDown);

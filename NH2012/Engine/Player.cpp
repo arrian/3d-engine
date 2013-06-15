@@ -19,13 +19,15 @@ Player::Player(PlayerDesc description, World* world)
     placementDistance(3.0f),
     lookResponsiveness(0.15f),
     handMoveScalar(0.1f),
+    reachDistance(20.0f),
     skeleton(),
     movement(description.gravity),
     itemGenerationID(3),//temporarily generating a watermelon when the 1 key is pressed
     creatureGenerationID(1),
     currentTarget(NULL),
     interactPressed(false),
-    freeCameraNode(NULL)
+    freeCameraNode(NULL),
+    localPlayer(true)//TODO: change for multiplayer
 {
 }
 
@@ -91,7 +93,7 @@ void Player::update(double elapsedSeconds)
   }
   if(addCreature) scene->addCreature(creatureGenerationID, scene->getScenePathfindManager()->getRandomNavigablePoint());//create a creature at an arbitrary location
 
-  currentTarget = query.rayQuery(camera.getDirection(), 20.0f, EXCLUDE_SELF);
+  currentTarget = query.rayQuery(camera.getDirection(), reachDistance, EXCLUDE_SELF);
   
   if(currentTarget)
   {
@@ -101,13 +103,13 @@ void Player::update(double elapsedSeconds)
     {
       if(currentTarget->isInGroup(ITEM))
       {
-        Item* item = static_cast<Item*>(currentTarget->getInstancePointer());
-        inventory.add(item);//inventory now becomes responsible for the life of the item
-        scene->removeItem(item);
+        Item* item = currentTarget->getInstancePointer<Item>();
+        inventory.insert(Id<Item>(), scene->remove<Item>(item));//inventory now becomes responsible for the life of the item
+        ;
       }
       else if(currentTarget->isInGroup(INTERACTIVE))
       {
-        Interactive* interactive = static_cast<Interactive*>(currentTarget->getInstancePointer());
+        Interactive* interactive = currentTarget->getInstancePointer<Interactive>();
         interactive->interact();
       }
       interactPressed = false;
@@ -275,22 +277,19 @@ Ogre::Viewport* Player::getViewport()
 //-------------------------------------------------------------------------------------
 void Player::stagger(Vector3 direction)
 {
-  //check if there is space to stagger
-  //stumble backwards
-  throw NHException("not implemented");
+  movement.push(direction);
 }
 
 //-------------------------------------------------------------------------------------
 void Player::damage(double amount)
 {
-  throw NHException("not implemented");
+  health.remove(amount);
 }
 
 //-------------------------------------------------------------------------------------
 void Player::heal(double amount)
 {
-
-  throw NHException("not implemented");
+  health.add(amount);
 }
 
 //-------------------------------------------------------------------------------------

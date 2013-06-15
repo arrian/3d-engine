@@ -6,6 +6,7 @@
 #include <OgreLight.h>
 
 #include "Scene.h"
+#include "Effect.h"
 
 class LightPlugin
 {
@@ -14,6 +15,8 @@ public:
     : light(light)
   {
   }
+
+  virtual ~LightPlugin() {}
 
   virtual void update(double elapsedSeconds) = 0;
 
@@ -35,7 +38,7 @@ public:
 
   void update(double elapsedSeconds)
   {
-    //implemet here
+    //implement here
   }
 
 protected:
@@ -62,7 +65,7 @@ class ColourVariationDesc : public LightPlugin
 
   void update(double elapsedSeconds)
   {
-    //implemet here
+    //implement here
   }
 
 protected:
@@ -72,7 +75,7 @@ protected:
   float interval;
 };
 
-class Light : public BasicComponent
+class Light : public Effect
 {
 public:
   Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour);

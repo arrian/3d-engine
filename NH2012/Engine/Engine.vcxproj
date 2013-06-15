@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Apparel.h" />
+    <ClInclude Include="Architecture.h" />
     <ClInclude Include="BasicComponent.h" />
     <ClInclude Include="BoidComponent.h" />
     <ClInclude Include="Boids\Boid.h" />
@@ -80,6 +81,8 @@
     <ClInclude Include="HumanoidSkeletonComponent.h" />
     <ClInclude Include="Id.h" />
     <ClInclude Include="IntelligentMovementComponent.h" />
+    <ClInclude Include="Particles.h" />
+    <ClInclude Include="Physical.h" />
     <ClInclude Include="SceneArchitectureManager.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="Interactive.h" />
@@ -116,7 +119,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="Creature.h" />
-    <ClInclude Include="ComponentContainer.h" />
+    <ClInclude Include="Container.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="ScriptManager.h" />
     <ClInclude Include="SoundComponent.h" />
@@ -191,6 +194,7 @@
     <ClCompile Include="GraphicsManager.cpp" />
     <ClCompile Include="HumanoidSkeletonComponent.cpp" />
     <ClCompile Include="IntelligentMovementComponent.cpp" />
+    <ClCompile Include="Particles.cpp" />
     <ClCompile Include="SceneArchitectureManager.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="Interactive.cpp" />

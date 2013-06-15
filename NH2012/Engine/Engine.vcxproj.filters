@@ -341,13 +341,7 @@
     <ClInclude Include="Apparel.h">
       <Filter>Header Files\World\Scene\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files\World\Scene\Miscellaneous</Filter>
-    </ClInclude>
     <ClInclude Include="Ivy.h">
-      <Filter>Header Files\World\Scene\Miscellaneous</Filter>
-    </ClInclude>
-    <ClInclude Include="Flock.h">
       <Filter>Header Files\World\Scene\Miscellaneous</Filter>
     </ClInclude>
     <ClInclude Include="Actor.h">
@@ -419,9 +413,6 @@
     <ClInclude Include="GraphicsManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentContainer.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="ScenePathfindManager.h">
       <Filter>Header Files\Managers\SceneManagers</Filter>
     </ClInclude>
@@ -437,8 +428,26 @@
     <ClInclude Include="Creature.h">
       <Filter>Header Files\World\Scene\Actor</Filter>
     </ClInclude>
+    <ClInclude Include="Physical.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
     <ClInclude Include="Id.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Container.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Architecture.h">
+      <Filter>Header Files\World\Scene\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Particles.h">
+      <Filter>Header Files\World\Scene\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Flock.h">
+      <Filter>Header Files\World\Scene\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\World\Scene\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -658,9 +667,6 @@
     <ClCompile Include="Door.cpp">
       <Filter>Source Files\World\Scene\Interactive</Filter>
     </ClCompile>
-    <ClCompile Include="Flock.cpp">
-      <Filter>Source Files\World\Scene\Miscellaneous</Filter>
-    </ClCompile>
     <ClCompile Include="Interactive.cpp">
       <Filter>Source Files\World\Scene\Interactive</Filter>
     </ClCompile>
@@ -668,9 +674,6 @@
       <Filter>Source Files\World\Scene\Item</Filter>
     </ClCompile>
     <ClCompile Include="Ivy.cpp">
-      <Filter>Source Files\World\Scene\Miscellaneous</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
       <Filter>Source Files\World\Scene\Miscellaneous</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -753,6 +756,15 @@
     </ClCompile>
     <ClCompile Include="Creature.cpp">
       <Filter>Source Files\World\Scene\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Particles.cpp">
+      <Filter>Source Files\World\Scene\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\World\Scene\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Flock.cpp">
+      <Filter>Source Files\World\Scene\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

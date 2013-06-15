@@ -14,9 +14,13 @@
 #include "NetworkManager.h"
 #include "GraphicsManager.h"
 
+#include "Id.h"
+#include "Container.h"
+
 //Forward Declarations
 class Player;
 class Scene;
+class WorldLoader;
 
 /************************************************************************/
 /* Contains the entire game world.                                      */
@@ -32,10 +36,11 @@ public:
 
   //Initialisation
   void initialise(std::string iniFile);
-  Scene* loadScene(int id);
+  Scene* loadScene(Id<Scene> id);
+  Player* loadPlayer(Id<Player> id);
 
   //Destruction
-  void destroyScene(int id);
+  void destroyScene(Id<Scene> id);
 
   //Getters
   DataManager* getDataManager();
@@ -47,9 +52,9 @@ public:
   NetworkManager* getNetworkManager();
   GraphicsManager* getGraphicsManager();
   Player* getPlayer();
-  Scene* getScene(int id);
-  int getNumberScenes();
-  void getSceneNames(std::map<int, std::string> &names);
+  Scene* getScene(Id<Scene> id);
+  int getSceneCount();
+  void getSceneNames(std::map<Id<Scene>, std::string> &names);
 
   //Input
   void keyPressed(const OIS::KeyEvent &arg);
@@ -59,15 +64,16 @@ public:
   void mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
   //Assertions
-  bool hasScene(int id);
+  bool hasScene(Id<Scene> id);
 
 private:
   //Local Player
-  Player* player;
+  Id<Player> playerId;
+  std::shared_ptr<Player> player;
 
   //Scenes
-  int defaultScene;
-  std::map<int, Scene*> scenes;
+  Id<Scene> defaultScene;
+  Container<Scene> scenes;
   
   //Managers
   DataManager dataManager;
@@ -80,6 +86,6 @@ private:
   GraphicsManager graphicsManager;
   
   //Initialisation
-  void parseInitialisation(std::string filename);
+  friend class WorldLoader;
 };
 

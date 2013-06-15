@@ -16,6 +16,7 @@
 #include "Quaternion.h"
 #include "InitialisationParser.h"
 #include "ScenePhysicsManager.h"
+#include "WorldLoader.h"
 
 //-------------------------------------------------------------------------------------
 World::World()
@@ -28,8 +29,9 @@ World::World()
     controlManager(),
     networkManager(),
     graphicsManager(),
-    player(NULL),
-    defaultScene(0)
+    player(),
+    defaultScene(0),
+    playerId(0)
 {
   scriptManager.setWorld(this);
 }
@@ -45,8 +47,9 @@ World::World(Ogre::Root* root, Ogre::RenderWindow* window)
     controlManager(),
     networkManager(),
     graphicsManager(),
-    player(NULL),
-    defaultScene(0)
+    player(),
+    defaultScene(0),
+    playerId(0)
 {
   scriptManager.setWorld(this);
   graphicsManager.setRoot(root);
@@ -56,31 +59,23 @@ World::World(Ogre::Root* root, Ogre::RenderWindow* window)
 //-------------------------------------------------------------------------------------
 World::~World(void)
 {
-  for(std::map<int, Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
-  {
-    delete (it->second);
-    it->second = NULL;
-  }
-
-  delete player;
-  player = NULL;
 }
 
 //-------------------------------------------------------------------------------------
 void World::initialise(std::string iniFile)
 {
-  parseInitialisation(iniFile);
+  WorldLoader::load(iniFile, this);
 
   //Create default scene
   Scene* scene = loadScene(defaultScene);
   if(!scene) throw NHException("default scene creation failed");
   
   //Create default player
-  PlayerDesc playerDesc = PlayerDesc();
-  playerDesc.gravity = scene->getScenePhysicsManager()->getGravity();
-  player = new Player(playerDesc, this);
-  scene->addPlayer(player);
-  graphicsManager.setCamera(player->getCamera());
+  loadPlayer(Id<Player>());
+  if(!player) throw NHException("default player creation failed");
+
+  //Add player to scene
+  scene->addPlayer(player, playerId);
 }
 
 //-------------------------------------------------------------------------------------
@@ -89,10 +84,9 @@ bool World::update(double elapsedSeconds)
   if(!scriptManager.update(elapsedSeconds)) return false;
   timeManager.update(elapsedSeconds);
 
-  if(player)
+  for(Container<Scene>::Iterator it = scenes.begin(); it != scenes.end(); ++it)
   {
-    Scene* scene = player->getScene();
-    if(scene) scene->update(elapsedSeconds);
+    it->second->update(elapsedSeconds);
   }
 
   return true;
@@ -101,7 +95,7 @@ bool World::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 Player* World::getPlayer()
 {
-  return player;
+  return player.get();
 }
 
 //-------------------------------------------------------------------------------------
@@ -147,157 +141,93 @@ GraphicsManager* World::getGraphicsManager()
 }
 
 //-------------------------------------------------------------------------------------
-Scene* World::getScene(int id)
+Scene* World::getScene(Id<Scene> id)
 {
-  if(!hasScene(id)) return NULL;
-  return scenes.find(id)->second;
+  return scenes.get(id);
 }
 
 //-------------------------------------------------------------------------------------
-bool World::hasScene(int id)
+bool World::hasScene(Id<Scene> id)
 {
-  return scenes.count(id) > 0;
+  return scenes.contains(id);
 }
 
 //-------------------------------------------------------------------------------------
-int World::getNumberScenes()
+int World::getSceneCount()
 {
-  return scenes.size();
+  return scenes.count();
 }
 
 //-------------------------------------------------------------------------------------
-void World::getSceneNames(std::map<int, std::string> &names)
+void World::getSceneNames(std::map<Id<Scene>, std::string> &names)
 {
-  for(std::map<int, Scene*>::iterator it = scenes.begin(); it != scenes.end(); ++it) 
+  for(Container<Scene>::Iterator it = scenes.begin(); it != scenes.end(); ++it) 
   {
-    names.insert(std::pair<int, std::string>(it->first,it->second->getName()));
+    names.insert(std::pair<Id<Scene>, std::string>(it->first, it->second->getName()));
   }
 }
 
 //-------------------------------------------------------------------------------------
-Scene* World::loadScene(int id)
+Scene* World::loadScene(Id<Scene> id)
 {
-  if(hasScene(id)) return getScene(id);//check that the scene has not been loaded already
-  Scene* scene = new Scene(dataManager.getScene(id), this);
-  scenes.insert(std::pair<int, Scene*>(scene->getId(), scene));
-  return scene;
+  if(scenes.contains(id)) return scenes.get(id);//check that the scene has not been loaded already
+
+  std::shared_ptr<Scene> scene(new Scene(dataManager.getScene(id.getInstance()), this));
+  scenes.insert(id, scene);
+  return scene.get();
 }
 
 //-------------------------------------------------------------------------------------
-void World::destroyScene(int id)
+Player* World::loadPlayer(Id<Player> id)
 {
-  if(!hasScene(id)) throw NHException("there is no scene loaded with that id");
-  Scene* scene = scenes.find(id)->second;
-  if(scene->hasPlayer()) throw NHException("unable to destroy a scene while it contains a player");
-  delete scene;
-  scenes.erase(scenes.find(id));
+  if(playerId == id) return player.get();
+  
+  //Create default player - TODO: load player from file
+  PlayerDesc playerDesc = PlayerDesc();
+  playerId = Id<Player>();
+  player = std::shared_ptr<Player>(new Player(playerDesc, this));
+}
+
+//-------------------------------------------------------------------------------------
+void World::destroyScene(Id<Scene> id)
+{
+  Scene* scene = scenes.get(id);
+  if(!scene) throw NHException("there is no scene loaded with that id");
+  
+  if(scene->contains<Player>(playerId)) throw NHException("unable to destroy a scene while it contains the local player");
+  scenes.remove(id);
 }
 
 //-------------------------------------------------------------------------------------
 void World::keyPressed(const OIS::KeyEvent &arg)
 {
-  assert(player);
-  player->keyPressed(arg);
+  if(player) player->keyPressed(arg);
 }
 
 //-------------------------------------------------------------------------------------
 void World::keyReleased(const OIS::KeyEvent &arg)
 {
-  assert(player);
-  player->keyReleased(arg);
+  if(player) player->keyReleased(arg);
 }
 
 //-------------------------------------------------------------------------------------
 void World::mouseMoved(const OIS::MouseEvent &arg)
 {
-  assert(player);
-  player->mouseMoved(arg);
+  if(player) player->mouseMoved(arg);
 }
 
 //-------------------------------------------------------------------------------------
 void World::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
-  assert(player);
-  player->mousePressed(arg, id);
+  if(player) player->mousePressed(arg, id);
 }
 
 //-------------------------------------------------------------------------------------
 void World::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
-  assert(player);
-  player->mouseReleased(arg, id);
+  if(player) player->mouseReleased(arg, id);
 }
 
-//-------------------------------------------------------------------------------------
-void World::parseInitialisation(std::string filename)
-{
-  InitialisationParser ini(filename);
-
-  //General
-  physicsManager.setEnabled(ini.get<bool>("General.EnablePhysics"));
-  soundManager.setEnabled(ini.get<bool>("General.EnableAudio"));
-  //enableAI = ini.get<bool>("General.EnableAI");
-
-  //Controls
-  controlManager.moveForward = Button(ini.get<std::string>("Controls.Forward"));
-  controlManager.moveLeft = Button(ini.get<std::string>("Controls.Left"));
-  controlManager.moveBack = Button(ini.get<std::string>("Controls.Back"));
-  controlManager.moveRight = Button(ini.get<std::string>("Controls.Right"));
-  controlManager.jump = Button(ini.get<std::string>("Controls.Jump"));
-  controlManager.run = Button(ini.get<std::string>("Controls.Run"));
-  controlManager.crouch = Button(ini.get<std::string>("Controls.Crouch"));
-  controlManager.interact = Button(ini.get<std::string>("Controls.Interact"));
-  for(int i = 1; i < 10; i++) controlManager.quickslots.push_back(Button(ini.get<std::string>("Controls.QuickSlot" + boost::lexical_cast<std::string>(i))));
-  controlManager.console = Button(ini.get<std::string>("Controls.Console"));
-  controlManager.exit = Button(ini.get<std::string>("Controls.Exit"));
-  controlManager.leftHand = Button(ini.get<std::string>("Controls.LeftHand"));//OIS::MB_Left;
-  controlManager.rightHand = Button(ini.get<std::string>("Controls.RightHand"));//OIS::MB_Right;
-
-  //Temp Controls
-  controlManager.addItem = OIS::KC_1;
-  controlManager.addCreature = OIS::KC_2;
-  
-  //Environment
-  //graphicsManager.setShadowsEnabled(ini.get<bool>("Environment.Shadows"));
-  //graphicsManager.setBloomEnabled(ini.get<bool>("Environment.Bloom"));
-  //graphicsManager.setSSAOEnabled(ini.get<bool>("Environment.SSAO"));
-  
-  /*
-  enableHDR = ini.get<bool>("Environment.HDR");
-  enableMotionBlur = ini.get<bool>("Environment.MotionBlur");
-  enableLights = ini.get<bool>("Environment.Lights");
-  enableParticles = ini.get<bool>("Environment.Particles");
-  enableDecals = ini.get<bool>("Environment.Decals");
-  enableSprites = ini.get<bool>("Environment.Sprites");
-  enableWater = ini.get<bool>("Environment.Water");
-  enableSky = ini.get<bool>("Environment.Sky");
-  */
-
-  //Data
-  dataManager.addData(ini.get<std::string>("Data.Scenes"));
-  dataManager.addData(ini.get<std::string>("Data.Architecture"));
-  dataManager.addData(ini.get<std::string>("Data.Creatures"));
-  dataManager.addData(ini.get<std::string>("Data.Items"));
-  dataManager.addData(ini.get<std::string>("Data.Sounds"));
-
-  //Debug
-  /*
-  freezeCollisionDebug = ini.get<bool>("Debug.FreezeCollision");
-  freeCameraDebug = ini.get<bool>("Debug.FreeCamera");
-  wireframeDebug = ini.get<bool>("Debug.Wireframe");
-  showCollisionDebug = ini.get<bool>("Debug.ShowCollisionsDebug");
-  showShadowDebug = ini.get<bool>("Debug.ShowShadowDebug");
-  */
-  defaultScene = ini.get<int>("Debug.DefaultScene");
-
-#ifdef _DEBUG
-  std::string physXVisualDebuggerIP = ini.get<std::string>("Debug.PhysXVisualDebuggerIP");
-  int physXVisualDebuggerPort = ini.get<int>("Debug.PhysXVisualDebuggerPort");
-  int physXVisualDebuggerTimeoutMilliseconds = ini.get<int>("Debug.PhysXVisualDebuggerTimeoutMilliseconds");
-
-  physicsManager.initialiseVisualDebugger(physXVisualDebuggerIP, physXVisualDebuggerPort, physXVisualDebuggerTimeoutMilliseconds);
-#endif
-}
 
 
 

@@ -6,27 +6,28 @@
 #include "World.h"
 #include "Scene.h"
 
+#include "Id.h"
+
 /** 
  * A portal to transport the player or creatures.
  */
 class Portal
 {
 public:
-  Portal(int id, int targetSceneID, int targetPortalID, Vector3 position, Vector3 lookAt);
+  Portal(Id<Scene> targetSceneID, Id<Portal> targetPortalID, Vector3 position, Vector3 lookAt);
   ~Portal(void);
 
-  int getTargetScene();//gets the target scene for this portal
-  int getTargetPortal();
-  int getID();
+  Id<Scene> getTargetScene();
+  Id<Portal> getTargetPortal();
 
   Vector3 getPosition();
   Vector3 getLookAt();
 
   bool isLoadRequired(Vector3 observerPosition);
 private:
-  int id;
-  int targetSceneID;//defines the ID of the target scene
-  int targetPortalID;
+  Id<Scene> targetSceneId;
+  Id<Portal> targetPortalId;
+  
   Vector3 position;//defines the portal's target position in the target scene
   Vector3 lookAt;
 

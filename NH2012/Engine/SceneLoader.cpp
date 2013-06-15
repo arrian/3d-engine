@@ -8,15 +8,6 @@
 #include "boost/lexical_cast.hpp"
 
 
-SceneLoader::SceneLoader(void)
-{
-}
-
-
-SceneLoader::~SceneLoader(void)
-{
-}
-
 //XML scene file string constants
 static const char SCENE_STRING[] = "scene";
 static const char AMBIENT_RED_STRING[] = "ambient_r";

@@ -28,6 +28,9 @@ public:
   void setFull();
   void setEmpty();
 
+  void add(float amount);
+  void remove(float amount);
+
 private:
   /*! Maximum value of the bar.*/
   float max;

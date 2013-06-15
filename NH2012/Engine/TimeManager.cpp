@@ -20,7 +20,7 @@ TimeManager::~TimeManager(void)
 //-------------------------------------------------------------------------------------
 void TimeManager::update(double elapsedSeconds)
 {
-  if(ticks < ULONG_MAX - 1) ticks++;
+  if(ticks < ULONG_MAX) ticks++;
   else ticks = 0;
 }
 

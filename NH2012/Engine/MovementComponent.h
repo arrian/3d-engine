@@ -31,6 +31,8 @@ public:
 
   void hitGround();
 
+  void push(Vector3 strength);
+
 protected:
   virtual void hasNodeChange();
 

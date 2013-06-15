@@ -41,6 +41,11 @@ Vector3 MovementComponent::getVelocity()
   return velocity;
 }
 
+void MovementComponent::push(Vector3 strength)
+{
+  this->velocity += velocity;
+}
+
 Vector3 MovementComponent::getGravity()
 {
   return gravity;

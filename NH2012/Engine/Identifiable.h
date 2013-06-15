@@ -15,7 +15,10 @@ public:
   Identifiable(void* instancePointer, std::string name, Group group);
   virtual ~Identifiable(void);
 
-  void* getInstancePointer();
+
+  template<class T> T* getInstancePointer() {return dynamic_cast<T>(instancePointer);}
+
+
   int getInstanceID();
   std::string getName();
   Group getGroup();

@@ -48,6 +48,7 @@ void Light::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void Light::hasSceneChange()
 {
+  //TODO change effects to extending NodeComponent
   throw NHException("light basic component base class not implemented");
 }
 

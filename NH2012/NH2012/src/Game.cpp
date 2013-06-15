@@ -18,6 +18,7 @@ Game::~Game(void)
 {
   Ogre::WindowEventUtilities::removeWindowEventListener(window, this);
   windowClosed(window);
+  delete userInterface;
   delete world;
   delete root;
 }
