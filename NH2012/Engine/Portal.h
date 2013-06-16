@@ -23,6 +23,8 @@ public:
   Vector3 getPosition();
   Vector3 getLookAt();
 
+  void update(double elapsedSeconds);
+
   bool isLoadRequired(Vector3 observerPosition);
 private:
   Id<Scene> targetSceneId;

@@ -86,7 +86,7 @@ void SceneLoader::load(std::string filename, Scene* scene)
       bool cast_shadows = boost::lexical_cast<bool>(lightNode->first_attribute(CAST_SHADOWS_STRING)->value());
       float range = boost::lexical_cast<float>(lightNode->first_attribute(RANGE_STRING)->value());
       Ogre::ColourValue colour = getXMLColour(lightNode);
-      scene->addLight(getXMLPosition(lightNode),cast_shadows,range);
+      scene->addLight(-1, getXMLPosition(lightNode),cast_shadows,range);//TODO: use actual id rather than -1
       lightNode = lightNode->next_sibling(LIGHT_STRING);
     }
 
@@ -104,7 +104,7 @@ void SceneLoader::load(std::string filename, Scene* scene)
     while(creatureNode != NULL)
     {
       int id = boost::lexical_cast<int>(creatureNode->first_attribute(ID_STRING)->value());
-      scene->addCreature(id, getXMLPosition(creatureNode), getXMLRotation(creatureNode));
+      scene->addCreature(id, getXMLPosition(creatureNode));
       creatureNode = creatureNode->next_sibling(CREATURE_STRING);
     }
 
@@ -115,17 +115,19 @@ void SceneLoader::load(std::string filename, Scene* scene)
       int id = boost::lexical_cast<int>(portalNode->first_attribute(ID_STRING)->value());
       int targetSceneID = boost::lexical_cast<int>(portalNode->first_attribute(TARGET_SCENE_ID_STRING)->value());
       int targetPortalID = boost::lexical_cast<int>(portalNode->first_attribute(TARGET_PORTAL_ID_STRING)->value());
-      scene->addPortal(new Portal(id, targetSceneID, targetPortalID, getXMLPosition(portalNode), getXMLVector(portalNode, LOOK_AT_X_STRING, LOOK_AT_Y_STRING, LOOK_AT_Z_STRING)));
+      scene->addPortal(id, getXMLPosition(portalNode), getXMLVector(portalNode, LOOK_AT_X_STRING, LOOK_AT_Y_STRING, LOOK_AT_Z_STRING), Id<Scene>(targetSceneID), Id<Portal>(targetPortalID));
       portalNode = portalNode->next_sibling(PORTAL_STRING);//"portal");
     }
 
-    //Particles
+    //Particles //TODO: change to emitter
+    /*
     rapidxml::xml_node<>* particleNode = root->first_node(PARTICLE_STRING);//"particle");
     while(particleNode != NULL)
     {
       scene->addParticles(particleNode->first_attribute(NAME_STRING)->value(), particleNode->first_attribute(TEMPLATE_NAME_STRING)->value(),getXMLPosition(particleNode));
       particleNode = particleNode->next_sibling(PARTICLE_STRING);
     }
+    */
   }
   catch (rapidxml::parse_error e)
   {

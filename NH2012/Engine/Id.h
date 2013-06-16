@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include <string>
 #include <boost/lexical_cast.hpp>
 
@@ -7,6 +9,8 @@ template<class T>
 class Id
 {
 public:
+
+  typedef T type;
 
   //Generate an id
   Id()
@@ -22,7 +26,7 @@ public:
     this->instance = instance;
   }
 
-  long getInstance()
+  long getInstance() const
   {
     return instance;
   }
@@ -41,15 +45,20 @@ public:
     return std::string(typeid(T).name()) + "::" + stream.str();
   }
 
-  bool Id<T>::operator==(const Id<T> &other) const {
+  inline bool operator==(const Id<T>& other) const 
+  {
     return getInstance() == other.getInstance();
   }
 
-  bool Id<T>::operator!=(const Id<T> &other) const {
+  inline bool operator!=(const Id<T>& other) const 
+  {
     return !(*this == other);
   }
 
-  typedef T type;
+  inline bool operator<( const Id<T>& other) const
+  {
+    return getInstance() < other.getInstance();
+  }
 
 private:
   static long globalInstance;

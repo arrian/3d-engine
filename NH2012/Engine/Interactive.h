@@ -3,6 +3,8 @@
 #include "BasicComponent.h"
 #include "Identifiable.h"
 
+#include "Physical.h"
+
 class Interactive : public BasicComponent, public Physical, public Identifiable
 {
 public:

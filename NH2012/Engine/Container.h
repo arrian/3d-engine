@@ -8,8 +8,8 @@ template<class T>
 struct Container {
   
   typedef T Type;
-  typedef std::map<Id<T>, std::shared_ptr<T>> Map;
-  typedef Map::iterator Iterator;
+  typedef std::map<Id<T>, std::shared_ptr<T> > Map;
+  typedef typename Map::iterator Iterator;
 
   Map map;
 

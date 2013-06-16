@@ -81,6 +81,9 @@ public:
   Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour);
   virtual ~Light(void);
 
+  void setPosition(Vector3 position) {lightNode->setPosition(position);}
+  Vector3 getPosition() {return lightNode->getPosition();}
+
   void addPlugin(LightPlugin* plugin);
 
   void setOn(bool on);

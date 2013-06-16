@@ -18,6 +18,7 @@
 #include "Ivy.h"
 #include "Effect.h"
 #include "SceneLoader.h"
+#include "Interactive.h"
 
 #include "SceneArchitectureManager.h"
 #include "ScenePathfindManager.h"
@@ -92,9 +93,9 @@ void Scene::build()
 }
 
 //-------------------------------------------------------------------------------------
-Id<Item> Scene::addItem(int dataId, Vector3 position, Quaternion rotation = Quaternion::IDENTITY, Id<Item> instanceId)//add an object to the scene
+Id<Item> Scene::addItem(int dataId, Vector3 position, Quaternion rotation, Id<Item> instanceId)//add an object to the scene
 {
-  std::shared_ptr<Item> item(new Item(world->getDataManager()->getItem(dataId)));
+  std::shared_ptr<Item> item(new Item(world->getDataManager()->get<ItemDesc>(dataId)));
   item->setScene(this);
   item->setPosition(position);
   item->setRotation(rotation);
@@ -103,9 +104,9 @@ Id<Item> Scene::addItem(int dataId, Vector3 position, Quaternion rotation = Quat
 }
 
 //-------------------------------------------------------------------------------------
-Id<Creature> Scene::addCreature(int dataId, Vector3 position, Vector3 lookAt = Vector3::ZERO, Id<Creature> instanceId)//add an object to the scene
+Id<Creature> Scene::addCreature(int dataId, Vector3 position, Vector3 lookAt, Id<Creature> instanceId)//add an object to the scene
 {
-  std::shared_ptr<Creature> creature(new Creature(world->getDataManager()->getCreature(dataId)));
+  std::shared_ptr<Creature> creature(new Creature(world->getDataManager()->get<CreatureDesc>(dataId)));
   creature->setScene(this);
   creature->setPosition(position);
   creature->setLookAt(lookAt);
@@ -114,9 +115,9 @@ Id<Creature> Scene::addCreature(int dataId, Vector3 position, Vector3 lookAt = V
 }
 
 //-------------------------------------------------------------------------------------
-Id<Effect> Scene::addLight(int dataId, Vector3 position, Id<Effect> instanceId)//add an object to the scene
+Id<Effect> Scene::addLight(int dataId, Vector3 position, bool castShadows, float range, Id<Effect> instanceId)//add an object to the scene
 {
-  Light* light(new Light(world->getDataManager()->getLight(dataId)));
+  Light* light(new Light(world->getDataManager()->get<LightDesc>(dataId)));
   light->setScene(this);
   light->setPosition(position);
   effects.insert(instanceId, std::shared_ptr<Effect>(light));
@@ -126,7 +127,7 @@ Id<Effect> Scene::addLight(int dataId, Vector3 position, Id<Effect> instanceId)/
 //-------------------------------------------------------------------------------------
 Id<Interactive> Scene::addInteractive(int dataId, Vector3 position, Id<Interactive> instanceId)//add an object to the scene
 {
-  std::shared_ptr<Interactive> interactive(new Interactive(world->getDataManager()->getInteractive(dataId)));
+  std::shared_ptr<Interactive> interactive(new Interactive(world->getDataManager()->get<InteractiveDesc>(dataId)));
   interactive->setScene(this);
   interactive->setPosition(position);
   interactives.insert(instanceId, interactive);
@@ -136,7 +137,7 @@ Id<Interactive> Scene::addInteractive(int dataId, Vector3 position, Id<Interacti
 //-------------------------------------------------------------------------------------
 Id<Portal> Scene::addPortal(int dataId, Vector3 position, Vector3 lookAt, Id<Scene> targetScene, Id<Portal> targetPortal, Id<Portal> instanceId)//add an object to the scene
 {
-  std::shared_ptr<Portal> portal(new Portal(world->getDataManager()->getPortal(dataId), targetScene, targetPortal));
+  std::shared_ptr<Portal> portal(new Portal(world->getDataManager()->get<PortalDesc>(dataId), targetScene, targetPortal));
   portal->setScene(this);
   portal->setPosition(position);
   portal->setLookAt(lookAt);
@@ -167,7 +168,7 @@ Id<Player> Scene::addPlayer(std::shared_ptr<Player> player, Vector3 position, Ve
 //-------------------------------------------------------------------------------------
 Id<Architecture> Scene::addArchitecture(int dataId, Vector3 position, Quaternion rotation, Vector3 scale, Id<Architecture> instanceId)
 {
-  sceneArchitectureManager->add(instanceId, std::shared_ptr<Architecture>(new Architecture(world->getDataManager()->getArchitecture(dataId), position, rotation, scale)));
+  sceneArchitectureManager->add(instanceId, std::shared_ptr<Architecture>(new Architecture(world->getDataManager()->get<ArchitectureDesc>(dataId), position, rotation, scale)));
   return instanceId;
 }
 

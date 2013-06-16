@@ -2,6 +2,14 @@
 
 
 #include "Vector3.h"
+#include "Quaternion.h"
+#include "Id.h"
+#include "Endpoint.h"
+
+class Player;
+class Creature;
+class Item;
+class Scene;
 
 #define MAX_PACKET_LENGTH 1024
 
@@ -24,35 +32,36 @@ enum PacketType
 
 struct PacketHeader
 {
-  PacketType type;
-  int id;//the source object id
+  unsigned long packetId;
   unsigned long timestamp;
+  PacketType type;
+  Id<Endpoint> sourceId;
 };
 
-struct PlayerPacket
+struct PlayerPacket : public PacketHeader
 {
-  PacketHeader header;
+  Id<Player> playerId;
+  Id<Scene> sceneId;
   Vector3 position;
   Vector3 velocity;
-  bool isRunning;
-  bool isCrouching;
+  Vector3 lookAt;
+  bool running;
+  bool crouching;
 };
 
-struct ItemPacket
+struct ItemPacket : public PacketHeader
 {
-  PacketHeader header;
+  Id<Item> itemId;
+  Id<Scene> sceneId;
   Vector3 position;
+  Quaternion rotation;
 };
 
-struct CreaturePacket
+struct CreaturePacket : public PacketHeader
 {
-  PacketHeader header;
+  Id<Creature> creatureId;
+  Id<Scene> sceneId;
   Vector3 position;
-};
-
-struct WorldPacket
-{
-
 };
 
 
@@ -62,8 +71,15 @@ public:
   Packet(void);
   virtual ~Packet(void);
 
-  int getDataLength() { return MAX_PACKET_LENGTH; } //could make variable
-  void* getDataPointer();
+  int getDataLength() { return MAX_PACKET_LENGTH; }
+
+  PacketHeader* getHeader() {return getDataPointer<PacketHeader>();}
+
+  template<class T>
+  T* getDataPointer()
+  {
+    return reinterpret_cast<T*>(&data);
+  }
   
   char data[MAX_PACKET_LENGTH];
 

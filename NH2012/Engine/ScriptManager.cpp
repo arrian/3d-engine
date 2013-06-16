@@ -10,6 +10,7 @@
 #include "World.h"
 #include "Player.h"
 #include "Scene.h"
+#include "Portal.h"
 
 #include "ScenePhysicsManager.h"
 #include "SceneGraphicsManager.h"
@@ -212,8 +213,9 @@ void ScriptManager::setWindowed(Options argv)
 void ScriptManager::setPlayerScene(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  Scene* target = world->getScene(boost::lexical_cast<int>(argv[1]));
-  if(target) target->addPlayer(world->getPlayer());
+  Id<Scene> sceneId(Id<Scene>(boost::lexical_cast<int>(argv[1])));
+  Scene* target = world->getScene(sceneId);
+  if(target) world->setPlayerScene(sceneId, target->getDefaultPortal()->getPosition(), target->getDefaultPortal()->getLookAt());
   else throw NHException("no scene loaded with the given id");
 }
 
@@ -250,7 +252,7 @@ void ScriptManager::setPlayerItemGenerationID(Options argv)
 void ScriptManager::getItemData(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  ItemDesc desc = world->getDataManager()->getItem(boost::lexical_cast<int>(argv[1]));
+  ItemDesc desc(world->getDataManager()->get<ItemDesc>(boost::lexical_cast<int>(argv[1])));
   display("name", desc.name);
   display("mesh", desc.mesh);
   display("simplified mesh", desc.simplifiedMesh);
@@ -264,7 +266,7 @@ void ScriptManager::getItemData(Options argv)
 void ScriptManager::getCreatureData(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  CreatureDesc desc = world->getDataManager()->getCreature(boost::lexical_cast<int>(argv[1]));
+  CreatureDesc desc(world->getDataManager()->get<CreatureDesc>(boost::lexical_cast<int>(argv[1])));
   display("name", desc.name);
   display("mesh", desc.mesh);
   display("health", boost::lexical_cast<std::string>(desc.health));
@@ -277,7 +279,7 @@ void ScriptManager::getCreatureData(Options argv)
 void ScriptManager::getArchitectureData(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  ArchitectureDesc desc = world->getDataManager()->getArchitecture(boost::lexical_cast<int>(argv[1]));
+  ArchitectureDesc desc(world->getDataManager()->get<ArchitectureDesc>(boost::lexical_cast<int>(argv[1])));
   display("name", desc.name);
   display("mesh", desc.mesh);
   display("friction", boost::lexical_cast<std::string>(desc.friction));
@@ -288,7 +290,7 @@ void ScriptManager::getArchitectureData(Options argv)
 void ScriptManager::getSoundData(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  SoundDesc desc = world->getDataManager()->getSound(boost::lexical_cast<int>(argv[1]));
+  SoundDesc desc(world->getDataManager()->get<SoundDesc>(boost::lexical_cast<int>(argv[1])));
   display("name", desc.name);
   display("file", desc.file);
 }
@@ -297,7 +299,7 @@ void ScriptManager::getSoundData(Options argv)
 void ScriptManager::getSceneData(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
-  SceneDesc desc = world->getDataManager()->getScene(boost::lexical_cast<int>(argv[1]));
+  SceneDesc desc(world->getDataManager()->get<SceneDesc>(boost::lexical_cast<int>(argv[1])));
   display("name", desc.name);
   display("file", desc.file);
   //add other attributes here
@@ -348,12 +350,12 @@ void ScriptManager::getGameInfo(Options argv)
   display("number of viewports", boost::lexical_cast<std::string>(window->getNumViewports()));
   display("triangle count", boost::lexical_cast<std::string>(window->getTriangleCount()));
   display("window size", boost::lexical_cast<std::string>(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
-  display("number of loaded scenes", boost::lexical_cast<std::string>(world->getNumberScenes()));
+  display("number of loaded scenes", boost::lexical_cast<std::string>(world->getSceneCount()));
 
-  std::map<int, std::string> names;
+  std::map<Id<Scene>, std::string> names;
   world->getSceneNames(names);
   std::string list = "";
-  for(std::map<int, std::string>::iterator it = names.begin(); it != names.end(); ++it) list += boost::lexical_cast<std::string>(it->first) + ": \"" + it->second + "\" ";
+  for(std::map<Id<Scene>, std::string>::iterator it = names.begin(); it != names.end(); ++it) list += boost::lexical_cast<std::string>(it->first) + ": \"" + it->second + "\" ";
   display("loaded scenes", list);
 }
 

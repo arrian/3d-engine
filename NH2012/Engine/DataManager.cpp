@@ -16,12 +16,7 @@
 
 //-------------------------------------------------------------------------------------
 DataManager::DataManager(void)
-  : files(std::vector<std::string>()),
-    items(ItemList()),
-    scenes(SceneList()),
-    sounds(SoundList()),
-    creatures(CreatureList()),
-    architecture(ArchitectureList())
+  : files(std::vector<std::string>())
 {
 }
 
@@ -68,10 +63,15 @@ void DataManager::addData(std::string file)
 
     if(words.size() == 0) continue;
     
-    int id = -1;
+    int id = 0;
     try
     {
       id = boost::lexical_cast<int>(words[ID_INDEX]);
+      if(id == 0)
+      {
+        std::cout << "Could not find the id of the data entry in " << file << " on line " << line << "." << std::endl;
+        continue;
+      }
     }
     catch(boost::bad_lexical_cast ex)
     {
@@ -90,47 +90,12 @@ void DataManager::addData(std::string file)
     else file = "error.mesh";
 
     //Need to extend for other data options
-    if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(std::pair<int, ArchitectureDesc>(id, ArchitectureDesc(id, name, file)));
-    else if(type == CREATURES_IDENTIFIER) creatures.insert(std::pair<int, CreatureDesc>(id, CreatureDesc(id, name, file)));
-    else if(type == ITEMS_IDENTIFIER) items.insert(std::pair<int, ItemDesc>(id, ItemDesc(id, name, file, file)));//change second mesh argument to the simplified mesh
-    else if(type == SCENES_IDENTIFIER) scenes.insert(std::pair<int, SceneDesc>(id, SceneDesc(id, name, file)));
-    else if(type == SOUNDS_IDENTIFIER) sounds.insert(std::pair<int, SoundDesc>(id, SoundDesc(id, name, file)));
+    if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(Id<ArchitectureDesc>(id), std::shared_ptr<ArchitectureDesc>(new ArchitectureDesc(id, name, file)));
+    else if(type == CREATURES_IDENTIFIER) creatures.insert(Id<CreatureDesc>(id), std::shared_ptr<CreatureDesc>(new CreatureDesc(id, name, file)));
+    else if(type == ITEMS_IDENTIFIER) items.insert(Id<ItemDesc>(id), std::shared_ptr<ItemDesc>(new ItemDesc(id, name, file, file)));
+    else if(type == SCENES_IDENTIFIER) scenes.insert(Id<SceneDesc>(id), std::shared_ptr<SceneDesc>(new SceneDesc(id, name, file)));
+    else if(type == SOUNDS_IDENTIFIER) sounds.insert(Id<SoundDesc>(id), std::shared_ptr<SoundDesc>(new SoundDesc(id, name, file)));
   }
-}
-
-//-------------------------------------------------------------------------------------
-ItemDesc DataManager::getItem(int id)
-{
-  if(items.count(id) == 0) throw NHException("could not find an item with the given id");
-  return ((*(items.find(id))).second);
-}
-
-//-------------------------------------------------------------------------------------
-CreatureDesc DataManager::getCreature(int id)
-{
-  if(creatures.count(id) == 0) throw NHException("could not find a creature with the given id");
-  return ((*(creatures.find(id))).second);
-}
-
-//-------------------------------------------------------------------------------------
-ArchitectureDesc DataManager::getArchitecture(int id)
-{
-  if(architecture.count(id) == 0) throw NHException("could not find architecture with the given id");
-  return ((*(architecture.find(id))).second);
-}
-
-//-------------------------------------------------------------------------------------
-SceneDesc DataManager::getScene(int id)
-{
-  if(scenes.count(id) == 0) throw NHException("could not find a scene with the given id");
-  return ((*(scenes.find(id))).second);
-}
-
-//-------------------------------------------------------------------------------------
-SoundDesc DataManager::getSound(int id)
-{
-  if(sounds.count(id) == 0) throw NHException("could not find a sound with the given id");
-  return ((*(sounds.find(id))).second);
 }
 
 //-------------------------------------------------------------------------------------

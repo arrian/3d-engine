@@ -35,7 +35,7 @@ void Door::hasSceneChange()
 
   node = scene->getSceneGraphicsManager()->createSceneNode();
 
-  ArchitectureDesc doorDesc = scene->getWorld()->getDataManager()->getArchitecture(200);//temp constants
+  ArchitectureDesc doorDesc(scene->getWorld()->getDataManager()->get<ArchitectureDesc>(200));//temp constants
   doorMesh.setMesh(doorDesc.mesh);
   physx::PxMaterial* doorMaterial = scene->getScenePhysicsManager()->getScenePhysics()->getPhysics().createMaterial(doorDesc.friction, doorDesc.friction, doorDesc.restitution);
   doorPhysical.begin();

@@ -72,6 +72,7 @@
     <ClInclude Include="Crowd\TestCharacter.h" />
     <ClInclude Include="CursorScreen.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Endpoint.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FabricationManager.h" />
     <ClInclude Include="Goal.h" />
@@ -133,6 +134,7 @@
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="InitialisationParser.h" />
+    <ClInclude Include="WorldLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -240,6 +242,7 @@
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="InitialisationParser.cpp" />
+    <ClCompile Include="WorldLoader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{73AA2BBC-22D7-44A1-9222-A1BD72F36105}</ProjectGuid>

@@ -2,13 +2,16 @@
 
 #include "Player.h"
 #include "World.h"
+#include "Endpoint.h"
+#include "Scene.h"
 
 
 NetworkManager::NetworkManager()
   : hasConnections(false),
     authority(false),
     broadcast(false),
-    maxConnections(8)
+    maxConnections(16),
+    endpoints()
 {
 
 }
@@ -39,21 +42,42 @@ void NetworkManager::send()
 
 void NetworkManager::receive()
 {
-  int initialReceived = received.size();//TODO: check bounds
+  int initialReceived = received.size();
 
   while(initialReceived > 0)
   {
     Packet packet = getNextPacket();
     //TODO: receive packet from remote endpoints
 
-    PacketHeader* header = reinterpret_cast<PacketHeader*>(packet.getDataPointer());
+    PacketHeader* header = packet.getHeader();
+    Endpoint* endpoint = endpoints.get(header->sourceId);
 
     if(header->type == PLAYER_UPDATE)
     {
-      PlayerPacket* playerPacket = reinterpret_cast<PlayerPacket*>(packet.getDataPointer());
-      //TODO: get player id from endpoint not from the packet
-      if(remotePlayers.count(playerPacket->header.id) == 0) throw NHException("the specified network player found in packet does not exist");
-      remotePlayers.find(playerPacket->header.id)->second->integratePacket(*playerPacket);
+      PlayerPacket* playerPacket = packet.getDataPointer<PlayerPacket>();
+      Scene* scene = world->getScene(playerPacket->sceneId);
+
+      if(!endpoint)
+      {
+        endpoints.insert(header->sourceId, std::shared_ptr<Endpoint>(new Endpoint(false, playerPacket->playerId)));
+        endpoint = endpoints.get(header->sourceId);
+        if(!endpoint) throw NHException("Endpoint could not be created");
+      }
+
+      if(scene)
+      {
+        Player* player = scene->get<Player>(playerPacket->playerId);
+        if(player)
+        {
+          player->integratePacket(*playerPacket);
+        }
+        else
+        {
+          scene->addPlayer(std::shared_ptr<Player>(new Player(PlayerDesc(),world)), playerPacket->position, playerPacket->lookAt, playerPacket->playerId);
+          player = scene->get<Player>(endpoint->playerId);
+          if(!player) throw NHException("Player could not be created");
+        }
+      }
     }
     else if(header->type == PLAYER_JOIN)
     {

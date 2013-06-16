@@ -66,6 +66,8 @@ public:
   //Assertions
   bool hasScene(Id<Scene> id);
 
+  void setPlayerScene(Id<Scene> sceneId, Vector3 position, Vector3 lookAt);
+
 private:
   //Local Player
   Id<Player> playerId;

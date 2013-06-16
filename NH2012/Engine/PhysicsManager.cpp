@@ -35,7 +35,7 @@ PhysicsManager::PhysicsManager(void)
   if(!profileZoneManager) throw NHException("physics profile zone manager could not be created");
 #else
   bool recordMemoryAllocations = false;
-  physx::PxProfileZoneManager* profileZoneManager = NULL;
+  profileZoneManager = NULL;
 #endif
 
   physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations, profileZoneManager);

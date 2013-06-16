@@ -4,6 +4,7 @@
 #include "Quaternion.h"
 #include "BasicComponent.h"
 #include "Identifiable.h"
+#include "Physical.h"
 
 class Scene;
 

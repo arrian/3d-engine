@@ -17,6 +17,7 @@
 #include "InitialisationParser.h"
 #include "ScenePhysicsManager.h"
 #include "WorldLoader.h"
+#include "Portal.h"
 
 //-------------------------------------------------------------------------------------
 World::World()
@@ -75,7 +76,8 @@ void World::initialise(std::string iniFile)
   if(!player) throw NHException("default player creation failed");
 
   //Add player to scene
-  scene->addPlayer(player, playerId);
+  Portal* portal = scene->getDefaultPortal();
+  scene->addPlayer(player, portal->getPosition(), portal->getLookAt(), playerId);
 }
 
 //-------------------------------------------------------------------------------------
@@ -83,12 +85,7 @@ bool World::update(double elapsedSeconds)
 {
   if(!scriptManager.update(elapsedSeconds)) return false;
   timeManager.update(elapsedSeconds);
-
-  for(Container<Scene>::Iterator it = scenes.begin(); it != scenes.end(); ++it)
-  {
-    it->second->update(elapsedSeconds);
-  }
-
+  for(Container<Scene>::Iterator it = scenes.begin(); it != scenes.end(); ++it) it->second->update(elapsedSeconds);
   return true;
 }
 
@@ -172,7 +169,7 @@ Scene* World::loadScene(Id<Scene> id)
 {
   if(scenes.contains(id)) return scenes.get(id);//check that the scene has not been loaded already
 
-  std::shared_ptr<Scene> scene(new Scene(dataManager.getScene(id.getInstance()), this));
+  std::shared_ptr<Scene> scene(new Scene(dataManager.get<SceneDesc>(id.getInstance()), this));
   scenes.insert(id, scene);
   return scene.get();
 }
@@ -182,7 +179,7 @@ Player* World::loadPlayer(Id<Player> id)
 {
   if(playerId == id) return player.get();
   
-  //Create default player - TODO: load player from file
+  //Create default player - TODO: load player from file //dataManager.get<PlayerDesc>(id.getInstance());
   PlayerDesc playerDesc = PlayerDesc();
   playerId = Id<Player>();
   player = std::shared_ptr<Player>(new Player(playerDesc, this));
@@ -228,6 +225,11 @@ void World::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
   if(player) player->mouseReleased(arg, id);
 }
 
+//-------------------------------------------------------------------------------------
+void World::setPlayerScene(Id<Scene> sceneId, Vector3 position, Vector3 lookAt) 
+{
+  if(player) getScene(sceneId)->addPlayer(player,position,lookAt);
+}
 
 
 

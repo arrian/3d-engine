@@ -43,7 +43,7 @@ public:
 
   //Add
   Id<Item> addItem(int dataId, Vector3 position, Quaternion rotation = Quaternion::IDENTITY, Id<Item> instanceId = Id<Item>());//add an object to the scene
-  Id<Effect> addLight(int dataId, Vector3 position, Id<Effect> instanceId = Id<Effect>());//add an object to the scene
+  Id<Effect> addLight(int dataId, Vector3 position, bool castShadows, float range, Id<Effect> instanceId = Id<Effect>());//add an object to the scene
   Id<Portal> addPortal(int dataId, Vector3 position, Vector3 lookAt, Id<Scene> targetScene, Id<Portal> targetPortal, Id<Portal> instanceId = Id<Portal>());//add an object to the scene
   Id<Player> addPlayer(std::shared_ptr<Player> player, Vector3 position, Vector3 lookAt, Id<Player> instanceId = Id<Player>());//add an object to the scene
   Id<Creature> addCreature(int dataId, Vector3 position, Vector3 lookAt = Vector3::ZERO, Id<Creature> instanceId = Id<Creature>());//add an object to the scene
@@ -67,7 +67,7 @@ public:
   template<class T> std::shared_ptr<T> remove(T* value)//remove an object from the scene by value
   {
     Container<T>* container = getContainer<T>();
-    if(container) return container->remove(id);
+    if(container) return container->remove(value);
     return std::shared_ptr<T>();
   }
 
@@ -119,12 +119,12 @@ private:
 
   template<class T> Container<T>* getContainer()
   {
-    if(items.isType<T>())        return &items;
-    if(players.isType<T>())      return &players;
-    if(portals.isType<T>())      return &portals;
-    if(creatures.isType<T>())    return &creatures;
-    if(effects.isType<T>())      return &effects;
-    if(interactives.isType<T>()) return &interactives;
+    if(items.isType<T>())        return (Container<T>*)&items;
+    if(players.isType<T>())      return (Container<T>*)&players;
+    if(portals.isType<T>())      return (Container<T>*)&portals;
+    if(creatures.isType<T>())    return (Container<T>*)&creatures;
+    if(effects.isType<T>())      return (Container<T>*)&effects;
+    if(interactives.isType<T>()) return (Container<T>*)&interactives;
     return NULL;
   }
 };

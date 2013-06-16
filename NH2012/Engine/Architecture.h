@@ -1,4 +1,4 @@
-
+#pragma once
 
 #include "DataManager.h"
 #include "Vector3.h"

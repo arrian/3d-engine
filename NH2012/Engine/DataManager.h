@@ -13,6 +13,7 @@
 
 //Local
 #include "Vector3.h"
+#include "Container.h"
 
 #define GRAVITY 0.0f, -9.81f, 0.0f
 
@@ -156,20 +157,84 @@ struct PlayerDesc
   std::string name;
 
   Vector3 gravity;
-
 };
 
-typedef std::map<int, ArchitectureDesc > ArchitectureList;
-typedef std::map<int, CreatureDesc > CreatureList;
-typedef std::map<int, SceneDesc > SceneList;
-typedef std::map<int, SoundDesc > SoundList;
-typedef std::map<int, ItemDesc > ItemList;
+struct EmitterDesc
+{
+  EmitterDesc(int id, std::string name, std::string file)
+    : id(id),
+      name(name),
+      file(file)
+  {
+  }
+
+  int id;
+  std::string name;
+  std::string file;
+};
+
+struct LightDesc
+{
+  LightDesc(int id, std::string name, std::string file)
+    : id(id),
+      name(name),
+      file(file)
+  {
+  }
+
+  int id;
+  std::string name;
+  std::string file;
+};
+
+struct SpriteDesc
+{
+  SpriteDesc(int id, std::string name, std::string file)
+    : id(id),
+      name(name),
+      file(file)
+  {
+  }
+
+  int id;
+  std::string name;
+  std::string file;
+};
+
+struct AffectorDesc
+{
+  AffectorDesc(int id, std::string name, std::string script)
+    : id(id),
+      name(name),
+      script(script)
+  {
+  }
+
+  int id;
+  std::string name;
+  std::string script;
+};
+
+
+
+typedef std::map<int, ArchitectureDesc> ArchitectureList;
+typedef std::map<int, CreatureDesc> CreatureList;
+typedef std::map<int, SceneDesc> SceneList;
+typedef std::map<int, SoundDesc> SoundList;
+typedef std::map<int, ItemDesc> ItemList;
+
+static const char SCENES_IDENTIFIER[] = "#Scenes";
 
 static const char ARCHITECTURE_IDENTIFIER[] = "#Architecture";
+static const char INTERACTIVES_IDENTIFIER[] = "#Interactives";
 static const char CREATURES_IDENTIFIER[] = "#Creatures";
-static const char SCENES_IDENTIFIER[] = "#Scenes";
-static const char SOUNDS_IDENTIFIER[] = "#Sounds";
 static const char ITEMS_IDENTIFIER[] = "#Items";
+static const char PLAYERS_IDENTIFIER[] = "#Players";
+
+static const char SOUNDS_IDENTIFIER[] = "#Sounds";
+static const char EMITTERS_IDENTIFIER[] = "#Emitters";
+static const char LIGHTS_IDENTIFIER[] = "#Lights";
+static const char SPRITES_IDENTIFIER[] = "#Sprites";
 
 static const int ID_INDEX = 0;
 static const int NAME_INDEX = 1;
@@ -186,22 +251,45 @@ public:
 
   void addData(std::string file);
 
-  //Data getters
-  ArchitectureDesc getArchitecture(int id);
-  CreatureDesc getCreature(int id);
-  SceneDesc getScene(int id);
-  SoundDesc getSound(int id);
-  ItemDesc getItem(int id);
+  template<class Desc>
+  Desc get(int id)
+  {
+    Container<Desc>* container = getContainer<Desc>();
+    if(!container) throw NHException("the specified description type does not exist");
+    Desc* desc = container->get(Id<Desc>(id));
+    if(!desc) throw NHException("the specified description could not be found");
+    return *desc;
+  }
 
   std::vector<std::string> getLoadedDataFiles();
 
 private:
   std::vector<std::string> files;
 
-  ArchitectureList architecture;
-  CreatureList creatures;
-  SceneList scenes;
-  SoundList sounds;
-  ItemList items;
+  Container<ArchitectureDesc> architecture;
+  Container<CreatureDesc> creatures;
+  Container<AffectorDesc> affectors;
+  Container<EmitterDesc> emitters;
+  Container<SpriteDesc> sprites;
+  Container<PlayerDesc> players;
+  Container<SceneDesc> scenes;
+  Container<SoundDesc> sounds;
+  Container<LightDesc> lights;
+  Container<ItemDesc> items;
+
+  template<class Desc>
+  Container<Desc>* getContainer()
+  {
+    if(architecture.isType<Desc>()) return (Container<Desc>*)&architecture;
+    if(creatures.isType<Desc>())    return (Container<Desc>*)&creatures;
+    if(affectors.isType<Desc>())    return (Container<Desc>*)&affectors;
+    if(emitters.isType<Desc>())     return (Container<Desc>*)&emitters;
+    if(sprites.isType<Desc>())      return (Container<Desc>*)&sprites;
+    if(players.isType<Desc>())      return (Container<Desc>*)&players;
+    if(scenes.isType<Desc>())       return (Container<Desc>*)&scenes;
+    if(sounds.isType<Desc>())       return (Container<Desc>*)&sounds;
+    if(lights.isType<Desc>())       return (Container<Desc>*)&lights;
+    if(items.isType<Desc>())        return (Container<Desc>*)&items;
+  }
 };
 

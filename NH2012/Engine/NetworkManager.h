@@ -2,7 +2,9 @@
 
 #include <deque>
 
+#include "Id.h"
 #include "Packet.h"
+#include "Container.h"
 
 class World;
 class Player;
@@ -17,15 +19,17 @@ public:
 
   void connect(std::string address);//connects to a server making this terminal a client (ie. not an authority)
   void disconnect(std::string address);
-  void disconnect(int playerID);
+  void disconnect(Id<Endpoint> endpoint);
 
   void setBroadcast(bool broadcast);//broadcast availability
   void setIsAuthority(bool authority);
   void setMaxConnections(int maxConnections);//max number of client connections
+
+  void setWorld(World* world) {this->world = world;}
   
 protected:
   World* world;
-  std::map<int, Player*> remotePlayers;//change int id to connection endpoint for the server
+  Container<Endpoint> endpoints;//the remote players
 
   void send();
   void receive();

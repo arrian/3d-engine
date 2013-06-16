@@ -335,8 +335,9 @@ PlayerPacket Player::extractPacket()
   PlayerPacket packet = PlayerPacket();
   packet.position = getPosition();
   packet.velocity = getVelocity();
-  packet.isCrouching = getCrouching();
-  packet.isRunning = getRunning();
+  packet.lookAt = camera.getDirection();//TODO: change lookat to direction
+  packet.crouching = getCrouching();
+  packet.running = getRunning();
   return packet;
 }
 
@@ -344,7 +345,7 @@ PlayerPacket Player::extractPacket()
 void Player::integratePacket(PlayerPacket packet)
 {
   setPosition(packet.position);//should interpolate
-  setCrouching(packet.isCrouching);
-  setRunning(packet.isRunning);
-  //set velocity
+  setCrouching(packet.crouching);
+  setRunning(packet.running);
+  setLookAt(packet.lookAt);
 }

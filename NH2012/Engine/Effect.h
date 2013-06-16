@@ -2,6 +2,8 @@
 
 #include "BasicComponent.h"
 
+#include "Physical.h"
+
 class Effect : public BasicComponent, public Physical
 {
 public:

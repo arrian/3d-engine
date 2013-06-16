@@ -16,7 +16,7 @@ public:
   virtual ~Identifiable(void);
 
 
-  template<class T> T* getInstancePointer() {return dynamic_cast<T>(instancePointer);}
+  template<class T> T* getInstancePointer() {return dynamic_cast<T*>(instancePointer);}
 
 
   int getInstanceID();

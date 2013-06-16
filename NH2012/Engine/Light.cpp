@@ -2,6 +2,8 @@
 
 #include "SceneGraphicsManager.h"
 
+#include "NHException.h"
+
 Light::Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
   : light(scene->getSceneGraphicsManager()->createLight())
 {
