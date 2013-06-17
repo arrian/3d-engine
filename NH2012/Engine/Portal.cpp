@@ -1,11 +1,10 @@
 #include "Portal.h"
 
 //-------------------------------------------------------------------------------------
-Portal::Portal(Id<Scene> targetSceneID, Id<Portal> targetPortalID, Vector3 position, Vector3 lookAt)
-  : targetSceneId(targetSceneId),
+Portal::Portal(PortalDesc desc, Id<Scene> targetSceneID, Id<Portal> targetPortalID)
+  : desc(desc),
+    targetSceneId(targetSceneId),
     targetPortalId(targetPortalId),
-    position(position),
-    lookAt(lookAt),
     loadArea(),
     moveArea()
 {

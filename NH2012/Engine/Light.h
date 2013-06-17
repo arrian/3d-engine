@@ -4,9 +4,14 @@
 
 #include <OgreColourValue.h>
 #include <OgreLight.h>
+#include <OgreSceneNode.h>
 
+#include "DataManager.h"
 #include "Scene.h"
 #include "Effect.h"
+
+#include "Vector3.h"
+#include "Quaternion.h"
 
 class LightPlugin
 {
@@ -78,11 +83,14 @@ protected:
 class Light : public Effect
 {
 public:
-  Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour);
+  Light(LightDesc desc);
   virtual ~Light(void);
 
   void setPosition(Vector3 position) {lightNode->setPosition(position);}
   Vector3 getPosition() {return lightNode->getPosition();}
+
+  void setRotation(Quaternion rotation) {lightNode->_setDerivedOrientation(rotation);}
+  Quaternion getRotation() {return lightNode->_getDerivedOrientation();}
 
   void addPlugin(LightPlugin* plugin);
 
@@ -94,6 +102,7 @@ protected:
   virtual void hasSceneChange();
 
 private:
+  LightDesc desc;
   Ogre::Light* light;
   std::vector<LightPlugin*> plugins;
 

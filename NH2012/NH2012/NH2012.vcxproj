@@ -239,6 +239,10 @@
     <None Include="..\Media\sounds.dat">
       <FileType>Document</FileType>
     </None>
+    <None Include="interactives.dat" />
+    <None Include="lights.dat" />
+    <None Include="particles.dat" />
+    <None Include="players.dat" />
     <None Include="res\NH2012.ico" />
   </ItemGroup>
   <ItemGroup>

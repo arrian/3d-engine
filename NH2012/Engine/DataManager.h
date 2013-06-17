@@ -185,6 +185,8 @@ struct LightDesc
   int id;
   std::string name;
   std::string file;
+  float range;
+  bool castShadows;
 };
 
 struct SpriteDesc
@@ -215,13 +217,33 @@ struct AffectorDesc
   std::string script;
 };
 
+struct PortalDesc
+{
+  PortalDesc(int id, std::string name, std::string file)
+    : id(id),
+      name(name),
+      file(file)
+  {
+  }
 
+  int id;
+  std::string name;
+  std::string file;
+};
 
-typedef std::map<int, ArchitectureDesc> ArchitectureList;
-typedef std::map<int, CreatureDesc> CreatureList;
-typedef std::map<int, SceneDesc> SceneList;
-typedef std::map<int, SoundDesc> SoundList;
-typedef std::map<int, ItemDesc> ItemList;
+struct InteractiveDesc
+{
+  InteractiveDesc(int id, std::string name, std::string script)
+    : id(id),
+      name(name),
+      script(script)
+  {
+  }
+
+  int id;
+  std::string name;
+  std::string script;
+};
 
 static const char SCENES_IDENTIFIER[] = "#Scenes";
 
@@ -230,6 +252,7 @@ static const char INTERACTIVES_IDENTIFIER[] = "#Interactives";
 static const char CREATURES_IDENTIFIER[] = "#Creatures";
 static const char ITEMS_IDENTIFIER[] = "#Items";
 static const char PLAYERS_IDENTIFIER[] = "#Players";
+static const char PORTALS_IDENTIFIER[] = "#Portals";
 
 static const char SOUNDS_IDENTIFIER[] = "#Sounds";
 static const char EMITTERS_IDENTIFIER[] = "#Emitters";
@@ -290,6 +313,7 @@ private:
     if(sounds.isType<Desc>())       return (Container<Desc>*)&sounds;
     if(lights.isType<Desc>())       return (Container<Desc>*)&lights;
     if(items.isType<Desc>())        return (Container<Desc>*)&items;
+    return NULL;
   }
 };
 

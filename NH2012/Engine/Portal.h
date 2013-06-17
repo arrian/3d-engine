@@ -14,7 +14,7 @@
 class Portal
 {
 public:
-  Portal(Id<Scene> targetSceneID, Id<Portal> targetPortalID, Vector3 position, Vector3 lookAt);
+  Portal(PortalDesc desc, Id<Scene> targetSceneID, Id<Portal> targetPortalID);
   ~Portal(void);
 
   Id<Scene> getTargetScene();
@@ -23,10 +23,17 @@ public:
   Vector3 getPosition();
   Vector3 getLookAt();
 
+  void setPosition(Vector3 position) {this->position = position;}
+  void setLookAt(Vector3 lookAt) {this->lookAt = lookAt;}
+  void setScene(Scene* scene) {this->scene = scene;}
+
   void update(double elapsedSeconds);
 
   bool isLoadRequired(Vector3 observerPosition);
 private:
+  Scene* scene;
+  PortalDesc desc;
+
   Id<Scene> targetSceneId;
   Id<Portal> targetPortalId;
   

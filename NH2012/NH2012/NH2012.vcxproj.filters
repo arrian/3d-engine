@@ -44,6 +44,18 @@
     <None Include="..\Media\game.ini">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="interactives.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="players.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="lights.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="particles.dat">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\NH2012.rc">

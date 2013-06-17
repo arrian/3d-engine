@@ -4,7 +4,7 @@
 
 
 Chest::Chest(void)
-  : Interactive("Chest"),
+  : Interactive(InteractiveDesc(0, "Chest", "invalid.script")),
     open(false),
     locked(false)
 {

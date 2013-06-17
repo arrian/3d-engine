@@ -1,8 +1,11 @@
 #include "Interactive.h"
 
 
-Interactive::Interactive(std::string name)
-  : Identifiable(this, name, INTERACTIVE)
+Interactive::Interactive(InteractiveDesc desc)
+  : Identifiable(this, desc.name, INTERACTIVE),
+    Physical(),
+    BasicComponent(),
+    desc(desc)
 {
 }
 

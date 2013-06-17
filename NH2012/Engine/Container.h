@@ -46,7 +46,7 @@ struct Container {
   {
     for(Iterator it = begin(); it != end(); ++it) 
     {
-      if(it->second->get() == value)
+      if(it->second.get() == value)
       {
         std::shared_ptr<T> temp(it->second);
         map.erase(it->first);

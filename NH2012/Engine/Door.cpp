@@ -7,7 +7,7 @@
 #include "SceneGraphicsManager.h"
 
 Door::Door(void)
-  : Interactive("Door"),
+  : Interactive(InteractiveDesc(0, "Door", "invalid.script")),
     open(false),
     locked(false),
     doorPhysical(INTERACTIVE),

@@ -117,7 +117,10 @@ Id<Creature> Scene::addCreature(int dataId, Vector3 position, Vector3 lookAt, Id
 //-------------------------------------------------------------------------------------
 Id<Effect> Scene::addLight(int dataId, Vector3 position, bool castShadows, float range, Id<Effect> instanceId)//add an object to the scene
 {
-  Light* light(new Light(world->getDataManager()->get<LightDesc>(dataId)));
+  LightDesc desc(world->getDataManager()->get<LightDesc>(dataId));
+  desc.range = range;
+  desc.castShadows = castShadows;
+  Light* light(new Light(desc));
   light->setScene(this);
   light->setPosition(position);
   effects.insert(instanceId, std::shared_ptr<Effect>(light));
@@ -148,8 +151,6 @@ Id<Portal> Scene::addPortal(int dataId, Vector3 position, Vector3 lookAt, Id<Sce
 //-------------------------------------------------------------------------------------
 Id<Player> Scene::addPlayer(std::shared_ptr<Player> player, Vector3 position, Vector3 lookAt, Id<Player> instanceId)//add an object to the scene
 {
-  Vector3 lookAt = Vector3::UNIT_Z;
-
   Scene* old = player->getScene();
   if(old) old->remove<Player>(player.get());//need to remove player from previous scene
   player->setScene(this);

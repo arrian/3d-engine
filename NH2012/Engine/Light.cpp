@@ -4,15 +4,11 @@
 
 #include "NHException.h"
 
-Light::Light(Scene* scene, Vector3 position, bool castShadows, Ogre::Real range, Ogre::ColourValue colour)
-  : light(scene->getSceneGraphicsManager()->createLight())
+Light::Light(LightDesc desc)
+  : light(NULL),
+    desc(desc)
 {
-  lightNode = scene->getSceneGraphicsManager()->createSceneNode(position);
-  lightNode->attachObject(light);
-  light->setAttenuation(range, 0.95f, 0.05f, 0.0f);
-  light->setDiffuseColour(colour);
-  light->setSpecularColour(Ogre::ColourValue::White);
-  light->setCastShadows(castShadows);
+
 }
 
 //-------------------------------------------------------------------------------------
@@ -50,7 +46,12 @@ void Light::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void Light::hasSceneChange()
 {
-  //TODO change effects to extending NodeComponent
-  throw NHException("light basic component base class not implemented");
+  light = scene->getSceneGraphicsManager()->createLight();
+  lightNode = scene->getSceneGraphicsManager()->createSceneNode();
+  lightNode->attachObject(light);
+  light->setAttenuation(desc.range, 0.95f, 0.05f, 0.0f);
+  light->setDiffuseColour(Ogre::ColourValue::White);
+  light->setSpecularColour(Ogre::ColourValue::White);
+  light->setCastShadows(desc.castShadows);
 }
 
