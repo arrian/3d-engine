@@ -26,6 +26,7 @@ struct Container {
 
   void insert(Id<T> id, std::shared_ptr<T> item)
   {
+    std::cout << "Added " << id.getName() << std::endl;
     map.insert(map.begin(), std::pair< Id<T>, std::shared_ptr<T> >(id, item));
   }
 
@@ -74,6 +75,11 @@ struct Container {
   Iterator end()
   {
     return map.end();
+  }
+
+  void clear()
+  {
+    map.clear();
   }
 };
 

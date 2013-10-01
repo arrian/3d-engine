@@ -2,6 +2,8 @@
 #pragma once
 
 #include <string>
+#include <iostream>
+#include <iomanip>
 #include <boost/lexical_cast.hpp>
 
 
@@ -41,7 +43,7 @@ public:
   std::string getName()
   {
     std::stringstream stream;
-    stream << std::hex << instance;
+    stream << std::setw(8) << std::setfill('0') << std::hex << instance;
     return std::string(typeid(T).name()) + "::" + stream.str();
   }
 

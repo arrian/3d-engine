@@ -27,7 +27,7 @@ public:
   void setLookAt(Vector3 lookAt) {this->lookAt = lookAt;}
   void setScene(Scene* scene) {this->scene = scene;}
 
-  void update(double elapsedSeconds);
+  void update(double elapsedSeconds) {}
 
   bool isLoadRequired(Vector3 observerPosition);
 private:

@@ -60,7 +60,7 @@ Item::~Item(void)
 {
   //if(physical) physical->release();
 
-  material->release();
+  //material->release();//TODO: might need this
 
   if(scene)
   {

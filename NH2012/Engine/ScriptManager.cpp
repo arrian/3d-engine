@@ -16,6 +16,11 @@
 #include "SceneGraphicsManager.h"
 #include "ScenePathfindManager.h"
 
+//Lua Bind
+#include <luabind/luabind.hpp>
+#include <luabind/function.hpp>
+#include "LuaBind.h"
+
 
 ScriptManager::ScriptManager(void)
   : world(NULL),
@@ -52,6 +57,7 @@ ScriptManager::ScriptManager(void)
   addCommand("setSceneDrawDebugNavMesh", "(true | false)", "displays or hides the scene navigation mesh", &ScriptManager::setSceneDrawDebugNavMesh);
   addCommand("setSceneShadowsEnabled", "(true | false)", "shows or hides shadows", &ScriptManager::setSceneShadowsEnabled);
   addCommand("setSceneGravity", "x y z", "sets the scene gravity", &ScriptManager::setSceneGravity);
+
 }
 
 //-------------------------------------------------------------------------------------
@@ -78,6 +84,44 @@ bool ScriptManager::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void ScriptManager::execute(std::string command)
 {
+  //Testing Lua binding... TODO: remove
+  lua_State* state = lua_open();
+  luaL_openlibs(state);
+  bindLua(state);
+
+  luabind::globals(state)["world"] = world;
+
+  //Managers
+  luabind::globals(state)["control"] = world->getControlManager();
+  luabind::globals(state)["data"] = world->getDataManager();
+  luabind::globals(state)["graphics"] = world->getGraphicsManager();
+  luabind::globals(state)["network"] = world->getNetworkManager();
+  luabind::globals(state)["physics"] = world->getPhysicsManager();
+  luabind::globals(state)["script"] = world->getScriptManager();
+  luabind::globals(state)["sound"] = world->getSoundManager();
+  luabind::globals(state)["time"] = world->getTimeManager();
+
+  //TODO: these may change for each scene... need to update
+  luabind::globals(state)["player"] = world->getPlayer();
+
+
+
+  int initialStackSize = lua_gettop(state);
+
+  const char* command_c = command.c_str();
+  luaL_dostring(state, command_c);
+
+  int finalStackSize = lua_gettop(state);
+  
+  if(!lua_isnil(state, -1)) 
+  {
+    std::string result = lua_tostring(state, -1);
+    display(result);
+  }
+  lua_pop(state, 1);
+
+  /*
+
   std::vector<std::string> commandSet;
   split(command, ';', commandSet);
 
@@ -100,7 +144,11 @@ void ScriptManager::execute(std::string command)
     {
       throw NHException("bad arguments given");
     }
-  }
+
+    
+    
+  
+  }*/
 }
 
 //-------------------------------------------------------------------------------------
@@ -134,7 +182,7 @@ bool ScriptManager::stringToBool(std::string string)
 //-------------------------------------------------------------------------------------
 void ScriptManager::about(Options argv)
 {
-  display("Copyright Arrian Purcell 2012.");
+  display("Copyright Arrian Purcell 2013.");
 }
 
 //-------------------------------------------------------------------------------------
@@ -355,7 +403,7 @@ void ScriptManager::getGameInfo(Options argv)
   std::map<Id<Scene>, std::string> names;
   world->getSceneNames(names);
   std::string list = "";
-  for(std::map<Id<Scene>, std::string>::iterator it = names.begin(); it != names.end(); ++it) list += boost::lexical_cast<std::string>(it->first) + ": \"" + it->second + "\" ";
+  for(std::map<Id<Scene>, std::string>::iterator it = names.begin(); it != names.end(); ++it) list += boost::lexical_cast<std::string>(it->first.getInstance()) + ": \"" + it->second + "\" ";
   display("loaded scenes", list);
 }
 

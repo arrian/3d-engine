@@ -28,7 +28,7 @@ public:
   ~Scene(void);
 
   void update(double elapsedSeconds);
-  void reset() {setup();}//reverts the scene to its original state
+  void reset();//reverts the scene to its original state
 
   //Getters
   World* getWorld() {return world;}

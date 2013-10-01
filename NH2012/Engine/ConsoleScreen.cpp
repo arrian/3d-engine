@@ -24,6 +24,7 @@ ConsoleScreen::ConsoleScreen(ScriptManager* scriptManager)
     displayLines(27),
     displayOffset(0),
     historyIndex(0),
+    cursorIndex(0),
     firstKeyPressHoldWait(1.0),
     consecutiveKeyPressHoldWait(0.1),
     holdAccumulator(0.0),
@@ -108,7 +109,7 @@ void ConsoleScreen::keyPressed(const OIS::KeyEvent &arg)
 {
   if(!isVisible()) return;
 
-  if(arg.key == OIS::KC_SPACE) command += ' ';
+  if(arg.key == OIS::KC_SPACE) addCommandText(cursorIndex, " ");
   else if(arg.key == OIS::KC_GRAVE) return;
   else if(arg.key == OIS::KC_BACK) backspace();
   else if(arg.key == OIS::KC_RETURN) enter();
@@ -122,16 +123,20 @@ void ConsoleScreen::keyPressed(const OIS::KeyEvent &arg)
     isControl = true; 
     return;
   }
-  else if(arg.key == OIS::KC_5 && isShift) command += "%%";//single percent used as escape sequence in gorilla markup
+  else if(arg.key == OIS::KC_5 && isShift) addCommandText(cursorIndex, "%%");//single percent used as escape sequence in gorilla markup
   else if(arg.key == OIS::KC_UP && isShift) displayOffset++;//show previous text
   else if(arg.key == OIS::KC_DOWN && isShift) displayOffset--;//show more recent text
   else if(arg.key == OIS::KC_UP) up();
   else if(arg.key == OIS::KC_DOWN) down();
+  else if(arg.key == OIS::KC_LEFT) left();
+  else if(arg.key == OIS::KC_RIGHT) right();
+  else if(arg.key == OIS::KC_TAB) tab();
+  else if(arg.key == OIS::KC_DELETE) del();
   else 
   {
     try
     {
-      command += ControlMap::getInstance().getAsString(arg.key, isShift);
+      addCommandText(cursorIndex, ControlMap::getInstance().getAsString(arg.key, isShift));
     }
     catch(NHException e)
     {
@@ -227,17 +232,30 @@ void ConsoleScreen::update()
     viewText += "\n " + *iter;
   }
 
-  if(end == lines.end()) viewText += "\n%3> " + command;
+  if(end == lines.end()) viewText += "\n%3> ";
 
-  if(showCursor) viewText = viewText + "|";
+  if(showCursor) 
+  {
+    int cursorPosition = cursorIndex;
+    if(cursorIndex > command.size()) cursorPosition = command.size();
+    std::string preCursor = command.substr(0, cursorPosition);
+    std::string postCursor = command.substr(cursorPosition, command.size() - cursorPosition);
+
+    viewText += preCursor + "|" + postCursor;
+  }
+  else 
+  {
+    viewText += command;
+  }
+
   if(view) view->text(viewText);
 }
 
 //-------------------------------------------------------------------------------------
 void ConsoleScreen::backspace()
 {
-  if(command.size() == 0) return;
-  command = command.substr(0, command.size() - 1);
+  removeCommandText(cursorIndex - 1, 1);
+  cursorIndex--;
 }
 
 //-------------------------------------------------------------------------------------
@@ -258,8 +276,50 @@ void ConsoleScreen::down()
   else command = "";
 }
 
+//-------------------------------------------------------------------------------------
+void ConsoleScreen::del()
+{
+  removeCommandText(cursorIndex, 1);
+}
 
+//-------------------------------------------------------------------------------------
+void ConsoleScreen::left()
+{
+  if(cursorIndex <= 0) return;
+  cursorIndex--;
+  if(cursorIndex > command.size()) cursorIndex = command.size();
+}
 
+//-------------------------------------------------------------------------------------
+void ConsoleScreen::right()
+{
+  if(cursorIndex >= command.size()) return;
+  cursorIndex++;
+}
 
+//-------------------------------------------------------------------------------------
+void ConsoleScreen::tab()
+{
+  addCommandText(cursorIndex, "  ");
+}
+
+//-------------------------------------------------------------------------------------
+void ConsoleScreen::addCommandText(int index, std::string text)
+{
+  if(command.size() == 0) command += text;
+  else if(index <= 0) command = text + command;
+  else if(index >= command.size()) command += text;
+  else command.insert(index, text);
+
+  cursorIndex += text.size();
+}
+
+//-------------------------------------------------------------------------------------
+void ConsoleScreen::removeCommandText(int index, int count)
+{
+  if(command.size() <= 0) return;
+  if(index >= command.size()) return;
+  command = command.erase(index, count);
+}
 
 

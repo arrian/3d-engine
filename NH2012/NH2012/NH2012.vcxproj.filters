@@ -35,9 +35,6 @@
     <None Include="..\Media\items.dat">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\Media\monsters.dat">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\Media\scenes.dat">
       <Filter>Resource Files</Filter>
     </None>
@@ -54,6 +51,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="particles.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\Media\creatures.dat">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

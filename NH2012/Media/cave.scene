@@ -2,7 +2,7 @@
   <item id="35" tx="2" ty="1" tz="0" rx="0" ry="0" rz="0" />
   <item id="35" tx="3" ty="1" tz="0" rx="0" ry="0" rz="0" />
   <item id="35" tx="4" ty="1" tz="0" rx="0" ry="0" rz="0" />
-  <portal id="0" target_scene_id="1" target_portal_id="0" tx="0" ty="1.8" tz="0" ltx="0" lty="2" ltz="-10" />
+  <portal id="1" target_scene_id="2" target_portal_id="1" tx="0" ty="1.8" tz="0" ltx="0" lty="2" ltz="-10" />
   <light tx="0" ty="0" tz="0" range="20" cast_shadows="1" ca="1" cr="1" cg="1" cb="1" type="point" />
   <architecture id="140" tx="0" ty="0" tz="0" />
 </scene>

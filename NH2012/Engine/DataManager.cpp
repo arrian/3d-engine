@@ -34,6 +34,7 @@ void DataManager::addData(std::string file)
   }
   files.push_back(file);//record loading this file
 
+  std::cout << "Loading " << file << "..." << std::endl;
   Ogre::FileInfoListPtr fileListPtr = Ogre::ResourceGroupManager::getSingletonPtr()->findResourceFileInfo("Essential", file);
   if(fileListPtr->size() < 1) throw NHException("could not find the path to the specified data file");
 

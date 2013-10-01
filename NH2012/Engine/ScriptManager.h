@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 
+
 class World;
 
 typedef std::vector<std::string> Options;
@@ -75,13 +76,15 @@ public:
 
   void setWorld(World* world);
 
-  void execute(std::string command);//executes a string of commands
-
   bool update(double elapsedSeconds);
 
   void run(std::string file);//executes the specified file
+  void execute(std::string command);//executes a string of commands
 
+  void display(std::string comment);//displays a line of text
+  void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
   void addOutputTarget(OutputCallback* target);
+
 private:
   World* world;
   bool done;
@@ -90,8 +93,6 @@ private:
 
   bool stringToBool(std::string string);
   void split(const std::string &s, char delim, std::vector<std::string> &elems);//Tokenises a string by the given delimiter.
-  void display(std::string comment);//displays a line of text
-  void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
   void addCommand(std::string name, std::string arguments, std::string help, void (ScriptManager::*run) (Options));
 
   //Set of executable commands
@@ -108,7 +109,7 @@ private:
   void setPlayerPosition         (Options);
   void setPlayerItemGenerationID (Options);
   void getItemData               (Options);
-  void getCreatureData            (Options);
+  void getCreatureData           (Options);
   void getArchitectureData       (Options);
   void getSoundData              (Options);
   void getSceneData              (Options);
@@ -119,11 +120,12 @@ private:
   void getWorldInfo              (Options);
   void getPlayerPosition         (Options);
   void addItem                   (Options);
-  void addCreature                (Options);
+  void addCreature               (Options);
   void setSceneLoaded            (Options);
   void setSceneDrawDebugNavMesh  (Options);
   void setSceneShadowsEnabled    (Options);
   void setSceneGravity           (Options);
   void reset                     (Options);
+  
 };
 

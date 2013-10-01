@@ -2,13 +2,13 @@
 #Id,Name,File
 
 [Samples]
-0,Buzz,buzz.wav
-1,Drip,drip.wav
-2,Switch,switch.wav
+1,Buzz,buzz.wav
+2,Drip,drip.wav
+3,Switch,switch.wav
 
 [Ambience]
-3,Day,day.wav
-4,Night,night.wav
+4,Day,day.wav
+5,Night,night.wav
 
 [Music]
-5,Introduction,intro.wav
+6,Introduction,intro.wav

@@ -66,6 +66,22 @@ void Scene::setup()
   //add(std::shared_ptr<Interactive>(new Door()));//temp door
 }
 
+void Scene::reset()
+{
+  std::shared_ptr<Player> player(players.remove(localPlayer));
+
+  items.clear();
+  players.clear();
+  portals.clear();
+  creatures.clear();
+  effects.clear();
+  interactives.clear();
+  
+  setup();
+
+  addPlayer(player, getDefaultPortal()->getPosition(), getDefaultPortal()->getLookAt());
+}
+
 //-------------------------------------------------------------------------------------
 void Scene::update(double elapsedSeconds)
 {
@@ -145,6 +161,7 @@ Id<Portal> Scene::addPortal(int dataId, Vector3 position, Vector3 lookAt, Id<Sce
   portal->setPosition(position);
   portal->setLookAt(lookAt);
   portals.insert(instanceId, portal);
+  if(!defaultPortal.isValid()) defaultPortal = instanceId;
   return instanceId;
 }
 

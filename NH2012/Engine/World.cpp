@@ -138,6 +138,12 @@ GraphicsManager* World::getGraphicsManager()
 }
 
 //-------------------------------------------------------------------------------------
+SoundManager* World::getSoundManager()
+{
+  return &soundManager;
+}
+
+//-------------------------------------------------------------------------------------
 Scene* World::getScene(Id<Scene> id)
 {
   return scenes.get(id);
@@ -181,8 +187,9 @@ Player* World::loadPlayer(Id<Player> id)
   
   //Create default player - TODO: load player from file //dataManager.get<PlayerDesc>(id.getInstance());
   PlayerDesc playerDesc = PlayerDesc();
-  playerId = Id<Player>();
+  playerId = id;
   player = std::shared_ptr<Player>(new Player(playerDesc, this));
+  return player.get();
 }
 
 //-------------------------------------------------------------------------------------

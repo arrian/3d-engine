@@ -105,6 +105,33 @@
     <Filter Include="Header Files\Managers\SceneManagers">
       <UniqueIdentifier>{7621ee55-1672-4ef2-a0a5-2263c56354a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility\Loaders">
+      <UniqueIdentifier>{731706ee-6196-48bc-ad8e-06ab8d224fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\Controls">
+      <UniqueIdentifier>{9ed337c6-c0d1-425f-970b-38971495c7d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\Identification">
+      <UniqueIdentifier>{b2bdc843-a398-4837-b785-6e44392f4575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\Network">
+      <UniqueIdentifier>{dda7b78f-eb04-46d3-800c-42174e241dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\Intelligence">
+      <UniqueIdentifier>{714ed179-aca6-49be-adf8-38bc1b924c8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\Error">
+      <UniqueIdentifier>{c1e79049-df04-4644-b10d-2c113907aaa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\Loaders">
+      <UniqueIdentifier>{7e8a8037-4d78-44d0-aded-65cb175c02be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\Error">
+      <UniqueIdentifier>{f4589c44-5f29-4c60-8c6b-135b632d3538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\Network">
+      <UniqueIdentifier>{c18557ed-b492-4c57-a171-d514df66bd3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraComponent.h">
@@ -121,12 +148,6 @@
     </ClInclude>
     <ClInclude Include="PhysicalComponent.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsErrorCallback.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="NHException.h">
-      <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="DataManager.h">
       <Filter>Header Files\Managers</Filter>
@@ -272,9 +293,6 @@
     <ClInclude Include="Crowd\QueryFlags.h">
       <Filter>Header Files\Utility\3rd Party\Crowd</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="QueryComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -290,9 +308,6 @@
     <ClInclude Include="ScriptManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Group.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Gorilla.h">
       <Filter>Header Files\Utility\3rd Party</Filter>
     </ClInclude>
@@ -305,16 +320,10 @@
     <ClInclude Include="MovementComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Goal.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Vector3.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Quaternion.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Priority.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="BoidComponent.h">
@@ -356,9 +365,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Header Files\World\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneLoader.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Header Files\World\Scene\Effect</Filter>
     </ClInclude>
@@ -366,12 +372,6 @@
       <Filter>Header Files\World\Scene\Effect</Filter>
     </ClInclude>
     <ClInclude Include="Savable.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Identifiable.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Packetable.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Interface.h">
@@ -401,12 +401,6 @@
     <ClInclude Include="CursorScreen.h">
       <Filter>Header Files\Interface\Screen</Filter>
     </ClInclude>
-    <ClInclude Include="InitialisationParser.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="ControlMap.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
@@ -431,9 +425,6 @@
     <ClInclude Include="Physical.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Id.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Container.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
@@ -449,10 +440,49 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files\World\Scene\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Endpoint.h">
-      <Filter>Header Files\Utility</Filter>
+    <ClInclude Include="ControlMap.h">
+      <Filter>Header Files\Utility\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Id.h">
+      <Filter>Header Files\Utility\Identification</Filter>
+    </ClInclude>
+    <ClInclude Include="Group.h">
+      <Filter>Header Files\Utility\Identification</Filter>
+    </ClInclude>
+    <ClInclude Include="Identifiable.h">
+      <Filter>Header Files\Utility\Identification</Filter>
     </ClInclude>
     <ClInclude Include="WorldLoader.h">
+      <Filter>Header Files\Utility\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader.h">
+      <Filter>Header Files\Utility\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="InitialisationParser.h">
+      <Filter>Header Files\Utility\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Header Files\Utility\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Packetable.h">
+      <Filter>Header Files\Utility\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Endpoint.h">
+      <Filter>Header Files\Utility\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Priority.h">
+      <Filter>Header Files\Utility\Intelligence</Filter>
+    </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>Header Files\Utility\Intelligence</Filter>
+    </ClInclude>
+    <ClInclude Include="NHException.h">
+      <Filter>Header Files\Utility\Error</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsErrorCallback.h">
+      <Filter>Header Files\Utility\Error</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaBind.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
@@ -471,12 +501,6 @@
     </ClCompile>
     <ClCompile Include="PhysicalComponent.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsErrorCallback.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="NHException.cpp">
-      <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="DataManager.cpp">
       <Filter>Source Files\Managers</Filter>
@@ -628,9 +652,6 @@
     <ClCompile Include="Crowd\Recast\RecastRegion.cpp">
       <Filter>Source Files\Utility\3rd Party\Crowd</Filter>
     </ClCompile>
-    <ClCompile Include="Packet.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="QueryComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -697,9 +718,6 @@
     <ClCompile Include="Apparel.cpp">
       <Filter>Source Files\World\Scene\Item</Filter>
     </ClCompile>
-    <ClCompile Include="SceneLoader.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Source Files\World\Scene\Effect</Filter>
     </ClCompile>
@@ -710,9 +728,6 @@
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Identifiable.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Packetable.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Interface.cpp">
@@ -742,9 +757,6 @@
     <ClCompile Include="CursorScreen.cpp">
       <Filter>Source Files\Interface\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="InitialisationParser.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="GraphicsManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -772,8 +784,26 @@
     <ClCompile Include="Flock.cpp">
       <Filter>Source Files\World\Scene\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="InitialisationParser.cpp">
+      <Filter>Source Files\Utility\Loaders</Filter>
+    </ClCompile>
     <ClCompile Include="WorldLoader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneLoader.cpp">
+      <Filter>Source Files\Utility\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="NHException.cpp">
+      <Filter>Source Files\Utility\Error</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsErrorCallback.cpp">
+      <Filter>Source Files\Utility\Error</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Source Files\Utility\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Packetable.cpp">
+      <Filter>Source Files\Utility\Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -115,7 +115,7 @@ void SceneLoader::load(std::string filename, Scene* scene)
       int id = boost::lexical_cast<int>(portalNode->first_attribute(ID_STRING)->value());
       int targetSceneID = boost::lexical_cast<int>(portalNode->first_attribute(TARGET_SCENE_ID_STRING)->value());
       int targetPortalID = boost::lexical_cast<int>(portalNode->first_attribute(TARGET_PORTAL_ID_STRING)->value());
-      scene->addPortal(id, getXMLPosition(portalNode), getXMLVector(portalNode, LOOK_AT_X_STRING, LOOK_AT_Y_STRING, LOOK_AT_Z_STRING), Id<Scene>(targetSceneID), Id<Portal>(targetPortalID));
+      scene->addPortal(id, getXMLPosition(portalNode), getXMLVector(portalNode, LOOK_AT_X_STRING, LOOK_AT_Y_STRING, LOOK_AT_Z_STRING), Id<Scene>(targetSceneID), Id<Portal>(targetPortalID), Id<Portal>(id));
       portalNode = portalNode->next_sibling(PORTAL_STRING);//"portal");
     }
 

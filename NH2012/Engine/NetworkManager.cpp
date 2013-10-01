@@ -20,6 +20,11 @@ NetworkManager::~NetworkManager(void)
 {
 }
 
+void NetworkManager::connect(std::string address)
+{
+  
+}
+
 void NetworkManager::setIsAuthority(bool authority)
 {
   this->authority = authority;

@@ -123,7 +123,7 @@ bool Game::frameRenderingQueued(const Ogre::FrameEvent& evt)
 bool Game::keyPressed(const OIS::KeyEvent &arg)
 {
   if(arg.key == OIS::KC_ESCAPE) done = true;//temp fast exit
-  if(arg.key == OIS::KC_F1) ;
+  //if(arg.key == OIS::KC_F1) ;
 
   userInterface->keyPressed(arg);
   if(userInterface->capturedInput()) return true;

@@ -45,6 +45,7 @@ private:
   std::string command;//Current console command.
   std::vector<std::string> history;//The command execution history.
   int historyIndex;
+  int cursorIndex;
 
   bool keyIsDown;
   bool hasDoneFirstHold;//has only done the initial key press and no repeats
@@ -60,9 +61,16 @@ private:
   void update();//Updates the console display.  
   void up();//up pressed
   void down();//down pressed
+  void left();
+  void right();
+  void tab();
+  void del();
 
   void display(std::string comment);//displays a line of text
   void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
   void error(std::string comment);//displays an error on the console
+
+  void addCommandText(int index, std::string text);
+  void removeCommandText(int index, int count);
 };
 

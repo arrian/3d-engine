@@ -19,6 +19,18 @@
 
 struct ArchitectureDesc
 {
+  ArchitectureDesc()
+    : name(""),
+      mesh(""),
+      id(0),
+      friction(0.2f),
+      restitution(0.5f),
+      isNavigable(true),
+      isPhysical(true),
+      isStatic(true)
+  {
+  }
+
   ArchitectureDesc(int id, std::string name, std::string mesh)
     : name(name),
       mesh(mesh),
@@ -60,6 +72,20 @@ struct ItemDesc
   {
   }
 
+  ItemDesc()
+    : name(""),
+      mesh(""),
+      simplifiedMesh(""),
+      dynamicFriction(0.7f),
+      staticFriction(0.7f),
+      restitution(0.5f),
+      density(0.1f),
+      id(0),
+      isDynamic(true),
+      isPhysical(true)
+  {
+  }
+
   std::string mesh;
   std::string simplifiedMesh;//mesh suitable for collison
   std::string name;
@@ -88,6 +114,17 @@ struct CreatureDesc
   {
   }
 
+  CreatureDesc()
+    : name(""),
+      mesh(""),
+      height(1.75f),
+      speed(1.0f),
+      health(100.0f),
+      id(0),
+      gravity(0,0,0)
+  {
+  }
+
   std::string mesh;
   std::string name;
 
@@ -105,6 +142,20 @@ struct SceneDesc
     : name(name),
       file(file),
       id(id),
+      ambientLight(0.1f,0.1f,0.1f),
+      shadowColour(1.0f,1.0f,1.0f),
+      gravity(GRAVITY),
+      north(0.0f, 0.0f, 1.0f),
+      fogStart(100.0f),
+      fogEnd(200.0f),
+      fogColour(0.5f,0.5f,0.5f)
+  {
+  }
+
+  SceneDesc()
+    : name(""),
+      file(""),
+      id(0),
       ambientLight(0.1f,0.1f,0.1f),
       shadowColour(1.0f,1.0f,1.0f),
       gravity(GRAVITY),
@@ -138,6 +189,13 @@ struct SoundDesc
   {
   }
 
+  SoundDesc()
+    : name(""),
+      file(""),
+      id(0)
+  {
+  }
+
   std::string file;
   std::string name;
 
@@ -168,6 +226,13 @@ struct EmitterDesc
   {
   }
 
+  EmitterDesc()
+    : id(0),
+      name(""),
+      file("")
+  {
+  }
+
   int id;
   std::string name;
   std::string file;
@@ -179,6 +244,13 @@ struct LightDesc
     : id(id),
       name(name),
       file(file)
+  {
+  }
+
+  LightDesc()
+    : id(0),
+      name(""),
+      file("")
   {
   }
 
@@ -198,6 +270,13 @@ struct SpriteDesc
   {
   }
 
+  SpriteDesc()
+    : id(0),
+      name(""),
+      file("")
+  {
+  }
+
   int id;
   std::string name;
   std::string file;
@@ -209,6 +288,13 @@ struct AffectorDesc
     : id(id),
       name(name),
       script(script)
+  {
+  }
+
+  AffectorDesc()
+    : id(0),
+      name(""),
+      script("")
   {
   }
 
@@ -226,6 +312,13 @@ struct PortalDesc
   {
   }
 
+  PortalDesc()
+    : id(0),
+      name(""),
+      file("")
+  {
+  }
+
   int id;
   std::string name;
   std::string file;
@@ -237,6 +330,13 @@ struct InteractiveDesc
     : id(id),
       name(name),
       script(script)
+  {
+  }
+
+  InteractiveDesc()
+    : id(0),
+      name(""),
+      script("")
   {
   }
 
@@ -280,7 +380,13 @@ public:
     Container<Desc>* container = getContainer<Desc>();
     if(!container) throw NHException("the specified description type does not exist");
     Desc* desc = container->get(Id<Desc>(id));
-    if(!desc) throw NHException("the specified description could not be found");
+    if(!desc)
+    {
+      //std::stringstream ss;
+      std::cout << "the description " << Id<Desc>(id).getName() << " could not be found" << std::endl;
+      return Desc();
+      //throw NHException(ss.str());
+    }
     return *desc;
   }
 
@@ -295,6 +401,7 @@ private:
   Container<EmitterDesc> emitters;
   Container<SpriteDesc> sprites;
   Container<PlayerDesc> players;
+  Container<PortalDesc> portals;
   Container<SceneDesc> scenes;
   Container<SoundDesc> sounds;
   Container<LightDesc> lights;
@@ -309,6 +416,7 @@ private:
     if(emitters.isType<Desc>())     return (Container<Desc>*)&emitters;
     if(sprites.isType<Desc>())      return (Container<Desc>*)&sprites;
     if(players.isType<Desc>())      return (Container<Desc>*)&players;
+    if(portals.isType<Desc>())      return (Container<Desc>*)&portals;
     if(scenes.isType<Desc>())       return (Container<Desc>*)&scenes;
     if(sounds.isType<Desc>())       return (Container<Desc>*)&sounds;
     if(lights.isType<Desc>())       return (Container<Desc>*)&lights;

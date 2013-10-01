@@ -2,8 +2,8 @@
 #ID,Name,Filename
 
 [Default]
-0,Cave,cave.scene
-1,Generated Demo,generated_demo.scene
-2,Brutalist,brutalist.scene
-3,Theatre Detail,theatre_detail.scene
-4,Theatre,theatre.scene
+1,Cave,cave.scene
+2,Generated Demo,generated_demo.scene
+3,Brutalist,brutalist.scene
+4,Theatre Detail,theatre_detail.scene
+5,Theatre,theatre.scene
