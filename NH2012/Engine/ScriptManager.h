@@ -6,8 +6,15 @@
 #include <string>
 #include <map>
 
+extern "C"
+{
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
 class World;
+class ConsoleScreen;
 
 typedef std::vector<std::string> Options;
 
@@ -83,13 +90,19 @@ public:
 
   void display(std::string comment);//displays a line of text
   void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section
+  int display(lua_State* state);//lua print
   void addOutputTarget(OutputCallback* target);
+
+  void setConsole(ConsoleScreen* console);
 
 private:
   World* world;
   bool done;
   std::vector<OutputCallback*> outputs;
   std::map<std::string, Command<ScriptManager>*> commands;//list of all possible commands
+
+  lua_State* state;
+  void initialiseLua();
 
   bool stringToBool(std::string string);
   void split(const std::string &s, char delim, std::vector<std::string> &elems);//Tokenises a string by the given delimiter.
@@ -100,31 +113,14 @@ private:
   void help                      (Options);
   void exit                      (Options);
   void screenshot                (Options);
-  void setPhysicsEnabled         (Options);
   void setCameraFree             (Options);
   void setFullscreen             (Options);
   void setWindowed               (Options);
-  void setPlayerScene            (Options);
-  void setSceneAmbientLight      (Options);
-  void setPlayerPosition         (Options);
   void setPlayerItemGenerationID (Options);
-  void getItemData               (Options);
-  void getCreatureData           (Options);
-  void getArchitectureData       (Options);
-  void getSoundData              (Options);
-  void getSceneData              (Options);
-  void getDataFiles              (Options);
   void getPhysicsInfo            (Options);
   void getGameInfo               (Options);
   void getSceneInfo              (Options);
   void getWorldInfo              (Options);
-  void getPlayerPosition         (Options);
-  void addItem                   (Options);
-  void addCreature               (Options);
-  void setSceneLoaded            (Options);
-  void setSceneDrawDebugNavMesh  (Options);
-  void setSceneShadowsEnabled    (Options);
-  void setSceneGravity           (Options);
   void reset                     (Options);
   
 };

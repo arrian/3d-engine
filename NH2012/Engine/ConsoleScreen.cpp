@@ -33,6 +33,7 @@ ConsoleScreen::ConsoleScreen(ScriptManager* scriptManager)
     previousKey(OIS::KC_UNASSIGNED)
 {
   scriptManager->addOutputTarget(this);
+  scriptManager->setConsole(this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -50,7 +51,6 @@ void ConsoleScreen::setScriptManager(ScriptManager* scriptManager)
 void ConsoleScreen::hasLayerChange()
 {
   view = layer->createMarkupText(9, 0, 0, "");
-
   update();
 }
 
@@ -126,12 +126,16 @@ void ConsoleScreen::keyPressed(const OIS::KeyEvent &arg)
   else if(arg.key == OIS::KC_5 && isShift) addCommandText(cursorIndex, "%%");//single percent used as escape sequence in gorilla markup
   else if(arg.key == OIS::KC_UP && isShift) displayOffset++;//show previous text
   else if(arg.key == OIS::KC_DOWN && isShift) displayOffset--;//show more recent text
+  else if(arg.key == OIS::KC_PGUP) displayOffset++;
+  else if(arg.key == OIS::KC_PGDOWN) displayOffset--;
   else if(arg.key == OIS::KC_UP) up();
   else if(arg.key == OIS::KC_DOWN) down();
   else if(arg.key == OIS::KC_LEFT) left();
   else if(arg.key == OIS::KC_RIGHT) right();
   else if(arg.key == OIS::KC_TAB) tab();
   else if(arg.key == OIS::KC_DELETE) del();
+  else if(arg.key == OIS::KC_HOME) cursorIndex = 0;
+  else if(arg.key == OIS::KC_END) cursorIndex = command.size();
   else 
   {
     try
@@ -167,10 +171,10 @@ void ConsoleScreen::enter()
   historyIndex = 0;
   history.push_back(command);
   lines.push_back("> " + command);
+  cursorIndex = 0;
 
   try
   {
-    if(command == "clear") clear();
     scriptManager->execute(command);
   }
   catch(NHException e)
@@ -249,31 +253,38 @@ void ConsoleScreen::update()
   }
 
   if(view) view->text(viewText);
+  
 }
 
 //-------------------------------------------------------------------------------------
 void ConsoleScreen::backspace()
 {
   removeCommandText(cursorIndex - 1, 1);
-  cursorIndex--;
+  if(cursorIndex > 0) cursorIndex--;
 }
 
 //-------------------------------------------------------------------------------------
 void ConsoleScreen::up()
 {
+  bool cursorAtEnd = (command.size() == cursorIndex);
   displayOffset = 0;
   if(historyIndex < history.size()) historyIndex++;
   if(historyIndex > 0) command = history[history.size() - historyIndex];
   else command = "";
+
+  if(cursorAtEnd || cursorIndex > command.size()) cursorIndex = command.size();
 }
 
 //-------------------------------------------------------------------------------------
 void ConsoleScreen::down()
 {
+  bool cursorAtEnd = (command.size() == cursorIndex);
   displayOffset = 0;
   if(historyIndex > 0) historyIndex--;
   if(historyIndex > 0) command = history[history.size() - historyIndex];
   else command = "";
+
+  if(cursorAtEnd || cursorIndex > command.size()) cursorIndex = command.size();
 }
 
 //-------------------------------------------------------------------------------------

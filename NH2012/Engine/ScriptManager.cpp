@@ -16,6 +16,8 @@
 #include "SceneGraphicsManager.h"
 #include "ScenePathfindManager.h"
 
+#include "ConsoleScreen.h"
+
 //Lua Bind
 #include <luabind/luabind.hpp>
 #include <luabind/function.hpp>
@@ -25,8 +27,14 @@
 ScriptManager::ScriptManager(void)
   : world(NULL),
     done(false),
-    outputs()
+    outputs(),
+    state(NULL)
 {
+  state = lua_open();
+  luaL_openlibs(state);
+  bindLua(state);
+
+  /*
   addCommand("help", "", "shows the help list", &ScriptManager::help);
   addCommand("about", "", "show game info", &ScriptManager::about);
   addCommand("reset", "", "resets the scene", &ScriptManager::reset);
@@ -57,7 +65,7 @@ ScriptManager::ScriptManager(void)
   addCommand("setSceneDrawDebugNavMesh", "(true | false)", "displays or hides the scene navigation mesh", &ScriptManager::setSceneDrawDebugNavMesh);
   addCommand("setSceneShadowsEnabled", "(true | false)", "shows or hides shadows", &ScriptManager::setSceneShadowsEnabled);
   addCommand("setSceneGravity", "x y z", "sets the scene gravity", &ScriptManager::setSceneGravity);
-
+  */
 }
 
 //-------------------------------------------------------------------------------------
@@ -84,71 +92,23 @@ bool ScriptManager::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void ScriptManager::execute(std::string command)
 {
-  //Testing Lua binding... TODO: remove
-  lua_State* state = lua_open();
-  luaL_openlibs(state);
-  bindLua(state);
-
-  luabind::globals(state)["world"] = world;
-
-  //Managers
-  luabind::globals(state)["control"] = world->getControlManager();
-  luabind::globals(state)["data"] = world->getDataManager();
-  luabind::globals(state)["graphics"] = world->getGraphicsManager();
-  luabind::globals(state)["network"] = world->getNetworkManager();
-  luabind::globals(state)["physics"] = world->getPhysicsManager();
-  luabind::globals(state)["script"] = world->getScriptManager();
-  luabind::globals(state)["sound"] = world->getSoundManager();
-  luabind::globals(state)["time"] = world->getTimeManager();
-
-  //TODO: these may change for each scene... need to update
-  luabind::globals(state)["player"] = world->getPlayer();
-
-
-
+  //Execute
   int initialStackSize = lua_gettop(state);
-
   const char* command_c = command.c_str();
   luaL_dostring(state, command_c);
-
   int finalStackSize = lua_gettop(state);
   
-  if(!lua_isnil(state, -1)) 
+ 
+  //Print result
+  for(int i = initialStackSize + 1; i <= finalStackSize; i++)
   {
-    std::string result = lua_tostring(state, -1);
-    display(result);
+    if(!lua_isnil(state, i)) 
+    {
+      std::string result = lua_tostring(state, i);
+      display(result);
+    }
+    lua_pop(state, 1);
   }
-  lua_pop(state, 1);
-
-  /*
-
-  std::vector<std::string> commandSet;
-  split(command, ';', commandSet);
-
-  if(commandSet.size() == 0) commandSet.push_back(command);//we were only given one command
-
-  for(std::vector<std::string>::iterator commandIter = commandSet.begin(); commandIter < commandSet.end(); ++commandIter)
-  {
-    Options elements;
-    split(*commandIter, ' ', elements);
-
-    if(elements.size() == 0) elements.push_back(*commandIter);//must be a one word command
-
-    if(commands.count(elements[0]) < 1) throw NHException("command not found");
-
-    try
-    {
-      commands.find(elements[0])->second->run(elements);
-    }
-    catch(boost::bad_lexical_cast e)//could not interpret the arguments given
-    {
-      throw NHException("bad arguments given");
-    }
-
-    
-    
-  
-  }*/
 }
 
 //-------------------------------------------------------------------------------------
@@ -171,6 +131,26 @@ void ScriptManager::split(const std::string &s, char delim, std::vector<std::str
 void ScriptManager::setWorld(World* world)
 {
   this->world = world;
+  initialiseLua();
+}
+
+//-------------------------------------------------------------------------------------
+void ScriptManager::initialiseLua()
+{
+  //Globals
+  luabind::globals(state)["world"] = world;
+  luabind::globals(state)["control"] = world->getControlManager();
+  luabind::globals(state)["data"] = world->getDataManager();
+  luabind::globals(state)["graphics"] = world->getGraphicsManager();
+  luabind::globals(state)["network"] = world->getNetworkManager();
+  luabind::globals(state)["physics"] = world->getPhysicsManager();
+  luabind::globals(state)["script"] = world->getScriptManager();
+  luabind::globals(state)["sound"] = world->getSoundManager();
+  luabind::globals(state)["time"] = world->getTimeManager();
+
+  //Redirect print
+  lua_pushcfunction(state, printLua);
+  lua_setglobal(state, "print");
 }
 
 //-------------------------------------------------------------------------------------
@@ -220,13 +200,6 @@ void ScriptManager::screenshot(Options argv)
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::setPhysicsEnabled(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  world->getPhysicsManager()->setEnabled(stringToBool(argv[1]));
-}
-
-//-------------------------------------------------------------------------------------
 void ScriptManager::setCameraFree(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
@@ -258,107 +231,10 @@ void ScriptManager::setWindowed(Options argv)
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::setPlayerScene(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  Id<Scene> sceneId(Id<Scene>(boost::lexical_cast<int>(argv[1])));
-  Scene* target = world->getScene(sceneId);
-  if(target) world->setPlayerScene(sceneId, target->getDefaultPortal()->getPosition(), target->getDefaultPortal()->getLookAt());
-  else throw NHException("no scene loaded with the given id");
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::setSceneAmbientLight(Options argv)
-{
-  if(argv.size() < 5) throw NHException("too few arguments");
-  Scene* target = world->getPlayer()->getScene();
-  if(target) target->getSceneGraphicsManager()->setAmbientLight(Ogre::ColourValue(boost::lexical_cast<float>(argv[1]), 
-    boost::lexical_cast<float>(argv[2]), 
-    boost::lexical_cast<float>(argv[3]), 
-    boost::lexical_cast<float>(argv[4])));
-  else throw NHException("player needs to be located within a scene");
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::setPlayerPosition(Options argv)
-{
-  if(argv.size() < 4) throw NHException("too few arguments");
-  Vector3 position = Vector3(Ogre::Real(boost::lexical_cast<float>(argv[1])), 
-  Ogre::Real(boost::lexical_cast<float>(argv[2])), 
-  Ogre::Real(boost::lexical_cast<float>(argv[3])));
-  world->getPlayer()->setPosition(position);
-}
-
-//-------------------------------------------------------------------------------------
 void ScriptManager::setPlayerItemGenerationID(Options argv)
 {
   if(argv.size() < 2) throw NHException("too few arguments");
   world->getPlayer()->setItemGenerationID(boost::lexical_cast<int>(argv[1]));
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::getItemData(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  ItemDesc desc(world->getDataManager()->get<ItemDesc>(boost::lexical_cast<int>(argv[1])));
-  display("name", desc.name);
-  display("mesh", desc.mesh);
-  display("simplified mesh", desc.simplifiedMesh);
-  display("dynamic friction", boost::lexical_cast<std::string>(desc.dynamicFriction));
-  display("static friction", boost::lexical_cast<std::string>(desc.staticFriction));
-  display("restitution", boost::lexical_cast<std::string>(desc.restitution));
-  display("density", boost::lexical_cast<std::string>(desc.density));
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::getCreatureData(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  CreatureDesc desc(world->getDataManager()->get<CreatureDesc>(boost::lexical_cast<int>(argv[1])));
-  display("name", desc.name);
-  display("mesh", desc.mesh);
-  display("health", boost::lexical_cast<std::string>(desc.health));
-  display("height", boost::lexical_cast<std::string>(desc.height));
-  display("speed", boost::lexical_cast<std::string>(desc.speed));
-
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::getArchitectureData(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  ArchitectureDesc desc(world->getDataManager()->get<ArchitectureDesc>(boost::lexical_cast<int>(argv[1])));
-  display("name", desc.name);
-  display("mesh", desc.mesh);
-  display("friction", boost::lexical_cast<std::string>(desc.friction));
-  display("restitution", boost::lexical_cast<std::string>(desc.restitution));
-
-}
-//-------------------------------------------------------------------------------------
-void ScriptManager::getSoundData(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  SoundDesc desc(world->getDataManager()->get<SoundDesc>(boost::lexical_cast<int>(argv[1])));
-  display("name", desc.name);
-  display("file", desc.file);
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::getSceneData(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  SceneDesc desc(world->getDataManager()->get<SceneDesc>(boost::lexical_cast<int>(argv[1])));
-  display("name", desc.name);
-  display("file", desc.file);
-  //add other attributes here
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::getDataFiles(Options argv)
-{
-  std::vector<std::string> files = world->getDataManager()->getLoadedDataFiles();
-
-  for(std::vector<std::string>::iterator iter = files.begin(); iter < files.end(); ++iter) display(*iter);
 }
 
 //-------------------------------------------------------------------------------------
@@ -421,91 +297,6 @@ void ScriptManager::getWorldInfo(Options argv)
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::getPlayerPosition(Options argv)
-{
-  Vector3 position = world->getPlayer()->getPosition();
-  display("x,y,z: ", "(" + boost::lexical_cast<std::string>(position.x) + "," 
-    + boost::lexical_cast<std::string>(position.y) + "," 
-    + boost::lexical_cast<std::string>(position.z) + ")");
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::addItem(Options argv)
-{
-  if(argv.size() < 3) throw NHException("too few arguments");
-  Scene* target = world->getPlayer()->getScene();
-  if(target)
-  {
-    int numberToAdd = 1;
-    if(argv.size() > 5) numberToAdd = boost::lexical_cast<int>(argv[5]);
-
-    Vector3 position;
-    if(argv.size() > 1 && argv[2] == "@player")//the user specified to add the item at the current location
-    {
-      position = world->getPlayer()->getPosition();
-      if(argv.size() > 2) numberToAdd = boost::lexical_cast<int>(argv[3]);
-    }
-    else position = Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
-      Ogre::Real(boost::lexical_cast<float>(argv[3])), 
-      Ogre::Real(boost::lexical_cast<float>(argv[4])));
-    int idNum = boost::lexical_cast<int>(argv[1]);
-    for(int i = 0; i < numberToAdd; i++) target->addItem(idNum, position);
-  }
-  else throw NHException("player needs to be located within a scene to add an item to it");
-}
-//-------------------------------------------------------------------------------------
-void ScriptManager::addCreature(Options argv)
-{
-  Scene* target = world->getPlayer()->getScene();
-  if(target)
-  {
-    Vector3 position = Vector3(Ogre::Real(boost::lexical_cast<float>(argv[2])), 
-                                           Ogre::Real(boost::lexical_cast<float>(argv[3])), 
-                                           Ogre::Real(boost::lexical_cast<float>(argv[4])));
-    int idNum = boost::lexical_cast<int>(argv[1]);
-    target->addCreature(idNum, position);
-  }
-  else throw NHException("player needs to be located within a scene to add a creature to it");
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::setSceneLoaded(Options argv)
-{
-  if(argv.size() < 3) throw NHException("too few arguments");
-  if(stringToBool(argv[2]))
-  {
-    if(world->loadScene(boost::lexical_cast<int>(argv[1]))) display("scene loaded");
-    else display("could not load the scene");
-  }
-  else
-  {
-    world->destroyScene(boost::lexical_cast<int>(argv[1]));
-    display("scene unloaded");
-  }
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::setSceneDrawDebugNavMesh(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  world->getPlayer()->getScene()->getScenePathfindManager()->setDrawNavigationMesh(stringToBool(argv[1]));
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::setSceneShadowsEnabled(Options argv)
-{
-  if(argv.size() < 2) throw NHException("too few arguments");
-  world->getPlayer()->getScene()->getSceneGraphicsManager()->setShadowsEnabled(stringToBool(argv[1]));
-}
-
-//-------------------------------------------------------------------------------------
-void ScriptManager::setSceneGravity(Options argv)
-{
-  if(argv.size() < 4) throw NHException("too few arguments");
-  world->getPlayer()->getScene()->getScenePhysicsManager()->setGravity(Vector3(boost::lexical_cast<float>(argv[1]), boost::lexical_cast<float>(argv[2]), boost::lexical_cast<float>(argv[3])));
-}
-
-//-------------------------------------------------------------------------------------
 void ScriptManager::reset(Options argv)
 {
   if(!world) throw NHException("no world found");
@@ -538,4 +329,18 @@ void ScriptManager::display(std::string highlight, std::string comment)
   }
 }
 
+//-------------------------------------------------------------------------------------
+int ScriptManager::display(lua_State* state)
+{
+  int i;
+  int nargs = lua_gettop(state);
+  for(i=1; i <= nargs; ++i) display(lua_tostring(state, i));
+  printf("\n");
+  return 0;
+}
 
+//-------------------------------------------------------------------------------------
+void ScriptManager::setConsole(ConsoleScreen* console)
+{
+  luabind::globals(state)["console"] = console;
+}

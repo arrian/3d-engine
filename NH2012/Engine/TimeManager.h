@@ -79,7 +79,7 @@ public:
 
   Date getDate();
   std::string getDateString();
-  std::string getMoonPhase();
+  std::string getMoonPhaseString();
   bool isFriday13();
   bool isBirthday();//currently set to 30th October
   bool isHalloween();

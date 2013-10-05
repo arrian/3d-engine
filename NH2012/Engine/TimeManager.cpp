@@ -43,7 +43,7 @@ std::string TimeManager::getDateString()
 }
 
 //-------------------------------------------------------------------------------------
-std::string TimeManager::getMoonPhase()
+std::string TimeManager::getMoonPhaseString()
 {
   return serialiseMoonPhase(getMoonPhase(Date()));
 }
