@@ -1,0 +1,14 @@
+material blue
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.0235294 0 1 1
+			diffuse 0.0235294 0 1 1
+			specular 0 0 0 1 10
+		}
+
+	}
+
+}

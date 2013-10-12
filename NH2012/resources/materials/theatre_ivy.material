@@ -1,0 +1,36 @@
+material Leaf1
+{
+	technique
+	{
+		pass
+		{
+      ambient 0 0 0
+			diffuse 1 1 1 
+			specular 1 0.8 0.8 30
+     
+      scene_blend alpha_blend
+     //alpha_rejection greater 50
+     depth_write off
+     
+			texture_unit
+			{
+				texture ivy_opacity.tga
+			}
+		}
+	}
+}
+
+material Branch
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.262745 0.219608 0.219608 1
+			diffuse 0.262745 0.219608 0.219608 1
+			specular 0 0 0 1 10
+		}
+
+	}
+
+}

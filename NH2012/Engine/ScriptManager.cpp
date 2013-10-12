@@ -71,16 +71,7 @@ ScriptManager::ScriptManager(void)
 //-------------------------------------------------------------------------------------
 ScriptManager::~ScriptManager(void)
 {
-  for(std::map<std::string, Command<ScriptManager>* >::iterator iter = commands.begin(); iter != commands.end(); ++iter)
-  {
-    delete iter->second;
-  }
-}
 
-//-------------------------------------------------------------------------------------
-void ScriptManager::addCommand(std::string name, std::string arguments, std::string help, void (ScriptManager::*run) (Options))
-{
-  commands.insert(std::pair<std::string, Command<ScriptManager>* >(name, new Command<ScriptManager>(arguments, help, run, this)));
 }
 
 //-------------------------------------------------------------------------------------
@@ -174,21 +165,7 @@ void ScriptManager::exit(Options argv)
 //-------------------------------------------------------------------------------------
 void ScriptManager::help(Options argv)
 {
-  if(argv.size() > 1)//only show specified command
-  {
-    for(unsigned int i = 1U; i < argv.size(); i++)
-    {
-      if(commands.count(argv[i]) > 0) display(argv[i], commands.find(argv[i])->second->help);
-      else throw NHException("command not found");
-    }
-  }
-  else//show all help
-  {
-    for(std::map<std::string, Command<ScriptManager>* >::iterator iter = commands.begin(); iter != commands.end(); ++iter)
-    {
-      display(iter->first + " " + iter->second->args, iter->second->help);
-    }
-  }
+
 }
 
 //-------------------------------------------------------------------------------------

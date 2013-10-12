@@ -1,0 +1,9 @@
+#Scenes
+#ID,Name,Filename
+
+[Default]
+1,Cave,cave.scene
+2,Generated Demo,generated_demo.scene
+3,Brutalist,brutalist.scene
+4,Theatre Detail,theatre_detail.scene
+5,Theatre,theatre.scene

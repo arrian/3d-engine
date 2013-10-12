@@ -99,14 +99,12 @@ private:
   World* world;
   bool done;
   std::vector<OutputCallback*> outputs;
-  std::map<std::string, Command<ScriptManager>*> commands;//list of all possible commands
 
   lua_State* state;
   void initialiseLua();
 
   bool stringToBool(std::string string);
   void split(const std::string &s, char delim, std::vector<std::string> &elems);//Tokenises a string by the given delimiter.
-  void addCommand(std::string name, std::string arguments, std::string help, void (ScriptManager::*run) (Options));
 
   //Set of executable commands
   void about                     (Options);

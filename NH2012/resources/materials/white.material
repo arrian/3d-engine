@@ -1,0 +1,5 @@
+material white : diffuse_template
+{
+    set_texture_alias ambient_tex white.bmp
+    set_texture_alias diffuse_tex white.bmp
+}

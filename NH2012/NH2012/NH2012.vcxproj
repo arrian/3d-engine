@@ -63,8 +63,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>obj\$(Configuration)\</IntDir>
-    <OutDir>bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -73,8 +73,8 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>obj\$(Configuration)\</IntDir>
-    <OutDir>bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -105,14 +105,15 @@
       <ProgramDatabaseFile>$(OutDir)/NH2012.pdb</ProgramDatabaseFile>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\Dev\Nethack2012\NH2012\Debug;$(OGRE_DEPS)\lib\debug;$(OGRE_HOME)\lib\debug;$(Boost_ROOT)\lib;C:\Dev\PhysX\Lib\win32;C:\Dev\PhysX\Samples\PxToolkit\lib\win32;C:\Dev\OgreHydrax\libhydrax-0.5.4\bin\Debug;C:\Dev\Lua\luabind\luabind-0.9.1\lib;C:\Dev\Lua\lua51;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OgreMain_d.lib;OgreTerrain_d.lib;OIS_d.lib;Engine.lib;PhysX3CHECKED_x86.lib;PhysX3CommonCHECKED_x86.lib;PhysX3CookingCHECKED_x86.lib;PhysX3CharacterKinematicCHECKED_x86.lib;PhysX3ExtensionsCHECKED.lib;PhysXVisualDebuggerSDKCHECKED.lib;PhysXProfileSDKCHECKED.lib;PxToolkitCHECKED.lib;fmodex_vc.lib;Hydrax.lib;libLuabind-gd-x86.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\Dev\Nethack2012\NH2012\bin\debug;$(OGRE_DEPS)\lib\debug;$(OGRE_HOME)\lib\debug;$(Boost_ROOT)\lib;C:\Dev\PhysX\Lib\win32;C:\Dev\PhysX\Samples\PxToolkit\lib\win32;C:\Dev\OgreHydrax\libhydrax-0.5.4\bin\Debug;C:\Dev\Lua\luabind\luabind-0.9.1\lib;C:\Dev\Lua\lua51;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OgreMain_d.lib;OgreTerrain_d.lib;OIS_d.lib;engine.lib;PhysX3CHECKED_x86.lib;PhysX3CommonCHECKED_x86.lib;PhysX3CookingCHECKED_x86.lib;PhysX3CharacterKinematicCHECKED_x86.lib;PhysX3ExtensionsCHECKED.lib;PhysXVisualDebuggerSDKCHECKED.lib;PhysXProfileSDKCHECKED.lib;PxToolkitCHECKED.lib;fmodex_vc.lib;Hydrax.lib;libLuabind-gd-x86.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>LIBCMT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Message>Copying game exe to samples bin directory ...</Message>
-      <Command>copy "$(OutDir)\$(TargetFileName)" "$(OGRE_HOME)\Bin\$(Configuration)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -172,12 +173,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\Dev\Nethack2012\NH2012\Release;$(OGRE_DEPS)\lib\release;$(OGRE_HOME)\lib\release;$(Boost_ROOT)\lib;C:\Dev\PhysX\Lib\win32;C:\Dev\PhysX\Samples\PxToolkit\lib\win32;C:\Dev\OgreHydrax\libhydrax-0.5.4\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;OIS.lib;Engine.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Cooking_x86.lib;PhysX3CharacterKinematic_x86.lib;PhysX3Extensions.lib;PhysXVisualDebuggerSDK.lib;PhysXProfileSDK.lib;PxToolkit.lib;fmodex_vc.lib;Hydrax.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\Dev\Nethack2012\NH2012\bin\release;$(OGRE_DEPS)\lib\release;$(OGRE_HOME)\lib\release;$(Boost_ROOT)\lib;C:\Dev\PhysX\Lib\win32;C:\Dev\PhysX\Samples\PxToolkit\lib\win32;C:\Dev\OgreHydrax\libhydrax-0.5.4\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;OIS.lib;engine.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Cooking_x86.lib;PhysX3CharacterKinematic_x86.lib;PhysX3Extensions.lib;PhysXVisualDebuggerSDK.lib;PhysXProfileSDK.lib;PxToolkit.lib;fmodex_vc.lib;Hydrax.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Message>Copying exe to samples bin directory ...</Message>
-      <Command>copy "$(OutDir)\$(TargetFileName)" "$(OGRE_HOME)\Bin\$(Configuration)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -223,26 +225,6 @@
     <ClCompile Include="src\Game.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Media\architecture.dat">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\Media\items.dat">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\Media\creatures.dat">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\Media\game.ini" />
-    <None Include="..\Media\scenes.dat">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\Media\sounds.dat">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="interactives.dat" />
-    <None Include="lights.dat" />
-    <None Include="particles.dat" />
-    <None Include="players.dat" />
     <None Include="res\NH2012.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,5 @@
 syntax: glob
-NH2012/Editor/Debug/
-NH2012/Engine/Debug/
-NH2012/Engine/Release/
-NH2012/NH2012/obj/
-NH2012/Server/Debug/
-NH2012/Server/Release/
+NH2012/resources/models/converter/xml/
+NH2012/resources/models/converter/Ogre Files/
+NH2012/resources/models/converter/Blend Files/
+NH2012/bin/obj/

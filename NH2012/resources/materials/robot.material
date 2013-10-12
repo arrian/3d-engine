@@ -1,0 +1,5 @@
+material robot : diffuse_template
+{
+    set_texture_alias ambient_tex r2skin.jpg
+    set_texture_alias diffuse_tex r2skin.jpg
+}

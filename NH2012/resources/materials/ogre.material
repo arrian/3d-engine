@@ -1,0 +1,5 @@
+material ogre : diffuse_template
+{
+    set_texture_alias ambient_tex GreenSkin.jpg
+    set_texture_alias diffuse_tex GreenSkin.jpg
+}

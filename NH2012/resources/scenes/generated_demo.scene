@@ -1,0 +1,34 @@
+<scene north="0" fog_start="100" fog_end="200" fog_colour="0.5,0.5,0.5" ambient_r="0.2" ambient_g="0.2" ambient_b="0.2" >
+  <portal id="0" target_scene_id="1" target_portal_id="0" tx="0" ty="4" tz="0" ltx="0" lty="0" ltz="0" />
+  <light tx="0" ty="0" tz="0" range="40" cast_shadows="0" ca="1" cr="1" cg="1" cb="1" type="point" />
+  
+  <architecture id="75" tx="0" ty="8" tz="0" />
+  <architecture id="95" tx="8" ty="8" tz="0" />
+  <architecture id="95" tx="16" ty="8" tz="0" />
+  <architecture id="79" tx="24" ty="8" tz="0" />
+  <architecture id="103" tx="32" ty="4" tz="0" />
+  <architecture id="103" tx="40" ty="0" tz="0" />
+  <architecture id="55" tx="48" ty="0" tz="0" />
+  <architecture id="47" tx="56" ty="0" tz="0" />
+  <architecture id="47" tx="64" ty="0" tz="0" />
+  <architecture id="51" tx="72" ty="0" tz="0" />
+  
+  <architecture id="95" tx="0" ty="8" tz="8" />
+  <architecture id="71" tx="8" ty="8" tz="8" />
+  <architecture id="71" tx="16" ty="8" tz="8" />
+  <architecture id="75" tx="24" ty="8" tz="8" />
+  <architecture id="47" tx="60" ty="0" tz="8" />
+  <architecture id="75" tx="70" ty="0" tz="8" />
+  <architecture id="75" tx="80" ty="0" tz="8" />
+  <architecture id="105" tx="90" ty="0" tz="8" />
+  
+  <architecture id="75" tx="0" ty="8" tz="16" />
+  <architecture id="95" tx="8" ty="8" tz="16" />
+  <architecture id="95" tx="16" ty="8" tz="16" />
+  <architecture id="75" tx="24" ty="8" tz="16" />
+  <architecture id="47" tx="60" ty="0" tz="16" />
+  <architecture id="95" tx="70" ty="0" tz="16" />
+  <architecture id="95" tx="80" ty="0" tz="16" />
+  <architecture id="104" tx="90" ty="0" tz="16" />
+  
+</scene>
