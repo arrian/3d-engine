@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9E7BDDAA-BD83-4340-B01B-F81B38B4EB1D}</ProjectGuid>
-    <RootNamespace>NH2012</RootNamespace>
+    <RootNamespace>Game</RootNamespace>
     <ProjectName>Game</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -111,7 +111,8 @@
       <IgnoreSpecificDefaultLibraries>LIBCMT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Message>Copying game exe to samples bin directory ...</Message>
+      <Message>
+      </Message>
       <Command>
       </Command>
     </PostBuildEvent>
@@ -177,7 +178,8 @@
       <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;OIS.lib;engine.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Cooking_x86.lib;PhysX3CharacterKinematic_x86.lib;PhysX3Extensions.lib;PhysXVisualDebuggerSDK.lib;PhysXProfileSDK.lib;PxToolkit.lib;fmodex_vc.lib;Hydrax.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Message>Copying exe to samples bin directory ...</Message>
+      <Message>
+      </Message>
       <Command>
       </Command>
     </PostBuildEvent>

@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game", "NH2012\NH2012.vcxproj", "{9E7BDDAA-BD83-4340-B01B-F81B38B4EB1D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "game\game.vcxproj", "{9E7BDDAA-BD83-4340-B01B-F81B38B4EB1D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{73AA2BBC-22D7-44A1-9222-A1BD72F36105} = {73AA2BBC-22D7-44A1-9222-A1BD72F36105}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "Engine\Engine.vcxproj", "{73AA2BBC-22D7-44A1-9222-A1BD72F36105}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "engine\Engine.vcxproj", "{73AA2BBC-22D7-44A1-9222-A1BD72F36105}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "editor", "Editor\Editor.vcxproj", "{F6C89989-98A2-4B9E-A48F-04DB85404ECA}"
 	ProjectSection(ProjectDependencies) = postProject
