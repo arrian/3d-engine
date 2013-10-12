@@ -22,6 +22,19 @@
 #include "extensions/PxDefaultAllocator.h"
 #include "cooking/PxCooking.h"
 
+struct ConvexMeshRef
+{
+  physx::PxConvexMesh* mesh;
+  int count;
+};
+
+struct TriangleMeshRef
+{
+  physx::PxTriangleMesh* mesh;
+  int count;
+};
+
+
 /**
  * Handles the physics cooking.
  */
@@ -73,8 +86,11 @@ public:
   virtual ~FabricationManager(void);
 
   physx::PxConvexMesh* createConvexMesh(const Ogre::MeshPtr& mesh);//Ogre::Entity* e);
-  physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
-  physx::PxTriangleMesh* createTriangleMeshV2(Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);
+  //physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
+  physx::PxTriangleMesh* createTriangleMeshV2(Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);//TODO: change name to get triangle mesh
+
+  void releaseConvexMesh(const Ogre::MeshPtr& mesh);
+  void releaseTriangleMesh(Ogre::Entity* e);
 
   void setDefaultPhysicsMaterial(physx::PxMaterial* defaultPhysicsMaterial);
   void setCooking(physx::PxCooking* cooking);
@@ -84,6 +100,7 @@ private:
   physx::PxCooking* cooking;
   physx::PxPhysics* physics;
 
-  std::map<std::string, physx::PxConvexMesh*> convexHistory;
+  std::map<std::string, ConvexMeshRef> convexHistory;
+  std::map<std::string, TriangleMeshRef> triangleHistory;
 };
 

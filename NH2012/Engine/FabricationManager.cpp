@@ -8,7 +8,8 @@ FabricationManager::FabricationManager()
   : material(NULL),
     cooking(NULL),
     physics(NULL),
-    convexHistory()
+    convexHistory(),
+    triangleHistory()
 {
 }
 
@@ -18,10 +19,40 @@ FabricationManager::~FabricationManager(void)
 }
 
 //-------------------------------------------------------------------------------------
+void FabricationManager::releaseConvexMesh(const Ogre::MeshPtr& mesh)
+{
+  if(convexHistory.count(mesh->getName()) > 0) 
+  {
+    ConvexMeshRef* ref = &convexHistory.find(mesh->getName())->second;
+    ref->count--;
+
+    if(ref->count == 0) ref->mesh->release();
+  }
+}
+
+//-------------------------------------------------------------------------------------
+void FabricationManager::releaseTriangleMesh(Ogre::Entity* e)
+{
+  Ogre::MeshPtr mesh = e->getMesh();
+
+  if(triangleHistory.count(mesh->getName()) > 0) 
+  {
+    TriangleMeshRef* ref = &triangleHistory.find(mesh->getName())->second;
+    ref->count--;
+
+    if(ref->count == 0) ref->mesh->release();
+  }
+}
+
+//-------------------------------------------------------------------------------------
 physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& mesh)
 {
-  if(convexHistory.count(mesh->getName()) > 0) return convexHistory.find(mesh->getName())->second;//if the required convex mesh has already been created then return a pointer to it
-
+  if(convexHistory.count(mesh->getName()) > 0) 
+  {
+    ConvexMeshRef* ref = &convexHistory.find(mesh->getName())->second;
+    ref->count++;
+    return ref->mesh;//if the required convex mesh has already been created then return a pointer to it
+  }
 
   unsigned int mVertexCount = 0; 
   unsigned int mIndexCount  = 0; 
@@ -129,8 +160,12 @@ physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& m
   PxToolkit::MemoryOutputStream buf;
   bool status = cooking->cookConvexMesh(convexDesc, buf);
   physx::PxConvexMesh* convexMesh = physics->createConvexMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));
+  
+  ConvexMeshRef ref;
+  ref.count = 1;
+  ref.mesh = convexMesh;
 
-  convexHistory.insert(std::pair<std::string, physx::PxConvexMesh*>(mesh->getName(), convexMesh));//record that a convex mesh has been cooked for the given mesh
+  convexHistory.insert(std::pair<std::string, ConvexMeshRef>(mesh->getName(), ref));//record that a convex mesh has been cooked for the given mesh
 
   delete []vertices;
   delete []indices;
@@ -140,6 +175,7 @@ physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& m
 }
 
 //-------------------------------------------------------------------------------------
+/*
 physx::PxTriangleMesh* FabricationManager::createTriangleMesh(Ogre::Entity* e) 
 {
 
@@ -260,12 +296,21 @@ physx::PxTriangleMesh* FabricationManager::createTriangleMesh(Ogre::Entity* e)
   delete []mMeshVertices;
   delete []mMeshFaces;
   return triangleMesh;
-}
+}*/
 
 //-------------------------------------------------------------------------------------
 physx::PxTriangleMesh* FabricationManager::createTriangleMeshV2(Ogre::Entity* e, Params &params, AddedMaterials *out_addedMaterials)
 {
+
   Ogre::MeshPtr mesh = e->getMesh();//extracting mesh pointer from entity
+
+  if(triangleHistory.count(mesh->getName()) > 0) 
+  {
+    TriangleMeshRef* ref = &triangleHistory.find(mesh->getName())->second;
+    ref->count++;
+    return ref->mesh;//if the required convex mesh has already been created then return a pointer to it
+  }
+
 
   //getting the mesh info
   MeshInfo meshInfo;
@@ -341,6 +386,12 @@ physx::PxTriangleMesh* FabricationManager::createTriangleMeshV2(Ogre::Entity* e,
   bool success = cooking->cookTriangleMesh(desc, buf);
   if(!success) return 0;//something went wrong with the cooking
   physx::PxTriangleMesh* triangleMesh = physics->createTriangleMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));
+
+  TriangleMeshRef ref;
+  ref.count = 1;
+  ref.mesh = triangleMesh;
+
+  triangleHistory.insert(std::pair<std::string, TriangleMeshRef>(mesh->getName(), ref));//record that a triangle mesh has been cooked for the given mesh
 
   delete[] fVertices;
   delete[] iIndices;

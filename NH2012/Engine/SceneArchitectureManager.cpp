@@ -18,7 +18,8 @@ SceneArchitectureManager::SceneArchitectureManager(Scene* scene)
     geometry(scene->getSceneGraphicsManager()->createStaticGeometry("architecture")),//potentially unsafe operation... ensure all objects used by getGraphicsManager have been constructed
     nodes(),
     actors(),
-    statics(),
+    shapes(),
+    entities(),
     isBuilt(false)
 {
   //geometry->setCastShadows(true);//produces no shadows at all?
@@ -27,8 +28,20 @@ SceneArchitectureManager::SceneArchitectureManager(Scene* scene)
 //-------------------------------------------------------------------------------------
 SceneArchitectureManager::~SceneArchitectureManager(void)
 {
+  for(std::vector<Ogre::Entity*>::iterator it = entities.begin(); it != entities.end(); ++it) 
+  {
+    scene->getWorld()->getPhysicsManager()->getFabrication()->releaseTriangleMesh(*it);
+  }
+
+  for(std::vector<physx::PxShape*>::iterator it = shapes.begin(); it != shapes.end(); ++it) 
+  {
+    if(*it) (*it)->release();
+    (*it) = NULL;
+  }
+
   for(std::vector<physx::PxRigidStatic*>::iterator it = actors.begin(); it != actors.end(); ++it) 
   {
+    
     if(*it) (*it)->release();
     (*it) = NULL;
   }
@@ -54,14 +67,7 @@ void SceneArchitectureManager::addStaticTrimesh(std::string meshName, float rest
 
   physx::PxTriangleMesh* mesh = NULL;
 
-  if(statics.count(meshName) > 0) mesh = statics.find(meshName)->second;
-  else
-  {
-    std::cout << "Building " << meshName << "... ";
-    mesh = scene->getWorld()->getPhysicsManager()->getFabrication()->createTriangleMeshV2(entity);
-    statics.insert(std::pair<Ogre::String,physx::PxTriangleMesh*>(meshName, mesh));
-    std::cout << "done." << std::endl;
-  }
+  mesh = scene->getWorld()->getPhysicsManager()->getFabrication()->createTriangleMeshV2(entity);
 
   if(!mesh) throw NHException("could not create architecture triangle mesh");
 
@@ -76,6 +82,8 @@ void SceneArchitectureManager::addStaticTrimesh(std::string meshName, float rest
 
   scene->getScenePhysicsManager()->addActor(*actor);
 
+  entities.push_back(entity);
+  shapes.push_back(shape);
   actors.push_back(actor);
   instanceNumber++;
 

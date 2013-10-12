@@ -29,6 +29,7 @@ void Item::hasSceneChange()
   {
     if(node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
     if(entity) oldScene->getSceneGraphicsManager()->destroyEntity(entity);
+    if(simplifiedEntity) oldScene->getWorld()->getPhysicsManager()->getFabrication()->releaseConvexMesh(simplifiedEntity->getMesh());
   }
 
   node = NULL;

@@ -46,8 +46,9 @@ private:
 
   Container<Architecture> architecture;
   std::vector<Ogre::SceneNode*> nodes;
-  std::map<Ogre::String, physx::PxTriangleMesh*> statics;
   std::vector<physx::PxRigidStatic*> actors;
+  std::vector<physx::PxShape*> shapes;
+  std::vector<Ogre::Entity*> entities;
 
   Ogre::StaticGeometry* geometry;
 
