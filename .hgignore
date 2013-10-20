@@ -1,5 +1,5 @@
 syntax: glob
-NH2012/resources/models/converter/xml/
-NH2012/resources/models/converter/Ogre Files/
-NH2012/resources/models/converter/Blend Files/
-NH2012/bin/obj/
+resources/models/converter/xml/
+resources/models/converter/Ogre Files/
+resources/models/converter/Blend Files/
+bin/obj/
