@@ -294,13 +294,13 @@
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(SolutionDir)bin\obj\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)bin\obj\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(SolutionDir)bin\obj\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)bin\obj\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -310,6 +310,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WIN32_WINNT=0x0501;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Dev\Nethack2012\NH2012\Engine;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;C:\Dev\PhysX\Samples\PxToolkit\include;C:\Dev\Ogre3D\Components\Terrain\include;C:\Dev\OgreHydrax\libhydrax-0.5.4\include;C:\Dev\Lua\luabind\luabind-0.9.1;C:\Dev\Lua\lua51\include;C:\Dev\Lua\luajit\LuaJIT-2.0.2\src;./;C:\Dev\Nethack2012\NH2012\Engine;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;C:\Dev\PhysX\Samples\PxToolkit\include;C:\Dev\Ogre3D\Components\Terrain\include;C:\Dev\OgreHydrax\libhydrax-0.5.4\include;C:\Dev\Lua\luabind\luabind-0.9.1;C:\Dev\Lua\lua51\include;C:\Dev\Lua\luajit\LuaJIT-2.0.2\src;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -340,6 +341,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Dev\Nethack2012\NH2012\Engine;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;C:\Dev\PhysX\Samples\PxToolkit\include;C:\Dev\Ogre3D\Components\Terrain\include;C:\Dev\OgreHydrax\libhydrax-0.5.4\include;C:\Dev\Lua\luabind\luabind-0.9.1;C:\Dev\Lua\lua51\include;C:\Dev\Lua\luajit\LuaJIT-2.0.2\src;./;C:\Dev\Nethack2012\NH2012\NH2012Lib;include;$(OGRE_HOME)\include;$(OGRE_SDK)\include;$(OGRE_DEPS)\include\OIS;$(OGRE_SDK)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(Boost_ROOT);C:\Dev\Ogre3D\Samples\Common\include;C:\Dev\PhysX\Include;C:\Dev\PhysX\Samples\PxToolkit\include;C:\Dev\Ogre3D\Components\Terrain\include;C:\Dev\OgreHydrax\libhydrax-0.5.4\include;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

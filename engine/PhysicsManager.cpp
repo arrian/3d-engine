@@ -4,6 +4,7 @@
 
 #include "NHException.h"
 
+
 PhysicsManager::PhysicsManager(void)
   : errorCallback(),
     allocatorCallback(),
@@ -24,21 +25,23 @@ PhysicsManager::PhysicsManager(void)
 #ifdef _DEBUG //error level
   physicsFoundation->setErrorLevel(physx::PxErrorCode::eMASK_ALL);
 #else
-  physicsFoundation->setErrorLevel(physx::PxErrorCode::eABORT | physx::PxErrorCode::eINTERNAL_ERROR 
-                                  |physx::PxErrorCode::eINVALID_OPERATION | physx::PxErrorCode::eINVALID_PARAMETER 
-                                  |physx::PxErrorCode::eOUT_OF_MEMORY);
+  //physicsFoundation->setErrorLevel(physx::PxErrorCode::eABORT | physx::PxErrorCode::eINTERNAL_ERROR 
+  //                                |physx::PxErrorCode::eINVALID_OPERATION | physx::PxErrorCode::eINVALID_PARAMETER 
+  //                                |physx::PxErrorCode::eOUT_OF_MEMORY);
 #endif
 
 #ifdef _DEBUG //profile zone manager
   bool recordMemoryAllocations = true;
   profileZoneManager = &physx::PxProfileZoneManager::createProfileZoneManager(physicsFoundation);
   if(!profileZoneManager) throw NHException("physics profile zone manager could not be created");
+  physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations, profileZoneManager);
 #else
   bool recordMemoryAllocations = false;
-  profileZoneManager = NULL;
+  //profileZoneManager = NULL;
+  physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations);
 #endif
 
-  physicsWorld = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale(), recordMemoryAllocations, profileZoneManager);
+  
   if(!physicsWorld) throw NHException("physics world could not be created");
 
   PxInitExtensions(*physicsWorld);
