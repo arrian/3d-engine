@@ -91,11 +91,11 @@ void DataManager::addData(std::string file)
     else file = "error.mesh";
 
     //Need to extend for other data options
-    if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(Id<ArchitectureDesc>(id), std::shared_ptr<ArchitectureDesc>(new ArchitectureDesc(id, name, file)));
-    else if(type == CREATURES_IDENTIFIER) creatures.insert(Id<CreatureDesc>(id), std::shared_ptr<CreatureDesc>(new CreatureDesc(id, name, file)));
-    else if(type == ITEMS_IDENTIFIER) items.insert(Id<ItemDesc>(id), std::shared_ptr<ItemDesc>(new ItemDesc(id, name, file, file)));
-    else if(type == SCENES_IDENTIFIER) scenes.insert(Id<SceneDesc>(id), std::shared_ptr<SceneDesc>(new SceneDesc(id, name, file)));
-    else if(type == SOUNDS_IDENTIFIER) sounds.insert(Id<SoundDesc>(id), std::shared_ptr<SoundDesc>(new SoundDesc(id, name, file)));
+    if(type == ARCHITECTURE_IDENTIFIER) architecture.insert(Id<ArchitectureDesc>(id), boost::shared_ptr<ArchitectureDesc>(new ArchitectureDesc(id, name, file)));
+    else if(type == CREATURES_IDENTIFIER) creatures.insert(Id<CreatureDesc>(id), boost::shared_ptr<CreatureDesc>(new CreatureDesc(id, name, file)));
+    else if(type == ITEMS_IDENTIFIER) items.insert(Id<ItemDesc>(id), boost::shared_ptr<ItemDesc>(new ItemDesc(id, name, file, file)));
+    else if(type == SCENES_IDENTIFIER) scenes.insert(Id<SceneDesc>(id), boost::shared_ptr<SceneDesc>(new SceneDesc(id, name, file)));
+    else if(type == SOUNDS_IDENTIFIER) sounds.insert(Id<SoundDesc>(id), boost::shared_ptr<SoundDesc>(new SoundDesc(id, name, file)));
   }
 }
 

@@ -18,6 +18,16 @@
 #include <Interface.h>
 #include <World.h>
 
+#include <boost/shared_ptr.hpp>
+
+
+//Dump memory leaks to standard out
+#ifdef _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
 
 class Game : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {
@@ -28,10 +38,10 @@ public:
 
 protected:
   bool done;
-  World* world;
-  Interface* userInterface;
+  boost::shared_ptr<World> world;
+  boost::shared_ptr<Interface> userInterface;
+  boost::shared_ptr<Ogre::Root> root;
 
-  Ogre::Root *root;
   Ogre::RenderWindow* window;
 
   OIS::InputManager* inputManager;

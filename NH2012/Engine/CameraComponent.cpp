@@ -32,6 +32,7 @@ CameraComponent::CameraComponent(bool enableSSAO, bool enableBloom)
 CameraComponent::~CameraComponent(void)
 {
   //delete ssao;
+  boost::shared_ptr<Scene> scene = getScene();
   if(scene) scene->getSceneGraphicsManager()->destroyCamera(camera);
 }
 
@@ -95,7 +96,10 @@ Ogre::RenderWindow* CameraComponent::getWindow()
 //-------------------------------------------------------------------------------------
 void CameraComponent::hasNodeChange()
 {
-  if(oldScene == scene)
+  boost::shared_ptr<Scene> scene = getScene();
+  boost::shared_ptr<Scene> oldScene = getOldScene();
+
+  if(oldScene.get() == scene.get())
   {
     if(oldNode) oldNode->detachObject(camera);
   }

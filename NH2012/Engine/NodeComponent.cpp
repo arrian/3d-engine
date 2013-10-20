@@ -14,7 +14,7 @@ NodeComponent::~NodeComponent(void)
 }
 
 //-------------------------------------------------------------------------------------
-void NodeComponent::setNode(Scene* scene, Ogre::SceneNode* node)
+void NodeComponent::setNode(boost::shared_ptr<Scene> scene, Ogre::SceneNode* node)
 {
   setScene(scene);
 
@@ -27,7 +27,7 @@ void NodeComponent::setNode(Scene* scene, Ogre::SceneNode* node)
 //-------------------------------------------------------------------------------------
 void NodeComponent::removeNode()
 {
-  setNode(NULL, NULL);
+  setNode(boost::shared_ptr<Scene>(), NULL);
 }
 
 //-------------------------------------------------------------------------------------

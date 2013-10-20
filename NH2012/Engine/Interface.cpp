@@ -20,7 +20,7 @@ Interface::Interface(World* world)
 //-------------------------------------------------------------------------------------
 Interface::~Interface(void)
 {
-  delete overlay;
+  //delete overlay;//TODO: need to work out shared_ptr dependencies before this will work correctly!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
 //-------------------------------------------------------------------------------------

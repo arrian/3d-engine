@@ -2,6 +2,9 @@
 
 #include <vector>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
 #include <OgreString.h>
 #include "Vector3.h"
 #include <OgreSceneNode.h>
@@ -18,25 +21,42 @@ class Scene;
 class SceneArchitectureManager : public Identifiable
 {
 public:
-  SceneArchitectureManager(Scene* scene);
+  SceneArchitectureManager(boost::shared_ptr<Scene> scene);
   ~SceneArchitectureManager(void);
 
-  void add(Id<Architecture> instanceId, std::shared_ptr<Architecture> a) 
+  void add(Id<Architecture> instanceId, boost::shared_ptr<Architecture> a) 
   {
     architecture.insert(instanceId, a);
     add(a->description, a->position, a->quaternion, a->scale);
   }
 
-  std::shared_ptr<Architecture> remove(Id<Architecture> instanceId)
+  boost::shared_ptr<Architecture> remove(Id<Architecture> instanceId)
   {
     throw NHException("removing architecture not implemented");
-    return std::shared_ptr<Architecture>();
+    return boost::shared_ptr<Architecture>();
   }
 
   void build();
 
+  
+  boost::shared_ptr<Scene> getScene() 
+  {
+    try
+    {
+      return scene.lock();
+    }
+    catch(boost::bad_weak_ptr b)
+    {
+#ifdef _DEBUG
+      std::cout << "Could not get scene from scene architecture manager. Scene has expired." << std::endl;
+#endif
+    }
+    return boost::shared_ptr<Scene>();
+  }
+
+
 private:
-  Scene* scene;
+  boost::weak_ptr<Scene> scene;
 
   Ogre::SceneNode* rootNode;
 
@@ -48,7 +68,7 @@ private:
   std::vector<Ogre::SceneNode*> nodes;
   std::vector<physx::PxRigidStatic*> actors;
   std::vector<physx::PxShape*> shapes;
-  std::vector<Ogre::Entity*> entities;
+  std::vector<std::string> entities;
 
   Ogre::StaticGeometry* geometry;
 

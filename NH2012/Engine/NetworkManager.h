@@ -2,6 +2,9 @@
 
 #include <deque>
 
+#include <boost/weak_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include "Id.h"
 #include "Packet.h"
 #include "Container.h"
@@ -25,10 +28,25 @@ public:
   void setIsAuthority(bool authority);
   void setMaxConnections(int maxConnections);//max number of client connections
 
-  void setWorld(World* world) {this->world = world;}
+  void setWorld(boost::shared_ptr<World> world) {this->world = boost::weak_ptr<World>(world);}
+
+  boost::shared_ptr<World> getWorld() 
+  {
+    try
+    {
+      return world.lock();
+    }
+    catch(boost::bad_weak_ptr b)
+    {
+#ifdef _DEBUG
+      std::cout << "Could not get world from network manager. World has expired." << std::endl;
+#endif
+    }
+    return boost::shared_ptr<World>();
+  }
   
 protected:
-  World* world;
+  boost::weak_ptr<World> world;
   Container<Endpoint> endpoints;//the remote players
 
   void send();

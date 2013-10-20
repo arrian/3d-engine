@@ -32,22 +32,29 @@ void BoidComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void BoidComponent::hasNodeChange()
 {
+  boost::shared_ptr<Scene> oldScene = getOldScene();
   //Visual
   if(oldScene && entity) oldScene->getSceneGraphicsManager()->destroyEntity(entity);
   entity = NULL;
   //entity = scene->getGraphicsManager()->createEntity("watermelon.mesh");//use temp debug mesh
   //node->attachObject(entity);
-  node->setVisible(true);
+  
+  boost::shared_ptr<Scene> scene = getScene();
 
-  //do I have to destroy old billboards?
-  billboardSet = scene->getSceneGraphicsManager()->createBillboardSet(1);
-  billboardSet->setMaterialName("Examples/Flare");
-  billboard = billboardSet->createBillboard(0, 0, 0);
-  billboard->setDimensions(2,2);
-  node->attachObject(billboardSet);
+  if(scene) 
+  {
+    node->setVisible(true);
 
-  //light = scene->getGraphicsManager()->createLight();
-  //light->setPosition(Ogre::Vector3::ZERO);
-  //light->setAttenuation(5, 1.0f, 0.35f, 0.44f);
-  //node->attachObject(light);
+    //do I have to destroy old billboards?
+    billboardSet = scene->getSceneGraphicsManager()->createBillboardSet(1);
+    billboardSet->setMaterialName("Examples/Flare");
+    billboard = billboardSet->createBillboard(0, 0, 0);
+    billboard->setDimensions(2,2);
+    node->attachObject(billboardSet);
+
+    //light = scene->getGraphicsManager()->createLight();
+    //light->setPosition(Ogre::Vector3::ZERO);
+    //light->setAttenuation(5, 1.0f, 0.35f, 0.44f);
+    //node->attachObject(light);
+  } 
 }

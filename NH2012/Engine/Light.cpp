@@ -46,8 +46,9 @@ void Light::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void Light::hasSceneChange()
 {
-  light = scene->getSceneGraphicsManager()->createLight();
-  lightNode = scene->getSceneGraphicsManager()->createSceneNode();
+  boost::shared_ptr<Scene> scene_ptr = getScene(); 
+  light = scene_ptr->getSceneGraphicsManager()->createLight();
+  lightNode = scene_ptr->getSceneGraphicsManager()->createSceneNode();
   lightNode->attachObject(light);
   light->setAttenuation(desc.range, 0.95f, 0.05f, 0.0f);
   light->setDiffuseColour(Ogre::ColourValue::White);

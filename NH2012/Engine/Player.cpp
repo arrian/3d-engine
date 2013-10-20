@@ -8,9 +8,9 @@
 #include "ScenePathfindManager.h"
 
 //-------------------------------------------------------------------------------------
-Player::Player(PlayerDesc description, World* world)
+Player::Player(PlayerDesc description, boost::shared_ptr<World> world)
   : Actor(this, "Player", PLAYER_SELF),
-    world(world),
+    world(boost::weak_ptr<World>(world)),
     camera(world->getGraphicsManager()->isSSAOEnabled(), world->getGraphicsManager()->isBloomEnabled()),
     mesh(description.mesh),
     query(),
@@ -34,7 +34,19 @@ Player::Player(PlayerDesc description, World* world)
 //-------------------------------------------------------------------------------------
 Player::~Player(void)
 {
-  if(node) scene->getSceneGraphicsManager()->destroySceneNode(node);
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr)
+  {
+#ifdef _DEBUG
+    std::cout << "World expired before calling player destructor." << std::endl;
+#endif
+    return;
+  }
+
+  //TODO: Check for scene expiry
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+
+  if(scene_ptr && node && scene_ptr->getSceneGraphicsManager()) scene_ptr->getSceneGraphicsManager()->destroySceneNode(node);
   node = NULL;
 }
 
@@ -42,7 +54,8 @@ Player::~Player(void)
 void Player::hasSceneChange()
 {
   //pulling down
-  if(oldScene)
+  boost::shared_ptr<Scene> oldScene_ptr = getOldScene();
+  if(oldScene_ptr)
   {
     mesh.removeNode();
     camera.removeNode();
@@ -50,28 +63,29 @@ void Player::hasSceneChange()
     skeleton.removeNode();
     query.removeNode();
     
-    if(node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
+    if(node) oldScene_ptr->getSceneGraphicsManager()->destroySceneNode(node);
     node = NULL;
 
-    if(freeCameraNode) oldScene->getSceneGraphicsManager()->destroySceneNode(freeCameraNode);
+    if(freeCameraNode) oldScene_ptr->getSceneGraphicsManager()->destroySceneNode(freeCameraNode);
     freeCameraNode = NULL;
   }
 
   //setting up
-  if(scene)
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(scene_ptr)
   {
-    node = scene->getSceneGraphicsManager()->createSceneNode();
+    node = scene_ptr->getSceneGraphicsManager()->createSceneNode();
     
     setPosition(position);
 
     skeleton.setUserData((Identifiable*) this);
     skeleton.setGroup(PLAYER_SELF);//add ability to have other player groups
 
-    mesh.setNode(scene, node);
-    skeleton.setNode(scene, node);
-    movement.setNode(scene, node);
-    camera.setNode(scene, skeleton.getHead());
-    query.setNode(scene, skeleton.getHead());
+    mesh.setNode(scene_ptr, node);
+    skeleton.setNode(scene_ptr, node);
+    movement.setNode(scene_ptr, node);
+    camera.setNode(scene_ptr, skeleton.getHead());
+    query.setNode(scene_ptr, skeleton.getHead());
 
     stop();
   
@@ -82,6 +96,9 @@ void Player::hasSceneChange()
 //-------------------------------------------------------------------------------------
 void Player::update(double elapsedSeconds)
 {
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr) throw NHException("attempted to update a player that was not in a scene");
+
   camera.update(elapsedSeconds);
   movement.update(elapsedSeconds);
   skeleton.update(elapsedSeconds);
@@ -89,9 +106,9 @@ void Player::update(double elapsedSeconds)
 
   if(addItem)
   {
-    for(int i = 0; i < 10; i++) scene->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
+    for(int i = 0; i < 10; i++) scene_ptr->addItem(itemGenerationID, skeleton.getForwardPosition(placementDistance));
   }
-  if(addCreature) scene->addCreature(creatureGenerationID, scene->getScenePathfindManager()->getRandomNavigablePoint());//create a creature at an arbitrary location
+  if(addCreature) scene_ptr->addCreature(creatureGenerationID, scene_ptr->getScenePathfindManager()->getRandomNavigablePoint());//create a creature at an arbitrary location
 
   currentTarget = query.rayQuery(camera.getDirection(), reachDistance, EXCLUDE_SELF);
   
@@ -104,7 +121,7 @@ void Player::update(double elapsedSeconds)
       if(currentTarget->isInGroup(ITEM))
       {
         Item* item = currentTarget->getInstancePointer<Item>();
-        inventory.insert(Id<Item>(), scene->remove<Item>(item));//inventory now becomes responsible for the life of the item
+        inventory.insert(Id<Item>(), scene_ptr->remove<Item>(item));//inventory now becomes responsible for the life of the item
         ;
       }
       else if(currentTarget->isInGroup(INTERACTIVE))
@@ -132,22 +149,25 @@ void Player::keyReleased(const OIS::KeyEvent &evt)
 //-------------------------------------------------------------------------------------
 void Player::buttonEvent(Button button, bool isDown)
 {
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Failed to get control manager in player button event. The world has expired.");
+
   if(isDown)
   {
-    if(button == world->getControlManager()->jump) movement.jump();
-    else if(button == world->getControlManager()->interact) interactPressed = true;
+    if(button == world_ptr->getControlManager()->jump) movement.jump();
+    else if(button == world_ptr->getControlManager()->interact) interactPressed = true;
   }
 
-  if(button == world->getControlManager()->moveForward) movement.setMoveForward(isDown);
-  else if(button == world->getControlManager()->moveBack) movement.setMoveBackward(isDown);
-  else if(button == world->getControlManager()->moveLeft) movement.setMoveLeft(isDown);
-  else if(button == world->getControlManager()->moveRight) movement.setMoveRight(isDown);
-  else if(button == world->getControlManager()->run) movement.setRun(isDown);
-  else if(button == world->getControlManager()->crouch) skeleton.setCrouch(isDown);
-  else if(button == world->getControlManager()->addItem) addItem = isDown;
-  else if(button == world->getControlManager()->addCreature) addCreature = isDown;
-  else if(button == world->getControlManager()->leftHand) skeleton.setLeftHand(isDown);
-  else if(button == world->getControlManager()->rightHand) skeleton.setRightHand(isDown);
+  if(button == world_ptr->getControlManager()->moveForward) movement.setMoveForward(isDown);
+  else if(button == world_ptr->getControlManager()->moveBack) movement.setMoveBackward(isDown);
+  else if(button == world_ptr->getControlManager()->moveLeft) movement.setMoveLeft(isDown);
+  else if(button == world_ptr->getControlManager()->moveRight) movement.setMoveRight(isDown);
+  else if(button == world_ptr->getControlManager()->run) movement.setRun(isDown);
+  else if(button == world_ptr->getControlManager()->crouch) skeleton.setCrouch(isDown);
+  else if(button == world_ptr->getControlManager()->addItem) addItem = isDown;
+  else if(button == world_ptr->getControlManager()->addCreature) addCreature = isDown;
+  else if(button == world_ptr->getControlManager()->leftHand) skeleton.setLeftHand(isDown);
+  else if(button == world_ptr->getControlManager()->rightHand) skeleton.setRightHand(isDown);
 }
 
 //-------------------------------------------------------------------------------------
@@ -233,25 +253,26 @@ void Player::setGravity(Vector3 gravity)
 //-------------------------------------------------------------------------------------
 void Player::setFreeCamera(bool enabled)
 {
-  if(!scene) throw NHException("player must be in a scene to enable or disable the free camera");
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr) throw NHException("player must be in a scene to enable or disable the free camera");
 
   if(enabled)
   {
-    if(!freeCameraNode) freeCameraNode = scene->getSceneGraphicsManager()->createSceneNode();
+    if(!freeCameraNode) freeCameraNode = scene_ptr->getSceneGraphicsManager()->createSceneNode();
     freeCameraNode->setPosition(skeleton.getHead()->_getDerivedPosition());
     freeCameraNode->_setDerivedOrientation(skeleton.getHead()->_getDerivedOrientation());
 
-    camera.setNode(scene, freeCameraNode);
+    camera.setNode(scene_ptr, freeCameraNode);
     movement.setGravityEnabled(false);
-    movement.setNode(scene, freeCameraNode);
+    movement.setNode(scene_ptr, freeCameraNode);
   }
   else
   {
-    camera.setNode(scene, skeleton.getHead());
+    camera.setNode(scene_ptr, skeleton.getHead());
     movement.setGravityEnabled(true);
-    movement.setNode(scene, skeleton.getHead());
+    movement.setNode(scene_ptr, skeleton.getHead());
 
-    if(freeCameraNode) scene->getSceneGraphicsManager()->destroySceneNode(freeCameraNode);
+    if(freeCameraNode) scene_ptr->getSceneGraphicsManager()->destroySceneNode(freeCameraNode);
     freeCameraNode = NULL;
   }
 }

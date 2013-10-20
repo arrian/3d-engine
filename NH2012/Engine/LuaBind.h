@@ -53,7 +53,26 @@ extern "C" int bindLua(lua_State* L)
       class_<Creature     >("Creature"),
       class_<Interactive  >("Interactive"),
       class_<Architecture >("Architecture"),
-      
+
+      class_<Id<Item>         >("ItemId"),
+      class_<Id<Effect>       >("EffectId"),
+      class_<Id<Portal>       >("PortalId"),
+      class_<Id<Player>       >("PlayerId"),
+      class_<Id<Creature>     >("CreatureId"),
+      class_<Id<Interactive>  >("InteractiveId"),
+      class_<Id<Architecture> >("ArchitectureId"),
+
+      class_<ItemDesc>("ItemDesc"),
+      class_<PlayerDesc>("PlayerDesc"),
+      class_<ArchitectureDesc>("ArchitectureDesc"),
+      class_<CreatureDesc>("CreatureDesc"),
+      class_<SceneDesc>("SceneDesc"),
+      class_<SoundDesc>("SoundDesc"),
+      class_<EmitterDesc>("EmitterDesc"),
+      class_<LightDesc>("LightDesc"),
+      class_<PortalDesc>("PortalDesc"),
+      class_<InteractiveDesc>("InteractiveDesc"),
+
       class_<World>("World")
       .def("getScene",           &World::getScene)
       .def("getScriptManager",   &World::getScriptManager)
@@ -175,15 +194,9 @@ extern "C" int bindLua(lua_State* L)
       .def("clear", &ConsoleScreen::clear),
 
       class_<Vector3>("Vector3"),
-      class_<Quaternion>("Quaternion"),
+      class_<Quaternion>("Quaternion")
 
-      class_<Id<Item>         >("IdItem"),
-      class_<Id<Effect>       >("IdEffect"),
-      class_<Id<Portal>       >("IdPortal"),
-      class_<Id<Player>       >("IdPlayer"),
-      class_<Id<Creature>     >("IdCreature"),
-      class_<Id<Interactive>  >("IdInteractive"),
-      class_<Id<Architecture> >("IdArchitecture")
+
 
 
     ];

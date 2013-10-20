@@ -33,23 +33,27 @@ void Creature::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void Creature::hasSceneChange()
 {
+  boost::shared_ptr<Scene> oldScene_ptr = getOldScene();
+
   //pulling down
-  if(oldScene)
+  if(oldScene_ptr)
   {
-    if(node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
+    if(node) oldScene_ptr->getSceneGraphicsManager()->destroySceneNode(node);
     node = NULL;
   }
   
   //setting up
-  if(scene)
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+
+  if(scene_ptr)
   {
-    node = scene->getSceneGraphicsManager()->createSceneNode();
+    node = scene_ptr->getSceneGraphicsManager()->createSceneNode();
 
     setPosition(position);
 
-    intelligence.setNode(scene, node);
-    mesh.setNode(scene, node);
-    skeleton.setNode(scene, node);
+    intelligence.setNode(scene_ptr, node);
+    mesh.setNode(scene_ptr, node);
+    skeleton.setNode(scene_ptr, node);
   }
 }
 

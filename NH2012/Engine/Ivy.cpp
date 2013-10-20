@@ -164,10 +164,10 @@ bool IvyStem::isDone()
   return done;
 }
 
-Ivy::Ivy(Scene* scene, Vector3 position, Vector3 direction)
+Ivy::Ivy(boost::shared_ptr<Scene> scene, Vector3 position, Vector3 direction)
   : active(),
     segmentNumber(0),
-    scene(scene),
+    scene(scene.get()),
     query(),
     root(NULL)
 {

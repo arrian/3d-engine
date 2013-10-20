@@ -27,7 +27,8 @@ void MeshComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void MeshComponent::hasNodeChange()
 {
-  if(oldScene && entity) oldScene->getSceneGraphicsManager()->destroyEntity(entity);
+  boost::shared_ptr<Scene> oldScene_ptr = getOldScene();
+  if(oldScene_ptr && entity) oldScene_ptr->getSceneGraphicsManager()->destroyEntity(entity);
   entity = NULL;
 
   updateEntity();
@@ -43,7 +44,8 @@ Ogre::Entity* MeshComponent::getEntity()
 void MeshComponent::setMesh(std::string mesh)
 {
   this->mesh = mesh;
-  if(scene && entity) scene->getSceneGraphicsManager()->destroyEntity(entity);
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(scene_ptr && entity) scene_ptr->getSceneGraphicsManager()->destroyEntity(entity);
   entity = NULL;
   updateEntity();
 }
@@ -51,8 +53,9 @@ void MeshComponent::setMesh(std::string mesh)
 //-------------------------------------------------------------------------------------
 void MeshComponent::updateEntity()
 {
-  if(!scene || !node || mesh == "") return;
-  entity = scene->getSceneGraphicsManager()->createEntity(mesh);
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr || !node || mesh == "") return;
+  entity = scene_ptr->getSceneGraphicsManager()->createEntity(mesh);
   node->attachObject(entity);
   node->setVisible(true);
 }

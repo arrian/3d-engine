@@ -26,7 +26,7 @@ void QueryComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void QueryComponent::hasNodeChange()
 {
-  if(!scene || !node) return;
+  if(!getScene() || !node) return;
 
   //debugHitPosition = scene->getGraphicsManager()->createEntity("1mBox.mesh");
   //hitNode = node->createChildSceneNode();
@@ -38,12 +38,15 @@ void QueryComponent::hasNodeChange()
 //-------------------------------------------------------------------------------------
 Identifiable* QueryComponent::rayQuery(Vector3 position, Vector3 direction, float distance, Group groups)
 {
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr) return NULL;
+
   Vector3 unitDirection = direction.normalisedCopy();
   physx::PxSceneQueryFlags outputFlags = physx::PxSceneQueryFlags();
   physx::PxSceneQueryFilterData filterData = physx::PxSceneQueryFilterData();
   filterData.data.word0 = groups;
   physx::PxRaycastHit hit;
-  if(scene->getScenePhysicsManager()->getScenePhysics()->raycastSingle(physx::PxVec3(position.x, position.y, position.z), physx::PxVec3(unitDirection.x, unitDirection.y, unitDirection.z), distance, outputFlags, hit, filterData))
+  if(scene_ptr->getScenePhysicsManager()->getScenePhysics()->raycastSingle(physx::PxVec3(position.x, position.y, position.z), physx::PxVec3(unitDirection.x, unitDirection.y, unitDirection.z), distance, outputFlags, hit, filterData))
   {
     //hitNode->_setDerivedPosition(Vector3(hit.impact.x, hit.impact.y, hit.impact.z));
     

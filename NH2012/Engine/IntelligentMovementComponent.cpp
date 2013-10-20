@@ -81,7 +81,7 @@ void IntelligentMovementComponent::checkNextGoal()
 //-------------------------------------------------------------------------------------
 void IntelligentMovementComponent::setPosition(Vector3 position)
 {
-  if(!scene || !agent) return;
+  if(!getScene() || !agent) return;
   removeAgent();
   addAgent();
 }
@@ -96,10 +96,11 @@ Vector3 IntelligentMovementComponent::getPosition()
 //-------------------------------------------------------------------------------------
 void IntelligentMovementComponent::hasNodeChange()
 {
-  if(oldScene && agent) oldScene->getScenePathfindManager()->removeAgent(agent);
+  boost::shared_ptr<Scene> oldScene_ptr = getOldScene();
+  if(oldScene_ptr && agent) oldScene_ptr->getScenePathfindManager()->removeAgent(agent);
   agent = NULL;
   
-  if(!scene || !node) return;
+  if(!getScene() || !node) return;
   addAgent();
 }
 
@@ -114,16 +115,18 @@ void IntelligentMovementComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void IntelligentMovementComponent::addAgent()
 {
-  if(!scene || !node) throw NHException("intelligence component must be inside a scene to create the pathfind agent");
-  agent = scene->getScenePathfindManager()->createAgent(node->_getDerivedPosition());
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr || !node) throw NHException("intelligence component must be inside a scene to create the pathfind agent");
+  agent = scene_ptr->getScenePathfindManager()->createAgent(node->_getDerivedPosition());
   if(!agent) throw NHException("could not create intelligence component pathfind agent");
 }
 
 //-------------------------------------------------------------------------------------
 void IntelligentMovementComponent::removeAgent()
 {
-  if(!scene || !agent) throw NHException("intelligence component must be inside a scene to remove the pathfind agent");
-  scene->getScenePathfindManager()->removeAgent(agent);
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr || !agent) throw NHException("intelligence component must be inside a scene to remove the pathfind agent");
+  scene_ptr->getScenePathfindManager()->removeAgent(agent);
   agent = NULL;
 }
 

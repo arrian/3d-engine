@@ -1,24 +1,37 @@
 #include "SceneGraphicsManager.h"
 
 #include "OgreSceneManager.h"
+#include "Scene.h"
+#include "World.h"
 
 
-SceneGraphicsManager::SceneGraphicsManager(GraphicsManager* graphicsManager, Ogre::ColourValue ambientLight, Ogre::ColourValue shadowColour)
-  : graphicsManager(graphicsManager),
+SceneGraphicsManager::SceneGraphicsManager(boost::shared_ptr<Scene> scene, Ogre::ColourValue ambientLight, Ogre::ColourValue shadowColour)
+  : scene(boost::weak_ptr<Scene>(scene)),
     shadowColour(shadowColour),
     sceneManager(NULL)
 {
-  sceneManager = graphicsManager->createSceneGraphicsManager();
-  if(!sceneManager) return;
+  if(!scene) throw NHException("Given scene null in scene graphics manager constructor.");
 
-  setShadowsEnabled(graphicsManager->isShadowsEnabled());
+  boost::shared_ptr<World> world_ptr = scene->getWorld();
+  if(!world_ptr) throw NHException("World has expired in scene graphics manager contructor.");
+
+  sceneManager = world_ptr->getGraphicsManager()->createSceneGraphicsManager();
+  if(!sceneManager) throw NHException("failed to create SceneGraphicsManager");
+
+  setShadowsEnabled(scene->getWorld()->getGraphicsManager()->isShadowsEnabled());
   setAmbientLight(ambientLight);
 }
 
 //-------------------------------------------------------------------------------------
 SceneGraphicsManager::~SceneGraphicsManager(void)
 {
-  graphicsManager->destroySceneGraphicsManager(sceneManager);
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(scene_ptr) 
+  {
+    boost::shared_ptr<World> world_ptr = scene_ptr->getWorld();
+    if(world_ptr && world_ptr->getGraphicsManager() && sceneManager) world_ptr->getGraphicsManager()->destroySceneGraphicsManager(sceneManager);
+  }
+  sceneManager = NULL;
 }
 
 //-------------------------------------------------------------------------------------
@@ -44,10 +57,18 @@ void SceneGraphicsManager::destroyAllAttachedMoveables(Ogre::SceneNode* node)
 //-------------------------------------------------------------------------------------
 void SceneGraphicsManager::destroySceneNode(Ogre::SceneNode* node)
 {
-  if(!node) return;
-  destroyAllAttachedMoveables(node);
-  node->removeAndDestroyAllChildren();
-  node->getCreator()->destroySceneNode(node);
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(scene_ptr && node) 
+  {
+    boost::shared_ptr<World> world_ptr = scene_ptr->getWorld();
+    if(world_ptr && world_ptr->getGraphicsManager() && world_ptr->getGraphicsManager()->getRoot())//TODO: fix checks here
+    {
+      destroyAllAttachedMoveables(node);
+      node->removeAndDestroyAllChildren();
+      node->getCreator()->destroySceneNode(node);
+    }
+  }
+  
 }
 
 //-------------------------------------------------------------------------------------

@@ -143,11 +143,6 @@ private:
                    (",","<")(".",">")("/","?");
   }
 
-  ~ControlMap(void)
-  {
-
-  }
-
   ControlMap(ControlMap const&);    // Don't implement
   void operator=(ControlMap const&); // Don't implement
 

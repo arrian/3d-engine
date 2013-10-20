@@ -1,9 +1,11 @@
 #include "BasicComponent.h"
 
+#include "PointerUtils.h"
+
 //-------------------------------------------------------------------------------------
 BasicComponent::BasicComponent(void)
-  : scene(NULL),
-    oldScene(NULL)
+  : scene(),
+    oldScene()
 {
 }
 
@@ -13,17 +15,41 @@ BasicComponent::~BasicComponent(void)
 }
 
 //-------------------------------------------------------------------------------------
-void BasicComponent::setScene(Scene* scene)
+void BasicComponent::setScene(boost::shared_ptr<Scene> scene)
 {
-  oldScene = this->scene;
-  this->scene = scene;
+  setOldScene(getScene());
+  this->scene = getWeakFromShared(scene);
   hasSceneChange();
 }
 
 //-------------------------------------------------------------------------------------
-Scene* BasicComponent::getScene()
+boost::shared_ptr<Scene> BasicComponent::getScene()
 {
-  return scene;
+  return getSharedFromWeak(scene, "Failed to get scene from basic component. Either the scene never existed or it has expired.");
+}
+
+//-------------------------------------------------------------------------------------
+boost::shared_ptr<Scene> BasicComponent::getOldScene()
+{
+  return getSharedFromWeak(oldScene, "Failed to get old scene from basic component. Either the old scene never existed or it has expired.");
+}
+
+//-------------------------------------------------------------------------------------
+void BasicComponent::setOldScene(boost::shared_ptr<Scene> oldScene)
+{
+  this->oldScene = getWeakFromShared(oldScene);
+}
+
+//-------------------------------------------------------------------------------------
+bool BasicComponent::hasScene()
+{
+  return scene.expired();
+}
+
+//-------------------------------------------------------------------------------------
+bool BasicComponent::hasOldScene()
+{
+  return oldScene.expired();
 }
 
 

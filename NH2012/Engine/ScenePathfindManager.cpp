@@ -1,8 +1,11 @@
 #include "ScenePathfindManager.h"
 
 #include "NHException.h"
+#include "Scene.h"
+#include "World.h"
+#include "SceneGraphicsManager.h"
 
-ScenePathfindManager::ScenePathfindManager(Ogre::SceneManager* sceneManager)
+ScenePathfindManager::ScenePathfindManager(boost::shared_ptr<Scene> scene)
   : recast(NULL),
     detour(NULL),
     geometry(),
@@ -12,13 +15,16 @@ ScenePathfindManager::ScenePathfindManager(Ogre::SceneManager* sceneManager)
 {
   OgreRecastConfigParams params = OgreRecastConfigParams();
   //set required parameters here
-  recast = new OgreRecast(sceneManager, params);
+
+  boost::shared_ptr<SceneGraphicsManager> sceneGraphicsManager_ptr = scene->getSceneGraphicsManager();
+  if(sceneGraphicsManager_ptr) recast = new OgreRecast(sceneGraphicsManager_ptr->getSceneManager(), params);
 }
 
 //-------------------------------------------------------------------------------------
 ScenePathfindManager::~ScenePathfindManager(void)
 {
-  delete geom;
+  //delete geom;
+  recast->RecastCleanup();
   delete recast;
 
   for(std::vector<PathfindAgent*>::iterator iter = agents.begin(); iter != agents.end(); ++iter)
@@ -45,8 +51,9 @@ void ScenePathfindManager::addGeometry(Ogre::Entity* geometry)
 void ScenePathfindManager::build()
 {
   std::cout << "Building navigation... ";
-  geom = new InputGeom(geometry);
-  recast->NavMeshBuild(geom);
+  recast->NavMeshBuild(geometry);
+  //geom = new InputGeom(geometry);
+  //if(geom) recast->NavMeshBuild(geom);
   built = true;
   detour = new OgreDetourCrowd(recast);
   if(!detour) throw NHException("could not create detour crowd in pathfind manager");

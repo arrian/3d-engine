@@ -85,6 +85,7 @@
     <ClInclude Include="LuaBind.h" />
     <ClInclude Include="Particles.h" />
     <ClInclude Include="Physical.h" />
+    <ClInclude Include="PointerUtils.h" />
     <ClInclude Include="SceneArchitectureManager.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="Interactive.h" />

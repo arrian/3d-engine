@@ -8,7 +8,7 @@ template<class T>
 struct Container {
   
   typedef T Type;
-  typedef std::map<Id<T>, std::shared_ptr<T> > Map;
+  typedef std::map<Id<T>, boost::shared_ptr<T> > Map;
   typedef typename Map::iterator Iterator;
 
   Map map;
@@ -18,43 +18,43 @@ struct Container {
     return boost::is_same<V, T>::value;
   }
 
-  T* get(Id<T> id)
+  boost::shared_ptr<T> get(Id<T> id)
   {
-    if(map.count(id) > 0) return map.find(id)->second.get();
-    return NULL;
+    if(map.count(id) > 0) return map.find(id)->second;
+    return boost::shared_ptr<T>();
   }
 
-  void insert(Id<T> id, std::shared_ptr<T> item)
+  void insert(Id<T> id, boost::shared_ptr<T> item)
   {
     std::cout << "Added " << id.getName() << std::endl;
-    map.insert(map.begin(), std::pair< Id<T>, std::shared_ptr<T> >(id, item));
+    map.insert(map.begin(), std::pair< Id<T>, boost::shared_ptr<T> >(id, item));
   }
 
   //Remove the specified object from the container. The caller becomes the new owner (or deleted if returned value ignored).
-  std::shared_ptr<T> remove(Id<T> id)
+  boost::shared_ptr<T> remove(Id<T> id)
   {
     if(map.count(id) > 0)
     {
-      std::shared_ptr<T> temp(map.find(id)->second);
+      boost::shared_ptr<T> temp(map.find(id)->second);
       map.erase(id);
       return temp;
     }
-    return std::shared_ptr<T>();
+    return boost::shared_ptr<T>();
   }
 
   //TODO: Put keys inside values to make this function constant in time.
-  std::shared_ptr<T> remove(T* value)
+  boost::shared_ptr<T> remove(T* value)
   {
     for(Iterator it = begin(); it != end(); ++it) 
     {
       if(it->second.get() == value)
       {
-        std::shared_ptr<T> temp(it->second);
+        boost::shared_ptr<T> temp = it->second;
         map.erase(it->first);
         return temp;
       }
     }
-    return std::shared_ptr<T>();
+    return boost::shared_ptr<T>();
   }
 
   int count()

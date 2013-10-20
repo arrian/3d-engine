@@ -14,7 +14,7 @@ public:
 
   virtual void update(double elapsedSeconds) = 0;
 
-  void setNode(Scene* scene, Ogre::SceneNode* node);//temporary requires scene as confirmation
+  void setNode(boost::shared_ptr<Scene> scene, Ogre::SceneNode* node);//temporary requires scene as confirmation
   void removeNode();
 
   Ogre::SceneNode* getNode();

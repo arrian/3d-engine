@@ -24,13 +24,17 @@
 #include "Button.h"
 #include "Container.h"
 
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include "PointerUtils.h"
+
 class Scene;
 class World;
 
 class Player : public Actor, public Packetable<PlayerPacket>
 {
 public:
-  Player(PlayerDesc description, World* world);
+  Player(PlayerDesc description, boost::shared_ptr<World> world);
   ~Player(void);
 
   void update(double elapsedSeconds);
@@ -75,8 +79,13 @@ public:
 
   bool isLocalPlayer() { return localPlayer; }
 
+  boost::shared_ptr<World> getWorld() 
+  {
+    return getSharedFromWeak(world, "Could not get world from player. World has expired.");
+  }  
+
 private:
-  World* world;
+  boost::weak_ptr<World> world;
 
   bool localPlayer;
 

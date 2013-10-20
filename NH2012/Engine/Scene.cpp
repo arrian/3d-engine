@@ -26,8 +26,8 @@
 #include "ScenePhysicsManager.h"
 
 //-------------------------------------------------------------------------------------
-Scene::Scene(SceneDesc desc, World* world)
-  : world(world),
+Scene::Scene(SceneDesc desc, boost::shared_ptr<World> world)
+  : world(boost::weak_ptr<World>(world)),
     desc(desc),
     scenePathfindManager(),
     sceneGraphicsManager(),
@@ -42,21 +42,28 @@ Scene::Scene(SceneDesc desc, World* world)
     localPlayer(0),
     defaultPortal(0)
 {
-  setup();
 }
 
 //-------------------------------------------------------------------------------------
 Scene::~Scene(void)
 {
+  //need to destruct all scene objects before scene and world references destroyed
+
+  scenePhysicsManager.reset();
+  sceneGraphicsManager.reset();
+  scenePathfindManager.reset();
+  sceneArchitectureManager.reset();
+
+  world = boost::weak_ptr<World>();
 }
 
 //-------------------------------------------------------------------------------------
-void Scene::setup()
+void Scene::initialise()
 {
-  scenePhysicsManager = std::shared_ptr<ScenePhysicsManager>(new ScenePhysicsManager(world->getPhysicsManager(), desc.gravity));
-  sceneGraphicsManager = std::shared_ptr<SceneGraphicsManager>(new SceneGraphicsManager(world->getGraphicsManager(), desc.ambientLight, desc.shadowColour));
-  scenePathfindManager = std::shared_ptr<ScenePathfindManager>(new ScenePathfindManager(sceneGraphicsManager->getSceneManager()));
-  sceneArchitectureManager = std::shared_ptr<SceneArchitectureManager>(new SceneArchitectureManager(this));
+  scenePhysicsManager = boost::shared_ptr<ScenePhysicsManager>(new ScenePhysicsManager(shared_from_this(), desc.gravity));//world->getPhysicsManager()
+  sceneGraphicsManager = boost::shared_ptr<SceneGraphicsManager>(new SceneGraphicsManager(shared_from_this(), desc.ambientLight, desc.shadowColour));//world->getGraphicsManager()
+  scenePathfindManager = boost::shared_ptr<ScenePathfindManager>(new ScenePathfindManager(shared_from_this()));//sceneGraphicsManager->getSceneManager()
+  sceneArchitectureManager = boost::shared_ptr<SceneArchitectureManager>(new SceneArchitectureManager(shared_from_this()));
 
   SceneLoader::load(desc.file, this);//load an xml scene
 
@@ -66,9 +73,10 @@ void Scene::setup()
   //add(std::shared_ptr<Interactive>(new Door()));//temp door
 }
 
+//-------------------------------------------------------------------------------------
 void Scene::reset()
 {
-  std::shared_ptr<Player> player(players.remove(localPlayer));
+  boost::shared_ptr<Player> player(players.remove(localPlayer));
 
   items.clear();
   players.clear();
@@ -76,8 +84,13 @@ void Scene::reset()
   creatures.clear();
   effects.clear();
   interactives.clear();
+
+  scenePhysicsManager.reset();
+  sceneGraphicsManager.reset();
+  scenePathfindManager.reset();
+  sceneArchitectureManager.reset();
   
-  setup();
+  initialise();
 
   addPlayer(player, getDefaultPortal()->getPosition(), getDefaultPortal()->getLookAt());
 }
@@ -111,8 +124,11 @@ void Scene::build()
 //-------------------------------------------------------------------------------------
 Id<Item> Scene::addItem(int dataId, Vector3 position, Quaternion rotation, Id<Item> instanceId)//add an object to the scene
 {
-  std::shared_ptr<Item> item(new Item(world->getDataManager()->get<ItemDesc>(dataId)));
-  item->setScene(this);
+  boost::shared_ptr<World> world = getWorld();
+  if(!world) throw NHException("Attempting to add item to scene failed. World has expired.");
+  
+  boost::shared_ptr<Item> item(new Item(world->getDataManager()->get<ItemDesc>(dataId)));
+  item->setScene(shared_from_this());
   item->setPosition(position);
   item->setRotation(rotation);
   items.insert(instanceId, item);
@@ -122,8 +138,11 @@ Id<Item> Scene::addItem(int dataId, Vector3 position, Quaternion rotation, Id<It
 //-------------------------------------------------------------------------------------
 Id<Creature> Scene::addCreature(int dataId, Vector3 position, Vector3 lookAt, Id<Creature> instanceId)//add an object to the scene
 {
-  std::shared_ptr<Creature> creature(new Creature(world->getDataManager()->get<CreatureDesc>(dataId)));
-  creature->setScene(this);
+  boost::shared_ptr<World> world = getWorld();
+  if(!world) throw NHException("Attempting to add creature to scene failed. World has expired.");
+
+  boost::shared_ptr<Creature> creature(new Creature(world->getDataManager()->get<CreatureDesc>(dataId)));
+  creature->setScene(shared_from_this());
   creature->setPosition(position);
   creature->setLookAt(lookAt);
   creatures.insert(instanceId, creature);
@@ -133,21 +152,27 @@ Id<Creature> Scene::addCreature(int dataId, Vector3 position, Vector3 lookAt, Id
 //-------------------------------------------------------------------------------------
 Id<Effect> Scene::addLight(int dataId, Vector3 position, bool castShadows, float range, Id<Effect> instanceId)//add an object to the scene
 {
+  boost::shared_ptr<World> world = getWorld();
+  if(!world) throw NHException("Attempting to add light to scene failed. World has expired.");
+
   LightDesc desc(world->getDataManager()->get<LightDesc>(dataId));
   desc.range = range;
   desc.castShadows = castShadows;
   Light* light(new Light(desc));
-  light->setScene(this);
+  light->setScene(shared_from_this());
   light->setPosition(position);
-  effects.insert(instanceId, std::shared_ptr<Effect>(light));
+  effects.insert(instanceId, boost::shared_ptr<Effect>(light));
   return instanceId;
 }
 
 //-------------------------------------------------------------------------------------
 Id<Interactive> Scene::addInteractive(int dataId, Vector3 position, Id<Interactive> instanceId)//add an object to the scene
 {
-  std::shared_ptr<Interactive> interactive(new Interactive(world->getDataManager()->get<InteractiveDesc>(dataId)));
-  interactive->setScene(this);
+  boost::shared_ptr<World> world = getWorld();
+  if(!world) throw NHException("Attempting to add interactive to scene failed. World has expired.");
+
+  boost::shared_ptr<Interactive> interactive(new Interactive(world->getDataManager()->get<InteractiveDesc>(dataId)));
+  interactive->setScene(shared_from_this());
   interactive->setPosition(position);
   interactives.insert(instanceId, interactive);
   return instanceId;
@@ -156,7 +181,10 @@ Id<Interactive> Scene::addInteractive(int dataId, Vector3 position, Id<Interacti
 //-------------------------------------------------------------------------------------
 Id<Portal> Scene::addPortal(int dataId, Vector3 position, Vector3 lookAt, Id<Scene> targetScene, Id<Portal> targetPortal, Id<Portal> instanceId)//add an object to the scene
 {
-  std::shared_ptr<Portal> portal(new Portal(world->getDataManager()->get<PortalDesc>(dataId), targetScene, targetPortal));
+  boost::shared_ptr<World> world = getWorld();
+  if(!world) throw NHException("Attempting to add portal to scene failed. World has expired.");
+
+  boost::shared_ptr<Portal> portal(new Portal(world->getDataManager()->get<PortalDesc>(dataId), targetScene, targetPortal));
   portal->setScene(this);
   portal->setPosition(position);
   portal->setLookAt(lookAt);
@@ -166,11 +194,14 @@ Id<Portal> Scene::addPortal(int dataId, Vector3 position, Vector3 lookAt, Id<Sce
 }
 
 //-------------------------------------------------------------------------------------
-Id<Player> Scene::addPlayer(std::shared_ptr<Player> player, Vector3 position, Vector3 lookAt, Id<Player> instanceId)//add an object to the scene
+Id<Player> Scene::addPlayer(boost::shared_ptr<Player> player, Vector3 position, Vector3 lookAt, Id<Player> instanceId)//add an object to the scene
 {
-  Scene* old = player->getScene();
+  boost::shared_ptr<World> world = getWorld();
+  if(!world) throw NHException("Attempting to add player to scene failed. World has expired.");
+
+  boost::shared_ptr<Scene> old = player->getScene();
   if(old) old->remove<Player>(player.get());//need to remove player from previous scene
-  player->setScene(this);
+  player->setScene(shared_from_this());
   player->setGravity(getScenePhysicsManager()->getGravity());
   player->setLookAt(lookAt);
 
@@ -186,7 +217,10 @@ Id<Player> Scene::addPlayer(std::shared_ptr<Player> player, Vector3 position, Ve
 //-------------------------------------------------------------------------------------
 Id<Architecture> Scene::addArchitecture(int dataId, Vector3 position, Quaternion rotation, Vector3 scale, Id<Architecture> instanceId)
 {
-  sceneArchitectureManager->add(instanceId, std::shared_ptr<Architecture>(new Architecture(world->getDataManager()->get<ArchitectureDesc>(dataId), position, rotation, scale)));
+  boost::shared_ptr<World> world = getWorld();
+  if(!world) throw NHException("Attempting to add architecture to scene failed. World has expired.");
+
+  sceneArchitectureManager->add(instanceId, boost::shared_ptr<Architecture>(new Architecture(world->getDataManager()->get<ArchitectureDesc>(dataId), position, rotation, scale)));
   return instanceId;
 }
 

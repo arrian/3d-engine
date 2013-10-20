@@ -25,34 +25,37 @@ Item::Item(ItemDesc desc)
 //-------------------------------------------------------------------------------------
 void Item::hasSceneChange()
 {
-  if(oldScene)
+  boost::shared_ptr<Scene> oldScene_ptr = getOldScene();
+  if(oldScene_ptr)
   {
-    if(node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
-    if(entity) oldScene->getSceneGraphicsManager()->destroyEntity(entity);
-    if(simplifiedEntity) oldScene->getWorld()->getPhysicsManager()->getFabrication()->releaseConvexMesh(simplifiedEntity->getMesh());
+    if(node) oldScene_ptr->getSceneGraphicsManager()->destroySceneNode(node);
+    if(entity) oldScene_ptr->getSceneGraphicsManager()->destroyEntity(entity);
+    if(simplifiedEntity) oldScene_ptr->getWorld()->getPhysicsManager()->getFabrication()->releaseConvexMesh(simplifiedEntity->getMesh()->getName());
   }
 
   node = NULL;
   entity = NULL;
 
-  if(scene)
-  {
-    node = scene->getSceneGraphicsManager()->createSceneNode();
+  boost::shared_ptr<Scene> scene_ptr = getScene();
 
-    entity = scene->getSceneGraphicsManager()->createEntity(desc.mesh);
+  if(scene_ptr)
+  {
+    node = scene_ptr->getSceneGraphicsManager()->createSceneNode();
+
+    entity = scene_ptr->getSceneGraphicsManager()->createEntity(desc.mesh);
     node->attachObject(entity);
     node->setVisible(true);
 
     //Physical
-    simplifiedEntity = scene->getSceneGraphicsManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
-    if(!material) material = scene->getScenePhysicsManager()->getScenePhysics()->getPhysics().createMaterial(desc.staticFriction, desc.dynamicFriction, desc.restitution);
+    simplifiedEntity = scene_ptr->getSceneGraphicsManager()->createEntity(desc.simplifiedMesh);//create the simplified mesh
+    if(!material) material = scene_ptr->getScenePhysicsManager()->getScenePhysics()->getPhysics().createMaterial(desc.staticFriction, desc.dynamicFriction, desc.restitution);
     physical.begin();
-    physical.addConvexMesh(scene->getWorld()->getPhysicsManager()->getFabrication()->createConvexMesh(simplifiedEntity->getMesh()), material);
+    physical.addConvexMesh(scene_ptr->getWorld()->getPhysicsManager()->getFabrication()->createConvexMesh(simplifiedEntity->getMesh()->getName(), simplifiedEntity->getMesh()), material);
     physical.end();
 
     setUserData((Identifiable*) this);
 
-    physical.setNode(scene, node);
+    physical.setNode(scene_ptr, node);
   }
 }
 
@@ -63,10 +66,12 @@ Item::~Item(void)
 
   //material->release();//TODO: might need this
 
-  if(scene)
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+
+  if(scene_ptr)
   {
-    if(entity) scene->getSceneGraphicsManager()->destroyEntity(entity);
-    if(node) scene->getSceneGraphicsManager()->destroySceneNode(node);
+    if(entity&& scene_ptr->getSceneGraphicsManager()) scene_ptr->getSceneGraphicsManager()->destroyEntity(entity);
+    if(node && scene_ptr->getSceneGraphicsManager()) scene_ptr->getSceneGraphicsManager()->destroySceneNode(node);
   }
 
   node = NULL;

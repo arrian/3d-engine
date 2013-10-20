@@ -55,30 +55,30 @@ void NetworkManager::receive()
     //TODO: receive packet from remote endpoints
 
     PacketHeader* header = packet.getHeader();
-    Endpoint* endpoint = endpoints.get(header->sourceId);
+    boost::shared_ptr<Endpoint> endpoint = endpoints.get(header->sourceId);
 
     if(header->type == PLAYER_UPDATE)
     {
       PlayerPacket* playerPacket = packet.getDataPointer<PlayerPacket>();
-      Scene* scene = world->getScene(playerPacket->sceneId);
+      boost::shared_ptr<Scene> scene = getWorld()->getScene(playerPacket->sceneId);
 
       if(!endpoint)
       {
-        endpoints.insert(header->sourceId, std::shared_ptr<Endpoint>(new Endpoint(false, playerPacket->playerId)));
+        endpoints.insert(header->sourceId, boost::shared_ptr<Endpoint>(new Endpoint(false, playerPacket->playerId)));
         endpoint = endpoints.get(header->sourceId);
         if(!endpoint) throw NHException("Endpoint could not be created");
       }
 
       if(scene)
       {
-        Player* player = scene->get<Player>(playerPacket->playerId);
+        boost::shared_ptr<Player> player = scene->get<Player>(playerPacket->playerId);
         if(player)
         {
           player->integratePacket(*playerPacket);
         }
         else
         {
-          scene->addPlayer(std::shared_ptr<Player>(new Player(PlayerDesc(),world)), playerPacket->position, playerPacket->lookAt, playerPacket->playerId);
+          scene->addPlayer(boost::shared_ptr<Player>(new Player(PlayerDesc(),getWorld())), playerPacket->position, playerPacket->lookAt, playerPacket->playerId);
           player = scene->get<Player>(endpoint->playerId);
           if(!player) throw NHException("Player could not be created");
         }
@@ -114,7 +114,7 @@ Packet NetworkManager::getNextPacket()
 
 void NetworkManager::sendNextPackets()//client packet... sending essential player updates
 {
-  world->getPlayer()->extractPacket();//TODO: send this packet
+  getWorld()->getPlayer()->extractPacket();//TODO: send this packet
   //TODO: implement
 }
 

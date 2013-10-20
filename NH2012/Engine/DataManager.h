@@ -7,6 +7,8 @@
 
 //Boost
 #include <boost/algorithm/string.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 //Ogre
 #include <OgreColourValue.h>
@@ -379,15 +381,16 @@ public:
   {
     Container<Desc>* container = getContainer<Desc>();
     if(!container) throw NHException("the specified description type does not exist");
-    Desc* desc = container->get(Id<Desc>(id));
-    if(!desc)
+
+    boost::shared_ptr<Desc> desc_ptr = container->get(Id<Desc>(id));
+    if(desc_ptr)
     {
-      //std::stringstream ss;
-      std::cout << "the description " << Id<Desc>(id).getName() << " could not be found" << std::endl;
-      return Desc();
-      //throw NHException(ss.str());
+      Desc* desc = desc_ptr.get();
+      if(desc != NULL) return *desc;
     }
-    return *desc;
+
+    std::cout << "The description " << Id<Desc>(id).getName() << " could not be found." << std::endl;
+    return Desc();
   }
 
   std::vector<std::string> getLoadedDataFiles();

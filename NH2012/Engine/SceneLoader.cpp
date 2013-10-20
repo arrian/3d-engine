@@ -73,7 +73,17 @@ void SceneLoader::load(std::string filename, Scene* scene)
     while(architectureNode != NULL)
     {
       int id = boost::lexical_cast<int>(architectureNode->first_attribute(ID_STRING)->value());
-      scene->addArchitecture(id, getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
+      try
+      {
+        scene->addArchitecture(id, getXMLPosition(architectureNode), getXMLRotation(architectureNode), getXMLScale(architectureNode));
+      }
+      catch(NHException e) 
+      {
+#ifdef _DEBUG
+        std::cout << e.what() << std::endl;
+#endif
+      }
+      
       architectureNode = architectureNode->next_sibling(ARCHITECTURE_STRING);
     }
 

@@ -6,6 +6,9 @@
 #include <string>
 #include <map>
 
+#include <boost/weak_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+
 extern "C"
 {
 #include "lua.h"
@@ -81,7 +84,7 @@ public:
   ScriptManager(void);
   virtual ~ScriptManager(void);
 
-  void setWorld(World* world);
+  void setWorld(boost::shared_ptr<World> world);
 
   bool update(double elapsedSeconds);
 
@@ -94,9 +97,24 @@ public:
   void addOutputTarget(OutputCallback* target);
 
   void setConsole(ConsoleScreen* console);
+  
+  boost::shared_ptr<World> getWorld() 
+  {
+    try
+    {
+      return world.lock();
+    }
+    catch(boost::bad_weak_ptr b)
+    {
+#ifdef _DEBUG
+      std::cout << "Could not get world from script manager. World has expired." << std::endl;
+#endif
+    }
+    return boost::shared_ptr<World>();
+  }
 
 private:
-  World* world;
+  boost::weak_ptr<World> world;
   bool done;
   std::vector<OutputCallback*> outputs;
 
@@ -107,19 +125,19 @@ private:
   void split(const std::string &s, char delim, std::vector<std::string> &elems);//Tokenises a string by the given delimiter.
 
   //Set of executable commands
-  void about                     (Options);
-  void help                      (Options);
-  void exit                      (Options);
-  void screenshot                (Options);
-  void setCameraFree             (Options);
-  void setFullscreen             (Options);
-  void setWindowed               (Options);
-  void setPlayerItemGenerationID (Options);
-  void getPhysicsInfo            (Options);
-  void getGameInfo               (Options);
-  void getSceneInfo              (Options);
-  void getWorldInfo              (Options);
-  void reset                     (Options);
+  void about();
+  void help();
+  void exit();
+  void screenshot();
+  void setCameraFree(bool free);
+  void setFullscreen(int width, int height);
+  void setWindowed(int width, int height);
+  void setPlayerItemGenerationID(int id);
+  void getPhysicsInfo();
+  void getGameInfo();
+  void getSceneInfo();
+  void getWorldInfo();
+  void reset();
   
 };
 

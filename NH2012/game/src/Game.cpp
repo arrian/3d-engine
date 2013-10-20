@@ -7,8 +7,9 @@ Game::Game(void)
   keyboard(NULL),  
   window(NULL),
   mouse(NULL),
-  root(NULL),
-  world(NULL),
+  root(),
+  world(),
+  userInterface(),
   done(false)
 {
 }
@@ -18,14 +19,16 @@ Game::~Game(void)
 {
   Ogre::WindowEventUtilities::removeWindowEventListener(window, this);
   windowClosed(window);
-  delete userInterface;
-  delete world;
-  delete root;
 }
 
 //-------------------------------------------------------------------------------------
 bool Game::run()
 {
+  //Dump memory leaks on exit
+#ifdef _DEBUG
+  _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
+
   std::string resources;
   std::string plugins;
 
@@ -37,7 +40,7 @@ bool Game::run()
   plugins = "plugins.cfg";
 #endif
 
-  root = new Ogre::Root(plugins);
+  root = boost::shared_ptr<Ogre::Root>(new Ogre::Root(plugins));
 
   Ogre::ConfigFile cf;
   cf.load(resources);
@@ -86,10 +89,10 @@ bool Game::run()
   keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject(OIS::OISKeyboard, true));
   mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject(OIS::OISMouse, true));
 
-  world = new World(root, window);
+  world = boost::shared_ptr<World>(new World(root, window));
   world->initialise("game.ini");
 
-  userInterface = new Interface(world);
+  userInterface = boost::shared_ptr<Interface>(new Interface(world.get()));
   userInterface->hookWindow(window);
 
   mouse->setEventCallback(this);

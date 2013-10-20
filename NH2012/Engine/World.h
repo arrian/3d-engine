@@ -17,6 +17,10 @@
 #include "Id.h"
 #include "Container.h"
 
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
 //Forward Declarations
 class Player;
 class Scene;
@@ -25,19 +29,22 @@ class WorldLoader;
 /************************************************************************/
 /* Contains the entire game world.                                      */
 /************************************************************************/
-class World
+class World : public boost::enable_shared_from_this<World>
 {
 public:
   World();
-  World(Ogre::Root* root, Ogre::RenderWindow* window);
+  World(boost::shared_ptr<Ogre::Root> root, Ogre::RenderWindow* window);
   ~World(void);
+
+  typedef boost::shared_ptr<World> SharedPointer;
+  typedef boost::weak_ptr<World> WeakPointer;
 
   bool update(double elapsedSeconds);
 
   //Initialisation
   void initialise(std::string iniFile);
-  Scene* loadScene(Id<Scene> id);
-  Player* loadPlayer(Id<Player> id);
+  boost::shared_ptr<Scene> loadScene(Id<Scene> id);
+  boost::shared_ptr<Player> loadPlayer(Id<Player> id);
 
   //Destruction
   void destroyScene(Id<Scene> id);
@@ -51,8 +58,9 @@ public:
   ControlManager* getControlManager();
   NetworkManager* getNetworkManager();
   GraphicsManager* getGraphicsManager();
-  Player* getPlayer();
-  Scene* getScene(Id<Scene> id);
+  boost::shared_ptr<Player> getPlayer();
+  //Scene* getScene(Id<Scene> id);
+  boost::shared_ptr<Scene> getScene(Id<Scene> id);
   int getSceneCount();
   void getSceneNames(std::map<Id<Scene>, std::string> &names);
 
@@ -71,11 +79,12 @@ public:
 private:
   //Local Player
   Id<Player> playerId;
-  std::shared_ptr<Player> player;
+  boost::shared_ptr<Player> player;
 
   //Scenes
   Id<Scene> defaultScene;
-  Container<Scene> scenes;
+  //Container<Scene> scenes;
+  boost::shared_ptr<Scene> scene;
   
   //Managers
   DataManager dataManager;

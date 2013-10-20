@@ -485,6 +485,9 @@
     <ClInclude Include="LuaBind.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="PointerUtils.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp">

@@ -19,40 +19,89 @@ FabricationManager::~FabricationManager(void)
 }
 
 //-------------------------------------------------------------------------------------
-void FabricationManager::releaseConvexMesh(const Ogre::MeshPtr& mesh)
+void FabricationManager::addConvexMesh(std::string name, physx::PxConvexMesh* mesh)
 {
-  if(convexHistory.count(mesh->getName()) > 0) 
-  {
-    ConvexMeshRef* ref = &convexHistory.find(mesh->getName())->second;
-    ref->count--;
+  ConvexMeshRef* ref = new ConvexMeshRef();
+  ref->count = 1;
+  ref->mesh = mesh;
+  convexHistory.insert(std::pair<std::string, ConvexMeshRef*>(name, ref));
+}
 
-    if(ref->count == 0) ref->mesh->release();
+//-------------------------------------------------------------------------------------
+void FabricationManager::addTriangleMesh(std::string name, physx::PxTriangleMesh* mesh)
+{
+  TriangleMeshRef* ref = new TriangleMeshRef();
+  ref->count = 1;
+  ref->mesh = mesh;
+  triangleHistory.insert(std::pair<std::string, TriangleMeshRef*>(name, ref));
+}
+
+//-------------------------------------------------------------------------------------
+physx::PxConvexMesh* FabricationManager::getConvexMesh(std::string name)
+{
+  std::map<std::string, ConvexMeshRef*>::iterator ref = convexHistory.find(name);
+  if(ref != convexHistory.end()) 
+  {
+    ref->second->count++;
+    return ref->second->mesh;
+  }
+  return NULL;
+}
+
+//-------------------------------------------------------------------------------------
+physx::PxTriangleMesh* FabricationManager::getTriangleMesh(std::string name)
+{
+  std::map<std::string, TriangleMeshRef*>::iterator ref = triangleHistory.find(name);
+  if(ref != triangleHistory.end()) 
+  {
+    ref->second->count++;
+    return ref->second->mesh;
+  }
+  return NULL;
+}
+
+//-------------------------------------------------------------------------------------
+void FabricationManager::releaseConvexMesh(std::string name)
+{
+  std::map<std::string, ConvexMeshRef*>::iterator ref = convexHistory.find(name);
+
+  if(ref != convexHistory.end()) 
+  {
+    ref->second->mesh--;
+    
+    if(ref->second->count == 0) 
+    {
+      ref->second->mesh->release();
+      delete ref->second;
+      convexHistory.erase(name);
+    }
   }
 }
 
 //-------------------------------------------------------------------------------------
-void FabricationManager::releaseTriangleMesh(Ogre::Entity* e)
+void FabricationManager::releaseTriangleMesh(std::string name)
 {
-  Ogre::MeshPtr mesh = e->getMesh();
+  return; //TODO: some kind of memory corruption here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  std::map<std::string, TriangleMeshRef*>::iterator ref = triangleHistory.find(name);
 
-  if(triangleHistory.count(mesh->getName()) > 0) 
+  if(ref != triangleHistory.end()) 
   {
-    TriangleMeshRef* ref = &triangleHistory.find(mesh->getName())->second;
-    ref->count--;
+    ref->second->mesh--;
 
-    if(ref->count == 0) ref->mesh->release();
+    if(ref->second->count == 0) 
+    {
+      ref->second->mesh->release();
+      delete ref->second;
+      triangleHistory.erase(name);
+    }
   }
 }
 
 //-------------------------------------------------------------------------------------
-physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& mesh)
+physx::PxConvexMesh* FabricationManager::createConvexMesh(std::string name, const Ogre::MeshPtr& mesh)
 {
-  if(convexHistory.count(mesh->getName()) > 0) 
-  {
-    ConvexMeshRef* ref = &convexHistory.find(mesh->getName())->second;
-    ref->count++;
-    return ref->mesh;//if the required convex mesh has already been created then return a pointer to it
-  }
+  physx::PxConvexMesh* convexMesh = getConvexMesh(name);
+  if(convexMesh) return convexMesh;
 
   unsigned int mVertexCount = 0; 
   unsigned int mIndexCount  = 0; 
@@ -159,14 +208,10 @@ physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& m
 
   PxToolkit::MemoryOutputStream buf;
   bool status = cooking->cookConvexMesh(convexDesc, buf);
-  physx::PxConvexMesh* convexMesh = physics->createConvexMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));
   
-  ConvexMeshRef ref;
-  ref.count = 1;
-  ref.mesh = convexMesh;
-
-  convexHistory.insert(std::pair<std::string, ConvexMeshRef>(mesh->getName(), ref));//record that a convex mesh has been cooked for the given mesh
-
+  convexMesh = physics->createConvexMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));
+  addConvexMesh(name, convexMesh);
+  
   delete []vertices;
   delete []indices;
   delete []mMeshVertices;
@@ -175,142 +220,12 @@ physx::PxConvexMesh* FabricationManager::createConvexMesh(const Ogre::MeshPtr& m
 }
 
 //-------------------------------------------------------------------------------------
-/*
-physx::PxTriangleMesh* FabricationManager::createTriangleMesh(Ogre::Entity* e) 
+physx::PxTriangleMesh* FabricationManager::createTriangleMesh(std::string name, Ogre::Entity* e, Params &params, AddedMaterials *out_addedMaterials)
 {
-
-  unsigned int mVertexCount = 0; 
-  unsigned long mIndexCount = 0; 
-  //size_t vertex_count; 
-  Ogre::Vector3* vertices; 
-  //size_t index_count; 
-  unsigned long* indices; 
-  bool added_shared = false; 
-  //vertex_count = 0; 
-  //index_count = 0; 
-  size_t current_offset = 0; 
-  size_t shared_offset = 0; 
-  size_t next_offset = 0; 
-  size_t index_offset = 0; 
-
-  for ( unsigned short i = 0; i < e->getMesh()->getNumSubMeshes(); ++i) 
-  { 
-    Ogre::SubMesh* submesh = e->getMesh()->getSubMesh( i ); 
-
-    if(submesh->useSharedVertices) 
-    { 
-      if(!added_shared) 
-      { 
-        mVertexCount += e->getMesh()->sharedVertexData->vertexCount; 
-        added_shared = true; 
-      } 
-    } 
-    else mVertexCount += submesh->vertexData->vertexCount;
-
-    mIndexCount += submesh->indexData->indexCount; 
-  } 
-
-  vertices = new Ogre::Vector3[mVertexCount]; 
-  indices = new unsigned long[mIndexCount]; 
-
-  physx::PxVec3* mMeshVertices = new physx::PxVec3[mVertexCount]; 
-  physx::PxU32* mMeshFaces = new physx::PxU32[mIndexCount]; 
-
-  added_shared = false; 
-
-  for (unsigned short i = 0; i < e->getMesh()->getNumSubMeshes();i++) 
-  {
-    Ogre::SubMesh* submesh = e->getMesh()->getSubMesh(i); 
-    Ogre::VertexData* vertex_data=submesh->useSharedVertices ? e->getMesh()->sharedVertexData:submesh->vertexData; 
-
-    if((!submesh->useSharedVertices)||(submesh->useSharedVertices && !added_shared)) 
-    { 
-      if(submesh->useSharedVertices) 
-      { 
-        added_shared = true; 
-        shared_offset = current_offset; 
-      } 
-
-      const Ogre::VertexElement* posElem = vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION); 
-      Ogre::HardwareVertexBufferSharedPtr vbuf = vertex_data->vertexBufferBinding->getBuffer(posElem->getSource()); 
-      unsigned char* vertex = static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY)); 
-
-      float* pReal; 
-
-      for(size_t j = 0; j < vertex_data->vertexCount; ++j, vertex += vbuf->getVertexSize()) 
-      { 
-        posElem->baseVertexPointerToElement(vertex, &pReal); 
-        mMeshVertices[current_offset + j] = physx::PxVec3(pReal[0],pReal[1],pReal[2]); 
-
-        std::cout << "x:" << pReal[0] << " z:"<< pReal[1] << " y:" << pReal[2] << std::endl;
-      }
-
-      vbuf->unlock(); 
-      next_offset += vertex_data->vertexCount; 
-    }
-
-    Ogre::IndexData* index_data = submesh->indexData; 
-
-    size_t numTris = index_data->indexCount / 3; 
-    Ogre::HardwareIndexBufferSharedPtr ibuf = index_data->indexBuffer; 
-
-    bool use32bitindexes = (ibuf->getType() == Ogre::HardwareIndexBuffer::IT_32BIT); 
-
-    if(use32bitindexes) 
-    { 
-      unsigned int* pInt = static_cast<unsigned int*>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY)); 
-      size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset; 
-
-      for (size_t k = 0; k < numTris*3; ++k) mMeshFaces[index_offset] = pInt[k] + static_cast<unsigned int>(offset); 
-    } 
-    else 
-    { 
-      unsigned short* pShort = reinterpret_cast<unsigned short*>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY)); 
-      size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset; 
-
-      for (size_t k = 0; k < numTris * 3; ++k) mMeshFaces[index_offset] = static_cast<unsigned int>(pShort[k]) + static_cast<unsigned int>(offset);
-    } 
-
-    ibuf->unlock(); 
-    current_offset = next_offset; 
-  }
-
-  physx::PxTriangleMeshDesc meshDesc;
-
-  meshDesc.points.count     = mVertexCount; 
-  meshDesc.points.data      = mMeshVertices; 
-  meshDesc.points.stride    = 4 * 3; 
-
-  meshDesc.triangles.count  = mIndexCount / 3; 
-  meshDesc.triangles.stride = 4 * 3; 
-  meshDesc.triangles.data   = mMeshFaces;
-
-  
-  PxToolkit::MemoryOutputStream buf;
-  bool status = cooking->cookTriangleMesh(meshDesc, buf);
-  
-  physx::PxTriangleMesh* triangleMesh = physics->createTriangleMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));//MemoryReadBuffer(buf.data));
-
-  delete []vertices;
-  delete []indices;
-  delete []mMeshVertices;
-  delete []mMeshFaces;
-  return triangleMesh;
-}*/
-
-//-------------------------------------------------------------------------------------
-physx::PxTriangleMesh* FabricationManager::createTriangleMeshV2(Ogre::Entity* e, Params &params, AddedMaterials *out_addedMaterials)
-{
+  physx::PxTriangleMesh* triangleMesh = getTriangleMesh(name);
+  if(triangleMesh) return triangleMesh;
 
   Ogre::MeshPtr mesh = e->getMesh();//extracting mesh pointer from entity
-
-  if(triangleHistory.count(mesh->getName()) > 0) 
-  {
-    TriangleMeshRef* ref = &triangleHistory.find(mesh->getName())->second;
-    ref->count++;
-    return ref->mesh;//if the required convex mesh has already been created then return a pointer to it
-  }
-
 
   //getting the mesh info
   MeshInfo meshInfo;
@@ -385,13 +300,9 @@ physx::PxTriangleMesh* FabricationManager::createTriangleMeshV2(Ogre::Entity* e,
   PxToolkit::MemoryOutputStream buf;
   bool success = cooking->cookTriangleMesh(desc, buf);
   if(!success) return 0;//something went wrong with the cooking
-  physx::PxTriangleMesh* triangleMesh = physics->createTriangleMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));
-
-  TriangleMeshRef ref;
-  ref.count = 1;
-  ref.mesh = triangleMesh;
-
-  triangleHistory.insert(std::pair<std::string, TriangleMeshRef>(mesh->getName(), ref));//record that a triangle mesh has been cooked for the given mesh
+  
+  triangleMesh = physics->createTriangleMesh(PxToolkit::MemoryInputData(buf.getData(), buf.getSize()));
+  addTriangleMesh(name, triangleMesh);
 
   delete[] fVertices;
   delete[] iIndices;

@@ -2,7 +2,7 @@
 
 
 GraphicsManager::GraphicsManager(void)
-  : root(NULL),
+  : root(),
     camera(NULL),
     ssao(NULL),
     enableBloom(false),
@@ -19,9 +19,9 @@ GraphicsManager::~GraphicsManager(void)
 }
 
 //-------------------------------------------------------------------------------------
-void GraphicsManager::setRoot(Ogre::Root* root)
+void GraphicsManager::setRoot(boost::shared_ptr<Ogre::Root> root)
 {
-  this->root = root;
+  this->root = boost::weak_ptr<Ogre::Root>(root);
 }
 
 //-------------------------------------------------------------------------------------

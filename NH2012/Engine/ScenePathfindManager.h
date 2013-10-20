@@ -1,10 +1,15 @@
 #pragma once
 
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
 #include <OgreSceneManager.h>
 #include "./Crowd/OgreRecast.h"
 #include "./Crowd/OgreDetourCrowd.h"
 
 #include "Vector3.h"
+
+class Scene;
 
 struct PathfindAgent
 {
@@ -58,7 +63,7 @@ private:
 class ScenePathfindManager
 {
 public:
-  ScenePathfindManager(Ogre::SceneManager* sceneManager);
+  ScenePathfindManager(boost::shared_ptr<Scene> scene);//Ogre::SceneManager* sceneManager
   virtual ~ScenePathfindManager(void);
 
   void update(double elapsedSeconds);

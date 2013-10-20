@@ -63,13 +63,21 @@ BoidComponent* Flock::makeBoid(Boids::Vector dimensions, double maximumVelocity,
 //-------------------------------------------------------------------------------------
 void Flock::hasSceneChange()
 {
-  if(oldScene && node) oldScene->getSceneGraphicsManager()->destroySceneNode(node);
-  node = scene->getSceneGraphicsManager()->createSceneNode();
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  boost::shared_ptr<Scene> oldScene_ptr = getOldScene();
 
-  for(std::vector<BoidComponent*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
+  if(oldScene_ptr && node) oldScene_ptr->getSceneGraphicsManager()->destroySceneNode(node);
+  
+  if(scene_ptr) 
   {
-    (*iter)->setNode(scene, node->createChildSceneNode());
+    node = scene_ptr->getSceneGraphicsManager()->createSceneNode();
+
+    for(std::vector<BoidComponent*>::iterator iter = boids.begin(); iter < boids.end(); ++iter)
+    {
+      (*iter)->setNode(scene_ptr, node->createChildSceneNode());
+    }
   }
+  
 }
 
 //-------------------------------------------------------------------------------------

@@ -38,6 +38,9 @@ void PhysicalComponent::update(double elapsedSeconds)
 //-------------------------------------------------------------------------------------
 void PhysicalComponent::hasNodeChange()
 {
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr) return;
+
   createActor();
   
   for(std::vector<PhysicalShape*>::iterator iter = shapes.begin(); iter != shapes.end(); ++iter)
@@ -45,7 +48,7 @@ void PhysicalComponent::hasNodeChange()
     (*iter)->attach(actor);
   }
 
-  scene->getScenePhysicsManager()->addActor(*actor);
+  scene_ptr->getScenePhysicsManager()->addActor(*actor);
   physx::PxRigidBodyExt::updateMassAndInertia(*actor, density);
 }
 
@@ -59,10 +62,12 @@ void PhysicalComponent::setUserData(void* data)
 //-------------------------------------------------------------------------------------
 void PhysicalComponent::createActor()
 {
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr) return;
   if(actor) actor->release();
   Vector3 oPosition = node->getPosition();
   physx::PxVec3 pPosition = physx::PxVec3(oPosition.x, oPosition.y, oPosition.z);
-  actor = scene->getScenePhysicsManager()->getScenePhysics()->getPhysics().createRigidDynamic(physx::PxTransform(pPosition));
+  actor = scene_ptr->getScenePhysicsManager()->getScenePhysics()->getPhysics().createRigidDynamic(physx::PxTransform(pPosition));
   if(!actor) throw NHException("could not create physical component actor");
   actor->setLinearVelocity(physx::PxVec3(0.0f, 0.0f, 0.0f));
   actor->userData = userData;

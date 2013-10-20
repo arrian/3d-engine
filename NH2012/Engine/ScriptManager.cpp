@@ -25,7 +25,7 @@
 
 
 ScriptManager::ScriptManager(void)
-  : world(NULL),
+  : world(),
     done(false),
     outputs(),
     state(NULL)
@@ -119,25 +119,28 @@ void ScriptManager::split(const std::string &s, char delim, std::vector<std::str
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::setWorld(World* world)
+void ScriptManager::setWorld(boost::shared_ptr<World> world)
 {
-  this->world = world;
+  this->world = boost::weak_ptr<World>(world);
   initialiseLua();
 }
 
 //-------------------------------------------------------------------------------------
 void ScriptManager::initialiseLua()
 {
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not initialise lua in script manager. World has expired.");
+
   //Globals
-  luabind::globals(state)["world"] = world;
-  luabind::globals(state)["control"] = world->getControlManager();
-  luabind::globals(state)["data"] = world->getDataManager();
-  luabind::globals(state)["graphics"] = world->getGraphicsManager();
-  luabind::globals(state)["network"] = world->getNetworkManager();
-  luabind::globals(state)["physics"] = world->getPhysicsManager();
-  luabind::globals(state)["script"] = world->getScriptManager();
-  luabind::globals(state)["sound"] = world->getSoundManager();
-  luabind::globals(state)["time"] = world->getTimeManager();
+  luabind::globals(state)["world"] = world_ptr.get();//TODO: change to managed pointer later
+  luabind::globals(state)["control"] = world_ptr->getControlManager();
+  luabind::globals(state)["data"] = world_ptr->getDataManager();
+  luabind::globals(state)["graphics"] = world_ptr->getGraphicsManager();
+  luabind::globals(state)["network"] = world_ptr->getNetworkManager();
+  luabind::globals(state)["physics"] = world_ptr->getPhysicsManager();
+  luabind::globals(state)["script"] = world_ptr->getScriptManager();
+  luabind::globals(state)["sound"] = world_ptr->getSoundManager();
+  luabind::globals(state)["time"] = world_ptr->getTimeManager();
 
   //Redirect print
   lua_pushcfunction(state, printLua);
@@ -151,73 +154,81 @@ bool ScriptManager::stringToBool(std::string string)
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::about(Options argv)
+void ScriptManager::about()
 {
   display("Copyright Arrian Purcell 2013.");
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::exit(Options argv)
+void ScriptManager::exit()
 {
   done = true;
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::help(Options argv)
+void ScriptManager::help()
 {
 
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::screenshot(Options argv)
+void ScriptManager::screenshot()
 {
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not take a screenshot in script manager. World has expired.");
+
   //Console::getInstance().setVisible(false);
-  if(world->getGraphicsManager()->getWindow())display("Screenshot saved to '" + world->getGraphicsManager()->getWindow()->writeContentsToTimestampedFile("screenshot", ".png") + "'.");
+  if(world_ptr->getGraphicsManager()->getWindow())display("Screenshot saved to '" + world_ptr->getGraphicsManager()->getWindow()->writeContentsToTimestampedFile("screenshot", ".png") + "'.");
   //Console::getInstance().setVisible(true);
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::setCameraFree(Options argv)
+void ScriptManager::setCameraFree(bool free)
 {
-  if(argv.size() < 2) throw NHException("too few arguments");
-  world->getPlayer()->setFreeCamera(stringToBool(argv[1]));
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not set camera free in script manager. World has expired.");
+
+  world_ptr->getPlayer()->setFreeCamera(free);
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::setFullscreen(Options argv)
+void ScriptManager::setFullscreen(int width, int height)
 {
-  if(argv.size() < 3) throw NHException("too few arguments");
-  int widthNum = boost::lexical_cast<int>(argv[1]);
-  int heightNum = boost::lexical_cast<int>(argv[2]);
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not set to fullscreen in script manager. World has expired.");
 
-  if(widthNum <= 0 || heightNum <= 0) throw NHException("bad screen dimensions");
-  else if(world->getGraphicsManager()->getWindow()) world->getGraphicsManager()->getWindow()->setFullscreen(true, widthNum, heightNum);
+  if(width <= 0 || height <= 0) throw NHException("bad screen dimensions");
+  else if(world_ptr->getGraphicsManager()->getWindow()) world_ptr->getGraphicsManager()->getWindow()->setFullscreen(true, width, height);
   else throw NHException("no window to set to fullscreen mode");
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::setWindowed(Options argv)
+void ScriptManager::setWindowed(int width, int height)
 {
-  if(argv.size() < 3) throw NHException("too few arguments");
-  int widthNum = boost::lexical_cast<int>(argv[1]);
-  int heightNum = boost::lexical_cast<int>(argv[2]);
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not set to windowed in script manager. World has expired.");
 
-  if(widthNum <= 0 || heightNum <= 0) throw NHException("bad screen dimensions");
-  else if(world->getGraphicsManager()->getWindow()) world->getGraphicsManager()->getWindow()->setFullscreen(false, widthNum, heightNum);
+  if(width <= 0 || height <= 0) throw NHException("bad screen dimensions");
+  else if(world_ptr->getGraphicsManager()->getWindow()) world_ptr->getGraphicsManager()->getWindow()->setFullscreen(false, width, height);
   else throw NHException("no window to set to windowed mode");
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::setPlayerItemGenerationID(Options argv)
+void ScriptManager::setPlayerItemGenerationID(int id)
 {
-  if(argv.size() < 2) throw NHException("too few arguments");
-  world->getPlayer()->setItemGenerationID(boost::lexical_cast<int>(argv[1]));
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not set player item generation id in script manager. World has expired.");
+
+  world_ptr->getPlayer()->setItemGenerationID(id);
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::getPhysicsInfo(Options argv)
+void ScriptManager::getPhysicsInfo()
 {
-  Scene* target = world->getPlayer()->getScene();
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not get physics info in script manager. World has expired.");
+
+  boost::shared_ptr<Scene> target = world_ptr->getPlayer()->getScene();
   if(target) 
   {
     physx::PxScene* physics = target->getScenePhysicsManager()->getScenePhysics();
@@ -240,9 +251,12 @@ void ScriptManager::getPhysicsInfo(Options argv)
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::getGameInfo(Options argv)
+void ScriptManager::getGameInfo()
 {
-  Ogre::RenderWindow* window = world->getGraphicsManager()->getWindow();
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not get game info in script manager. World has expired.");
+
+  Ogre::RenderWindow* window = world_ptr->getGraphicsManager()->getWindow();
   if(!window) throw NHException("no render window found");
   display("average fps", boost::lexical_cast<std::string>(int(window->getAverageFPS())));
   display("best fps", boost::lexical_cast<std::string>(window->getBestFPS()));
@@ -251,35 +265,41 @@ void ScriptManager::getGameInfo(Options argv)
   display("number of viewports", boost::lexical_cast<std::string>(window->getNumViewports()));
   display("triangle count", boost::lexical_cast<std::string>(window->getTriangleCount()));
   display("window size", boost::lexical_cast<std::string>(window->getWidth()) + "x" + Ogre::StringConverter::toString(window->getHeight()));
-  display("number of loaded scenes", boost::lexical_cast<std::string>(world->getSceneCount()));
+  display("number of loaded scenes", boost::lexical_cast<std::string>(world_ptr->getSceneCount()));
 
   std::map<Id<Scene>, std::string> names;
-  world->getSceneNames(names);
+  world_ptr->getSceneNames(names);
   std::string list = "";
   for(std::map<Id<Scene>, std::string>::iterator it = names.begin(); it != names.end(); ++it) list += boost::lexical_cast<std::string>(it->first.getInstance()) + ": \"" + it->second + "\" ";
   display("loaded scenes", list);
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::getSceneInfo(Options argv)
+void ScriptManager::getSceneInfo()
 {
-  display("name", world->getPlayer()->getScene()->getName());
-  display("ogre internal name", world->getPlayer()->getScene()->getName());
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not get scene info in script manager. World has expired.");
+
+  display("name", world_ptr->getPlayer()->getScene()->getName());
+  display("ogre internal name", world_ptr->getPlayer()->getScene()->getName());
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::getWorldInfo(Options argv)
+void ScriptManager::getWorldInfo()
 {
 
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::reset(Options argv)
+void ScriptManager::reset()
 {
-  if(!world) throw NHException("no world found");
-  if(!world->getPlayer()) throw NHException("no player found");
-  if(!world->getPlayer()->getScene()) throw NHException("no scene found");
-  world->getPlayer()->getScene()->reset();
+  boost::shared_ptr<World> world_ptr = getWorld();
+  if(!world_ptr) throw NHException("Could not reset scene in script manager. World has expired.");
+
+  if(!world_ptr) throw NHException("no world found");
+  if(!world_ptr->getPlayer()) throw NHException("no player found");
+  if(!world_ptr->getPlayer()->getScene()) throw NHException("no scene found");
+  world_ptr->getPlayer()->getScene()->reset();
 }
 
 //-------------------------------------------------------------------------------------

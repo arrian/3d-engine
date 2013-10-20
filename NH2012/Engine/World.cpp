@@ -3,6 +3,8 @@
 
 //Boost
 #include <boost/lexical_cast.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 //Local
 #include "Scene.h"
@@ -19,9 +21,12 @@
 #include "WorldLoader.h"
 #include "Portal.h"
 
+
+
 //-------------------------------------------------------------------------------------
 World::World()
-  : scenes(),
+  : //scenes(),
+    scene(),
     timeManager(),
     dataManager(),
     soundManager(),
@@ -34,12 +39,12 @@ World::World()
     defaultScene(0),
     playerId(0)
 {
-  scriptManager.setWorld(this);
 }
 
 //-------------------------------------------------------------------------------------
-World::World(Ogre::Root* root, Ogre::RenderWindow* window)
-  : scenes(),
+World::World(boost::shared_ptr<Ogre::Root> root, Ogre::RenderWindow* window)
+  : //scenes(),
+    scene(),
     timeManager(),
     dataManager(),
     soundManager(),
@@ -52,8 +57,9 @@ World::World(Ogre::Root* root, Ogre::RenderWindow* window)
     defaultScene(0),
     playerId(0)
 {
-  scriptManager.setWorld(this);
+  std::cout << "before: " << root.use_count() << std::endl;//TODO: remove
   graphicsManager.setRoot(root);
+  std::cout << "after: " << root.use_count() << std::endl;//TODO: remove
   graphicsManager.hookWindow(window);
 }
 
@@ -65,18 +71,20 @@ World::~World(void)
 //-------------------------------------------------------------------------------------
 void World::initialise(std::string iniFile)
 {
+  scriptManager.setWorld(shared_from_this());
+
   WorldLoader::load(iniFile, this);
 
   //Create default scene
-  Scene* scene = loadScene(defaultScene);
-  if(!scene) throw NHException("default scene creation failed");
+  loadScene(defaultScene);
+  if(!scene) throw NHException("Default scene creation failed. Unable to load the scene.");
   
   //Create default player
   loadPlayer(Id<Player>());
-  if(!player) throw NHException("default player creation failed");
+  if(!player) throw NHException("Default player creation failed. Unable to load the player.");
 
   //Add player to scene
-  Portal* portal = scene->getDefaultPortal();
+  boost::shared_ptr<Portal> portal = scene->getDefaultPortal();
   scene->addPlayer(player, portal->getPosition(), portal->getLookAt(), playerId);
 }
 
@@ -85,14 +93,15 @@ bool World::update(double elapsedSeconds)
 {
   if(!scriptManager.update(elapsedSeconds)) return false;
   timeManager.update(elapsedSeconds);
-  for(Container<Scene>::Iterator it = scenes.begin(); it != scenes.end(); ++it) it->second->update(elapsedSeconds);
+  //for(Container<Scene>::Iterator it = scenes.begin(); it != scenes.end(); ++it) it->second->update(elapsedSeconds);
+  scene->update(elapsedSeconds);
   return true;
 }
 
 //-------------------------------------------------------------------------------------
-Player* World::getPlayer()
+boost::shared_ptr<Player> World::getPlayer()
 {
-  return player.get();
+  return player;
 }
 
 //-------------------------------------------------------------------------------------
@@ -144,62 +153,75 @@ SoundManager* World::getSoundManager()
 }
 
 //-------------------------------------------------------------------------------------
-Scene* World::getScene(Id<Scene> id)
+boost::shared_ptr<Scene> World::getScene(Id<Scene> id)
 {
-  return scenes.get(id);
+  if(scene->getId() == id) return scene;
+  return boost::shared_ptr<Scene>();
+  //return scenes.get(id);
 }
 
 //-------------------------------------------------------------------------------------
 bool World::hasScene(Id<Scene> id)
 {
-  return scenes.contains(id);
+  return scene->getId() == id;
+  //return scenes.contains(id);
 }
 
 //-------------------------------------------------------------------------------------
 int World::getSceneCount()
 {
-  return scenes.count();
+  if(scene) return 1;
+  return 0;
+  //return scenes.count();
 }
 
 //-------------------------------------------------------------------------------------
 void World::getSceneNames(std::map<Id<Scene>, std::string> &names)
 {
-  for(Container<Scene>::Iterator it = scenes.begin(); it != scenes.end(); ++it) 
-  {
-    names.insert(std::pair<Id<Scene>, std::string>(it->first, it->second->getName()));
-  }
+  names.insert(std::pair<Id<Scene>, std::string>(scene->getId(), scene->getName()));
+  //for(Container<Scene>::Iterator it = scenes.begin(); it != scenes.end(); ++it) 
+  //{
+  //  names.insert(std::pair<Id<Scene>, std::string>(it->first, it->second->getName()));
+  //}
 }
 
 //-------------------------------------------------------------------------------------
-Scene* World::loadScene(Id<Scene> id)
+boost::shared_ptr<Scene> World::loadScene(Id<Scene> id)
 {
-  if(scenes.contains(id)) return scenes.get(id);//check that the scene has not been loaded already
+  //if(scenes.contains(id)) return scenes.get(id);//check that the scene has not been loaded already
+  if(scene && scene->getId() == id) return scene;
 
-  std::shared_ptr<Scene> scene(new Scene(dataManager.get<SceneDesc>(id.getInstance()), this));
-  scenes.insert(id, scene);
-  return scene.get();
+  //std::shared_ptr<Scene> scene(new Scene(dataManager.get<SceneDesc>(id.getInstance()), shared_from_this()));
+  //scenes.insert(id, scene);
+  //return scene.get();
+
+  boost::shared_ptr<Scene> scene(new Scene(dataManager.get<SceneDesc>(id.getInstance()), shared_from_this()));
+  scene->initialise();
+  this->scene = scene;
+  return scene;
 }
 
 //-------------------------------------------------------------------------------------
-Player* World::loadPlayer(Id<Player> id)
+boost::shared_ptr<Player> World::loadPlayer(Id<Player> id)
 {
-  if(playerId == id) return player.get();
+  if(playerId == id) return player;
   
   //Create default player - TODO: load player from file //dataManager.get<PlayerDesc>(id.getInstance());
   PlayerDesc playerDesc = PlayerDesc();
   playerId = id;
-  player = std::shared_ptr<Player>(new Player(playerDesc, this));
-  return player.get();
+  player = boost::shared_ptr<Player>(new Player(playerDesc, shared_from_this()));
+  return player;
 }
 
 //-------------------------------------------------------------------------------------
 void World::destroyScene(Id<Scene> id)
 {
-  Scene* scene = scenes.get(id);
-  if(!scene) throw NHException("there is no scene loaded with that id");
+  //Scene* scene = scenes.get(id);
+  
+  if(scene->getId() != id) throw NHException("there is no scene loaded with that id");
   
   if(scene->contains<Player>(playerId)) throw NHException("unable to destroy a scene while it contains the local player");
-  scenes.remove(id);
+  scene.reset();
 }
 
 //-------------------------------------------------------------------------------------
@@ -235,7 +257,7 @@ void World::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 //-------------------------------------------------------------------------------------
 void World::setPlayerScene(Id<Scene> sceneId, Vector3 position, Vector3 lookAt) 
 {
-  if(player) getScene(sceneId)->addPlayer(player,position,lookAt);
+  getScene(sceneId)->addPlayer(player, position, lookAt);
 }
 
 

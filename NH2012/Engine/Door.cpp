@@ -25,29 +25,32 @@ Door::~Door(void)
 void Door::hasSceneChange()
 {
 
+  boost::shared_ptr<Scene> oldScene_ptr = getOldScene();
+
   //remove stuff from old scene here
-  if(oldScene && node)
+  if(oldScene_ptr && node)
   {
-    oldScene->getSceneGraphicsManager()->destroySceneNode(node);
+    oldScene_ptr->getSceneGraphicsManager()->destroySceneNode(node);
   }
 
-  if(!scene) return;
+  boost::shared_ptr<Scene> scene_ptr = getScene();
+  if(!scene_ptr) return;
 
-  node = scene->getSceneGraphicsManager()->createSceneNode();
+  node = scene_ptr->getSceneGraphicsManager()->createSceneNode();
 
-  ArchitectureDesc doorDesc(scene->getWorld()->getDataManager()->get<ArchitectureDesc>(200));//temp constants
+  ArchitectureDesc doorDesc(scene_ptr->getWorld()->getDataManager()->get<ArchitectureDesc>(200));//temp constants
   doorMesh.setMesh(doorDesc.mesh);
-  physx::PxMaterial* doorMaterial = scene->getScenePhysicsManager()->getScenePhysics()->getPhysics().createMaterial(doorDesc.friction, doorDesc.friction, doorDesc.restitution);
+  physx::PxMaterial* doorMaterial = scene_ptr->getScenePhysicsManager()->getScenePhysics()->getPhysics().createMaterial(doorDesc.friction, doorDesc.friction, doorDesc.restitution);
   doorPhysical.begin();
   doorPhysical.addBoxMesh(1.5f, 3.0f, 0.2f, doorMaterial, Vector3(0.75f, 1.5f, 0.0f));
   doorPhysical.end();
 
-  doorPhysical.setNode(scene, node);
-  doorMesh.setNode(scene, node);
+  doorPhysical.setNode(scene_ptr, node);
+  doorMesh.setNode(scene_ptr, node);
 
   doorConstraint = physx::PxTransform(physx::PxVec3(0.0f, 1.5f, 0.0f));//, physx::PxQuat(physx::PxPi / 2, physx::PxVec3(-1.0f,0.0f,0.0f)));
   frameConstraint = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f));
-  hingeJoint = physx::PxRevoluteJointCreate(scene->getScenePhysicsManager()->getScenePhysics()->getPhysics(), doorPhysical.getActor(), doorConstraint, NULL, frameConstraint);
+  hingeJoint = physx::PxRevoluteJointCreate(scene_ptr->getScenePhysicsManager()->getScenePhysics()->getPhysics(), doorPhysical.getActor(), doorConstraint, NULL, frameConstraint);
   hingeJoint->setLimit(physx::PxJointLimitPair(-physx::PxPi / 4, physx::PxPi / 4, 0.01f));
   hingeJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eLIMIT_ENABLED, true);
   hingeJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eDRIVE_FREESPIN, true);

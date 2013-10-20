@@ -85,12 +85,15 @@ public:
   FabricationManager();
   virtual ~FabricationManager(void);
 
-  physx::PxConvexMesh* createConvexMesh(const Ogre::MeshPtr& mesh);//Ogre::Entity* e);
-  //physx::PxTriangleMesh* createTriangleMesh(Ogre::Entity* e);
-  physx::PxTriangleMesh* createTriangleMeshV2(Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);//TODO: change name to get triangle mesh
+  physx::PxConvexMesh* createConvexMesh(std::string name, const Ogre::MeshPtr& mesh);//Ogre::Entity* e);
+  physx::PxTriangleMesh* createTriangleMesh(std::string name, Ogre::Entity* e, Params &params = Params(), AddedMaterials *out_addedMaterials = nullptr);//TODO: change name to get triangle mesh
 
-  void releaseConvexMesh(const Ogre::MeshPtr& mesh);
-  void releaseTriangleMesh(Ogre::Entity* e);
+  void addConvexMesh(std::string name, physx::PxConvexMesh* mesh);
+  void addTriangleMesh(std::string name, physx::PxTriangleMesh* mesh);
+  physx::PxConvexMesh* getConvexMesh(std::string name);
+  physx::PxTriangleMesh* getTriangleMesh(std::string name);
+  void releaseConvexMesh(std::string name);
+  void releaseTriangleMesh(std::string name);
 
   void setDefaultPhysicsMaterial(physx::PxMaterial* defaultPhysicsMaterial);
   void setCooking(physx::PxCooking* cooking);
@@ -100,7 +103,7 @@ private:
   physx::PxCooking* cooking;
   physx::PxPhysics* physics;
 
-  std::map<std::string, ConvexMeshRef> convexHistory;
-  std::map<std::string, TriangleMeshRef> triangleHistory;
+  std::map<std::string, ConvexMeshRef*> convexHistory;
+  std::map<std::string, TriangleMeshRef*> triangleHistory;
 };
 

@@ -8,6 +8,9 @@
 
 #include "PxPhysicsAPI.h"
 
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
 class IvyStem;
 class Ivy;
 
@@ -93,7 +96,7 @@ private:
 class Ivy
 {
 public:
-  Ivy(Scene* scene, Vector3 position, Vector3 direction);
+  Ivy(boost::shared_ptr<Scene> scene, Vector3 position, Vector3 direction);
 
   virtual ~Ivy(void);
 

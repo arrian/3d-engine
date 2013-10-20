@@ -43,6 +43,9 @@ HumanoidSkeletonComponent::~HumanoidSkeletonComponent(void)
 //-------------------------------------------------------------------------------------
 void HumanoidSkeletonComponent::hasNodeChange()
 {
+  boost::shared_ptr<Scene> oldScene = getOldScene();
+  boost::shared_ptr<Scene> scene = getScene();
+
   if(oldScene)
   {
     if(head) oldScene->getSceneGraphicsManager()->destroySceneNode(head);

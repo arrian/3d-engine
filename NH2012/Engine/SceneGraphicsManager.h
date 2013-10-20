@@ -1,13 +1,18 @@
 #pragma once
 
+#include <boost/weak_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include "Vector3.h"
 #include "GraphicsManager.h"
+
+class Scene;
 
 /*Interface between ogre scene manager and the application.*/
 class SceneGraphicsManager
 {
 public:
-  SceneGraphicsManager(GraphicsManager* graphicsManager, Ogre::ColourValue ambientLight, Ogre::ColourValue shadowColour);
+  SceneGraphicsManager(boost::shared_ptr<Scene> scene, Ogre::ColourValue ambientLight, Ogre::ColourValue shadowColour);
   virtual ~SceneGraphicsManager(void);
 
   void setAmbientLight(Ogre::ColourValue colour) {sceneManager->setAmbientLight(colour);}
@@ -32,8 +37,24 @@ public:
   void destroyManualObject(Ogre::ManualObject* manualObject) {sceneManager->destroyManualObject(manualObject);}
   void destroyCamera(Ogre::Camera* camera) {sceneManager->destroyCamera(camera);}
 
+  boost::shared_ptr<Scene> getScene() 
+  {
+    try
+    {
+      return scene.lock();
+    }
+    catch(boost::bad_weak_ptr b)
+    {
+#ifdef _DEBUG
+      std::cout << "Could not get scene from scene graphics manager. Scene has expired." << std::endl;
+#endif
+    }
+    return boost::shared_ptr<Scene>();
+  }
+
 private:
-  GraphicsManager* graphicsManager;
+  boost::weak_ptr<Scene> scene;
+  //GraphicsManager* graphicsManager;
 
   Ogre::SceneManager* sceneManager;
 
