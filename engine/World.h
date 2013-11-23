@@ -60,7 +60,8 @@ public:
   GraphicsManager* getGraphicsManager();
   boost::shared_ptr<Player> getPlayer();
   //Scene* getScene(Id<Scene> id);
-  boost::shared_ptr<Scene> getScene(Id<Scene> id);
+  boost::shared_ptr<Scene> getScene();
+  //boost::shared_ptr<Scene> getScene(Id<Scene> id);
   int getSceneCount();
   void getSceneNames(std::map<Id<Scene>, std::string> &names);
 

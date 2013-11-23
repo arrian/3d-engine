@@ -81,7 +81,7 @@ bool ScriptManager::update(double elapsedSeconds)
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::execute(std::string command)
+void ScriptManager::runString(std::string command)
 {
   //Execute
   int initialStackSize = lua_gettop(state);
@@ -103,7 +103,7 @@ void ScriptManager::execute(std::string command)
 }
 
 //-------------------------------------------------------------------------------------
-void ScriptManager::run(std::string file)
+void ScriptManager::runScript(std::string file)
 {
   Ogre::DataStreamPtr ptr = Ogre::ResourceGroupManager::getSingletonPtr()->openResource(file);
   if(ptr.isNull()) throw NHException("script not found");

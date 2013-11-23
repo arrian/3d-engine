@@ -88,8 +88,8 @@ public:
 
   bool update(double elapsedSeconds);
 
-  void run(std::string file);//executes the specified file
-  void execute(std::string command);//executes a string of commands
+  void runScript(std::string file);//executes the specified file
+  void runString(std::string command);//executes a string of commands
 
   void display(std::string comment);//displays a line of text
   void display(std::string highlight, std::string comment);//displays a highlighted section of text followed by a normal section

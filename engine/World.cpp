@@ -153,12 +153,19 @@ SoundManager* World::getSoundManager()
 }
 
 //-------------------------------------------------------------------------------------
+boost::shared_ptr<Scene> World::getScene() 
+{
+  return scene;
+}
+
+/*
+//-------------------------------------------------------------------------------------
 boost::shared_ptr<Scene> World::getScene(Id<Scene> id)
 {
   if(scene->getId() == id) return scene;
   return boost::shared_ptr<Scene>();
   //return scenes.get(id);
-}
+}*/
 
 //-------------------------------------------------------------------------------------
 bool World::hasScene(Id<Scene> id)
